@@ -1,0 +1,32 @@
+#navbar {
+    display: grid;
+    grid-template-columns: 24% 24% 24% 24%;
+    column-gap: 1%;
+}
+
+.nav-button {
+    text-decoration: none;
+}
+
+#home {
+    grid-column: 1 / span 1;
+}
+
+#about {
+    grid-column: 2 / span 1;
+}
+
+#logoutForm {
+    grid-column: 3 / span 1;
+}
+
+#logout {
+    background: none;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+
+#help {
+    grid-column: 4 / span 1;
+}
