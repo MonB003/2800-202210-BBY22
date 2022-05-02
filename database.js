@@ -119,18 +119,31 @@ app.get("/logout", function (req, res) {
     }
 });
 
-app.post("/signup", function (req, res) {
-    res.setHeader("Content-Type", "application/json");
+app.post('/signup', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
 
-    console.log("POST: What was sent", req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password);
+    const mysql = require("mysql2");
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'OnTheHouseDB'
+    });
+    connection.connect();
+    connection.query('INSERT INTO users (firstName, lastName, city, email, password) values (?, ?, ?, ?, ?)',
+        [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password],
+        
+        function (error, results, fields) {
+            if (error) {
+                console.log(error);
 
-    let results = authenticate(req.body.email, req.body.password,
-        function (userRecord) {
+                // Send message saying account already exists
+                res.send({
+                    status: "fail",
+                    msg: "Account already exists with this information."
+                });
 
-            // When authenticate() returns null because user isn't currently in database
-            if (userRecord == null) {
-                console.log("Returned null");
-
+            } else {
                 req.session.loggedIn = true;
                 req.session.email = req.body.email;
                 req.session.password = req.body.password;
@@ -138,46 +151,13 @@ app.post("/signup", function (req, res) {
                 req.session.lastName = req.body.lastName;
                 req.session.city = req.body.city;
 
-                let newUser = {
-                    firstName: req.body.firstName,
-                    lastName: req.body.lastName,
-                    city: req.body.city,
-                    email: req.body.email,
-                    password: req.body.password
-                };
-
-                // ? is placeholder for data being inserted
-                let sql = `INSERT INTO users SET ?`
-
-                const mysql = require("mysql2");
-                const connection = mysql.createConnection({
-                    host: "localhost",
-                    user: "root",
-                    password: "",
-                    database: "OnTheHouseDB"
-                });
-                connection.connect();
-                connection.query(sql, newUser, (err, result) => {
-                    if (err) throw err;
-                    console.log(result);
-                    console.log("User added");
-                });
-
                 req.session.save(function (err) {
                     // Session saved
                 });
 
-                // Send message saying user's login was successful
                 res.send({
                     status: "success",
-                    msg: "Logged in."
-                });
-            } else {
-
-                // Send message saying account already exists
-                res.send({
-                    status: "fail",
-                    msg: "Account already exists with this information."
+                    msg: "New user logged in."
                 });
             }
         });

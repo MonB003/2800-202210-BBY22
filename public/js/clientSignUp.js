@@ -44,11 +44,11 @@ ready(function() {
         e.preventDefault();
         let fName = document.getElementById("firstName");
         let lName = document.getElementById("lastName");
-        let birthday = document.getElementById("birthday");
+        let city = document.getElementById("city");
         let email = document.getElementById("userEmail");
         let password = document.getElementById("userPassword");
-        let queryString = "firstName=" + fName.value + "&lastName=" + lName.value + "&birthday=" + birthday.value + "&email=" + email.value + "&password=" + password.value;
-        console.log("data that we will send", fName.value, lName.value, birthday.value, email.value, password.value);
+        let queryString = "firstName=" + fName.value + "&lastName=" + lName.value + "&city=" + city.value + "&email=" + email.value + "&password=" + password.value;
+        console.log("data that we will send", fName.value, lName.value, city.value, email.value, password.value);
 
         ajaxPOST("/signup", function (data) {
 
