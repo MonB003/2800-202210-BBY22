@@ -1,70 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="utf-8">
-    <title>Login</title>
+    <head>
+        <meta charset="utf-8">
+        <title>Login</title>
 
-    <!-- CSS style -->
-    <link rel="stylesheet" href="/css/login.css">
-</head>
+        <!-- CSS style -->
+        <link rel="stylesheet" href="/css/login.css">
+    </head>
 
-<body>
-    <!-- Header -->
-    <header id="header">
-        <h2>On the House</h2>
+    <body>
+        <!-- Header -->
+        <header id="head">
+            <!-- <h2>On the House</h2> -->
 
-        <!-- Navbar -->
-        <nav id="navbar">
-            <a href="" id="home" class="nav-button">Home</a>
-            <a href="" id="about" class="nav-button">About</a>
-            <a href="" id="contact" class="nav-button">Contact</a>
-            <a href="" id="help" class="nav-button">Help</a>
-        </nav>
+            <!-- Navbar -->
+            <!-- <nav id="navbar">
+                <a href="" id="home" class="nav-button">Home</a>
+                <a href="" id="about" class="nav-button">About</a>
+                <a href="" id="contact" class="nav-button">Contact</a>
+                <a href="" id="help" class="nav-button">Help</a>
+            </nav> -->
 
-    </header>
+        </header>
 
-    <div>
-        <h3 id="loginHeading">Login!</h3>
-    </div>
 
-    <!-- Login -->
-    <form id="loginForm">
-        <h4>Email</h4>
-        <input type="email" id="userEmail" name="email" placeholder="Email@email.ca" required="required">
-        <h4>Password</h4>
-        <input type="password" id="userPassword" name="password" placeholder="Password" required="required">
+
+        <section class="grid">
+
+            <div class="OTHText">
+                <h1>On The House</h1>
+            </div>
+
+
+            <div class="container">
+
+                <div class="header">
+                    <h1 id="loginHeading">Login!</h1>
+                </div>
+
+                <!-- Login -->
+                <div class="loginF">
+                    <form id="loginForm">
+                        <!-- <h4>Email</h4> -->
+                        <span>
+                        <input type="email" id="userEmail" name="email" placeholder="Email@email.ca" required="required">
+                        </span>
+                        <span>
+                        <!-- <h4>Password</h4> -->
+                        <input type="password" id="userPassword" name="password" placeholder="Password" required="required">
+                        </span>
+                        <br><br>
+                        <button id="loginBtn">Log In</button>
+                        <br>
+                    </form>
+                </div>
+
+                <br>
+
+                <!-- Sign up button -->
+                <div id="signupDiv">
+                    <span><p id="newUserP">New User?</p></span>
+                    <form action="/signup" method="get" id="signupForm">
+                        <input type="submit" id="signup" value="Sign Up"/>
+                    </form>
+                    <br>
+                    <p id="errorMsg"></p>
+                </div>
+
+            </div>
+        </section>
+
+
+
         <br><br>
-        <button id="loginBtn">Log In</button>
-        <br>
-    </form>
 
-    <br>
-
-    <!-- Sign up button -->
-    <div id="signupDiv">
-        <p id="newUserP">New User?</p>
-        <form action="/signup" method="get" id="signupForm">
-            <input type="submit" id="signup" value="Sign Up"/>
-        </form>
-        <br>
-        <p id="errorMsg"></p>
-    </div>
-
-    <br><br>
-
-    <!-- Footer -->
-    <footer>
-        <hr />
-        <p id="copyright"> &copy; 2022. On the House
-        </p>
-    </footer>
+        <!-- Footer -->
+        <footer>
+            <p id="copyright"> &copy; 2022. On the House</p>
+        </footer>
 
 
 
-    <!-- JavaScript -->
-    <script src="js/clientLogin.js"></script>
+        <!-- JavaScript -->
+        <script src="js/clientLogin.js"></script>
 
-</body>
+    </body>
 
 </html>
