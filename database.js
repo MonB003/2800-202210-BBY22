@@ -54,16 +54,31 @@ app.get("/login", function (req, res) {
 app.get("/main", function (req, res) {
 
     if (req.session.loggedIn) {
-        let main = fs.readFileSync("./app/main.html", "utf8");
-        let mainDOM = new JSDOM(main);
+        // Check user's type
+        if (req.session.type == "ADMIN") {
+            let main = fs.readFileSync("./app/dashboard.html", "utf8");
+            let mainDOM = new JSDOM(main);
 
-        // Get the user's data and put it into the page
-        mainDOM.window.document.getElementById("customerName").innerHTML = "Welcome, " + req.session.firstName +
-            " " + req.session.lastName + "!";
+            // Get the user's data and put it into the page
+            mainDOM.window.document.getElementById("customerName").innerHTML = "Welcome, " + req.session.firstName +
+                " " + req.session.lastName + "!";
 
-        res.set("Server", "MACT Engine");
-        res.set("X-Powered-By", "MACT");
-        res.send(mainDOM.serialize());
+            res.set("Server", "MACT Engine");
+            res.set("X-Powered-By", "MACT");
+            res.send(mainDOM.serialize());
+
+        } else {
+            let main = fs.readFileSync("./app/main.html", "utf8");
+            let mainDOM = new JSDOM(main);
+
+            // Get the user's data and put it into the page
+            mainDOM.window.document.getElementById("customerName").innerHTML = "Welcome, " + req.session.firstName +
+                " " + req.session.lastName + "!";
+
+            res.set("Server", "MACT Engine");
+            res.set("X-Powered-By", "MACT");
+            res.send(mainDOM.serialize());
+        }
 
     } else {
         // not logged in - no session and no access, redirect to home
@@ -102,6 +117,7 @@ app.post("/login", function (req, res) {
                 req.session.firstName = userRecord.firstName;
                 req.session.lastName = userRecord.lastName;
                 req.session.city = userRecord.city;
+                req.session.type = userRecord.type;
 
                 req.session.save(function (err) {
                     // session saved
@@ -149,8 +165,8 @@ app.post('/signup', function (req, res) {
                     database: 'OnTheHouseDB'
                 });
                 connection.connect();
-                connection.query('INSERT INTO users (firstName, lastName, city, email, password) values (?, ?, ?, ?, ?)',
-                    [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password],
+                connection.query('INSERT INTO users (firstName, lastName, city, email, password, type) values (?, ?, ?, ?, ?, ?)',
+                    [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, "USER"],
 
                     function (error, results, fields) {
                         if (error) {
@@ -169,6 +185,7 @@ app.post('/signup', function (req, res) {
                             req.session.firstName = req.body.firstName;
                             req.session.lastName = req.body.lastName;
                             req.session.city = req.body.city;
+                            req.session.type = req.body.type;
 
                             req.session.save(function (err) {
                                 // Session saved
@@ -286,6 +303,7 @@ async function init() {
         city VARCHAR(30), 
         email VARCHAR(30), 
         password VARCHAR(30), 
+        type VARCHAR(10),
         PRIMARY KEY (userID));`;
     await connection.query(createDBAndTables);
 
@@ -294,9 +312,9 @@ async function init() {
 
     // If no records, add some
     if (rows.length == 0) {
-        let userRecords = "insert into users (firstName, lastName, city, email, password) values ?";
+        let userRecords = "insert into users (firstName, lastName, city, email, password, type) values ?";
         let recordValues = [
-            ["Test", "Test", "Vancouver", "test@test.ca", "password"]
+            ["Test", "Test", "Vancouver", "test@test.ca", "password", "ADMIN"]
         ];
         await connection.query(userRecords, [recordValues]);
     }
