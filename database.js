@@ -30,7 +30,7 @@ app.get('/', function (req, res) {
         res.redirect("/main");
 
     } else {
-        let doc = fs.readFileSync("./app/login.html", "utf8");
+        let doc = fs.readFileSync("./app/index.html", "utf8");
 
         res.set("Server", "MACT Engine");
         res.set("X-Powered-By", "MACT");
@@ -39,6 +39,18 @@ app.get('/', function (req, res) {
 });
 
 
+// When index login button redirects to login page
+app.get("/login", function (req, res) {
+    let login = fs.readFileSync("./app/login.html", "utf8");
+    let loginDOM = new JSDOM(login);
+
+    res.set("Server", "MACT Engine");
+    res.set("X-Powered-By", "MACT");
+    res.send(loginDOM.serialize());
+});
+
+
+// When user successfully logs in
 app.get("/main", function (req, res) {
 
     if (req.session.loggedIn) {
@@ -73,9 +85,9 @@ app.post("/login", function (req, res) {
 
     console.log("What was sent", req.body.email, req.body.password);
 
-    let results = authenticate(req.body.email, req.body.password,
+    let results = authenticateUser(req.body.email, req.body.password,
         function (userRecord) {
-            //console.log(rows);
+
             if (userRecord == null) {
                 // User login in unsuccessful
                 res.send({
@@ -119,45 +131,62 @@ app.get("/logout", function (req, res) {
     }
 });
 
+
 app.post('/signup', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
-    const mysql = require("mysql2");
-    let connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'OnTheHouseDB'
-    });
-    connection.connect();
-    connection.query('INSERT INTO users (firstName, lastName, city, email, password) values (?, ?, ?, ?, ?)',
-        [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password],
-        
-        function (error, results, fields) {
-            if (error) {
-                console.log(error);
+    let results = checkEmailAlreadyExists(req.body.email,
+        function (userRecord) {
+
+            // When authenticate() returns null because user isn't currently in database
+            if (userRecord == null) {
+
+                const mysql = require("mysql2");
+                let connection = mysql.createConnection({
+                    host: 'localhost',
+                    user: 'root',
+                    password: '',
+                    database: 'OnTheHouseDB'
+                });
+                connection.connect();
+                connection.query('INSERT INTO users (firstName, lastName, city, email, password) values (?, ?, ?, ?, ?)',
+                    [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password],
+
+                    function (error, results, fields) {
+                        if (error) {
+                            console.log(error);
+
+                            // Send message saying account already exists
+                            res.send({
+                                status: "fail",
+                                msg: "Account already exists with this information."
+                            });
+
+                        } else {
+                            req.session.loggedIn = true;
+                            req.session.email = req.body.email;
+                            req.session.password = req.body.password;
+                            req.session.firstName = req.body.firstName;
+                            req.session.lastName = req.body.lastName;
+                            req.session.city = req.body.city;
+
+                            req.session.save(function (err) {
+                                // Session saved
+                            });
+
+                            res.send({
+                                status: "success",
+                                msg: "New user logged in."
+                            });
+                        }
+                    });
+
+            } else {
 
                 // Send message saying account already exists
                 res.send({
                     status: "fail",
                     msg: "Account already exists with this information."
-                });
-
-            } else {
-                req.session.loggedIn = true;
-                req.session.email = req.body.email;
-                req.session.password = req.body.password;
-                req.session.firstName = req.body.firstName;
-                req.session.lastName = req.body.lastName;
-                req.session.city = req.body.city;
-
-                req.session.save(function (err) {
-                    // Session saved
-                });
-
-                res.send({
-                    status: "success",
-                    msg: "New user logged in."
                 });
             }
         });
@@ -177,7 +206,7 @@ app.get("/signup", function (req, res) {
 
 
 // Validates user's email and password
-function authenticate(email, pwd, callback) {
+function authenticateUser(email, pwd, callback) {
 
     const mysql = require("mysql2");
     const connection = mysql.createConnection({
@@ -190,8 +219,6 @@ function authenticate(email, pwd, callback) {
     connection.query(
         "SELECT * FROM users WHERE email = ? AND password = ?", [email, pwd],
         function (error, results, fields) {
-            // results is an array of records, in JSON format
-            // fields contains extra meta data about results
             console.log("Results from DB", results, "and the # of records returned", results.length);
 
             if (error) {
@@ -211,29 +238,55 @@ function authenticate(email, pwd, callback) {
 }
 
 
-/*
- * Function that connects to the DBMS and checks if the DB exists, if not
- * creates it, then populates it with a couple of records
- */
+// Checks whether or not a new user's email already exists in the database
+function checkEmailAlreadyExists(email, callback) {
+
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "OnTheHouseDB"
+    });
+    connection.connect();
+    connection.query(
+        "SELECT * FROM users WHERE email = ?", [email],
+        function (error, results, fields) {
+            if (error) {
+                console.log(error);
+            }
+            if (results.length > 0) {
+                // Email already exists
+                return callback(results[0]);
+            } else {
+                // Email does not exist
+                return callback(null);
+            }
+        }
+    );
+}
+
+
+// Function connects to a database, checks if database exists, if not it creates it
 async function init() {
-        // Promise
-        const mysql = require("mysql2/promise");
-        const connection = await mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "",
-            multipleStatements: true
-        });
-        const createDBAndTables = `CREATE DATABASE IF NOT EXISTS OnTheHouseDB;
+    // Promise
+    const mysql = require("mysql2/promise");
+    const connection = await mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        multipleStatements: true
+    });
+    const createDBAndTables = `CREATE DATABASE IF NOT EXISTS OnTheHouseDB;
         use OnTheHouseDB;
         CREATE TABLE IF NOT EXISTS users(
-        id int NOT NULL AUTO_INCREMENT, 
+        userID int NOT NULL AUTO_INCREMENT, 
         firstName VARCHAR(20), 
         lastName VARCHAR(20), 
         city VARCHAR(30), 
         email VARCHAR(30), 
         password VARCHAR(30), 
-        PRIMARY KEY (id));`;
+        PRIMARY KEY (userID));`;
     await connection.query(createDBAndTables);
 
     // Await allows for us to wait for this line to execute synchronously

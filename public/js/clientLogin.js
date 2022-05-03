@@ -62,6 +62,12 @@ ready(function() {
         }, queryString);
     });
 
+
+    // Redirects to index page when navbar home button is clicked
+    document.querySelector("#home").addEventListener("click", function (e) {            e.preventDefault();
+            window.location.replace("/");
+    });
+
 });
 
 function ready(callback) {
