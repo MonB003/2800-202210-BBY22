@@ -77,7 +77,7 @@ app.get("/main", function (req, res) {
                 'SELECT * FROM users',
                 function (error, userResults, fields2) {
 
-                    // Create a table to display the recipes table
+                    // Create a table to display the users table
                     let allUsers = "<table><tr><th>First Name</th><th>Last Name</th><th>City</th><th>Email</th><th>Password</th><th>Edit</th></tr>";
 
                     // For loop gets each row of data
@@ -85,12 +85,14 @@ app.get("/main", function (req, res) {
                         let userIdNum = userResults[row].id;
 
                         // Add each row of data and append each attribute to strRowData
-                        let strRowData = "</tr><td>" + "<input type=\"text\" id=\"firstName" + userIdNum + "\"" + " value=\"" + userResults[row].firstName + "\">" + "</td>";
-                        strRowData += "<td>" + "<input type=\"text\" id=\"lastName" + userIdNum + "\"" + " value=\"" + userResults[row].lastName + "\">" + "</td>";
-                        strRowData += "<td>" + "<input type=\"text\" id=\"city" + userIdNum + "\"" + " value=\"" + userResults[row].city + "\">" + "</td>";
-                        strRowData += "<td>" + "<input type=\"text\" id=\"email" + userIdNum + "\"" + " value=\"" + userResults[row].email + "\">" + "</td>";
-                        strRowData += "<td>" + "<input type=\"text\" id=\"password" + userIdNum + "\"" + " value=\"" + userResults[row].password + "\">" + "</td>";
-                        strRowData += "<td>" + "<button id=\"button" + userIdNum + "\"" + "</td></tr>";
+                        let strRowData = "</tr><td>" + "<input type=\"text\" id=\"userFirstName" + userIdNum + "\"" + " value=\"" + userResults[row].firstName + "\">" + "</td>";
+                        strRowData += "<td>" + "<input type=\"text\" id=\"userLastName" + userIdNum + "\"" + " value=\"" + userResults[row].lastName + "\">" + "</td>";
+                        strRowData += "<td>" + "<input type=\"text\" id=\"userCity" + userIdNum + "\"" + " value=\"" + userResults[row].city + "\">" + "</td>";
+                        strRowData += "<td>" + "<input type=\"text\" id=\"userEmail" + userIdNum + "\"" + " value=\"" + userResults[row].email + "\">" + "</td>";
+                        strRowData += "<td>" + "<input type=\"text\" id=\"userPassword" + userIdNum + "\"" + " value=\"" + userResults[row].password + "\">" + "</td>";
+                        strRowData += "<td>" + "<input type=\"text\" id=\"userType" + userIdNum + "\"" + " value=\"" + userResults[row].type + "\">" + "</td>";
+                        strRowData += "<td>" + "<button id=\"editButton" + userIdNum + "\"" + "</tr>";
+                        strRowData += "<td>" + "<button id=\"deleteButton" + userIdNum + "\"" + "</td></tr>";
 
                         allUsers += strRowData;
                     }
@@ -104,11 +106,15 @@ app.get("/main", function (req, res) {
                     for (let row = 0; row < userResults.length; row++) {
                         let userIdNum = userResults[row].id;
 
-                        mainDOM.window.document.getElementById("button" + userIdNum).textContent = "Edit User " + userIdNum;
+                        // Set button name and method
+                        mainDOM.window.document.getElementById("editButton" + userIdNum).textContent = "Edit User";
+                        mainDOM.window.document.getElementById("editButton" + userIdNum).setAttribute("onclick", "updateAUsersData(" + userIdNum + ")");
+                        mainDOM.window.document.getElementById("deleteButton" + userIdNum).textContent = "Delete User";
+                        mainDOM.window.document.getElementById("deleteButton" + userIdNum).setAttribute("onclick", "deleteAUser(" + userIdNum + ")");
                     }
 
-                    res.set("Server", "Wazubi Engine");
-                    res.set("X-Powered-By", "Wazubi");
+                    res.set("Server", "MACT Engine");
+                    res.set("X-Powered-By", "MACT");
                     res.send(mainDOM.serialize());
                 }
             );
@@ -284,6 +290,7 @@ app.get('/profile', function (req, res) {
 });
 
 
+// When an admin updates a user's data
 app.post('/update-user-data', (req, res) => {
     const mysql = require("mysql2");
     const connection = mysql.createConnection({
@@ -294,7 +301,39 @@ app.post('/update-user-data', (req, res) => {
     });
     connection.connect();
     connection.query(
-        "UPDATE users SET firstName = ?, lastName = ?, city = ?, email = ?, password = ? WHERE email = ? AND password = ?",
+        "UPDATE users SET firstName = ?, lastName = ?, city = ?, email = ?, password = ?, type = ? WHERE id = ?",
+        [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.body.type, req.body.userID],
+        function (error, results) {
+            if (error) {
+                console.log(error);
+
+                res.send({
+                    status: 'Fail',
+                    msg: 'Error. User could not be updated'
+                });
+            }
+        }
+    );
+
+    res.send({
+        status: 'Success',
+        msg: 'Updated ' + req.body.firstName + ' ' + req.body.lastName + '\'s data'
+    });
+});
+
+
+// When user's updates their data
+app.post('/update-data', (req, res) => {    
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "OnTheHouseDB"
+    });
+    connection.connect();
+    connection.query(
+        "UPDATE users SET firstName = ?, lastName = ?, city = ?, email = ?, password = ? WHERE email = ? AND password = ?", 
         [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.session.email, req.session.password],
         function (error, results) {
             if (error) {
@@ -305,7 +344,36 @@ app.post('/update-user-data', (req, res) => {
 
     res.send({
         status: 'Success',
-        msg: 'Updated ' + req.body.firstName + ' ' + req.body.lastName + '\'s data'
+        msg: 'Data updated'
+    });
+});
+
+
+app.post('/delete-user', (req, res) => {    
+    let requestName = req.body.firstName + " " + req.body.lastName;
+
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "OnTheHouseDB"
+    });
+    connection.connect();
+    connection.query(
+        "DELETE FROM users WHERE id = ?", 
+        [req.body.userID],
+        function (error, results) {
+            if (error) {
+                console.log(error);
+            }
+        }
+
+    );
+
+    res.send({
+        status: 'Success',
+        msg: 'Deleted ' + requestName + '\'s data'
     });
 });
 
