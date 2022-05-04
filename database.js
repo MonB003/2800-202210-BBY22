@@ -132,7 +132,7 @@ app.post('/signup', function (req, res) {
     connection.connect();
     connection.query('INSERT INTO users (firstName, lastName, city, email, password) values (?, ?, ?, ?, ?)',
         [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password],
-        
+
         function (error, results, fields) {
             if (error) {
                 console.log(error);
@@ -216,15 +216,15 @@ function authenticate(email, pwd, callback) {
  * creates it, then populates it with a couple of records
  */
 async function init() {
-        // Promise
-        const mysql = require("mysql2/promise");
-        const connection = await mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "",
-            multipleStatements: true
-        });
-        const createDBAndTables = `CREATE DATABASE IF NOT EXISTS OnTheHouseDB;
+    // Promise
+    const mysql = require("mysql2/promise");
+    const connection = await mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        multipleStatements: true
+    });
+    const createDBAndTables = `CREATE DATABASE IF NOT EXISTS OnTheHouseDB;
         use OnTheHouseDB;
         CREATE TABLE IF NOT EXISTS users(
         id int NOT NULL AUTO_INCREMENT, 
@@ -233,7 +233,18 @@ async function init() {
         city VARCHAR(30), 
         email VARCHAR(30), 
         password VARCHAR(30), 
-        PRIMARY KEY (id));`;
+        PRIMARY KEY (id));
+        
+        CREATE TABLE IF NOT EXISTS item_posts(
+            id int NOT NULL AUTO_INCREMENT, 
+            user_id int NOT NULL,
+            title VARCHAR(50), 
+            description VARCHAR(1000), 
+            city VARCHAR(30), 
+            status VARCHAR(30), 
+            timestamp VARCHAR(50),
+            PRIMARY KEY (id),
+            FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
     await connection.query(createDBAndTables);
 
     // Await allows for us to wait for this line to execute synchronously
