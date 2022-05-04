@@ -18,7 +18,7 @@ body {
   grid-area: 1/1/2/2;
   background-color: rgba(0, 0, 0, 0.1);
   width: 375px;
-  margin: 12% auto;
+  margin: 8% auto;
   border-radius: 25px;
   box-shadow: 0 0 17px rgb(243, 243, 243);
 }
@@ -68,7 +68,6 @@ body {
 #loginBtn {
   padding-left: 0;
   font-family: 'Lato', sans-serif;
-  /* background-color: #83acf1; */
   background-color: #9e72ba;
   letter-spacing: 1px;
   font-weight: bold;
@@ -128,7 +127,7 @@ body {
   position: relative;
   top: 50pt;
   left: -30pt;
-  padding-top: 125px;
+  padding-top: 100px;
 }
 
 footer > p{
@@ -142,4 +141,50 @@ footer > p{
 
 #signupForm {
   font-family: 'Lato', sans-serif;
+}
+
+#signup {
+  border: none;
+  outline: none;
+  background-color: #7e72ba;
+  padding: 5pt;
+  padding-left: 8pt;
+  padding-right: 8pt;
+  font-family: 'Lato', sans-serif;
+  letter-spacing: 1px;
+  font-size: 15px;
+  color: aliceblue;
+  border-radius: 5pt;
+  margin-bottom: 10pt;
+  font-weight: bold;
+}
+
+#signup:hover {
+  background-color: rgb(86, 78, 129);
+  box-shadow: 1px 1px 3px rgb(73, 71, 71);
+}
+
+
+@media only screen and (max-width : 1000px) {
+
+  .grid {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 90% 10%;
+    height: auto;
+  }
+
+  .container {
+    grid-area: 1/1/2/2;
+    width: 380px;
+    height: 650px;
+    margin: 3% auto;
+    border-radius: 25px;
+    background-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 17px rgb(243, 243, 243);
+  }
+
+  .OTHText>h1 {
+    display: none;
+  }
 }

@@ -10,48 +10,38 @@
 </head>
 
 <body>
-
-    <!-- Nav bar -->
-    <header id="header">
-
-        <form action="/main" method="get">
-            <input type="submit" id="backToLogin" value="Back"/>
-        </form>
-
-    </header>
-
-    <br><br>
-
     <!-- Sign up form -->
-    <div id="content">
-        <form id="signUpForm">
-            <label>First Name:</label>
-            <br>
-            <input type="text" id="firstName" name="firstName" placeholder="First Name" pattern="[A-Za-z]{1,20}"
-                required="required">
-            <br><br>
-            <label>Last Name:</label>
-            <br>
-            <input type="text" id="lastName" name="lastName" placeholder="Last Name" pattern="[A-Za-z]{1,20}"
-                required="required">
-            <br><br>
-            <label>City:</label>
-            <br>
-            <input type="text" id="city" name="city" placeholder="City" pattern="[A-Za-z]{1,30}"
-                required="required">
-            <br><br>
-            <label>Email</label>
-            <br>
-            <input type="email" id="userEmail" name="userEmail" placeholder="Email@email.ca" required="required">
-            <br><br>
-            <label>Password</label>
-            <br>
-            <input type="password" id="userPassword" name="userPassword" placeholder="Password" required="required">
-            <br><br>
-            <button id="signUpBtn">Sign Up</button>
-            <br>
-            <p id="accExistsMsg"></p>
-        </form>
+    <div class="container">
+
+        <div class="header">
+            <h1 id="signUpHeading">Sign Up</h1>
+        </div>
+
+        <div class="content">
+
+            <form id="signUpForm">
+                
+                <span><input type="text" id="firstName" name="firstName" placeholder="First Name" pattern="[A-Za-z]{1,20}" required="required"></span>
+                <br>
+                <span><input type="text" id="lastName" name="lastName" placeholder="Last Name" pattern="[A-Za-z]{1,20}" required="required"></span>
+                <br>
+                <span><input type="text" id="city" name="city" placeholder="City" pattern="[A-Za-z]{1,30}" required="required"></span>
+                <br>
+                <span><input type="email" id="userEmail" name="userEmail" placeholder="Email@email.ca" required="required"></span>
+                <br>
+                <span><input type="password" id="userPassword" name="userPassword" placeholder="Password" required="required"></span>
+                <br>
+                <span><button id="signUpBtn">Sign Up</button></span>
+                <br>
+                <p id="accExistsMsg"></p>
+            </form>
+            <div class="return">
+                <p>Already have an account?</p>
+                <form action="/main" method="get">
+                    <input type="submit" id="backToLogin" value="Log In"/>
+                </form>
+            </div>
+        </div>
     </div>
 
 
