@@ -7,7 +7,7 @@
     <link href="/imgs/OTH-favicon.ico" rel="icon" type="image/x-icon" />
 
     <!-- CSS style -->
-    <link rel="stylesheet" href="/css/main.css" /> 
+    <link rel="stylesheet" href="/css/main.css" />
 </head>
 
 <body>
@@ -19,10 +19,12 @@
 
         <!-- Navbar -->
         <nav id="navbar">
+            <!-- Directs to profile page to edit user info -->
+            <button id="profile" class="nav-button">Profile</button>
+
             <a href="" id="home" class="nav-button">Home</a>
-            <a href="" id="about" class="nav-button">About</a>
             <form action="/logout" method="get" id="logoutForm">
-                <input type="submit" id="logout" class="nav-button" value="Logout"/>
+                <input type="submit" id="logout" class="nav-button" value="Logout" />
             </form>
             <a href="" id="help" class="nav-button">Help</a>
         </nav>
@@ -40,6 +42,11 @@
         <p id="copyright"> &copy; 2022. On the House
         </p>
     </footer>
+
+
+
+    <!-- JavaScript -->
+    <script src="js/clientMain.js"></script>
 
 </body>
 

@@ -54,6 +54,7 @@ app.get("/login", function (req, res) {
 app.get("/main", function (req, res) {
 
     if (req.session.loggedIn) {
+
         // Check user's type
         if (req.session.type == "ADMIN") {
             let main = fs.readFileSync("./app/dashboard.html", "utf8");
@@ -63,9 +64,54 @@ app.get("/main", function (req, res) {
             mainDOM.window.document.getElementById("customerName").innerHTML = "Welcome, " + req.session.firstName +
                 " " + req.session.lastName + "!";
 
-            res.set("Server", "MACT Engine");
-            res.set("X-Powered-By", "MACT");
-            res.send(mainDOM.serialize());
+            const mysql = require("mysql2");
+            const connection = mysql.createConnection({
+                host: "localhost",
+                user: "root",
+                password: "",
+                database: "OnTheHouseDB"
+            });
+            connection.connect();
+            connection.query(
+
+                'SELECT * FROM users',
+                function (error, userResults, fields2) {
+
+                    // Create a table to display the recipes table
+                    let allUsers = "<table><tr><th>First Name</th><th>Last Name</th><th>City</th><th>Email</th><th>Password</th><th>Edit</th></tr>";
+
+                    // For loop gets each row of data
+                    for (let row = 0; row < userResults.length; row++) {
+                        let userIdNum = userResults[row].id;
+
+                        // Add each row of data and append each attribute to strRowData
+                        let strRowData = "</tr><td>" + "<input type=\"text\" id=\"firstName" + userIdNum + "\"" + " value=\"" + userResults[row].firstName + "\">" + "</td>";
+                        strRowData += "<td>" + "<input type=\"text\" id=\"lastName" + userIdNum + "\"" + " value=\"" + userResults[row].lastName + "\">" + "</td>";
+                        strRowData += "<td>" + "<input type=\"text\" id=\"city" + userIdNum + "\"" + " value=\"" + userResults[row].city + "\">" + "</td>";
+                        strRowData += "<td>" + "<input type=\"text\" id=\"email" + userIdNum + "\"" + " value=\"" + userResults[row].email + "\">" + "</td>";
+                        strRowData += "<td>" + "<input type=\"text\" id=\"password" + userIdNum + "\"" + " value=\"" + userResults[row].password + "\">" + "</td>";
+                        strRowData += "<td>" + "<button id=\"button" + userIdNum + "\"" + "</td></tr>";
+
+                        allUsers += strRowData;
+                    }
+
+                    // Close table tag
+                    allUsers += "</table>";
+
+                    // Add table to HTML div
+                    mainDOM.window.document.getElementById("userTableDiv").innerHTML = allUsers;
+
+                    for (let row = 0; row < userResults.length; row++) {
+                        let userIdNum = userResults[row].id;
+
+                        mainDOM.window.document.getElementById("button" + userIdNum).textContent = "Edit User " + userIdNum;
+                    }
+
+                    res.set("Server", "Wazubi Engine");
+                    res.set("X-Powered-By", "Wazubi");
+                    res.send(mainDOM.serialize());
+                }
+            );
 
         } else {
             let main = fs.readFileSync("./app/main.html", "utf8");
@@ -220,6 +266,49 @@ app.get("/signup", function (req, res) {
     res.set("X-Powered-By", "MACT");
     res.send(signupDOM.serialize());
 });
+
+
+app.get('/profile', function (req, res) {
+    let profile = fs.readFileSync("./app/profile.html", "utf8");
+    let profileDOM = new JSDOM(profile);
+
+    profileDOM.window.document.getElementById("userFirstName").defaultValue = req.session.firstName;
+    profileDOM.window.document.getElementById("userLastName").defaultValue = req.session.lastName;
+    profileDOM.window.document.getElementById("userCity").defaultValue = req.session.city;
+    profileDOM.window.document.getElementById("userEmail").defaultValue = req.session.email;
+    profileDOM.window.document.getElementById("userPassword").defaultValue = req.session.password;
+
+    res.set("Server", "MACT Engine");
+    res.set("X-Powered-By", "MACT");
+    res.send(profileDOM.serialize());
+});
+
+
+app.post('/update-user-data', (req, res) => {
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "OnTheHouseDB"
+    });
+    connection.connect();
+    connection.query(
+        "UPDATE users SET firstName = ?, lastName = ?, city = ?, email = ?, password = ? WHERE email = ? AND password = ?",
+        [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.session.email, req.session.password],
+        function (error, results) {
+            if (error) {
+                console.log(error);
+            }
+        }
+    );
+
+    res.send({
+        status: 'Success',
+        msg: 'Updated ' + req.body.firstName + ' ' + req.body.lastName + '\'s data'
+    });
+});
+
 
 
 // Validates user's email and password

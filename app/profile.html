@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Profile Page</title>
+    <meta charset="utf-8" />
+    <link href="/imgs/OTH-favicon.ico" rel="icon" type="image/x-icon" />
+
+    <!-- CSS style -->
+    <link rel="stylesheet" href="/css/profile.css" />
+</head>
+
+<body>
+
+    <header id="header">
+        <nav id="navbar">
+            <button id="home">Home</button>
+            <form action="/logout" method="get" id="logout-form">
+                <input id="logout" class="nav-items" type="submit" value="Logout" />
+            </form>
+        </nav>
+    </header>
+
+    <section>
+        <h3>Edit Profile</h3>
+        <input type="text" id="userFirstName" name="firstName">
+        <br>
+        <input type="text" id="userLastName" name="lastName">
+        <br>
+        <input type="text" id="userCity" name="city">
+        <br>
+        <input type="text" id="userEmail" name="email">
+        <br>
+        <input type="text" id="userPassword" name="password">
+        <button id="saveBtn" onclick="updateData()">Save</button>
+        <p id="message"></p>
+    </section>
+
+
+
+    <script>
+        async function updateData() {
+            let firstName = document.getElementById('userFirstName').value;
+            let lastName = document.getElementById('userLastName').value;
+            let city = document.getElementById('userCity').value;
+            let email = document.getElementById('userEmail').value;
+            let password = document.getElementById('userPassword').value;
+
+            const dataSent = {
+                firstName,
+                lastName,
+                city,
+                email,
+                password
+            }
+
+            const postDetails = {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(dataSent)
+            }
+
+            // Get response from server side
+            const postResponse = await fetch('/update-user-data', postDetails);
+            const jsonData = await postResponse.json();
+            console.log(jsonData);
+            console.log(jsonData.msg);
+            document.getElementById('message').innerHTML = jsonData.msg;
+        };
+
+
+        document.querySelector("#home").addEventListener("click", function (e) {
+            window.location.replace("/main");
+        });
+    </script>
+
+</body>
+
+</html>
