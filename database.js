@@ -25,11 +25,12 @@ app.use(session({
 // Go to: http://localhost:8000
 app.get('/', function (req, res) {
 
-    // Check for a session first
+    // If there is a current session, go directly to the main page
     if (req.session.loggedIn) {
         res.redirect("/main");
 
     } else {
+        // If there's no session, go to the index page
         let doc = fs.readFileSync("./app/index.html", "utf8");
 
         res.set("Server", "MACT Engine");
@@ -39,7 +40,7 @@ app.get('/', function (req, res) {
 });
 
 
-// When index login button redirects to login page
+// When the login button on the index page directs to login page
 app.get("/login", function (req, res) {
     let login = fs.readFileSync("./app/login.html", "utf8");
     let loginDOM = new JSDOM(login);
@@ -53,14 +54,15 @@ app.get("/login", function (req, res) {
 // When user successfully logs in
 app.get("/main", function (req, res) {
 
+    // Check if user is logged in, if they are then check the user's type
     if (req.session.loggedIn) {
 
-        // Check user's type
+        // If user is admin
         if (req.session.type == "ADMIN") {
             let main = fs.readFileSync("./app/dashboard.html", "utf8");
             let mainDOM = new JSDOM(main);
 
-            // Get the user's data and put it into the page
+            // Get the user's name and put it into the page
             mainDOM.window.document.getElementById("customerName").innerHTML = "Welcome, " + req.session.firstName +
                 " " + req.session.lastName + "!";
 
@@ -106,7 +108,7 @@ app.get("/main", function (req, res) {
                     for (let row = 0; row < userResults.length; row++) {
                         let userIdNum = userResults[row].id;
 
-                        // Set button name and method
+                        // Set button name and its method when clicked
                         mainDOM.window.document.getElementById("editButton" + userIdNum).textContent = "Edit User";
                         mainDOM.window.document.getElementById("editButton" + userIdNum).setAttribute("onclick", "updateAUsersData(" + userIdNum + ")");
                         mainDOM.window.document.getElementById("deleteButton" + userIdNum).textContent = "Delete User";
@@ -120,10 +122,11 @@ app.get("/main", function (req, res) {
             );
 
         } else {
+            // If it is a regular user
             let main = fs.readFileSync("./app/main.html", "utf8");
             let mainDOM = new JSDOM(main);
 
-            // Get the user's data and put it into the page
+            // Get the user's name and put it into the page
             mainDOM.window.document.getElementById("customerName").innerHTML = "Welcome, " + req.session.firstName +
                 " " + req.session.lastName + "!";
 
@@ -133,7 +136,7 @@ app.get("/main", function (req, res) {
         }
 
     } else {
-        // not logged in - no session and no access, redirect to home
+        // User is not logged in, so direct to index page
         res.redirect("/");
     }
 
@@ -185,6 +188,7 @@ app.post("/login", function (req, res) {
 });
 
 
+// Logout
 app.get("/logout", function (req, res) {
 
     if (req.session) {
@@ -200,13 +204,15 @@ app.get("/logout", function (req, res) {
 });
 
 
+// After user signs up
 app.post('/signup', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
+    // Checks if the new user's email is already in the database (email must be unique)
     let results = checkEmailAlreadyExists(req.body.email,
         function (userRecord) {
 
-            // When authenticate() returns null because user isn't currently in database
+            // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
             if (userRecord == null) {
 
                 const mysql = require("mysql2");
@@ -231,6 +237,7 @@ app.post('/signup', function (req, res) {
                             });
 
                         } else {
+                            // User is logged in, so save their data into a session
                             req.session.loggedIn = true;
                             req.session.email = req.body.email;
                             req.session.password = req.body.password;
@@ -262,11 +269,10 @@ app.post('/signup', function (req, res) {
 });
 
 
+// Load sign up page
 app.get("/signup", function (req, res) {
     let signup = fs.readFileSync("./app/account.html", "utf8");
     let signupDOM = new JSDOM(signup);
-
-    console.log("Directed to sign up page");
 
     res.set("Server", "MACT Engine");
     res.set("X-Powered-By", "MACT");
@@ -274,10 +280,12 @@ app.get("/signup", function (req, res) {
 });
 
 
+// Load profile page
 app.get('/profile', function (req, res) {
     let profile = fs.readFileSync("./app/profile.html", "utf8");
     let profileDOM = new JSDOM(profile);
 
+    // Load current user's data into the text fields on the page
     profileDOM.window.document.getElementById("userFirstName").defaultValue = req.session.firstName;
     profileDOM.window.document.getElementById("userLastName").defaultValue = req.session.lastName;
     profileDOM.window.document.getElementById("userCity").defaultValue = req.session.city;
@@ -349,6 +357,7 @@ app.post('/update-data', (req, res) => {
 });
 
 
+// When an admin deletes a user from the database
 app.post('/delete-user', (req, res) => {    
     let requestName = req.body.firstName + " " + req.body.lastName;
 
@@ -469,7 +478,7 @@ async function init() {
 
     // If no records, add some
     if (rows.length == 0) {
-        let userRecords = "insert into users (firstName, lastName, city, email, password, type) values ?";
+        let userRecords = "INSERT INTO users (firstName, lastName, city, email, password, type) VALUES ?";
         let recordValues = [
             ["Test", "Test", "Vancouver", "test@test.ca", "password", "ADMIN"]
         ];

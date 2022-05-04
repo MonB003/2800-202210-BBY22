@@ -7,6 +7,7 @@ async function updateAUsersData(userID) {
     let password = document.getElementById('userPassword'+userID).value;
     let type = document.getElementById('userType'+userID).value;
 
+    // Store user's data that was filled into the text fields on the page
     const dataSent = {
         firstName,
         lastName,
@@ -17,6 +18,7 @@ async function updateAUsersData(userID) {
         userID
     }
 
+    // Additional details needed when sending data to server side
     const postDetails = {
         method: 'POST',
         headers: {
@@ -25,7 +27,7 @@ async function updateAUsersData(userID) {
         body: JSON.stringify(dataSent)
     }
 
-    // Get response from server side
+    // Get response from server side post request called update-user-data
     const postResponse = await fetch('/update-user-data', postDetails);
     const jsonData = await postResponse.json();
     console.log(jsonData);
@@ -61,7 +63,7 @@ async function deleteAUser(userID) {
         body: JSON.stringify(dataSent)
     }
 
-    // Get response from server side
+    // Get response from server side post request called delete-user
     const postResponse = await fetch('/delete-user', postDetails);
     const jsonData = await postResponse.json();
     console.log(jsonData);

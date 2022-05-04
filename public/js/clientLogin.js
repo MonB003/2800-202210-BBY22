@@ -39,13 +39,14 @@ ready(function() {
         xhr.send(params);
     }
 
-    // POST TO THE SERVER
+    // Sends a post request to the server side when login button is clicked
     document.querySelector("#loginBtn").addEventListener("click", function(e) {
         e.preventDefault();
         let email = document.getElementById("userEmail");
         let password = document.getElementById("userPassword");
-        let queryString = "email=" + email.value + "&password=" + password.value;
-        console.log("data that we will send", email.value, password.value);
+
+        // Data being sent to the server
+        let dataSent = "email=" + email.value + "&password=" + password.value;
 
         ajaxPOST("/login", function(data) {
 
@@ -59,7 +60,7 @@ ready(function() {
                 }
             }
 
-        }, queryString);
+        }, dataSent);
     });
 
 

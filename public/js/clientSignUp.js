@@ -39,7 +39,7 @@ ready(function() {
         xhr.send(params);
     }
 
-    // POST TO THE SERVER
+    // Sends a post request to the server side when sign up button is clicked
     document.querySelector("#signUpBtn").addEventListener("click", function (e) {
         e.preventDefault();
         let fName = document.getElementById("firstName");
@@ -47,8 +47,9 @@ ready(function() {
         let city = document.getElementById("city");
         let email = document.getElementById("userEmail");
         let password = document.getElementById("userPassword");
-        let queryString = "firstName=" + fName.value + "&lastName=" + lName.value + "&city=" + city.value + "&email=" + email.value + "&password=" + password.value;
-        console.log("data that we will send", fName.value, lName.value, city.value, email.value, password.value);
+
+        // Data being sent to the server
+        let dataSent = "firstName=" + fName.value + "&lastName=" + lName.value + "&city=" + city.value + "&email=" + email.value + "&password=" + password.value;
 
         ajaxPOST("/signup", function (data) {
 
@@ -63,7 +64,7 @@ ready(function() {
                 }
             }
 
-        }, queryString);
+        }, dataSent);
     });
 
 });

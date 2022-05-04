@@ -1,3 +1,4 @@
+// Method called when a user updates their own information
 async function updateData() {
     let firstName = document.getElementById('userFirstName').value;
     let lastName = document.getElementById('userLastName').value;
@@ -5,6 +6,7 @@ async function updateData() {
     let email = document.getElementById('userEmail').value;
     let password = document.getElementById('userPassword').value;
 
+    // Store user's data that was filled into the text fields on the page
     const dataSent = {
         firstName,
         lastName,
@@ -13,6 +15,7 @@ async function updateData() {
         password
     }
 
+    // Additional details needed when sending data to server side
     const postDetails = {
         method: 'POST',
         headers: {
@@ -30,6 +33,7 @@ async function updateData() {
 };
 
 
+// Directs to main page when home button is clicked
 document.querySelector("#home").addEventListener("click", function (e) {
     window.location.replace("/main");
 });
