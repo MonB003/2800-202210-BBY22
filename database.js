@@ -163,6 +163,53 @@ app.post('/signup', function (req, res) {
         });
 });
 
+app.post('/newPost', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+
+    const mysql = require("mysql2");
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'OnTheHouseDB'
+    });
+    connection.connect();
+
+    // Need to check how to add in data not taken from the forms
+    connection.query('INSERT INTO item_posts (title, city, description) values (?, ?, ?)',
+        [req.body.title, req.body.city, req.body.description],
+
+        function (error, results, fields) {
+            if (error) {
+                console.log(error);
+
+                // Send message saying account already exists
+                res.send({
+                    status: "fail",
+                    msg: "Account already exists with this information."
+                });
+
+            } else {
+                // How is this being stored in the DB?
+                req.session.loggedIn = true;
+                req.session.email = req.body.email;
+                req.session.password = req.body.password;
+                req.session.firstName = req.body.firstName;
+                req.session.lastName = req.body.lastName;
+                req.session.city = req.body.city;
+
+                req.session.save(function (err) {
+                    // Session saved
+                });
+
+                res.send({
+                    status: "success",
+                    msg: "New user logged in."
+                });
+            }
+        });
+});
+
 
 app.get("/signup", function (req, res) {
     let signup = fs.readFileSync("./app/account.html", "utf8");
