@@ -175,6 +175,17 @@ app.get("/signup", function (req, res) {
     res.send(signupDOM.serialize());
 });
 
+app.get("/newPost", function (req, res) {
+    let newPost = fs.readFileSync("./app/newPost.html", "utf8");
+    let newPostDOM = new JSDOM(newPost);
+
+    console.log("Directed to sign up page");
+
+    // res.set("Server", "MACT Engine");
+    // res.set("X-Powered-By", "MACT");
+    res.send(newPostDOM.serialize());
+});
+
 
 // Validates user's email and password
 function authenticate(email, pwd, callback) {
