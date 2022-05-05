@@ -75,6 +75,8 @@ app.get("/main", function (req, res) {
                     // For loop gets each row of data
                     for (let row = 0; row < userResults.length; row++) {
                         let userIdNum = userResults[row].id;
+                        // console.log(userIdNum);
+                        // console.log(userResults[row].id);
 
                         // Add each row of data and append each attribute to strRowData
                         let strRowData = "</tr><td>" + "<input type=\"text\" id=\"userFirstName" + userIdNum + "\"" + " value=\"" + userResults[row].firstName + "\">" + "</td>";
@@ -413,7 +415,7 @@ app.post('/add-new-user', (req, res) => {
                         } else {
                             res.send({
                                 status: "Success",
-                                msg: req.body.firstName + " " +  req.body.lastName + " was added."
+                                msg: req.body.firstName + " " + req.body.lastName + " was added."
                             });
                         }
                     });
@@ -505,14 +507,14 @@ async function init() {
     const createDatabaseTables = `CREATE DATABASE IF NOT EXISTS OnTheHouseDB;
         use OnTheHouseDB;
         CREATE TABLE IF NOT EXISTS users(
-        userID int NOT NULL AUTO_INCREMENT, 
+        id int NOT NULL AUTO_INCREMENT, 
         firstName VARCHAR(20), 
         lastName VARCHAR(20), 
         city VARCHAR(30), 
         email VARCHAR(30), 
         password VARCHAR(30), 
         type VARCHAR(10),
-        PRIMARY KEY (userID));`;
+        PRIMARY KEY (id));`;
     await connection.query(createDatabaseTables);
 
     // Await allows for us to wait for this line to execute synchronously
