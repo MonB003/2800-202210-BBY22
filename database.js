@@ -164,6 +164,7 @@ app.post('/signup', function (req, res) {
         });
 });
 
+//Gets the user input from newPost.html and passes it into the database server.
 app.post('/newPost', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
@@ -181,7 +182,8 @@ app.post('/newPost', function (req, res) {
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dateAndTime = date + ' ' + time;
 
-    // Need to check how to add in data not taken from the forms
+    // This is where the user input is passed into the database. 
+    // User_ID is hardcoded and needs to be amended.
     connection.query('INSERT INTO item_posts (user_id, title, city, description, status, timestamp) values (?, ?, ?, ?, ?, ?)',
         [2, req.body.title, req.body.city, req.body.description, "available", dateAndTime],
 
@@ -288,6 +290,8 @@ async function init() {
         password: "",
         multipleStatements: true
     });
+
+    //Creates a table for user profiles and item posts
     const createDBAndTables = `CREATE DATABASE IF NOT EXISTS OnTheHouseDB;
         use OnTheHouseDB;
         CREATE TABLE IF NOT EXISTS users(
@@ -314,7 +318,7 @@ async function init() {
     // Await allows for us to wait for this line to execute synchronously
     const [rows, fields] = await connection.query("SELECT * FROM users");
 
-    // If no records, add some
+    // Adds a default user account in case there is no data in the table.
     if (rows.length == 0) {
         let userRecords = "insert into users (firstName, lastName, city, email, password) values ?";
         let recordValues = [
