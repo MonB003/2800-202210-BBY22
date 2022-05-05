@@ -38,7 +38,7 @@ app.get('/', function (req, res) {
     }
 });
 
-
+//Display posts on the main page
 app.get("/main", function (req, res) {
     const mysql = require("mysql2");
     if (req.session.loggedIn) {
