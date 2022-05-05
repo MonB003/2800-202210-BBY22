@@ -198,7 +198,7 @@ app.post('/newPost', function (req, res) {
                 });
 
             } else {
-                // How is this being stored in the DB?
+                // Do we need this set of code?
                 // req.session.loggedIn = true;
                 // req.session.title = req.body.title;
                 // req.session.city = req.body.city;
