@@ -330,7 +330,7 @@ app.post('/update-user-data', (req, res) => {
 });
 
 
-// When user's updates their data
+// When a user updates their own data
 app.post('/update-data', (req, res) => {    
     const mysql = require("mysql2");
     const connection = mysql.createConnection({
@@ -488,6 +488,6 @@ async function init() {
     console.log("Listening on port " + port + "!");
 }
 
-// RUN SERVER
+// Server runs on port 8000
 let port = 8000;
 app.listen(port, init);
