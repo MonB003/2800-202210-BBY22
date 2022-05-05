@@ -148,11 +148,13 @@ app.get("/main", function (req, res) {
                             posts.appendChild(testpost);
                         });
                         connection.end();
-                        res.set("Server", "MACT Engine");
-                        res.set("X-Powered-By", "MACT");
-                        res.send(mainDOM.serialize());
-                    } else {}
-    
+                    } else {
+                        console.log('No posted items.');
+                    }
+
+                    res.set("Server", "MACT Engine");
+                    res.set("X-Powered-By", "MACT");
+                    res.send(mainDOM.serialize());
                 }
             );
         }
@@ -505,7 +507,7 @@ app.post('/add-new-user', (req, res) => {
                         } else {
                             res.send({
                                 status: "Success",
-                                msg: req.body.firstName + " " +  req.body.lastName + " was added."
+                                msg: req.body.firstName + " " + req.body.lastName + " was added."
                             });
                         }
                     });
