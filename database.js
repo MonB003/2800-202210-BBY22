@@ -85,6 +85,7 @@ app.post("/login", function (req, res) {
             } else {
                 // If user successfully logged in, authenticate the user, create a session
                 req.session.loggedIn = true;
+                req.session.userID = userRecord.ID;
                 req.session.email = userRecord.email;
                 req.session.password = userRecord.password;
                 req.session.firstName = userRecord.firstName;
@@ -175,9 +176,14 @@ app.post('/newPost', function (req, res) {
     });
     connection.connect();
 
+    var today = new Date();
+    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateAndTime = date + ' ' + time;
+
     // Need to check how to add in data not taken from the forms
-    connection.query('INSERT INTO item_posts (title, city, description) values (?, ?, ?)',
-        [req.body.title, req.body.city, req.body.description],
+    connection.query('INSERT INTO item_posts (user_id, title, city, description, status, timestamp) values (?, ?, ?, ?, ?, ?)',
+        [2, req.body.title, req.body.city, req.body.description, "available", dateAndTime],
 
         function (error, results, fields) {
             if (error) {
@@ -191,12 +197,12 @@ app.post('/newPost', function (req, res) {
 
             } else {
                 // How is this being stored in the DB?
-                req.session.loggedIn = true;
-                req.session.email = req.body.email;
-                req.session.password = req.body.password;
-                req.session.firstName = req.body.firstName;
-                req.session.lastName = req.body.lastName;
-                req.session.city = req.body.city;
+                // req.session.loggedIn = true;
+                // req.session.title = req.body.title;
+                // req.session.city = req.body.city;
+                // req.session.description = req.body.description;
+                // req.session.status = "Available";
+                // req.session.timestamp = "April 30, 2020 (dummy date)";
 
                 req.session.save(function (err) {
                     // Session saved
@@ -204,7 +210,7 @@ app.post('/newPost', function (req, res) {
 
                 res.send({
                     status: "success",
-                    msg: "New user logged in."
+                    msg: "New post created."
                 });
             }
         });

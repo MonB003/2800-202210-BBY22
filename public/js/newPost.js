@@ -50,23 +50,26 @@ ready(function () {
         let queryString = "title=" + title.value + "&description=" + description.value + "&city=" + city.value;
         console.log("data that we will send", title.value, city.value, description.value);
 
-        ajaxPOST("/signup", function (data) {
-
+        ajaxPOST("/newPost", function (data) {
             if (data) {
                 let dataParsed = JSON.parse(data);
                 console.log(dataParsed);
                 if (dataParsed.status == "fail") {
-                    document.getElementById("accExistsMsg").innerHTML = dataParsed.msg;
-                    console.log("No success");
+                    // document.getElementById("accExistsMsg").innerHTML = dataParsed.msg;
+                    // console.log("No success");
                 } else {
                     window.location.replace("/main");
                 }
             }
-
         }, queryString);
-    });
 
+
+    });
 });
+
+
+
+
 
 function ready(callback) {
     if (document.readyState != "loading") {
