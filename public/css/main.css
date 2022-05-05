@@ -43,15 +43,13 @@ body {
     grid-column: 1 / span 3;
     overflow: hidden;
     border-radius: 15px 15px 0px 0px;
-    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .postimage img {
     width: 125%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 }
 
 .posttitle {
@@ -126,7 +124,7 @@ body {
     .poststatus {
         font-size: 18px;
         height: 20px;
-        width: 80px;
+        width: 100px;
     }
 
     .postlocation {
@@ -161,25 +159,25 @@ body {
         margin: auto;
         width: 47vw;
         height: 47vw;
-        grid-template-rows: auto 22px 36px 14px;
+        grid-template-rows: auto 24px 40px 18px;
     }
 
     .posttitle {
-        font-size: 20px;
+        font-size: 22px;
     }
 
     .poststatus {
-        font-size: 16px;
-        height: 18px;
-        width: 70px;
+        font-size: 18px;
+        height: 20px;
+        width: 100px;
     }
 
     .postlocation {
-        font-size: 16px;
+        font-size: 18px;
     }
 
     .postdate {
-        font-size: 14px;
+        font-size: 16px;
     }
 
 }
@@ -206,27 +204,26 @@ body {
         margin: auto;
         width: 30vw;
         height: 30vw;
-        grid-template-rows: auto 20px 32px 12px;
+        grid-template-rows: auto 22px 36px 16px;
     }
 
     .posttitle {
-        font-size: 18px;
+        font-size: 20px;
     }
 
     .poststatus {
-        font-size: 14px;
-        height: 16px;
-        width: 60px;
+        font-size: 16px;
+        height: 18px;
+        width: 80px;
     }
 
     .postlocation {
-        font-size: 14px;
+        font-size: 16px;
     }
 
     .postdate {
-        font-size: 12px;
+        font-size: 14px;
     }
-
 }
 
 @media only screen and (min-width : 1201px) {
@@ -251,25 +248,25 @@ body {
         margin: auto;
         width: 23vw;
         height: 23vw;
-        grid-template-rows: auto 18px 28px 10px;
+        grid-template-rows: auto 22px 36px 16px;
     }
 
     .posttitle {
-        font-size: 16px;
+        font-size: 20px;
     }
 
     .poststatus {
-        font-size: 12px;
-        height: 14px;
-        width: 50px;
+        font-size: 16px;
+        height: 18px;
+        width: 80px;
     }
 
     .postlocation {
-        font-size: 12px;
+        font-size: 16px;
     }
 
     .postdate {
-        font-size: 10px;
+        font-size: 14px;
     }
 
 }
