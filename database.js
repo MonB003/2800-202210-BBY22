@@ -75,8 +75,6 @@ app.get("/main", function (req, res) {
                     // For loop gets each row of data
                     for (let row = 0; row < userResults.length; row++) {
                         let userIdNum = userResults[row].id;
-                        // console.log(userIdNum);
-                        // console.log(userResults[row].id);
 
                         // Add each row of data and append each attribute to strRowData
                         let strRowData = "</tr><td>" + "<input type=\"text\" id=\"userFirstName" + userIdNum + "\"" + " value=\"" + userResults[row].firstName + "\">" + "</td>";
@@ -85,8 +83,6 @@ app.get("/main", function (req, res) {
                         strRowData += "<td>" + "<input type=\"text\" id=\"userEmail" + userIdNum + "\"" + " value=\"" + userResults[row].email + "\">" + "</td>";
                         strRowData += "<td>" + "<input type=\"text\" id=\"userPassword" + userIdNum + "\"" + " value=\"" + userResults[row].password + "\">" + "</td>";
                         strRowData += "<td>" + "<input type=\"text\" id=\"userType" + userIdNum + "\"" + " value=\"" + userResults[row].type + "\">" + "</td>";
-                        
-                        
                         //doesnt work
                         strRowData += "<td>" + "<button id=\"editButton" + userIdNum + "\"" + "</tr>";
                         strRowData += "<td>" + "<button id=\"deleteButton" + userIdNum + "\"" + "</td></tr>";
@@ -415,7 +411,7 @@ app.post('/add-new-user', (req, res) => {
                         } else {
                             res.send({
                                 status: "Success",
-                                msg: req.body.firstName + " " + req.body.lastName + " was added."
+                                msg: req.body.firstName + " " +  req.body.lastName + " was added."
                             });
                         }
                     });
