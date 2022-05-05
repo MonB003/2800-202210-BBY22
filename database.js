@@ -30,24 +30,14 @@ app.get('/', function (req, res) {
         res.redirect("/main");
 
     } else {
-        // If there's no session, go to the index page
-        let doc = fs.readFileSync("./app/index.html", "utf8");
+        // If there's no session, go to the login page
+        let login = fs.readFileSync("./app/login.html", "utf8");
+        let loginDOM = new JSDOM(login);
 
         res.set("Server", "MACT Engine");
         res.set("X-Powered-By", "MACT");
-        res.send(doc);
+        res.send(loginDOM.serialize());
     }
-});
-
-
-// When the login button on the index page directs to login page
-app.get("/login", function (req, res) {
-    let login = fs.readFileSync("./app/login.html", "utf8");
-    let loginDOM = new JSDOM(login);
-
-    res.set("Server", "MACT Engine");
-    res.set("X-Powered-By", "MACT");
-    res.send(loginDOM.serialize());
 });
 
 
@@ -136,7 +126,7 @@ app.get("/main", function (req, res) {
         }
 
     } else {
-        // User is not logged in, so direct to index page
+        // User is not logged in, so direct to login page
         res.redirect("/");
     }
 
@@ -282,7 +272,7 @@ app.get("/signup", function (req, res) {
 
 // Load profile page
 app.get('/profile', function (req, res) {
-    let profile = fs.readFileSync("./app/profile.html", "utf8");
+    let profile = fs.readFileSync("./app/updateProfile.html", "utf8");
     let profileDOM = new JSDOM(profile);
 
     // Load current user's data into the text fields on the page
