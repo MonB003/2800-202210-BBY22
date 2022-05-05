@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Index</title>
+    <title>On The House</title>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,17 +15,27 @@
         <button type="button" class="navbutton" id="filter">Filter</button>
     </div>
     <div id="posts">
-        <div class="post">
-            <div class="postimage">
-                <img src="https://dummyimage.com/600x400/000/fff" alt="placeholder">
+        <template id="posttemplate">
+            <div class="post">
+                <div class="postimage">
+                    <img src="https://dummyimage.com/600x400/000/fff" alt="placeholder">
+                </div>
+                <div class="posttitle">Post Title</div>
+                <div class="poststatus">Status</div>
+                <div class="postlocation">
+                    Post Location
+                </div>
+                <div class="postoptions">
+                    <div class="savepost">
+                        S
+                    </div>
+                    <div class="messagepost">
+                        M
+                    </div>
+                </div>
+                <div class="postdate">Post date time</div>
             </div>
-            <div class="posttitle">Post Title</div>
-            <div class="poststatus">Status</div>
-            <div class="postlocation">
-                Post Location
-            </div>
-            <div class="postdate">Post date time</div>
-        </div>
+        </template>
     </div>
 </body>
 

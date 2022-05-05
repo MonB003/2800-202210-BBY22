@@ -40,18 +40,47 @@ app.get('/', function (req, res) {
 
 
 app.get("/main", function (req, res) {
-
+    const mysql = require("mysql2");
     if (req.session.loggedIn) {
         let main = fs.readFileSync("./app/main.html", "utf8");
         let mainDOM = new JSDOM(main);
+        const connection = mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "",
+            database: "OnTheHouseDB"
+        });
+        let myResults = null;
+        connection.connect();
 
-        // Get the user's data and put it into the page
-        mainDOM.window.document.getElementById("customerName").innerHTML = "Welcome, " + req.session.firstName +
-            " " + req.session.lastName + "!";
+        connection.execute(
+            "SELECT * FROM item_posts",
+            function (error, results, fields) {
+                console.log("results:", results);
+                myResults = results;
+                let posttemplate = mainDOM.window.document.getElementById("posttemplate");
+                let posts = mainDOM.window.document.getElementById("posts");
+                if (error) {} else if (results.length > 0) {
+                    results.forEach(post => {
+                        let testpost = posttemplate.content.cloneNode(true);
+                        testpost.querySelector(".post").id = `post${post.ID}`;
+                        testpost.querySelector(".posttitle").innerHTML = post.title;
+                        testpost.querySelector(".poststatus").innerHTML = post.status;
+                        testpost.querySelector(".postlocation").innerHTML = post.city;
+                        testpost.querySelector(".poststatus").innerHTML = post.status;
+                        testpost.querySelector(".postdate").innerHTML = post.timestamp;
+                        testpost.querySelector(".savepost").id = `save${post.ID}`;
+                        testpost.querySelector(".messagepost").id = `message${post.ID}`;
+                        posts.appendChild(testpost);
+                    });
+                    connection.end();
+                    res.set("Server", "Wazubi Engine");
+                    res.set("X-Powered-By", "Wazubi");
+                    res.send(mainDOM.serialize());
+                } else {}
 
-        res.set("Server", "MACT Engine");
-        res.set("X-Powered-By", "MACT");
-        res.send(mainDOM.serialize());
+            }
+        );
 
     } else {
         // not logged in - no session and no access, redirect to home
@@ -132,7 +161,7 @@ app.post('/signup', function (req, res) {
     connection.connect();
     connection.query('INSERT INTO users (firstName, lastName, city, email, password) values (?, ?, ?, ?, ?)',
         [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password],
-        
+
         function (error, results, fields) {
             if (error) {
                 console.log(error);
@@ -216,15 +245,15 @@ function authenticate(email, pwd, callback) {
  * creates it, then populates it with a couple of records
  */
 async function init() {
-        // Promise
-        const mysql = require("mysql2/promise");
-        const connection = await mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "",
-            multipleStatements: true
-        });
-        const createDBAndTables = `CREATE DATABASE IF NOT EXISTS OnTheHouseDB;
+    // Promise
+    const mysql = require("mysql2/promise");
+    const connection = await mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        multipleStatements: true
+    });
+    const createDBAndTables = `CREATE DATABASE IF NOT EXISTS OnTheHouseDB;
         use OnTheHouseDB;
         CREATE TABLE IF NOT EXISTS users(
         id int NOT NULL AUTO_INCREMENT, 
