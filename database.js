@@ -83,8 +83,11 @@ app.get("/main", function (req, res) {
                         strRowData += "<td>" + "<input type=\"text\" id=\"userEmail" + userIdNum + "\"" + " value=\"" + userResults[row].email + "\">" + "</td>";
                         strRowData += "<td>" + "<input type=\"text\" id=\"userPassword" + userIdNum + "\"" + " value=\"" + userResults[row].password + "\">" + "</td>";
                         strRowData += "<td>" + "<input type=\"text\" id=\"userType" + userIdNum + "\"" + " value=\"" + userResults[row].type + "\">" + "</td>";
-                        strRowData += "<td>" + "<button id=\"editButton" + userIdNum + "\">" + "</td>";
-                        strRowData += "<td>" + "<button id=\"deleteButton" + userIdNum + "\">" + "</td></tr>";
+                        
+                        
+                        //doesnt work
+                        strRowData += "<td>" + "<button id=\"editButton" + userIdNum + "\"" + "</tr>";
+                        strRowData += "<td>" + "<button id=\"deleteButton" + userIdNum + "\"" + "</td></tr>";
 
                         allUsers += strRowData;
                     }
