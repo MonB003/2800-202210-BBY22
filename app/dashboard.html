@@ -57,12 +57,36 @@
                 <div id="userTableDiv"></div>
             </div>
 
+<<<<<<< HEAD
             <!--Grid 3-->
             <!-- Message for user feedback when a user's data is changed -->
             <div id="changeMsg">
                 <p id="message"></p>
             </div>
         </div>
+=======
+    <!-- Section to add a new user -->
+    <section>
+        <h3>Add New User</h3>
+        <input type="text" id="newUserFirstName" name="firstName" placeholder="First Name" pattern="[A-Za-z]{1,20}" required="required">
+        <br>
+        <input type="text" id="newUserLastName" name="lastName" placeholder="Last Name" pattern="[A-Za-z]{1,20}" required="required">
+        <br>
+        <input type="text" id="newUserCity" name="city" placeholder="City" pattern="[A-Za-z]{1,30}" required="required">
+        <br>
+        <input type="text" id="newUserEmail" name="email" placeholder="Email@email.ca" required="required">
+        <br>
+        <input type="password" id="newUserPassword" name="password" placeholder="Password" required="required">
+        <br>
+        <select name="user-type" id="newUserType">
+            <option value="USER">User</option>
+            <option value="ADMIN">Admin</option>
+        </select>
+
+        <button id="addNewUserBtn" onclick="addAUser()">Add User</button>
+        <p id="addUserMessage"></p>
+    </section>
+>>>>>>> origin/Monica_Admin_Features
 
     </body>
 
