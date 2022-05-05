@@ -2,11 +2,11 @@
 <html lang="en">
 
 <head>
+    <title>On The House</title>
     <meta charset="utf-8" />
-    <title>Main</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/imgs/OTH-favicon.ico" rel="icon" type="image/x-icon" />
-
-    <!-- CSS style -->
     <link rel="stylesheet" href="/css/main.css" />
 </head>
 
@@ -26,24 +26,37 @@
             <form action="/logout" method="get" id="logoutForm">
                 <input type="submit" id="logout" class="nav-button" value="Logout" />
             </form>
-            
-            <!-- Directs to newPost.html page to create a new post -->
-            <button id="newPostPageBtn">New Post</button>
         </nav>
 
     </header>
 
-    <!-- Displays user's name -->
-    <h1 id="customerName"></h1>
-
-    <br><br>
-
-    <!-- Footer -->
-    <footer>
-        <hr />
-        <p id="copyright"> &copy; 2022. On the House
-        </p>
-    </footer>
+    <div id="topnav">
+        <button type="button" class="navbutton" id="newPostPageBtn">New Post</button>
+        <button type="button" class="navbutton" id="filter">Filter</button>
+    </div>
+    <div id="posts">
+        <template id="posttemplate">
+            <div class="post">
+                <div class="postimage">
+                    <img src="https://dummyimage.com/600x400/000/fff" alt="placeholder">
+                </div>
+                <div class="posttitle">Post Title</div>
+                <div class="poststatus">Status</div>
+                <div class="postlocation">
+                    Post Location
+                </div>
+                <div class="postoptions">
+                    <div class="savepost">
+                        S
+                    </div>
+                    <div class="messagepost">
+                        M
+                    </div>
+                </div>
+                <div class="postdate">Post date time</div>
+            </div>
+        </template>
+    </div>
 
 
 

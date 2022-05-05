@@ -114,23 +114,52 @@ app.get("/main", function (req, res) {
 
         } else {
             // If it is a regular user
+            //Display posts on the main page
             let main = fs.readFileSync("./app/main.html", "utf8");
             let mainDOM = new JSDOM(main);
+            const mysql = require("mysql2");
+            const connection = mysql.createConnection({
+                host: "localhost",
+                user: "root",
+                password: "",
+                database: "OnTheHouseDB"
+            });
+            let myResults = null;
+            connection.connect();
 
-            // Get the user's name and put it into the page
-            mainDOM.window.document.getElementById("customerName").innerHTML = "Welcome, " + req.session.firstName +
-                " " + req.session.lastName + "!";
-
-            res.set("Server", "MACT Engine");
-            res.set("X-Powered-By", "MACT");
-            res.send(mainDOM.serialize());
+            connection.execute(
+                "SELECT * FROM item_posts",
+                function (error, results, fields) {
+                    console.log("results:", results);
+                    myResults = results;
+                    let posttemplate = mainDOM.window.document.getElementById("posttemplate");
+                    let posts = mainDOM.window.document.getElementById("posts");
+                    if (error) {} else if (results.length > 0) {
+                        results.forEach(post => {
+                            let testpost = posttemplate.content.cloneNode(true);
+                            testpost.querySelector(".post").id = `post${post.ID}`;
+                            testpost.querySelector(".posttitle").innerHTML = post.title;
+                            testpost.querySelector(".poststatus").innerHTML = post.status;
+                            testpost.querySelector(".postlocation").innerHTML = post.city;
+                            testpost.querySelector(".poststatus").innerHTML = post.status;
+                            testpost.querySelector(".postdate").innerHTML = post.timestamp;
+                            testpost.querySelector(".savepost").id = `save${post.ID}`;
+                            testpost.querySelector(".messagepost").id = `message${post.ID}`;
+                            posts.appendChild(testpost);
+                        });
+                        connection.end();
+                        res.set("Server", "MACT Engine");
+                        res.set("X-Powered-By", "MACT");
+                        res.send(mainDOM.serialize());
+                    } else {}
+    
+                }
+            );
         }
-
     } else {
         // User is not logged in, so direct to login page
         res.redirect("/");
     }
-
 });
 
 
