@@ -3,11 +3,11 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Main</title>
+    <title>Admin Dashboard</title>
     <link href="/imgs/OTH-favicon.ico" rel="icon" type="image/x-icon" />
 
     <!-- CSS style -->
-    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/dashboard.css" />
 </head>
 
 <body>
@@ -19,10 +19,8 @@
 
         <!-- Navbar -->
         <nav id="navbar">
-            <!-- Directs to profile page to edit user info -->
-            <button id="profile" class="nav-button">Profile</button>
-
             <a href="" id="home" class="nav-button">Home</a>
+            <a href="" id="about" class="nav-button">About</a>
             <form action="/logout" method="get" id="logoutForm">
                 <input type="submit" id="logout" class="nav-button" value="Logout" />
             </form>
@@ -36,17 +34,16 @@
 
     <br><br>
 
-    <!-- Footer -->
-    <footer>
-        <hr />
-        <p id="copyright"> &copy; 2022. On the House
-        </p>
-    </footer>
+    <!-- Display user dashboard data -->
+    <div id="userTableDiv"></div>
+
+    <!-- Message for user feedback when a user's data is changed -->
+    <p id="message"></p>
 
 
-
+    
     <!-- JavaScript -->
-    <script src="js/clientMain.js"></script>
+    <script src="js/clientDashboard.js"></script>
 
 </body>
 

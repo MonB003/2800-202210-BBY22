@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Profile Page</title>
+    <meta charset="utf-8" />
+    <link href="/imgs/OTH-favicon.ico" rel="icon" type="image/x-icon" />
+
+    <!-- CSS style -->
+    <link rel="stylesheet" href="/css/profile.css" />
+</head>
+
+<body>
+
+    <header id="header">
+        <nav id="navbar">
+            <button id="home">Home</button>
+            <form action="/logout" method="get" id="logout-form">
+                <input id="logout" class="nav-items" type="submit" value="Logout" />
+            </form>
+        </nav>
+    </header>
+
+    <section>
+        <h3>Edit Profile</h3>
+        <input type="text" id="userFirstName" name="firstName">
+        <br>
+        <input type="text" id="userLastName" name="lastName">
+        <br>
+        <input type="text" id="userCity" name="city">
+        <br>
+        <input type="text" id="userEmail" name="email">
+        <br>
+        <input type="text" id="userPassword" name="password">
+        <button id="saveBtn" onclick="updateData()">Save</button>
+        <p id="message"></p>
+    </section>
+
+
+
+    <!-- JavaScript -->
+    <script src="js/clientProfile.js"></script>
+
+</body>
+
+</html>
