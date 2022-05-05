@@ -259,6 +259,60 @@ app.post('/signup', function (req, res) {
         });
 });
 
+//Gets the user input from newPost.html and passes it into the database server.
+app.post('/newPost', function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+
+    const mysql = require("mysql2");
+    let connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'OnTheHouseDB'
+    });
+    connection.connect();
+
+    var today = new Date();
+    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateAndTime = date + ' ' + time;
+
+    // This is where the user input is passed into the database. 
+    // User_ID is hardcoded and needs to be amended.
+    connection.query('INSERT INTO item_posts (user_id, title, city, description, status, timestamp) values (?, ?, ?, ?, ?, ?)',
+        [2, req.body.title, req.body.city, req.body.description, "available", dateAndTime],
+
+        function (error, results, fields) {
+            if (error) {
+                console.log(error);
+
+                // Send message saying account already exists
+                res.send({
+                    status: "fail",
+                    msg: "Account already exists with this information."
+                });
+
+            } else {
+                // Do we need this set of code?
+                // req.session.loggedIn = true;
+                // req.session.title = req.body.title;
+                // req.session.city = req.body.city;
+                // req.session.description = req.body.description;
+                // req.session.status = "Available";
+                // req.session.timestamp = "April 30, 2020 (dummy date)";
+
+                req.session.save(function (err) {
+                    // Session saved
+                });
+
+                res.send({
+                    status: "success",
+                    msg: "New post created."
+                });
+            }
+        });
+});
+
 
 // Load sign up page
 app.get("/signup", function (req, res) {
@@ -268,6 +322,17 @@ app.get("/signup", function (req, res) {
     res.set("Server", "MACT Engine");
     res.set("X-Powered-By", "MACT");
     res.send(signupDOM.serialize());
+});
+
+app.get("/newPost", function (req, res) {
+    let newPost = fs.readFileSync("./app/newPost.html", "utf8");
+    let newPostDOM = new JSDOM(newPost);
+
+    console.log("Directed to sign up page");
+
+    // res.set("Server", "MACT Engine");
+    // res.set("X-Powered-By", "MACT");
+    res.send(newPostDOM.serialize());
 });
 
 
@@ -500,6 +565,8 @@ async function init() {
         password: "",
         multipleStatements: true
     });
+
+    //Creates a table for user profiles and item posts
     const createDatabaseTables = `CREATE DATABASE IF NOT EXISTS OnTheHouseDB;
         use OnTheHouseDB;
         CREATE TABLE IF NOT EXISTS users(
@@ -510,13 +577,24 @@ async function init() {
         email VARCHAR(30), 
         password VARCHAR(30), 
         type VARCHAR(10),
-        PRIMARY KEY (id));`;
+        PRIMARY KEY (id));
+        
+        CREATE TABLE IF NOT EXISTS item_posts(
+            id int NOT NULL AUTO_INCREMENT, 
+            user_id int NOT NULL,
+            title VARCHAR(50), 
+            description VARCHAR(1000), 
+            city VARCHAR(30), 
+            status VARCHAR(30), 
+            timestamp VARCHAR(50),
+            PRIMARY KEY (id),
+            FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
     await connection.query(createDatabaseTables);
 
     // Await allows for us to wait for this line to execute synchronously
     const [rows, fields] = await connection.query("SELECT * FROM users");
 
-    // If no records, add some
+    // Adds a default user account in case there is no data in the table.
     if (rows.length == 0) {
         let recordReturneds = "INSERT INTO users (firstName, lastName, city, email, password, type) VALUES ?";
         let recordValues = [

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post New Item</title>
+
+    <!-- Styles Page for New Post -->
+    <link rel="stylesheet" href="/css/newPost.css">
+</head>
+
+<body>
+    <!-- Nav bar -->
+    <header id="header">
+
+
+
+    </header>
+
+    <!-- Sign up form -->
+    <div id="content">
+        <form id="signUpForm">
+            <label>Title:</label>
+            <br>
+            <input type="text" id="title" name="title" placeholder="Title" pattern="[A-Za-z]{1,50}" required="required">
+            <br><br>
+            <label>City:</label>
+            <br>
+            <input type="text" id="city" name="city" placeholder="City" pattern="[A-Za-z]{1,30}" required="required">
+            <br><br>
+            <label>Description:</label>
+            <br>
+            <textarea name="description" id="newPostDescription" maxlength="1000" minlength="20" cols="100"
+                rows="10"></textarea>
+            <br><br>
+            <button id="newPostBtn">Create New Post</button>
+            <br><br>
+        </form>
+        <form action="/main" method="get">
+            <input type="submit" id="backToLogin" value="Cancel" />
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <hr />
+        <p id="copyright"> &copy; 2022. On the House
+        </p>
+    </footer>
+
+
+    <!-- JavaScript -->
+    <script src="/js/newPost.js"></script>
+</body>
+
+</html>
