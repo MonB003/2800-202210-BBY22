@@ -70,7 +70,7 @@ app.get("/main", function (req, res) {
                 function (error, userResults, fields2) {
 
                     // Create a table to display the users table
-                    let allUsers = "<table><tr><th>First Name</th><th>Last Name</th><th>City</th><th>Email</th><th>Password</th><th>Edit</th></tr>";
+                    let allUsers = "<table><tr><th>First Name</th><th>Last Name</th><th>City</th><th>Email</th><th>Password</th><th>Role</th></tr>";
 
                     // For loop gets each row of data
                     for (let row = 0; row < userResults.length; row++) {
@@ -145,10 +145,10 @@ app.post("/login", function (req, res) {
 
     console.log("What was sent", req.body.email, req.body.password);
 
-    let results = authenticateUser(req.body.email, req.body.password,
-        function (userRecord) {
+    authenticateUser(req.body.email, req.body.password,
+        function (recordReturned) {
 
-            if (userRecord == null) {
+            if (recordReturned == null) {
                 // User login in unsuccessful
                 res.send({
                     status: "fail",
@@ -157,12 +157,12 @@ app.post("/login", function (req, res) {
             } else {
                 // If user successfully logged in, authenticate the user, create a session
                 req.session.loggedIn = true;
-                req.session.email = userRecord.email;
-                req.session.password = userRecord.password;
-                req.session.firstName = userRecord.firstName;
-                req.session.lastName = userRecord.lastName;
-                req.session.city = userRecord.city;
-                req.session.type = userRecord.type;
+                req.session.email = recordReturned.email;
+                req.session.password = recordReturned.password;
+                req.session.firstName = recordReturned.firstName;
+                req.session.lastName = recordReturned.lastName;
+                req.session.city = recordReturned.city;
+                req.session.type = recordReturned.type;
 
                 req.session.save(function (err) {
                     // session saved
@@ -199,11 +199,11 @@ app.post('/signup', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
     // Checks if the new user's email is already in the database (email must be unique)
-    let results = checkEmailAlreadyExists(req.body.email,
-        function (userRecord) {
+    checkEmailAlreadyExists(req.body.email,
+        function (recordReturned) {
 
             // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
-            if (userRecord == null) {
+            if (recordReturned == null) {
 
                 const mysql = require("mysql2");
                 let connection = mysql.createConnection({
@@ -321,7 +321,7 @@ app.post('/update-user-data', (req, res) => {
 
 
 // When a user updates their own data
-app.post('/update-data', (req, res) => {    
+app.post('/update-data', (req, res) => {
     const mysql = require("mysql2");
     const connection = mysql.createConnection({
         host: "localhost",
@@ -331,7 +331,7 @@ app.post('/update-data', (req, res) => {
     });
     connection.connect();
     connection.query(
-        "UPDATE users SET firstName = ?, lastName = ?, city = ?, email = ?, password = ? WHERE email = ? AND password = ?", 
+        "UPDATE users SET firstName = ?, lastName = ?, city = ?, email = ?, password = ? WHERE email = ? AND password = ?",
         [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.session.email, req.session.password],
         function (error, results) {
             if (error) {
@@ -348,7 +348,7 @@ app.post('/update-data', (req, res) => {
 
 
 // When an admin deletes a user from the database
-app.post('/delete-user', (req, res) => {    
+app.post('/delete-user', (req, res) => {
     let requestName = req.body.firstName + " " + req.body.lastName;
 
     const mysql = require("mysql2");
@@ -360,7 +360,7 @@ app.post('/delete-user', (req, res) => {
     });
     connection.connect();
     connection.query(
-        "DELETE FROM users WHERE id = ?", 
+        "DELETE FROM users WHERE id = ?",
         [req.body.userID],
         function (error, results) {
             if (error) {
@@ -374,6 +374,55 @@ app.post('/delete-user', (req, res) => {
         status: 'Success',
         msg: 'Deleted ' + requestName + '\'s data'
     });
+});
+
+
+// When an admin adds a new user to the database
+app.post('/add-new-user', (req, res) => {
+
+    // Checks if the new user's email is already in the database
+    checkEmailAlreadyExists(req.body.email,
+        function (recordReturned) {
+
+            // If authenticate() returns null, user isn't currently in database, so they can be added
+            if (recordReturned == null) {
+                const mysql = require("mysql2");
+                let connection = mysql.createConnection({
+                    host: 'localhost',
+                    user: 'root',
+                    password: '',
+                    database: 'OnTheHouseDB'
+                });
+                connection.connect();
+                connection.query('INSERT INTO users (firstName, lastName, city, email, password, type) values (?, ?, ?, ?, ?, ?)',
+                    [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.body.type],
+
+                    function (error, results) {
+                        if (error) {
+                            console.log(error);
+
+                            // Send message saying account already exists
+                            res.send({
+                                status: "Fail",
+                                msg: "Error adding user."
+                            });
+
+                        } else {
+                            res.send({
+                                status: "Success",
+                                msg: req.body.firstName + " " +  req.body.lastName + " was added."
+                            });
+                        }
+                    });
+
+            } else {
+                // Account already exists in the database
+                res.send({
+                    status: "Fail",
+                    msg: "Account already exists with this information."
+                });
+            }
+        });
 });
 
 
@@ -450,7 +499,7 @@ async function init() {
         password: "",
         multipleStatements: true
     });
-    const createDBAndTables = `CREATE DATABASE IF NOT EXISTS OnTheHouseDB;
+    const createDatabaseTables = `CREATE DATABASE IF NOT EXISTS OnTheHouseDB;
         use OnTheHouseDB;
         CREATE TABLE IF NOT EXISTS users(
         userID int NOT NULL AUTO_INCREMENT, 
@@ -461,18 +510,18 @@ async function init() {
         password VARCHAR(30), 
         type VARCHAR(10),
         PRIMARY KEY (userID));`;
-    await connection.query(createDBAndTables);
+    await connection.query(createDatabaseTables);
 
     // Await allows for us to wait for this line to execute synchronously
     const [rows, fields] = await connection.query("SELECT * FROM users");
 
     // If no records, add some
     if (rows.length == 0) {
-        let userRecords = "INSERT INTO users (firstName, lastName, city, email, password, type) VALUES ?";
+        let recordReturneds = "INSERT INTO users (firstName, lastName, city, email, password, type) VALUES ?";
         let recordValues = [
             ["Test", "Test", "Vancouver", "test@test.ca", "password", "ADMIN"]
         ];
-        await connection.query(userRecords, [recordValues]);
+        await connection.query(recordReturneds, [recordValues]);
     }
 
     console.log("Listening on port " + port + "!");
