@@ -195,6 +195,7 @@ app.post("/login", function (req, res) {
                 req.session.lastName = recordReturned.lastName;
                 req.session.city = recordReturned.city;
                 req.session.type = recordReturned.type;
+                req.session.userID = recordReturned.id;
 
                 req.session.save(function (err) {
                     // session saved
@@ -267,6 +268,7 @@ app.post('/signup', function (req, res) {
                             req.session.lastName = req.body.lastName;
                             req.session.city = req.body.city;
                             req.session.type = req.body.type;
+                            req.session.userID = recordReturned.id;
 
                             req.session.save(function (err) {
                                 // Session saved
@@ -309,9 +311,9 @@ app.post('/newPost', function (req, res) {
     var dateAndTime = date + ' ' + time;
 
     // This is where the user input is passed into the database. 
-    // User_ID is hardcoded and needs to be amended.
+    // User_ID is saved from the current user of the session
     connection.query('INSERT INTO item_posts (user_id, title, city, description, status, timestamp) values (?, ?, ?, ?, ?, ?)',
-        [2, req.body.title, req.body.city, req.body.description, "available", dateAndTime],
+        [req.session.userID, req.body.title, req.body.city, req.body.description, "available", dateAndTime],
 
         function (error, results, fields) {
             if (error) {
