@@ -13,58 +13,63 @@
 <body>
 
     <!-- Header -->
-    <header id="header">
-
-        <h2 id="companyName">On the House</h2>
-
+    <header id="header">  
         <!-- Navbar -->
-        <nav id="navbar">
-            <a href="" id="home" class="nav-button">Home</a>
-            <a href="" id="about" class="nav-button">About</a>
-            <form action="/logout" method="get" id="logoutForm">
-                <input type="submit" id="logout" class="nav-button" value="Logout" />
-            </form>
-            <a href="" id="help" class="nav-button">Help</a>
+        <nav id="navbar">  
+
+            
+
+
+            <div class="headerContainer">
+
+                
+                <div id="navLogout">
+                    <form action="/logout" method="get" id="logoutForm">
+                        <input type="submit" id="logout" class="nav-button" value="Logout" />
+                    </form>
+                </div>
+                
+
+            </div>   
+
+            
         </nav>
 
     </header>
 
-    <!-- Displays user's name -->
-    <h1 id="customerName"></h1>
+    <body>
 
-    <br><br>
+        <div class="grid">
 
-    <!-- Display user dashboard data which can be edited or deleted -->
-    <div id="userTableDiv"></div>
+            <!--Grid 1-->
+            <div id="navHeading">
+                <h1 id="companyName">Admin Dashboard</h1>   
+                <h2 id="customerName"></h2>
+            </div>
+            <!-- Displays user's name -->
+            
 
-    <!-- Message for user feedback when a user's data is changed -->
-    <p id="message"></p>
+            <br>
 
-    <br><br>
+            <!--Grid 2-->
+            <!-- Display user dashboard data -->
+            <div id="tableContainer">
+                <div id="userTableDiv"></div>
+            </div>
 
-    <section>
-        <h3>Add New User</h3>
-        <input type="text" id="newUserFirstName" name="firstName" placeholder="First Name" pattern="[A-Za-z]{1,20}" required="required">
-        <br>
-        <input type="text" id="newUserLastName" name="lastName" placeholder="Last Name" pattern="[A-Za-z]{1,20}" required="required">
-        <br>
-        <input type="text" id="newUserCity" name="city" placeholder="City" pattern="[A-Za-z]{1,30}" required="required">
-        <br>
-        <input type="text" id="newUserEmail" name="email" placeholder="Email@email.ca" required="required">
-        <br>
-        <input type="password" id="newUserPassword" name="password" placeholder="Password" required="required">
-        <br>
-        <select name="user-type" id="newUserType">
-            <option value="USER">User</option>
-            <option value="ADMIN">Admin</option>
-        </select>
+            <!--Grid 3-->
+            <!-- Message for user feedback when a user's data is changed -->
+            <div id="changeMsg">
+                <p id="message"></p>
+            </div>
+        </div>
 
-        <button id="addNewUserBtn" onclick="addAUser()">Add User</button>
-        <p id="addUserMessage"></p>
-    </section>
+    </body>
+
+    
 
 
-
+    
     <!-- JavaScript -->
     <script src="js/clientDashboard.js"></script>
 

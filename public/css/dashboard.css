@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Balsamiq+Sans:ital@1&family=Lato:wght@300&family=Nunito:wght@700&family=Orbitron:wght@500&family=Pacifico&family=Raleway:ital@1&family=Shadows+Into+Light&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Balsamiq+Sans:ital@1&family=Lato:wght@300&family=Nanum+Gothic:wght@700&family=Nunito:wght@500;700&family=Orbitron:wght@500&family=Pacifico&family=Raleway:ital@1&family=Shadows+Into+Light&display=swap');
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: sans-serif;
+  background: url("/imgs/background2.jpg") center/cover fixed;
+  /* background-color: #EAF4F4; */
+  background-repeat: no-repeat;
+  overflow: hidden;
+  background-size: cover;
+}
+
+.headerContainer {
+  display: grid;
+  grid-template-columns: 100%;
+  font-family: 'Nanum Gothic',sans-serif;
+  font-weight: bold;
+  border-bottom-style: solid;
+  /* border-color: #CCE3DE; */
+  border-color: #BCC1BA;
+  /* grid-template-rows: 95% 5%; */
+  height: 42px;
+  /* background-color: #F6FFF8; */
+  background-color: #FCFFFD;
+  color: rgb(77, 82, 86);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#navLogout {
+  position: fixed;
+  right: 0;
+  /* top: 7%; */
+  width: 8em;
+  margin-top: 0.8em;
+  margin-right: -2.5em;
+}
+
+#logout {
+  border: none;
+  outline: none;
+  /* background-color: #7e72ba; */
+  background-color: transparent;
+  
+  padding: 5pt;
+  padding-left: 8pt;
+  padding-right: 8pt;
+  font-family: 'Lato', sans-serif;
+  letter-spacing: 1px;
+  font-size: 15px;
+  color: #6B9080;
+  margin-bottom: 10pt;
+  font-weight: bold;
+  border: 10px;
+  border-color: aliceblue;
+  border-radius: 10px;
+  box-shadow: 0 0 2px rgb(243, 243, 243);
+}
+
+#logout:hover {
+  background-color: rgb(216, 215, 215);
+  box-shadow: 1px 1px 3px #CCE3DE;
+} 
+
+.grid{
+  display: grid;
+  grid-template-columns: 8% 84% 8%;
+  grid-template-rows: 10% 20% 60% 10%;
+  height: 500px;
+}
+
+#navHeading {
+  grid-area: 2/2/3/3;
+}
+
+#navHeading > h1 {
+  font-family: 'Pacifico',cursive;
+}
+
+#tableContainer {
+  grid-area: 3/2/4/3;
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 100%;
+  margin:7% auto;
+  border-radius: 25px;
+  box-shadow: 0 0 17px rgb(243, 243, 243);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#changeMsg {
+  grid-area: 4/2/5/3;
+}
+
+#customerName {
+  font-family: 'Lato',sans-serif;
+}
