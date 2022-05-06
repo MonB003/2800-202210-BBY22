@@ -70,7 +70,7 @@ app.get("/main", function (req, res) {
                 function (error, userResults, fields2) {
 
                     // Create a table to display the users table
-                    let allUsers = "<table><tr><th>First Name</th><th>Last Name</th><th>City</th><th>Email</th><th>Password</th><th>Role</th></tr>";
+                    let allUsers = "<table>";
 
                     // For loop gets each row of data
                     for (let row = 0; row < userResults.length; row++) {
@@ -78,15 +78,15 @@ app.get("/main", function (req, res) {
 
                         // StrRowData creates a table that will be displayed on the HTML page
                         // Add each row of data and append each attribute to strRowData
-                        let strRowData = "</tr><td>" + "<input type=\"text\" id=\"userFirstName" + userIdNum + "\"" + " value=\"" + userResults[row].firstName + "\">" + "</td>";
-                        strRowData += "<td>" + "<input type=\"text\" id=\"userLastName" + userIdNum + "\"" + " value=\"" + userResults[row].lastName + "\">" + "</td>";
-                        strRowData += "<td>" + "<input type=\"text\" id=\"userCity" + userIdNum + "\"" + " value=\"" + userResults[row].city + "\">" + "</td>";
-                        strRowData += "<td>" + "<input type=\"text\" id=\"userEmail" + userIdNum + "\"" + " value=\"" + userResults[row].email + "\">" + "</td>";
-                        strRowData += "<td>" + "<input type=\"text\" id=\"userPassword" + userIdNum + "\"" + " value=\"" + userResults[row].password + "\">" + "</td>";
-                        strRowData += "<td>" + "<input type=\"text\" id=\"userType" + userIdNum + "\"" + " value=\"" + userResults[row].type + "\">" + "</td>";
+                        let strRowData = "<tr><td><input type=\"text\" id=\"userFirstName" + userIdNum + "\"" + " value=\"" + userResults[row].firstName + "\">" + "</td></tr>";
+                        strRowData += "<tr><td><input type=\"text\" id=\"userLastName" + userIdNum + "\"" + " value=\"" + userResults[row].lastName + "\">" + "</td></tr>";
+                        strRowData += "<tr><td><input type=\"text\" id=\"userCity" + userIdNum + "\"" + " value=\"" + userResults[row].city + "\">" + "</td></tr>";
+                        strRowData += "<tr><td><input type=\"text\" id=\"userEmail" + userIdNum + "\"" + " value=\"" + userResults[row].email + "\">" + "</td></tr>";
+                        strRowData += "<tr><td><input type=\"text\" id=\"userPassword" + userIdNum + "\"" + " value=\"" + userResults[row].password + "\">" + "</td></tr>";
+                        strRowData += "<tr><td><input type=\"text\" id=\"userType" + userIdNum + "\"" + " value=\"" + userResults[row].type + "\">" + "</td></tr>";
                         //doesnt work
-                        strRowData += "<td>" + "<button id=\"editButton" + userIdNum + "\"" + "</tr>";
-                        strRowData += "<td>" + "<button id=\"deleteButton" + userIdNum + "\"" + "</td></tr>";
+                        strRowData += "<tr><td>" + "<button id=\"editButton" + userIdNum + "\"" + "</td><tr>";
+                        strRowData += "<tr><td>" + "<button id=\"deleteButton" + userIdNum + "\"" + "</td></tr>";
 
                         allUsers += strRowData;
                     }
