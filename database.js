@@ -321,23 +321,9 @@ app.post('/signup', function (req, res) {
                             req.session.lastName = req.body.lastName;
                             req.session.city = req.body.city;
                             req.session.type = req.body.type;
-                            
-                            // Get value of ID (auto generated primary key)
-                            connection.query('SELECT id FROM users WHERE email = ? AND password = ?',
-                                [req.session.email,  req.session.password],
-                                function (error, userReturned) {
-                                    if (error) {
-                                        res.send({
-                                            status: "Fail",
-                                            msg: "Error creating account."
-                                        });
-
-                                    } else {
-                                        console.log("ID result: " + userReturned[0].id);
-                                        req.session.userID = userReturned[0].id;
-                                    }
-                                }
-                            );
+                            console.log("ID result: " + results.insertId);
+                            req.session.userID = results.insertId;
+                            console.log("Recorded ID: " + req.session.userID);
                             
                             req.session.save(function (err) {
                                 // Session saved
