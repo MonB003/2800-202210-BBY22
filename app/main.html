@@ -16,20 +16,20 @@
 
     <!-- Header -->
     <header id="header">
-
-        <h2 id="companyName">On the House</h2>
-
         <!-- Navbar -->
         <nav id="navbar">
-            <!-- Directs to profile page to edit user info -->
-            <button id="profile" class="nav-button">Profile</button>
-
-            <a href="" id="home" class="nav-button">Home</a>
-            <form action="/logout" method="get" id="logoutForm">
-                <input type="submit" id="logout" class="nav-button" value="Logout" />
-            </form>
+            <div id="homeContainer">
+                <a href="" id="home" class="nav-button">Home</a>
+            </div>
+            <div id="profileContainer">
+                <button id="profile" class="nav-button">Profile</button>
+            </div>
+            <div id="logoutContainer">
+                <form action="/logout" method="get" id="logoutForm">
+                    <input type="submit" id="logout" class="nav-button" value="Logout" />
+                </form>
+            </div>
         </nav>
-
     </header>
 
     <div id="topnav">
