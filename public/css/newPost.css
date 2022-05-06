@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Balsamiq+Sans:ital@1&family=Lato:wght@300&family=Nunito:wght@700&family=Orbitron:wght@500&family=Pacifico&family=Raleway:ital@1&family=Shadows+Into+Light&display=swap');
+
+.headerContainer {
+  display: grid;
+  grid-template-columns: 100%;
+  font-family: 'Nanum Gothic', sans-serif;
+  font-weight: bold;
+  border-bottom-style: solid;
+  border-color: #BCC1BA;
+  height: 42px;
+  background-color: #FCFFFD;
+  color: rgb(77, 82, 86);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#navLogout {
+  position: fixed;
+  right: 0;
+  width: 8em;
+  margin-top: 0.8em;
+  margin-right: -2.5em;
+}
+
+#logout {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  padding: 5pt;
+  padding-left: 8pt;
+  padding-right: 8pt;
+  font-family: 'Lato', sans-serif;
+  letter-spacing: 1px;
+  font-size: 15px;
+  color: #6B9080;
+  margin-bottom: 10pt;
+  font-weight: bold;
+  border: 10px;
+  border-color: aliceblue;
+  border-radius: 10px;
+  box-shadow: 0 0 2px rgb(243, 243, 243);
+}
+
+#logout:hover {
+  background-color: rgb(216, 215, 215);
+  box-shadow: 1px 1px 3px #CCE3DE;
+}
+
+body {
+  font-family: sans-serif;
+  background: url("/imgs/background3.jpg") center/cover fixed;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  background-size: cover;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 3% 62% 15%;
+  grid-template-rows: 20% 70% 10%;
+}
+
+#newPostHeading {
+  grid-area: 2/2/3/3;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+
+}
+
+#newPostHeading>h1 {
+  font-family: 'Pacifico', cursive;
+  padding-top: 5px;
+  text-align: center;
+}
+
+#content {
+  grid-area: 2/2/3/3;
+  background-color: rgba(0, 0, 0, 0.1);
+  width: 500px;
+  margin: 2% auto;
+  border-top-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  box-shadow: 0 0 10px rgb(40, 39, 39);
+  padding: 20px;
+  font-family: 'Lato', sans-serif;
+  font-weight: bold;
+}
+
+#signUpForm {
+  text-align: center;
+}
+
+#signUpForm input {
+  width: 400px;
+  height: 40px;
+  border: none;
+  outline: none;
+  padding-left: 40px;
+  box-sizing: border-box;
+  font-size: 15px;
+  color: #333;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+#newPostBtn {
+  width: 400px;
+  height: 40px;
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+  font-size: 15px;
+  color: rgb(255, 255, 255);
+  background-color: #6B9080;
+  border-radius: 5px;
+}
+
+#newPostBtn:hover {
+  background-color: #526e62;
+  box-shadow: 1px 1px 3px rgb(73, 71, 71);
+}
+
+#backtoMain {
+  text-align: center;
+}
+
+#backToLogin {
+  width: 400px;
+  height: 40px;
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+  font-size: 15px;
+  color: rgb(255, 255, 255);
+  background-color: rgb(121, 119, 119);
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+#backToLogin:hover {
+  background-color: rgb(89, 88, 88);
+  box-shadow: 1px 1px 3px rgb(73, 71, 71);
+}
+

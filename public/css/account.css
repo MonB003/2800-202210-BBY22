@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Balsamiq+Sans:ital@1&family=Lato:wght@300&family=Nunito:wght@700&family=Orbitron:wght@500&family=Pacifico&family=Raleway:ital@1&family=Shadows+Into+Light&display=swap');
+
+body {
+  font-family: sans-serif;
+  background: url("/imgs/background4.jpg") center/cover fixed;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  background-size: cover;
+}
+
+.container {
+  grid-area: 1/1/2/2;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 375px;
+  margin: 3% auto;
+  border-radius: 25px;
+  box-shadow: 0 0 10px rgb(243, 243, 243);
+}
+
+.header {
+  text-align: center;
+  padding-top: 30px;
+  font-family: 'Pacifico', cursive;
+}
+
+.header>h1 {
+  color: rgb(255, 255, 255);
+  font-size: 45px;
+  margin-bottom: 40px;
+}
+
+.content {
+  text-align: center;
+}
+
+#signUpForm input {
+  width: 300px;
+  height: 40px;
+  border: none;
+  outline: none;
+  padding-left: 40px;
+  box-sizing: border-box;
+  font-size: 15px;
+  color: #333;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+.content label {
+  color: aliceblue;
+}
+
+#signUpBtn {
+  width: 300px;
+  height: 40px;
+  border: none;
+  outline: none;
+  padding-left: 40px;
+  box-sizing: border-box;
+  font-size: 15px;
+  color: #333;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+#signUpBtn {
+  padding-left: 0;
+  font-family: 'Lato', sans-serif;
+  background-color: #526e62;
+  letter-spacing: 1px;
+  font-weight: bold;
+  margin-bottom: 25px;
+  color: aliceblue;
+}
+
+#signUpBtn:hover {
+  background-color: #435a50;
+  box-shadow: 1px 1px 3px rgb(73, 71, 71);
+}
+
+.content input:hover {
+  box-shadow: 1px 1px 3px rgb(73, 71, 71);
+  background-color: rgba(221, 221, 221, 0.959);
+}
+
+.content>span {
+  position: relative;
+}
+
+.content>i {
+  font-size: 16px;
+  top: 2px;
+  position: absolute;
+  left: 15px;
+  color: rgb(53, 52, 52);
+}
+
+.return {
+  font-family: 'Lato', sans-serif;
+  color: aliceblue;
+  font-weight: bold;
+}
+
+#backToLogin {
+  border: none;
+  outline: none;
+  background-color: #3b4f4c;
+  padding: 5pt;
+  padding-left: 8pt;
+  padding-right: 8pt;
+  font-family: 'Lato',sans-serif;
+  letter-spacing: 1px;
+  font-size: 15px;
+  color: aliceblue;
+  border-radius: 5pt;
+  margin-bottom: 10pt;
+  font-weight: bold;
+}
+
+#backToLogin:hover {
+  background-color: #2e3d3b;
+  box-shadow: 1px 1px 3px rgb(73, 71, 71);
+}
+
+#accExistsMsg {
+  color: aliceblue;
+}
