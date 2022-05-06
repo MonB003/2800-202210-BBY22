@@ -55,10 +55,8 @@ ready(function() {
 
             if (data) {
                 let dataParsed = JSON.parse(data);
-                console.log(dataParsed);
-                if (dataParsed.status == "fail") {
+                if (dataParsed.status == "Fail") {
                     document.getElementById("accExistsMsg").innerHTML = dataParsed.msg;
-                    console.log("No success");
                 } else {
                     window.location.replace("/main");
                 }

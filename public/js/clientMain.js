@@ -2,6 +2,8 @@
 document.querySelector("#profile").addEventListener("click", function (e) {
     window.location.replace("/profile");
 });
+
+// Redirects to main page
 document.querySelector("#home").addEventListener("click", function (e) {
     window.location.replace("/main");
 });

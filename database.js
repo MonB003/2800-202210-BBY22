@@ -76,6 +76,7 @@ app.get("/main", function (req, res) {
                     for (let row = 0; row < userResults.length; row++) {
                         let userIdNum = userResults[row].id;
 
+                        // StrRowData creates a table that will be displayed on the HTML page
                         // Add each row of data and append each attribute to strRowData
                         let strRowData = "</tr><td>" + "<input type=\"text\" id=\"userFirstName" + userIdNum + "\"" + " value=\"" + userResults[row].firstName + "\">" + "</td>";
                         strRowData += "<td>" + "<input type=\"text\" id=\"userLastName" + userIdNum + "\"" + " value=\"" + userResults[row].lastName + "\">" + "</td>";
@@ -113,8 +114,7 @@ app.get("/main", function (req, res) {
             );
 
         } else {
-            // If it is a regular user
-            //Display posts on the main page
+            // If it is a regular user, display posts on the main page
             let main = fs.readFileSync("./app/main.html", "utf8");
             let mainDOM = new JSDOM(main);
             const mysql = require("mysql2");
@@ -135,6 +135,7 @@ app.get("/main", function (req, res) {
                     let posttemplate = mainDOM.window.document.getElementById("posttemplate");
                     let posts = mainDOM.window.document.getElementById("posts");
                     if (error) {} else if (results.length > 0) {
+                        // Creates a template for each post in the database and displays it on the page
                         results.forEach(post => {
                             let testpost = posttemplate.content.cloneNode(true);
                             testpost.querySelector(".post").id = `post${post.ID}`;
@@ -148,9 +149,7 @@ app.get("/main", function (req, res) {
                             posts.appendChild(testpost);
                         });
                         connection.end();
-                    } else {
-                        console.log('No posted items.');
-                    }
+                    } else {}
 
                     res.set("Server", "MACT Engine");
                     res.set("X-Powered-By", "MACT");
@@ -168,7 +167,7 @@ app.get("/mylistings", function (req, res) {
 
     // Check if user is logged in
     if (req.session.loggedIn) {
-        //Display posts the user's listings
+        // Display posts the user's listings
         let mylistings = fs.readFileSync("./app/mylistings.html", "utf8");
         let mylistingsDOM = new JSDOM(mylistings);
         const mysql = require("mysql2");
@@ -202,9 +201,7 @@ app.get("/mylistings", function (req, res) {
                         posts.appendChild(testpost);
                     });
                     connection.end();
-                } else {
-                    console.log('No posted items.');
-                }
+                } else {}
 
                 res.set("Server", "MACT Engine");
                 res.set("X-Powered-By", "MACT");
@@ -224,7 +221,7 @@ app.use(express.urlencoded({
 }));
 
 
-// Login
+// Login using an email and password
 app.post("/login", function (req, res) {
     res.setHeader("Content-Type", "application/json");
 
@@ -236,7 +233,7 @@ app.post("/login", function (req, res) {
             if (recordReturned == null) {
                 // User login in unsuccessful
                 res.send({
-                    status: "fail",
+                    status: "Fail",
                     msg: "Account not found."
                 });
             } else {
@@ -256,7 +253,7 @@ app.post("/login", function (req, res) {
 
                 // Send message saying user's login was successful
                 res.send({
-                    status: "success",
+                    status: "Success",
                     msg: "Logged in."
                 });
             }
@@ -264,7 +261,7 @@ app.post("/login", function (req, res) {
 });
 
 
-// Logout
+// Logout of the session
 app.get("/logout", function (req, res) {
 
     if (req.session) {
@@ -299,16 +296,16 @@ app.post('/signup', function (req, res) {
                     database: 'OnTheHouseDB'
                 });
                 connection.connect();
+
+                // Insert the new user into the database
                 connection.query('INSERT INTO users (firstName, lastName, city, email, password, type) values (?, ?, ?, ?, ?, ?)',
                     [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, "USER"],
 
                     function (error, results, fields) {
                         if (error) {
-                            console.log(error);
-
                             // Send message saying account already exists
                             res.send({
-                                status: "fail",
+                                status: "Fail",
                                 msg: "Account already exists with this information."
                             });
 
@@ -330,7 +327,7 @@ app.post('/signup', function (req, res) {
                             });
 
                             res.send({
-                                status: "success",
+                                status: "Success",
                                 msg: "New user logged in."
                             });
                         }
@@ -340,7 +337,7 @@ app.post('/signup', function (req, res) {
 
                 // Send message saying account already exists
                 res.send({
-                    status: "fail",
+                    status: "Fail",
                     msg: "Account already exists with this information."
                 });
             }
@@ -360,45 +357,32 @@ app.post('/newPost', function (req, res) {
     });
     connection.connect();
 
+    // Get the current date and time 
     var today = new Date();
     var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dateAndTime = date + ' ' + time;
 
-    // This is the problem
-    let testID = req.session.userID;
-    console.log("test: " + testID);
-
     // This is where the user input is passed into the database. 
-    // User_ID is saved from the current user of the session
-    connection.query('INSERT INTO item_posts (user_id, title, city, description, status, timestamp) values (?, ?, ?, ?, ?, ?)',
+    // User_ID is saved from the current user of the session. The details of the post are sent from the client side.
+    connection.query('INSERT INTO item_posts (user_id, title, city, description, status, timestamp) VALUES (?, ?, ?, ?, ?, ?)',
         [req.session.userID, req.body.title, req.body.city, req.body.description, "available", dateAndTime],
 
         function (error, results, fields) {
             if (error) {
-                console.log(error);
-
-                // Send message saying account already exists
+                // Send message saying there was an error
                 res.send({
-                    status: "fail",
+                    status: "Fail",
                     msg: "Error creating post."
                 });
 
             } else {
-                // Do we need this set of code?
-                // req.session.loggedIn = true;
-                // req.session.title = req.body.title;
-                // req.session.city = req.body.city;
-                // req.session.description = req.body.description;
-                // req.session.status = "Available";
-                // req.session.timestamp = "April 30, 2020 (dummy date)";
-
                 req.session.save(function (err) {
                     // Session saved
                 });
 
                 res.send({
-                    status: "success",
+                    status: "Success",
                     msg: "New post created."
                 });
             }
@@ -420,10 +404,6 @@ app.get("/newPost", function (req, res) {
     let newPost = fs.readFileSync("./app/newPost.html", "utf8");
     let newPostDOM = new JSDOM(newPost);
 
-    console.log("Directed to sign up page");
-
-    // res.set("Server", "MACT Engine");
-    // res.set("X-Powered-By", "MACT");
     res.send(newPostDOM.serialize());
 });
 
@@ -465,7 +445,7 @@ app.post('/update-user-data', (req, res) => {
 
                 res.send({
                     status: 'Fail',
-                    msg: 'Error. User could not be updated'
+                    msg: 'Error. User could not be updated.'
                 });
             }
         }
@@ -473,7 +453,7 @@ app.post('/update-user-data', (req, res) => {
 
     res.send({
         status: 'Success',
-        msg: 'Updated ' + req.body.firstName + ' ' + req.body.lastName + '\'s data'
+        msg: 'Updated ' + req.body.firstName + ' ' + req.body.lastName + '\'s data.'
     });
 });
 
@@ -493,14 +473,17 @@ app.post('/update-data', (req, res) => {
         [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.session.email, req.session.password],
         function (error, results) {
             if (error) {
-                console.log(error);
+                res.send({
+                    status: "Fail",
+                    msg: "Error updating data."
+                });
             }
         }
     );
 
     res.send({
         status: 'Success',
-        msg: 'Data updated'
+        msg: 'Data updated.'
     });
 });
 
@@ -522,7 +505,10 @@ app.post('/delete-user', (req, res) => {
         [req.body.userID],
         function (error, results) {
             if (error) {
-                console.log(error);
+                res.send({
+                    status: 'Fail',
+                    msg: 'User could not be deleted.'
+                });
             }
         }
 
@@ -530,7 +516,7 @@ app.post('/delete-user', (req, res) => {
 
     res.send({
         status: 'Success',
-        msg: 'Deleted ' + requestName + '\'s data'
+        msg: 'Deleted ' + requestName + ' from the database.'
     });
 });
 
@@ -552,13 +538,11 @@ app.post('/add-new-user', (req, res) => {
                     database: 'OnTheHouseDB'
                 });
                 connection.connect();
-                connection.query('INSERT INTO users (firstName, lastName, city, email, password, type) values (?, ?, ?, ?, ?, ?)',
+                connection.query('INSERT INTO users (firstName, lastName, city, email, password, type) VALUES (?, ?, ?, ?, ?, ?)',
                     [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.body.type],
 
                     function (error, results) {
                         if (error) {
-                            console.log(error);
-
                             // Send message saying account already exists
                             res.send({
                                 status: "Fail",
@@ -602,7 +586,10 @@ function authenticateUser(email, pwd, callback) {
             console.log("Results from DB", results, "and the # of records returned", results.length);
 
             if (error) {
-                console.log(error);
+                res.send({
+                    status: "Fail",
+                    msg: "Error finding the user."
+                });
             }
             if (results.length > 0) {
                 // email and password found
@@ -633,7 +620,10 @@ function checkEmailAlreadyExists(email, callback) {
         "SELECT * FROM users WHERE email = ?", [email],
         function (error, results, fields) {
             if (error) {
-                console.log(error);
+                res.send({
+                    status: "Fail",
+                    msg: "Error finding the user."
+                });
             }
             if (results.length > 0) {
                 // Email already exists
@@ -648,7 +638,7 @@ function checkEmailAlreadyExists(email, callback) {
 
 
 // Function connects to a database, checks if database exists, if not it creates it
-async function init() {
+async function initializeDatabase() {
     // Promise
     const mysql = require("mysql2/promise");
     const connection = await mysql.createConnection({
@@ -658,7 +648,7 @@ async function init() {
         multipleStatements: true
     });
 
-    //Creates a table for user profiles and item posts
+    // Creates a table for user profiles and item posts
     const createDatabaseTables = `CREATE DATABASE IF NOT EXISTS OnTheHouseDB;
         use OnTheHouseDB;
         CREATE TABLE IF NOT EXISTS users(
@@ -700,4 +690,4 @@ async function init() {
 
 // Server runs on port 8000
 let port = 8000;
-app.listen(port, init);
+app.listen(port, initializeDatabase);

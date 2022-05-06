@@ -30,8 +30,6 @@ async function updateAUsersData(userID) {
     // Get response from server side post request called update-user-data
     const postResponse = await fetch('/update-user-data', postDetails);
     const jsonData = await postResponse.json();
-    console.log(jsonData);
-    console.log(jsonData.msg);
     document.getElementById('message').innerHTML = jsonData.msg;
 };
 
@@ -66,8 +64,6 @@ async function deleteAUser(userID) {
     // Get response from server side post request called delete-user
     const postResponse = await fetch('/delete-user', postDetails);
     const jsonData = await postResponse.json();
-    console.log(jsonData);
-    console.log(jsonData.msg);
     document.getElementById('message').innerHTML = jsonData.msg;
 
     // Remove that user's text fields from the page

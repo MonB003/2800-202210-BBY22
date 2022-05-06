@@ -48,15 +48,11 @@ ready(function () {
         let description = document.getElementById("newPostDescription");
         let city = document.getElementById("city");
         let queryString = "title=" + title.value + "&description=" + description.value + "&city=" + city.value;
-        console.log("data that we will send", title.value, city.value, description.value);
 
         ajaxPOST("/newPost", function (data) {
             if (data) {
                 let dataParsed = JSON.parse(data);
-                console.log(dataParsed);
-                if (dataParsed.status == "fail") {
-                    // document.getElementById("accExistsMsg").innerHTML = dataParsed.msg;
-                    // console.log("No success");
+                if (dataParsed.status == "Fail") {
                 } else {
                     window.location.replace("/main");
                 }
@@ -66,9 +62,6 @@ ready(function () {
 
     });
 });
-
-
-
 
 
 function ready(callback) {

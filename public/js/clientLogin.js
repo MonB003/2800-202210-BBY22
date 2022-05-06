@@ -52,8 +52,7 @@ ready(function() {
 
             if(data) {
                 let dataParsed = JSON.parse(data);
-                console.log(dataParsed);
-                if(dataParsed.status == "fail") {
+                if(dataParsed.status == "Fail") {
                     document.getElementById("errorMsg").innerHTML = dataParsed.msg;
                 } else {
                     window.location.replace("/main");
