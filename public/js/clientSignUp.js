@@ -48,21 +48,42 @@ ready(function() {
         let email = document.getElementById("userEmail");
         let password = document.getElementById("userPassword");
 
-        // Data being sent to the server
-        let dataSent = "firstName=" + fName.value + "&lastName=" + lName.value + "&city=" + city.value + "&email=" + email.value + "&password=" + password.value;
+        // Get all the text fields in the form to check the values entered in them
+        var formInputFields = document.querySelectorAll('input');
+        var checkEmptyInput = false;
 
-        ajaxPOST("/signup", function (data) {
+        // Check for input fields with empty values
+        for (i = 0; i < formInputFields.length; i++) {
+            var currentInput = formInputFields[i];
 
-            if (data) {
-                let dataParsed = JSON.parse(data);
-                if (dataParsed.status == "Fail") {
-                    document.getElementById("accExistsMsg").innerHTML = dataParsed.msg;
-                } else {
-                    window.location.replace("/main");
-                }
+            if (currentInput.value == "") {
+                checkEmptyInput = true;
             }
+        }
 
-        }, dataSent);
+
+        // If at least one of the inputs is empty
+        if (checkEmptyInput) {
+            document.getElementById("accExistsMsg").innerHTML = "Please fill out all fields.";
+            
+        } else {
+            // Data being sent to the server
+            let dataSent = "firstName=" + fName.value + "&lastName=" + lName.value + "&city=" + city.value + "&email=" + email.value + "&password=" + password.value;
+
+            ajaxPOST("/signup", function (data) {
+                console.log("ajax post signup")
+
+                if (data) {
+                    let dataParsed = JSON.parse(data);
+                    if (dataParsed.status == "Fail") {
+                        document.getElementById("accExistsMsg").innerHTML = dataParsed.msg;
+                    } else {
+                        window.location.replace("/main");
+                    }
+                }
+
+            }, dataSent);
+        }
     });
 
 });
