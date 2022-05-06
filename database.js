@@ -268,8 +268,24 @@ app.post('/signup', function (req, res) {
                             req.session.lastName = req.body.lastName;
                             req.session.city = req.body.city;
                             req.session.type = req.body.type;
-                            req.session.userID = recordReturned.id;
+                            
+                            // Get value of ID (auto generated primary key)
+                            connection.query('SELECT id FROM users WHERE email = ? AND password = ?',
+                                [req.session.email,  req.session.password],
+                                function (error, userReturned) {
+                                    if (error) {
+                                        res.send({
+                                            status: "Fail",
+                                            msg: "Error creating account."
+                                        });
 
+                                    } else {
+                                        console.log("ID result: " + userReturned[0].id);
+                                        req.session.userID = userReturned[0].id;
+                                    }
+                                }
+                            );
+                            
                             req.session.save(function (err) {
                                 // Session saved
                             });
@@ -310,6 +326,10 @@ app.post('/newPost', function (req, res) {
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dateAndTime = date + ' ' + time;
 
+    // This is the problem
+    let testID = req.session.userID;
+    console.log("test: " + testID);
+
     // This is where the user input is passed into the database. 
     // User_ID is saved from the current user of the session
     connection.query('INSERT INTO item_posts (user_id, title, city, description, status, timestamp) values (?, ?, ?, ?, ?, ?)',
@@ -322,7 +342,7 @@ app.post('/newPost', function (req, res) {
                 // Send message saying account already exists
                 res.send({
                     status: "fail",
-                    msg: "Account already exists with this information."
+                    msg: "Error creating post."
                 });
 
             } else {
