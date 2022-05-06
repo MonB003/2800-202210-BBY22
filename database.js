@@ -191,13 +191,15 @@ app.get("/mylistings", function (req, res) {
                 if (error) {} else if (results.length > 0) {
                     results.forEach(post => {
                         let testpost = posttemplate.content.cloneNode(true);
-                        testpost.querySelector(".post").id = `post${post.ID}`;
+                        testpost.querySelector(".post").id = `post${post.id}`;
                         testpost.querySelector(".posttitle").innerHTML = post.title;
                         testpost.querySelector(".poststatus").innerHTML = post.status;
                         testpost.querySelector(".postlocation").innerHTML = post.city;
                         testpost.querySelector(".poststatus").innerHTML = post.status;
                         testpost.querySelector(".postdate").innerHTML = post.timestamp;
-                        testpost.querySelector(".messagepost").id = `message${post.ID}`;
+                        testpost.querySelector(".messagepost").id = `message${post.id}`;
+                        testpost.querySelector(".editpost").id = `edit${post.id}`;
+                        testpost.querySelector(".editpost").setAttribute("onclick", `toeditpost(${post.id})`)
                         posts.appendChild(testpost);
                     });
                     connection.end();
@@ -206,6 +208,49 @@ app.get("/mylistings", function (req, res) {
                 res.set("Server", "MACT Engine");
                 res.set("X-Powered-By", "MACT");
                 res.send(mylistingsDOM.serialize());
+            }
+        );
+    } else {
+        // User is not logged in, so direct to login page
+        res.redirect("/");
+    }
+});
+
+app.post("/toeditpost", function (req, res) {
+    res.setHeader("Content-Type", "application/json");
+    req.session.editpostID = req.body.postID;
+});
+
+app.get("/editpost", function (req, res) {
+    if (req.session.loggedIn) {
+        let editpost = fs.readFileSync("./app/editpost.html", "utf8");
+        let editpostDOM = new JSDOM(editpost);
+        const mysql = require("mysql2");
+        const connection = mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "",
+            database: "OnTheHouseDB"
+        });
+        let myResults = null;
+        connection.connect();
+        connection.query(
+            "SELECT * FROM item_posts WHERE id = ?",
+            [req.session.editpostID],
+            function (error, results, fields) {
+                myResults = results;
+                if (error) {} else if (results.length > 0) {
+                    results.forEach(post => {
+                        editpostDOM.window.document.querySelector("#title").setAttribute("value", `${post.title}`);
+                        editpostDOM.window.document.querySelector("#city").setAttribute("value", `${post.city}`);
+                        editpostDOM.window.document.querySelector("#postdescription").innerHTML = `${post.description}`;
+                    });
+                    connection.end();
+                } else {}
+
+                res.set("Server", "MACT Engine");
+                res.set("X-Powered-By", "MACT");
+                res.send(editpostDOM.serialize());
             }
         );
     } else {
@@ -321,7 +366,7 @@ app.post('/signup', function (req, res) {
                             console.log("ID result: " + results.insertId);
                             req.session.userID = results.insertId;
                             console.log("Recorded ID: " + req.session.userID);
-                            
+
                             req.session.save(function (err) {
                                 // Session saved
                             });
