@@ -56,6 +56,7 @@ ready(function() {
         for (i = 0; i < formInputFields.length; i++) {
             var currentInput = formInputFields[i];
 
+            // If value is empty
             if (currentInput.value == "") {
                 checkEmptyInput = true;
             }
@@ -71,7 +72,6 @@ ready(function() {
             let dataSent = "firstName=" + fName.value + "&lastName=" + lName.value + "&city=" + city.value + "&email=" + email.value + "&password=" + password.value;
 
             ajaxPOST("/signup", function (data) {
-                console.log("ajax post signup")
 
                 if (data) {
                     let dataParsed = JSON.parse(data);
