@@ -164,6 +164,59 @@ app.get("/main", function (req, res) {
     }
 });
 
+app.get("/mylistings", function (req, res) {
+
+    // Check if user is logged in
+    if (req.session.loggedIn) {
+        //Display posts the user's listings
+        let mylistings = fs.readFileSync("./app/mylistings.html", "utf8");
+        let mylistingsDOM = new JSDOM(mylistings);
+        const mysql = require("mysql2");
+        const connection = mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "",
+            database: "OnTheHouseDB"
+        });
+        let myResults = null;
+        connection.connect();
+
+        connection.execute(
+            "SELECT * FROM item_posts WHERE user_id = ?",
+            [req.session.userID],
+            function (error, results, fields) {
+                console.log("results:", results);
+                myResults = results;
+                let posttemplate = mylistingsDOM.window.document.getElementById("posttemplate");
+                let posts = mylistingsDOM.window.document.getElementById("posts");
+                if (error) {} else if (results.length > 0) {
+                    results.forEach(post => {
+                        let testpost = posttemplate.content.cloneNode(true);
+                        testpost.querySelector(".post").id = `post${post.ID}`;
+                        testpost.querySelector(".posttitle").innerHTML = post.title;
+                        testpost.querySelector(".poststatus").innerHTML = post.status;
+                        testpost.querySelector(".postlocation").innerHTML = post.city;
+                        testpost.querySelector(".poststatus").innerHTML = post.status;
+                        testpost.querySelector(".postdate").innerHTML = post.timestamp;
+                        testpost.querySelector(".messagepost").id = `message${post.ID}`;
+                        posts.appendChild(testpost);
+                    });
+                    connection.end();
+                } else {
+                    console.log('No posted items.');
+                }
+
+                res.set("Server", "MACT Engine");
+                res.set("X-Powered-By", "MACT");
+                res.send(mylistingsDOM.serialize());
+            }
+        );
+    } else {
+        // User is not logged in, so direct to login page
+        res.redirect("/");
+    }
+});
+
 
 app.use(express.json());
 app.use(express.urlencoded({

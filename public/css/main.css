@@ -8,26 +8,28 @@ body {
 }
 
 #topnav {
-    position: fixed;
-    top: 0;
     width: 100%;
+    height: 50px;
 }
 
 .navbutton {
     width: 75%;
     margin: auto;
-    margin-top: 10px;
-    margin-bottom: 10px;
     background-color: turquoise;
     border: none;
     text-align: center;
     text-decoration: none;
     border-radius: 15px;
-    font-size: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    height: 25px;
 }
 
-#posts {
-    margin-top: 40px;
+#pagename {
+    font-size: 36px;
+    font-weight: bold;
+    text-align: center;
+    margin: auto;
 }
 
 .post {
@@ -99,11 +101,6 @@ body {
 
 /* mobile view */
 @media only screen and (max-width : 425px) {
-    body {
-        display: grid;
-        grid-template-rows: auto;
-        grid-template-columns: 1fr;
-    }
 
     #topnav {
         display: grid;
@@ -138,11 +135,6 @@ body {
 }
 
 @media only screen and (min-width : 426px) and (max-width : 1000px) {
-    body {
-        display: grid;
-        grid-template-rows: auto;
-        grid-template-columns: 1fr;
-    }
 
     #topnav {
         display: grid;
@@ -183,11 +175,6 @@ body {
 }
 
 @media only screen and (min-width : 1001px) and (max-width : 1200px) {
-    body {
-        display: grid;
-        grid-template-rows: auto;
-        grid-template-columns: 1fr;
-    }
 
     #topnav {
         display: grid;
@@ -227,11 +214,6 @@ body {
 }
 
 @media only screen and (min-width : 1201px) {
-    body {
-        display: grid;
-        grid-template-rows: auto;
-        grid-template-columns: 1fr;
-    }
 
     #topnav {
         display: grid;
