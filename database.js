@@ -199,7 +199,7 @@ app.get("/mylistings", function (req, res) {
                         testpost.querySelector(".postdate").innerHTML = post.timestamp;
                         testpost.querySelector(".messagepost").id = `message${post.id}`;
                         testpost.querySelector(".editpost").id = `edit${post.id}`;
-                        testpost.querySelector(".editpost").setAttribute("onclick", `toeditpost(${post.id})`)
+                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${post.id})`)
                         posts.appendChild(testpost);
                     });
                     connection.end();
@@ -214,11 +214,6 @@ app.get("/mylistings", function (req, res) {
         // User is not logged in, so direct to login page
         res.redirect("/");
     }
-});
-
-app.post("/toeditpost", function (req, res) {
-    res.setHeader("Content-Type", "application/json");
-    req.session.editpostID = req.body.postID;
 });
 
 app.get("/editpost", function (req, res) {
@@ -236,7 +231,7 @@ app.get("/editpost", function (req, res) {
         connection.connect();
         connection.query(
             "SELECT * FROM item_posts WHERE id = ?",
-            [req.session.editpostID],
+            [1],
             function (error, results, fields) {
                 myResults = results;
                 if (error) {} else if (results.length > 0) {
@@ -468,6 +463,15 @@ app.get('/profile', function (req, res) {
     res.set("Server", "MACT Engine");
     res.set("X-Powered-By", "MACT");
     res.send(profileDOM.serialize());
+});
+
+app.post('/toeditpost', (req, res) => {
+    console.log(req.body.postID);
+    req.session.editpostID = req.body.postID;
+    res.send({
+        status: 'Success',
+        msg: 'recorded post id'
+    });
 });
 
 
