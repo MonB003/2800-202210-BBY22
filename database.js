@@ -1,3 +1,5 @@
+"use strict";
+
 // Requires
 const express = require("express");
 const session = require("express-session");
@@ -61,12 +63,12 @@ app.get("/main", function (req, res) {
                 host: "localhost",
                 user: "root",
                 password: "",
-                database: "OnTheHouseDB"
+                database: "COMP2800"
             });
             connection.connect();
             connection.query(
 
-                'SELECT * FROM users',
+                'SELECT * FROM BBY_22_users',
                 function (error, userResults, fields2) {
 
                     // Create a table to display the users table
@@ -117,20 +119,23 @@ app.get("/main", function (req, res) {
             // If it is a regular user, display posts on the main page
             let main = fs.readFileSync("./app/main.html", "utf8");
             let mainDOM = new JSDOM(main);
+
+            mainDOM.window.document.getElementById("customerName").innerHTML = "Welcome, " + req.session.firstName +
+                " " + req.session.lastName + "!";
+
             const mysql = require("mysql2");
             const connection = mysql.createConnection({
                 host: "localhost",
                 user: "root",
                 password: "",
-                database: "OnTheHouseDB"
+                database: "COMP2800"
             });
             let myResults = null;
             connection.connect();
 
             connection.execute(
-                "SELECT * FROM item_posts",
+                "SELECT * FROM BBY_22_item_posts",
                 function (error, results, fields) {
-                    console.log("results:", results);
                     myResults = results;
                     let posttemplate = mainDOM.window.document.getElementById("posttemplate");
                     let posts = mainDOM.window.document.getElementById("posts");
@@ -149,7 +154,7 @@ app.get("/main", function (req, res) {
                             posts.appendChild(testpost);
                         });
                         connection.end();
-                    } else {}
+                    }
 
                     res.set("Server", "MACT Engine");
                     res.set("X-Powered-By", "MACT");
@@ -175,16 +180,15 @@ app.get("/mylistings", function (req, res) {
             host: "localhost",
             user: "root",
             password: "",
-            database: "OnTheHouseDB"
+            database: "COMP2800"
         });
         let myResults = null;
         connection.connect();
 
         connection.execute(
-            "SELECT * FROM item_posts WHERE user_id = ?",
+            "SELECT * FROM BBY_22_item_posts WHERE user_id = ?",
             [req.session.userID],
             function (error, results, fields) {
-                console.log("results:", results);
                 myResults = results;
                 let posttemplate = mylistingsDOM.window.document.getElementById("posttemplate");
                 let posts = mylistingsDOM.window.document.getElementById("posts");
@@ -201,7 +205,7 @@ app.get("/mylistings", function (req, res) {
                         posts.appendChild(testpost);
                     });
                     connection.end();
-                } else {}
+                } 
 
                 res.set("Server", "MACT Engine");
                 res.set("X-Powered-By", "MACT");
@@ -224,8 +228,6 @@ app.use(express.urlencoded({
 // Login using an email and password
 app.post("/login", function (req, res) {
     res.setHeader("Content-Type", "application/json");
-
-    console.log("What was sent", req.body.email, req.body.password);
 
     authenticateUser(req.body.email, req.body.password,
         function (recordReturned) {
@@ -293,12 +295,12 @@ app.post('/signup', function (req, res) {
                     host: 'localhost',
                     user: 'root',
                     password: '',
-                    database: 'OnTheHouseDB'
+                    database: 'COMP2800'
                 });
                 connection.connect();
 
                 // Insert the new user into the database
-                connection.query('INSERT INTO users (firstName, lastName, city, email, password, type) values (?, ?, ?, ?, ?, ?)',
+                connection.query('INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type) values (?, ?, ?, ?, ?, ?)',
                     [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, "USER"],
 
                     function (error, results, fields) {
@@ -318,9 +320,7 @@ app.post('/signup', function (req, res) {
                             req.session.lastName = req.body.lastName;
                             req.session.city = req.body.city;
                             req.session.type = req.body.type;
-                            console.log("ID result: " + results.insertId);
                             req.session.userID = results.insertId;
-                            console.log("Recorded ID: " + req.session.userID);
                             
                             req.session.save(function (err) {
                                 // Session saved
@@ -353,7 +353,7 @@ app.post('/newPost', function (req, res) {
         host: 'localhost',
         user: 'root',
         password: '',
-        database: 'OnTheHouseDB'
+        database: 'COMP2800'
     });
     connection.connect();
 
@@ -365,16 +365,11 @@ app.post('/newPost', function (req, res) {
 
     // This is where the user input is passed into the database. 
     // User_ID is saved from the current user of the session. The details of the post are sent from the client side.
-    connection.query('INSERT INTO item_posts (user_id, title, city, description, status, timestamp) VALUES (?, ?, ?, ?, ?, ?)',
+    connection.query('INSERT INTO BBY_22_item_posts (user_id, title, city, description, status, timestamp) VALUES (?, ?, ?, ?, ?, ?)',
         [req.session.userID, req.body.title, req.body.city, req.body.description, "available", dateAndTime],
 
         function (error, results, fields) {
             if (error) {
-                // Send message saying there was an error
-                res.send({
-                    status: "Fail",
-                    msg: "Error creating post."
-                });
 
             } else {
                 req.session.save(function (err) {
@@ -433,16 +428,14 @@ app.post('/update-user-data', (req, res) => {
         host: "localhost",
         user: "root",
         password: "",
-        database: "OnTheHouseDB"
+        database: "COMP2800"
     });
     connection.connect();
     connection.query(
-        "UPDATE users SET firstName = ?, lastName = ?, city = ?, email = ?, password = ?, type = ? WHERE id = ?",
+        "UPDATE BBY_22_users SET firstName = ?, lastName = ?, city = ?, email = ?, password = ?, type = ? WHERE id = ?",
         [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.body.type, req.body.userID],
         function (error, results) {
             if (error) {
-                console.log(error);
-
                 res.send({
                     status: 'Fail',
                     msg: 'Error. User could not be updated.'
@@ -465,11 +458,11 @@ app.post('/update-data', (req, res) => {
         host: "localhost",
         user: "root",
         password: "",
-        database: "OnTheHouseDB"
+        database: "COMP2800"
     });
     connection.connect();
     connection.query(
-        "UPDATE users SET firstName = ?, lastName = ?, city = ?, email = ?, password = ? WHERE email = ? AND password = ?",
+        "UPDATE BBY_22_users SET firstName = ?, lastName = ?, city = ?, email = ?, password = ? WHERE email = ? AND password = ?",
         [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.session.email, req.session.password],
         function (error, results) {
             if (error) {
@@ -497,11 +490,11 @@ app.post('/delete-user', (req, res) => {
         host: "localhost",
         user: "root",
         password: "",
-        database: "OnTheHouseDB"
+        database: "COMP2800"
     });
     connection.connect();
     connection.query(
-        "DELETE FROM users WHERE id = ?",
+        "DELETE FROM BBY_22_users WHERE id = ?",
         [req.body.userID],
         function (error, results) {
             if (error) {
@@ -535,10 +528,10 @@ app.post('/add-new-user', (req, res) => {
                     host: 'localhost',
                     user: 'root',
                     password: '',
-                    database: 'OnTheHouseDB'
+                    database: 'COMP2800'
                 });
                 connection.connect();
-                connection.query('INSERT INTO users (firstName, lastName, city, email, password, type) VALUES (?, ?, ?, ?, ?, ?)',
+                connection.query('INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type) VALUES (?, ?, ?, ?, ?, ?)',
                     [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.body.type],
 
                     function (error, results) {
@@ -577,13 +570,12 @@ function authenticateUser(email, pwd, callback) {
         host: "localhost",
         user: "root",
         password: "",
-        database: "OnTheHouseDB"
+        database: "COMP2800"
     });
     connection.connect();
     connection.query(
-        "SELECT * FROM users WHERE email = ? AND password = ?", [email, pwd],
+        "SELECT * FROM BBY_22_users WHERE email = ? AND password = ?", [email, pwd],
         function (error, results, fields) {
-            console.log("Results from DB", results, "and the # of records returned", results.length);
 
             if (error) {
                 res.send({
@@ -613,11 +605,11 @@ function checkEmailAlreadyExists(email, callback) {
         host: "localhost",
         user: "root",
         password: "",
-        database: "OnTheHouseDB"
+        database: "COMP2800"
     });
     connection.connect();
     connection.query(
-        "SELECT * FROM users WHERE email = ?", [email],
+        "SELECT * FROM BBY_22_users WHERE email = ?", [email],
         function (error, results, fields) {
             if (error) {
                 res.send({
@@ -649,9 +641,9 @@ async function initializeDatabase() {
     });
 
     // Creates a table for user profiles and item posts
-    const createDatabaseTables = `CREATE DATABASE IF NOT EXISTS OnTheHouseDB;
-        use OnTheHouseDB;
-        CREATE TABLE IF NOT EXISTS users(
+    const createDatabaseTables = `CREATE DATABASE IF NOT EXISTS COMP2800;
+        use COMP2800;
+        CREATE TABLE IF NOT EXISTS BBY_22_users(
         id int NOT NULL AUTO_INCREMENT, 
         firstName VARCHAR(20), 
         lastName VARCHAR(20), 
@@ -661,7 +653,7 @@ async function initializeDatabase() {
         type VARCHAR(10),
         PRIMARY KEY (id));
         
-        CREATE TABLE IF NOT EXISTS item_posts(
+        CREATE TABLE IF NOT EXISTS BBY_22_item_posts(
             id int NOT NULL AUTO_INCREMENT, 
             user_id int NOT NULL,
             title VARCHAR(50), 
@@ -670,22 +662,21 @@ async function initializeDatabase() {
             status VARCHAR(30), 
             timestamp VARCHAR(50),
             PRIMARY KEY (id),
-            FOREIGN KEY (user_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
+            FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
     await connection.query(createDatabaseTables);
 
     // Await allows for us to wait for this line to execute synchronously
-    const [rows, fields] = await connection.query("SELECT * FROM users");
+    const [rows, fields] = await connection.query("SELECT * FROM BBY_22_users");
 
     // Adds a default user account in case there is no data in the table.
     if (rows.length == 0) {
-        let recordReturneds = "INSERT INTO users (firstName, lastName, city, email, password, type) VALUES ?";
+        let recordReturneds = "INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type) VALUES ?";
         let recordValues = [
             ["Test", "Test", "Vancouver", "test@test.ca", "password", "ADMIN"]
         ];
         await connection.query(recordReturneds, [recordValues]);
     }
 
-    console.log("Listening on port " + port + "!");
 }
 
 // Server runs on port 8000

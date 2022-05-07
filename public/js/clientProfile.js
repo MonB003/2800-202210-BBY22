@@ -1,3 +1,5 @@
+"use strict";
+
 // Method called when a user updates their own information
 async function updateData() {
     let firstName = document.getElementById('userFirstName').value;

@@ -1,3 +1,5 @@
+"use strict";
+
 // Updates a user's data in the database
 async function updateAUsersData(userID) {
     let firstName = document.getElementById('userFirstName' + userID).value;

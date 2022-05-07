@@ -1,58 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="utf-8">
-        <title>Login</title>
-        <link href="/imgs/OTH-favicon.ico" rel="icon" type="image/x-icon" />
+<head>
+    <meta charset="utf-8">
+    <title>Login</title>
+    <link href="/imgs/OTH-favicon.ico" rel="icon" type="image/x-icon" />
 
-        <!-- CSS style -->
-        <link rel="stylesheet" href="/css/login.css">
-    </head>
+    <!-- CSS style -->
+    <link rel="stylesheet" href="/css/login.css">
+</head>
 
-    <body>
+<body>
 
-        <section class="grid">
-            <div class="OTHText">
-                <h1>On The House</h1>
+    <section class="grid">
+        <div class="OTHText">
+            <h1>On The House</h1>
+        </div>
+        <div class="container">
+            <div class="header">
+                <h1 id="loginHeading">Login</h1>
             </div>
-            <div class="container">
-                <div class="header">
-                    <h1 id="loginHeading">Login</h1>
-                </div>
-                <!-- Login -->
-                <div class="loginF">
-                    <form id="loginForm">
-                        <!-- Email -->
-                        <span><input type="email" id="userEmail" name="email" placeholder="Email@email.ca" required="required"></span>
-                        <!-- Password -->
-                        <span><input type="password" id="userPassword" name="password" placeholder="Password" required="required"></span>
-                        <button id="loginBtn">Log In</button>
-                    </form>
-                </div>
+            <!-- Login -->
+            <div class="loginF">
+                <form id="loginForm">
+                    <!-- Email -->
+                    <span><input type="email" id="userEmail" name="email" placeholder="Email@email.ca"
+                            required="required"></span>
+                    <!-- Password -->
+                    <span><input type="password" id="userPassword" name="password" placeholder="Password"
+                            required="required"></span>
+                    <button id="loginBtn">Log In</button>
+                </form>
+            </div>
+            <br>
+            <!-- Sign up button -->
+            <div id="signupDiv">
+                <span>
+                    <p id="newUserP">New User?</p>
+                </span>
+                <form action="/signup" method="get" id="signupForm">
+                    <input type="submit" id="signup" value="Sign Up" />
+                </form>
                 <br>
-                <!-- Sign up button -->
-                <div id="signupDiv">
-                    <span><p id="newUserP">New User?</p></span>
-                    <form action="/signup" method="get" id="signupForm">
-                        <input type="submit" id="signup" value="Sign Up"/>
-                    </form>
-                    <br>
-                    <p id="errorMsg"></p>
-                </div>
+                <p id="errorMsg"></p>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <br><br>
+    <br><br>
 
-        <!-- Footer -->
-        <footer>
-            <p id="copyright"> &copy; 2022. On the House</p>
-        </footer>
+    <!-- Footer -->
+    <footer>
+        <p id="copyright"> &copy; 2022. On the House</p>
+    </footer>
 
-        <!-- JavaScript -->
-        <script src="js/clientLogin.js"></script>
+    <!-- JavaScript -->
+    <script src="js/clientLogin.js"></script>
 
-    </body>
+</body>
 
 </html>

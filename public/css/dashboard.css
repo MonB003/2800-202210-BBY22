@@ -75,7 +75,6 @@ body {
   border-top-left-radius: 0;
   border-bottom-right-radius: 0;
   box-shadow: 0 0 17px rgb(243, 243, 243);
-  /* display: flex; */
   align-items: center;
   justify-content: center;
   font-size: 1vw;
@@ -85,14 +84,12 @@ body {
 
 #adminHeading > h1 {
   font-family: 'Pacifico',cursive;
-  /* padding-left: 20px; */
   padding-top: 30px;
   text-align: center;
 }
 
 #adminHeading > h2 {
   font-family: 'Lato', sans-serif;
-  /* padding-left: 20px; */
   text-align: center;
 }
 
@@ -100,13 +97,11 @@ body {
   grid-area: 2/4/6/5;
   background-color: rgba(0, 0, 0, 0.4);
   width: 75%;
-  /* margin:7% auto; */
   margin: auto;
   margin-top: 10px;
   padding-top: 20px;
   padding-bottom: 20px;
   border-radius: 25px;
-  /* margin-bottom: 50px; */
   box-shadow: 0 0 17px rgb(243, 243, 243);
   display: flex;
   align-items: center;
@@ -186,7 +181,6 @@ body {
 
   #tableContainer {
     grid-area: 5/2/6/5;
-    /* max-height: 300px; */
   }
 
   #tableScroll {
