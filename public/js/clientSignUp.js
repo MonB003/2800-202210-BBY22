@@ -1,15 +1,15 @@
 "use strict";
 
-ready(function() {
+ready(function () {
 
     function ajaxGET(url, callback) {
 
         const xhr = new XMLHttpRequest();
-        xhr.onload = function() {
+        xhr.onload = function () {
             if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
                 callback(this.responseText);
 
-            } 
+            }
         }
         xhr.open("GET", url);
         xhr.send();
@@ -18,15 +18,17 @@ ready(function() {
     function ajaxPOST(url, callback, data) {
 
         let params = typeof data == 'string' ? data : Object.keys(data).map(
-                function(k){ return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]) }
-            ).join('&');
+            function (k) {
+                return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
+            }
+        ).join('&');
 
         const xhr = new XMLHttpRequest();
-        xhr.onload = function() {
+        xhr.onload = function () {
             if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
                 callback(this.responseText);
 
-            } 
+            }
         }
         xhr.open("POST", url);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -48,7 +50,7 @@ ready(function() {
         var checkEmptyInput = false;
 
         // Check for input fields with empty values
-        for (i = 0; i < formInputFields.length; i++) {
+        for (let i = 0; i < formInputFields.length; i++) {
             var currentInput = formInputFields[i];
 
             // If value is empty
@@ -61,7 +63,7 @@ ready(function() {
         // If at least one of the inputs is empty
         if (checkEmptyInput) {
             document.getElementById("accExistsMsg").innerHTML = "Please fill out all fields.";
-            
+
         } else {
             // Data being sent to the server
             let dataSent = "firstName=" + fName.value + "&lastName=" + lName.value + "&city=" + city.value + "&email=" + email.value + "&password=" + password.value;
