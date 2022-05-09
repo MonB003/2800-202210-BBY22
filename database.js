@@ -85,8 +85,7 @@ app.get("/main", function (req, res) {
                         strRowData += "<tr><td><input type=\"text\" id=\"userCity" + userIdNum + "\"" + " value=\"" + userResults[row].city + "\">" + "</td></tr>";
                         strRowData += "<tr><td><input type=\"text\" id=\"userEmail" + userIdNum + "\"" + " value=\"" + userResults[row].email + "\">" + "</td></tr>";
                         strRowData += "<tr><td><input type=\"text\" id=\"userPassword" + userIdNum + "\"" + " value=\"" + userResults[row].password + "\">" + "</td></tr>";
-                        strRowData += "<tr><td><input type=\"text\" id=\"userType" + userIdNum + "\"" + " value=\"" + userResults[row].type + "\">" + "</td></tr>";
-                        //doesnt work
+                        strRowData += "<tr><td><input type=\"text\" id=\"userType" + userIdNum + "\"" + " class=\"user-type-input\"" + " value=\"" + userResults[row].type + "\">" + "</td></tr>";
                         strRowData += "<tr><td>" + "<button id=\"editButton" + userIdNum + "\"" + "</td><tr>";
                         strRowData += "<tr><td>" + "<button id=\"deleteButton" + userIdNum + "\"" + "</td></tr>";
 
@@ -143,14 +142,14 @@ app.get("/main", function (req, res) {
                         // Creates a template for each post in the database and displays it on the page
                         results.forEach(post => {
                             let testpost = posttemplate.content.cloneNode(true);
-                            testpost.querySelector(".post").id = `post${post.ID}`;
+                            testpost.querySelector(".post").id = `post${post.id}`;
                             testpost.querySelector(".posttitle").innerHTML = post.title;
                             testpost.querySelector(".poststatus").innerHTML = post.status;
                             testpost.querySelector(".postlocation").innerHTML = post.city;
                             testpost.querySelector(".poststatus").innerHTML = post.status;
                             testpost.querySelector(".postdate").innerHTML = post.timestamp;
-                            testpost.querySelector(".savepost").id = `save${post.ID}`;
-                            testpost.querySelector(".messagepost").id = `message${post.ID}`;
+                            testpost.querySelector(".savepost").id = `save${post.id}`;
+                            testpost.querySelector(".messagepost").id = `message${post.id}`;
                             posts.appendChild(testpost);
                         });
                         connection.end();
@@ -195,13 +194,13 @@ app.get("/mylistings", function (req, res) {
                 if (error) {} else if (results.length > 0) {
                     results.forEach(post => {
                         let testpost = posttemplate.content.cloneNode(true);
-                        testpost.querySelector(".post").id = `post${post.ID}`;
+                        testpost.querySelector(".post").id = `post${post.id}`;
                         testpost.querySelector(".posttitle").innerHTML = post.title;
                         testpost.querySelector(".poststatus").innerHTML = post.status;
                         testpost.querySelector(".postlocation").innerHTML = post.city;
                         testpost.querySelector(".poststatus").innerHTML = post.status;
                         testpost.querySelector(".postdate").innerHTML = post.timestamp;
-                        testpost.querySelector(".messagepost").id = `message${post.ID}`;
+                        testpost.querySelector(".messagepost").id = `message${post.id}`;
                         posts.appendChild(testpost);
                     });
                     connection.end();
