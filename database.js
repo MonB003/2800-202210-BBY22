@@ -195,13 +195,15 @@ app.get("/mylistings", function (req, res) {
                 if (error) {} else if (results.length > 0) {
                     results.forEach(post => {
                         let testpost = posttemplate.content.cloneNode(true);
-                        testpost.querySelector(".post").id = `post${post.ID}`;
+                        testpost.querySelector(".post").id = `post${post.id}`;
                         testpost.querySelector(".posttitle").innerHTML = post.title;
                         testpost.querySelector(".poststatus").innerHTML = post.status;
                         testpost.querySelector(".postlocation").innerHTML = post.city;
                         testpost.querySelector(".poststatus").innerHTML = post.status;
                         testpost.querySelector(".postdate").innerHTML = post.timestamp;
-                        testpost.querySelector(".messagepost").id = `message${post.ID}`;
+                        testpost.querySelector(".messagepost").id = `message${post.id}`;
+                        testpost.querySelector(".editpost").id = `edit${post.id}`;
+                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${post.id})`)
                         posts.appendChild(testpost);
                     });
                     connection.end();
@@ -210,6 +212,47 @@ app.get("/mylistings", function (req, res) {
                 res.set("Server", "MACT Engine");
                 res.set("X-Powered-By", "MACT");
                 res.send(mylistingsDOM.serialize());
+            }
+        );
+    } else {
+        // User is not logged in, so direct to login page
+        res.redirect("/");
+    }
+});
+
+//populates the editpost page with the correct information
+app.get("/editpost", function (req, res) {
+    if (req.session.loggedIn) {
+        let editpost = fs.readFileSync("./app/editpost.html", "utf8");
+        let editpostDOM = new JSDOM(editpost);
+        const mysql = require("mysql2");
+        const connection = mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "",
+            database: "COMP2800"
+        });
+        let myResults = null;
+        connection.connect();
+        connection.query(
+            "SELECT * FROM BBY_22_item_posts WHERE id = ? AND user_id = ?",
+            [req.session.editpostID, req.session.userID],
+            function (error, results, fields) {
+                myResults = results;
+                if (error) {} else if (results.length > 0) {
+                    results.forEach(post => {
+                        editpostDOM.window.document.querySelector("#title").setAttribute("value", `${post.title}`);
+                        editpostDOM.window.document.querySelector("#city").setAttribute("value", `${post.city}`);
+                        editpostDOM.window.document.querySelector("#description").innerHTML = `${post.description}`;
+                        editpostDOM.window.document.querySelector("#savepost").setAttribute("onclick", `save_post(${post.id})`);
+                        editpostDOM.window.document.querySelector("#deletepost").setAttribute("onclick", `delete_post(${post.id})`);
+                    });
+                    connection.end();
+                } else {}
+
+                res.set("Server", "MACT Engine");
+                res.set("X-Powered-By", "MACT");
+                res.send(editpostDOM.serialize());
             }
         );
     } else {
@@ -420,6 +463,101 @@ app.get('/profile', function (req, res) {
     res.send(profileDOM.serialize());
 });
 
+//saves the postid so that the post can be edited on the editpost page
+app.post('/toeditpost', (req, res) => {
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
+    connection.connect();
+    connection.query(
+        "SELECT * FROM BBY_22_item_posts WHERE id = ?",
+        [req.body.postID],
+        function (error, results) {
+            if (error) {} else if (results.length > 0) {
+                results.forEach(post => {
+                    console.log(post.user_id);
+                    if (post.user_id == req.session.userID) {
+                        req.session.editpostID = req.body.postID;
+                        res.send({
+                            status: 'Success',
+                            msg: 'recorded post id'
+                        });
+                    } else {
+                        res.send({
+                            status: 'Fail',
+                            msg: 'Invalid user'
+                        });
+                    }
+                });
+            }
+        }
+    );
+});
+
+//save edits to post
+app.post('/savepostinfo', (req, res) => {
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
+    connection.connect();
+    connection.query(
+        "UPDATE BBY_22_item_posts SET title = ?, city = ?, description = ? WHERE id = ? AND user_id = ?",
+        [req.body.title, req.body.city, req.body.description, req.body.postID, req.session.userID],
+        function (error, results) {
+            if (error) {
+                console.log(error);
+
+                res.send({
+                    status: 'Fail',
+                    msg: 'Error. Post could not be updated.'
+                });
+            }
+        }
+    );
+
+    res.send({
+        status: 'Success',
+        msg: 'Post data updated.'
+    });
+});
+
+// delete post
+app.post('/deletepost', (req, res) => {
+
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
+    connection.connect();
+    connection.query(
+        "DELETE FROM BBY_22_item_posts WHERE id = ? AND user_id = ?",
+        [req.body.postID, req.session.userID],
+        function (error, results) {
+            if (error) {
+                res.send({
+                    status: 'Fail',
+                    msg: 'Post could not be deleted.'
+                });
+            }
+        }
+    );
+
+    res.send({
+        status: 'Success',
+        msg: 'Post deleted'
+    });
+});
 
 // When an admin updates a user's data
 app.post('/update-user-data', (req, res) => {
