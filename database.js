@@ -216,6 +216,7 @@ app.get("/mylistings", function (req, res) {
     }
 });
 
+//populates the editpost page with the correct information
 app.get("/editpost", function (req, res) {
     if (req.session.loggedIn) {
         let editpost = fs.readFileSync("./app/editpost.html", "utf8");
@@ -231,14 +232,16 @@ app.get("/editpost", function (req, res) {
         connection.connect();
         connection.query(
             "SELECT * FROM item_posts WHERE id = ?",
-            [1],
+            [req.session.editpostID],
             function (error, results, fields) {
                 myResults = results;
                 if (error) {} else if (results.length > 0) {
                     results.forEach(post => {
                         editpostDOM.window.document.querySelector("#title").setAttribute("value", `${post.title}`);
                         editpostDOM.window.document.querySelector("#city").setAttribute("value", `${post.city}`);
-                        editpostDOM.window.document.querySelector("#postdescription").innerHTML = `${post.description}`;
+                        editpostDOM.window.document.querySelector("#description").innerHTML = `${post.description}`;
+                        editpostDOM.window.document.querySelector("#savepost").setAttribute("onclick", `save_post(${post.id})`);
+                        editpostDOM.window.document.querySelector("#deletepost").setAttribute("onclick", `delete_post(${post.id})`);
                     });
                     connection.end();
                 } else {}
@@ -465,8 +468,8 @@ app.get('/profile', function (req, res) {
     res.send(profileDOM.serialize());
 });
 
+//saves the postid so that the post can be edited on the editpost page
 app.post('/toeditpost', (req, res) => {
-    console.log(req.body.postID);
     req.session.editpostID = req.body.postID;
     res.send({
         status: 'Success',
@@ -474,6 +477,66 @@ app.post('/toeditpost', (req, res) => {
     });
 });
 
+//save edits to post
+app.post('/savepostinfo', (req, res) => {
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "OnTheHouseDB"
+    });
+    connection.connect();
+    connection.query(
+        "UPDATE item_posts SET title = ?, city = ?, description = ? WHERE id = ?",
+        [req.body.title, req.body.city, req.body.description, req.body.postID],
+        function (error, results) {
+            if (error) {
+                console.log(error);
+
+                res.send({
+                    status: 'Fail',
+                    msg: 'Error. Post could not be updated.'
+                });
+            }
+        }
+    );
+
+    res.send({
+        status: 'Success',
+        msg: 'Post data updated.'
+    });
+});
+
+// delete post
+app.post('/deletepost', (req, res) => {
+
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "OnTheHouseDB"
+    });
+    connection.connect();
+    connection.query(
+        "DELETE FROM item_posts WHERE id = ?",
+        [req.body.postID],
+        function (error, results) {
+            if (error) {
+                res.send({
+                    status: 'Fail',
+                    msg: 'Post could not be deleted.'
+                });
+            }
+        }
+    );
+
+    res.send({
+        status: 'Success',
+        msg: 'Post deleted'
+    });
+});
 
 // When an admin updates a user's data
 app.post('/update-user-data', (req, res) => {
