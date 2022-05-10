@@ -479,7 +479,6 @@ app.post('/toeditpost', (req, res) => {
         function (error, results) {
             if (error) {} else if (results.length > 0) {
                 results.forEach(post => {
-                    console.log(post.user_id);
                     if (post.user_id == req.session.userID) {
                         req.session.editpostID = req.body.postID;
                         res.send({
@@ -513,8 +512,6 @@ app.post('/savepostinfo', (req, res) => {
         [req.body.title, req.body.city, req.body.description, req.body.postID, req.session.userID],
         function (error, results) {
             if (error) {
-                console.log(error);
-
                 res.send({
                     status: 'Fail',
                     msg: 'Error. Post could not be updated.'

@@ -107,10 +107,10 @@ body {
     height: 100vh;
     margin: 0px;
     padding: 0px;
-    overflow: scroll;
+    overflow-y: scroll;
     background: url("/imgs/background3.jpg") center/cover fixed;
     background-repeat: no-repeat;
-    overflow: hidden;
+    /* overflow: hidden; */
     background-size: cover;
     background-color: lightgray;
     font-family: Arial, Helvetica, sans-serif;
