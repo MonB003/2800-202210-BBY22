@@ -231,8 +231,8 @@ app.get("/editpost", function (req, res) {
         let myResults = null;
         connection.connect();
         connection.query(
-            "SELECT * FROM item_posts WHERE id = ?",
-            [req.session.editpostID],
+            "SELECT * FROM item_posts WHERE id = ? AND user_id = ?",
+            [req.session.editpostID, req.session.userID],
             function (error, results, fields) {
                 myResults = results;
                 if (error) {} else if (results.length > 0) {
@@ -470,11 +470,37 @@ app.get('/profile', function (req, res) {
 
 //saves the postid so that the post can be edited on the editpost page
 app.post('/toeditpost', (req, res) => {
-    req.session.editpostID = req.body.postID;
-    res.send({
-        status: 'Success',
-        msg: 'recorded post id'
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "OnTheHouseDB"
     });
+    connection.connect();
+    connection.query(
+        "SELECT * FROM item_posts WHERE id = ?",
+        [req.body.postID],
+        function (error, results) {
+            if (error) {} else if (results.length > 0) {
+                results.forEach(post => {
+                    console.log(post.user_id);
+                    if (post.user_id == req.session.userID) {
+                        req.session.editpostID = req.body.postID;
+                        res.send({
+                            status: 'Success',
+                            msg: 'recorded post id'
+                        });
+                    } else {
+                        res.send({
+                            status: 'Fail',
+                            msg: 'Invalid user'
+                        });
+                    }
+                });
+            }
+        }
+    );
 });
 
 //save edits to post
@@ -488,8 +514,8 @@ app.post('/savepostinfo', (req, res) => {
     });
     connection.connect();
     connection.query(
-        "UPDATE item_posts SET title = ?, city = ?, description = ? WHERE id = ?",
-        [req.body.title, req.body.city, req.body.description, req.body.postID],
+        "UPDATE item_posts SET title = ?, city = ?, description = ? WHERE id = ? AND user_id = ?",
+        [req.body.title, req.body.city, req.body.description, req.body.postID, req.session.userID],
         function (error, results) {
             if (error) {
                 console.log(error);
@@ -520,8 +546,8 @@ app.post('/deletepost', (req, res) => {
     });
     connection.connect();
     connection.query(
-        "DELETE FROM item_posts WHERE id = ?",
-        [req.body.postID],
+        "DELETE FROM item_posts WHERE id = ? AND user_id = ?",
+        [req.body.postID, req.session.userID],
         function (error, results) {
             if (error) {
                 res.send({

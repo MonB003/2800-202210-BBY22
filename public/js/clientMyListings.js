@@ -22,6 +22,7 @@ async function editpost(postID) {
     // Get response from server side post request called update-user-data
     const postResponse = await fetch('/toeditpost', postDetails);
     const jsonData = await postResponse.json();
-    // document.getElementById('message').innerHTML = jsonData.msg;
-    window.location.replace("/editpost");
+    if (jsonData.status == "Success") {
+        window.location.replace("/editpost");
+    }
 };
