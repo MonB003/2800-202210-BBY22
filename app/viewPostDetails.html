@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>On The House</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/imgs/OTH-favicon.ico" rel="icon" type="image/x-icon" />
+
+    <!-- CSS style -->
+    <link rel="stylesheet" href="/css/main.css" />
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header id="header">
+
+        <h2 id="companyName">On the House</h2>
+
+        <!-- Navbar -->
+        <nav id="navbar">
+            <!-- Directs to profile page to edit user info -->
+            <button id="profile" class="nav-button">Profile</button>
+            <button id="home" class="nav-button">Home</button>
+            <form action="/logout" method="get" id="logoutForm">
+                <input type="submit" id="logout" class="nav-button" value="Logout" />
+            </form>
+        </nav>
+
+    </header>
+
+    <div id="pagename">My Listings</div>
+    <div id="topnav">
+        <button type="button" class="navbutton" id="newPostPageBtn">New Post</button>
+        <button type="button" class="navbutton" id="filter">Filter</button>
+    </div>
+    <div id="posts">
+        <template id="posttemplate">
+            <div class="post">
+                <div class="postimage">
+                </div>
+                <div class="posttitle">Post Title</div>
+                <div class="poststatus">Status</div>
+                <div class="postlocation">
+                    Post Location
+                </div>
+                <div class="postoptions">
+                    <div class="messagepost">
+                        M
+                    </div>
+                    <div class="editpost">
+                        Edit
+                    </div>
+                </div>
+                <div class="postdate">Post date time</div>
+            </div>
+        </template>
+    </div>
+
+
+
+    <!-- JavaScript -->
+    <script src="js/clientMain.js"></script>
+    <script src="js/clientMyListings.js"></script>
+
+</body>
+
+</html>
