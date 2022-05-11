@@ -52,8 +52,7 @@
   padding: 5pt;
   padding-left: 8pt;
   padding-right: 8pt;
-  font-family: 'Lato',
-    sans-serif;
+  font-family: 'Lato',sans-serif;
   letter-spacing: 1px;
   font-size: 15px;
   color: #537164;
@@ -64,6 +63,21 @@
   border-radius: 10px;
   box-shadow: 0 0 2px rgb(243, 243, 243);
   text-decoration: none;
+}
+
+.navbutton {
+  width: 75%;
+  margin: auto;
+  background-color: #526e62;
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  height: 50px;
+  margin-top: 10px;
+  box-shadow: 0 0 5px rgb(40, 39, 39);
 }
 
 .nav-button:hover {
@@ -128,21 +142,6 @@ body {
   height: 50px;
 }
 
-.navbutton {
-  width: 75%;
-  margin: auto;
-  background-color: #526e62;
-  border: none;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 15px;
-  font-size: 18px;
-  font-weight: bold;
-  height: 50px;
-  margin-top: 10px;
-  box-shadow: 0 0 5px rgb(40, 39, 39);
-}
-
 .navbutton:hover {
   background-color: #435a50;
   box-shadow: 1px 1px 3px rgb(73, 71, 71);
@@ -152,11 +151,9 @@ body {
   display: grid;
   grid-template-columns: 25% 50% 25%;
   grid-template-rows: 25% 75%;
-  /* background-color: rgba(0, 0, 0, 0.5); */
   margin: 3% auto;
   min-height: 500px;
   height: auto;
-  /* background-color: #c9e1f0; */
   position: relative;
   overflow-y: auto;
 }
@@ -246,3 +243,72 @@ body {
   color: aliceblue;
 }
 
+@media only screen and (max-width : 1000px) {
+
+  #navbar {
+    height: 100px;
+  }
+
+  #customerName {
+    font-family: 'Lato', sans-serif;
+  }
+
+  #logout {
+    font-size: 3vw;
+  }
+
+  .nav-button {
+    font-size: 3vw;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 10% 80% 10%;
+    grid-template-rows: 40% 60%;
+  }
+
+  #pic-input {
+    grid-area: 1/2/2/3;
+    margin-top: 70px;
+    padding: 10px;
+  }
+
+  #pic {
+    max-width: 400px;
+    max-height: 400px;
+    box-shadow: 0 0 12px rgb(20, 19, 19);
+  }
+
+  #text-input {
+    grid-area: 2/2/3/3;
+    width: 600px;
+    box-shadow: 0 0 15px rgb(20, 19, 19);
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
+
+  #text-input h3 {
+    font-size: 7vw;
+  }
+
+  #text-input input {
+    width: 580px;
+    height: 80px;
+    font-size: 35px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+  }
+
+  #message {
+    margin-bottom: 100px;
+    font-size: 35px;
+  }
+
+  #saveBtn {
+    width: 580px;
+    height: 80px;
+    font-size: 40px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+}
