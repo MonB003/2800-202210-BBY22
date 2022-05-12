@@ -35,8 +35,19 @@
     <h2 id="customerName">placeholder</h2>
     <div id="topnav">
         <button type="button" class="navbutton" id="newPostPageBtn">New Post</button>
-        <button type="button" class="navbutton" id="filter">Filter</button>
-        <input type="text" id="search" onkeyup="displayposts()" placeholder="Search" title="Filter Search">
+        <button type="button" class="navbutton" id="filtermenu">Filter</button>
+        <div id="filtersearch">
+            <input type="text" id="search" onkeyup="displayposts()" placeholder="Search" title="Filter Search">
+            <select name="filter" id="filter">
+                <option value="title">Title</option>
+                <option value="city">City</option>
+            </select>
+        </div>
+        <div id="statussort">
+            <button type="button" id="filterstatus">All</button>
+            <button type="button" id="sortbutton">Sort</button>
+        </div>
+        
     </div>
 
     <!-- Template for displaying posts -->
