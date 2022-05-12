@@ -31,21 +31,21 @@
 
     </header>
 
-    <div id="pagename">My Listings</div>
+    <div id="pagename">Item Details</div>
     <div id="topnav">
-        <button type="button" class="navbutton" id="newPostPageBtn">New Post</button>
-        <button type="button" class="navbutton" id="filter">Filter</button>
+        <form id="backtoMain" action="/main" method="get">
+            <input type="submit" id="backToLogin" value="Go Back" />
+        </form>
     </div>
     <div id="posts">
         <template id="posttemplate">
             <div class="post">
                 <div class="postimage">
                 </div>
-                <div class="posttitle">Post Title</div>
-                <div class="poststatus">Status</div>
-                <div class="postlocation">
-                    Post Location
-                </div>
+                <div id="post-owner"></div>
+                <div id="post-title">Post Title</div>
+                <div id="poststatus">Status: <span id="post-status"></span></div>
+                <div id="postlocation"> Location: <span id="post-location"></span> </div>
                 <div class="postoptions">
                     <div class="messagepost">
                         M
@@ -62,8 +62,7 @@
 
 
     <!-- JavaScript -->
-    <script src="js/clientMain.js"></script>
-    <script src="js/clientMyListings.js"></script>
+    <script src="js/clientViewPostDetails.js"></script>
 
 </body>
 
