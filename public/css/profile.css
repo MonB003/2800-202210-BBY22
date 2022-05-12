@@ -128,7 +128,6 @@ body {
   height: 100vh;
   margin: 0px;
   padding: 0px;
-  overflow: scroll;
   background: url("/imgs/background3.jpg") center/cover fixed;
   background-repeat: no-repeat;
   overflow: hidden;
@@ -150,24 +149,24 @@ body {
 .grid {
   display: grid;
   grid-template-columns: 25% 50% 25%;
-  grid-template-rows: 25% 75%;
+  grid-template-rows: 30% 10% 60%;
   margin: 3% auto;
   min-height: 500px;
   height: auto;
   position: relative;
-  overflow-y: auto;
 }
 
-#pic-input{
+.post{
   grid-area: 1/2/2/3;
   width: auto;
   height: auto;
   margin: 0 auto;
   padding: 10px;
-  position: relative;
 }
 
-#pic {
+#postimage {
+  width: 400px;
+  height: 400px;
   max-width: 200px;
   max-height: 200px;
   border: #435a50;
@@ -176,8 +175,25 @@ body {
   box-shadow: 0 0 6px rgb(20, 19, 19);
 }
 
-#text-input{
+#change-input {
   grid-area: 2/2/3/3;
+  position: relative;
+  text-align: center;
+  align-items: center;
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-top-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  box-shadow: 0 0 10px rgb(20, 19, 19);
+  padding:10px;
+  font-family: 'Lato';
+  font-weight: bold;
+}
+
+#text-input{
+  grid-area: 3/2/4/3;
   width: auto;
   height: auto;
   margin: 0 auto;
@@ -187,13 +203,15 @@ body {
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 25px;
   box-shadow: 0 0 10px rgb(20, 19, 19);
-  margin-top: 80px;
+  margin-top: 40px;
+  /* border-color: black;
+  border-style: solid; */
 }
 
 #text-input h3 {
   text-align: center;
-  padding-top: 30px;
-  padding-bottom: 30px;
+  padding-top: 20px;
+  padding-bottom: 20px;
   font-family: 'Pacifico', cursive;
   color: rgb(255, 255, 255);
   font-size: 2.5vw;
@@ -232,6 +250,7 @@ body {
   color: #333;
   margin-top: 10px;
   border-radius: 5px;
+  margin-bottom: 10px;
 }
 
 #saveBtn {
@@ -264,23 +283,40 @@ body {
   .grid {
     display: grid;
     grid-template-columns: 10% 80% 10%;
-    grid-template-rows: 40% 60%;
+    grid-template-rows: 30% 15% 55%;
   }
 
-  #pic-input {
+  .post {
     grid-area: 1/2/2/3;
     margin-top: 70px;
     padding: 10px;
   }
 
-  #pic {
+  #postimage {
+    /* width: 300px;
+    height: 300px;
     max-width: 400px;
-    max-height: 400px;
+    max-height: 400px; */
     box-shadow: 0 0 12px rgb(20, 19, 19);
   }
 
-  #text-input {
+  #change-input {
     grid-area: 2/2/3/3;
+    width: auto;
+    height: auto;
+    margin: 0 auto;
+    padding-top:30px;
+    font-size: 35px;
+    font-weight: bold;
+    margin-top:30px;
+  }
+
+  #change-input form input {
+    font-size: 25px;
+  }
+
+  #text-input {
+    grid-area: 3/2/4/3;
     width: 600px;
     box-shadow: 0 0 15px rgb(20, 19, 19);
     margin-top: 40px;

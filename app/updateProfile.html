@@ -31,9 +31,30 @@
     </header>
 
     <section>
+        <div id="tempDiv"></div>
         <div class="grid">
-            <div id="pic-input">
-                <img id="pic" src="/imgs/On the House Logo.jpg">
+            <div id="posttemplate">
+                <div class="post">
+
+                    <div id="postimage">
+                        
+                        <img src="imgs/user-pic-background4.jpg" id="replacePic" alt="profile-pic" width = "400px" height = "400px">
+                        <!-- <img src="imgs/user-pic-user-pic-none.jpg" alt="profile-pic" width="400px" height="400px"> -->
+
+                    </div>
+
+                </div>
+            </div>
+            <div id="change-input">
+                <p>Update Profile Picture</p>
+                <br>
+                <div id="container">
+                    <form id="upload-images-form">
+                        <input id="image-upload" type="file" value="Upload Image" 
+                            accept="image/png, image/gif, image/jpg, image/jpeg" />
+                        <input id="submit" type="submit" value="Submit"/>
+                    </form>
+                </div>
             </div>
             <div id="text-input">
                 <h3>Edit Profile</h3>
@@ -57,6 +78,8 @@
 
     <!-- JavaScript -->
     <script src="js/clientProfile.js"></script>
+
+
 
 </body>
 

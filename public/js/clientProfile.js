@@ -1,4 +1,35 @@
 "use strict";
+const upLoadForm = document.getElementById("upload-images-form");
+upLoadForm.addEventListener("submit", uploadImages);
+
+async function uploadImages(e) {
+    e.preventDefault();
+
+    //send image to server side
+    const imageUpload = document.querySelector('#image-upload');
+    const formData = new FormData();
+    for (let i = 0; i < imageUpload.files.length; i++) {
+        // put the images from the input into the form data
+        formData.append("files", imageUpload.files[i]);
+    }
+
+    const options = {
+        method: 'POST',
+        body: formData
+    };
+
+    let resultPic = ""
+    // now use fetch
+    fetch("/upload-images", options
+    ).then(function (res) {
+        console.log(res);
+        resultPic = newPicture
+        console.log("result from server side: " + resultPic);
+    }).catch(function (err) { ("Error:", err) }
+    );
+
+}
+
 
 // Method called when a user updates their own information
 async function updateData() {
