@@ -9,6 +9,10 @@ const {
     JSDOM
 } = require('jsdom');
 
+//Setup for Heroku Hosting
+let http = require('http');
+let url = require('url');
+
 // Paths
 app.use('/js', express.static('./public/js'));
 app.use('/css', express.static('./public/css'));
@@ -207,7 +211,7 @@ app.get("/mylistings", function (req, res) {
                         posts.appendChild(testpost);
                     });
                     connection.end();
-                } 
+                }
 
                 res.set("Server", "MACT Engine");
                 res.set("X-Powered-By", "MACT");
@@ -364,7 +368,7 @@ app.post('/signup', function (req, res) {
                             req.session.city = req.body.city;
                             req.session.type = req.body.type;
                             req.session.userID = results.insertId;
-                            
+
                             req.session.save(function (err) {
                                 // Session saved
                             });
@@ -815,5 +819,17 @@ async function initializeDatabase() {
 }
 
 // Server runs on port 8000
-let port = 8000;
-app.listen(port, initializeDatabase);
+// let port = 8000;
+// app.listen(port, initializeDatabase);
+
+
+
+http.createServer((req, res) => {
+    let q = url.parse(req.url, true);
+    console.log(q.query);
+    res.writeHead(200, {
+        "Content-Type": "text/html",
+        "Access-Control-Allow-Origin": "*"
+    });
+    res.end(`Hello ${q.query['name']}`);
+}).listen(process.env.PORT || 8000)

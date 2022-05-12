@@ -4,5 +4,39 @@
     "express-session": "^1.17.2",
     "jsdom": "^19.0.0",
     "mysql2": "^2.3.3"
-  }
+  },
+  "name": "2800-202210-bby22",
+  "version": "1.0.0",
+  "main": "database.js",
+  "devDependencies": {},
+  "scripts": {
+    "start": "node database.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MonB003/2800-202210-BBY22.git"
+  },
+  "author": "BCIT 2800-202210-bby22",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MonB003/2800-202210-BBY22/issues"
+  },
+  "homepage": "https://github.com/MonB003/2800-202210-BBY22#readme",
+  "description": "On The House",
+  "keywords": [
+    "free",
+    "used",
+    "used",
+    "items",
+    "free",
+    "items",
+    "used",
+    "furniture",
+    "bed",
+    "table",
+    "chair",
+    "couch",
+    "sofa",
+    "mattress"
+  ]
 }
