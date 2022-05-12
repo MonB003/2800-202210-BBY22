@@ -123,50 +123,49 @@ app.get("/main", function (req, res) {
             mainDOM.window.document.getElementById("customerName").innerHTML = "Welcome, " + req.session.firstName +
                 " " + req.session.lastName + "!";
 
-            const mysql = require("mysql2");
-            const connection = mysql.createConnection({
-                host: "localhost",
-                user: "root",
-                password: "",
-                database: "COMP2800"
-            });
-            let myResults = null;
-            connection.connect();
+            // const mysql = require("mysql2");
+            // const connection = mysql.createConnection({
+            //     host: "localhost",
+            //     user: "root",
+            //     password: "",
+            //     database: "COMP2800"
+            // });
+            // let myResults = null;
+            // connection.connect();
 
-            connection.execute(
-                "SELECT * FROM BBY_22_item_posts",
-                function (error, results, fields) {
-                    myResults = results;
-                    let posttemplate = mainDOM.window.document.getElementById("posttemplate");
-                    let posts = mainDOM.window.document.getElementById("posts");
-                    if (error) {} else if (results.length > 0) {
-                        // Creates a template for each post in the database and displays it on the page
-                        results.forEach(post => {
-                            let testpost = posttemplate.content.cloneNode(true);
-                            testpost.querySelector(".post").id = `post${post.ID}`;
-                            testpost.querySelector(".posttitle").innerHTML = post.title;
-                            testpost.querySelector(".poststatus").innerHTML = post.status;
-                            testpost.querySelector(".postlocation").innerHTML = post.city;
-                            testpost.querySelector(".poststatus").innerHTML = post.status;
-                            testpost.querySelector(".postdate").innerHTML = post.timestamp;
-                            testpost.querySelector(".savepost").id = `save${post.ID}`;
-                            testpost.querySelector(".messagepost").id = `message${post.ID}`;
-                            posts.appendChild(testpost);
-                        });
-                        connection.end();
-                    }
-
-                    res.set("Server", "MACT Engine");
-                    res.set("X-Powered-By", "MACT");
-                    res.send(mainDOM.serialize());
-                }
-            );
+            // connection.query(
+            //     "SELECT * FROM BBY_22_item_posts",
+            //     function (error, results, fields) {
+            //         myResults = results;
+            //         let posttemplate = mainDOM.window.document.getElementById("posttemplate");
+            //         let posts = mainDOM.window.document.getElementById("posts");
+            //         if (error) {} else if (results.length > 0) {
+            //             results.forEach(post => {
+            //                 let testpost = posttemplate.content.cloneNode(true);
+            //                 testpost.querySelector(".post").id = `post${post.ID}`;
+            //                 testpost.querySelector(".posttitle").innerHTML = post.title;
+            //                 testpost.querySelector(".poststatus").innerHTML = post.status;
+            //                 testpost.querySelector(".postlocation").innerHTML = post.city;
+            //                 testpost.querySelector(".postdate").innerHTML = post.timestamp;
+            //                 testpost.querySelector(".savepost").id = `save${post.ID}`;
+            //                 testpost.querySelector(".messagepost").id = `message${post.ID}`;
+            //                 posts.appendChild(testpost);
+            //             });
+            //             connection.end();
+            //         }
+            //     }
+            // );
+            res.set("Server", "MACT Engine");
+            res.set("X-Powered-By", "MACT");
+            res.send(mainDOM.serialize());
         }
     } else {
         // User is not logged in, so direct to login page
         res.redirect("/");
     }
 });
+
+
 
 app.get("/mylistings", function (req, res) {
 
@@ -261,6 +260,36 @@ app.get("/editpost", function (req, res) {
     }
 });
 
+app.post("/loadposts", function (req, res) {
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
+    let myResults = null;
+    let posts = [];
+    connection.connect();
+    connection.query(
+        "SELECT * FROM BBY_22_item_posts where status != 'collected'",
+        function (error, results, fields) {
+            myResults = results;
+            if (error) {} else if (results.length > 0) {
+                results.forEach(post => {
+                    posts.push({"postid":post.id, 
+                        "title":post.title, 
+                        "status":post.status, 
+                        "city":post.city, 
+                        "timestamp":post.timestamp
+                    });
+                    console.log(posts);
+                });
+            }
+            res.send(posts);
+        }
+    );
+})
 
 app.use(express.json());
 app.use(express.urlencoded({

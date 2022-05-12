@@ -36,30 +36,31 @@
     <div id="topnav">
         <button type="button" class="navbutton" id="newPostPageBtn">New Post</button>
         <button type="button" class="navbutton" id="filter">Filter</button>
+        <input type="text" id="search" onkeyup="displayposts()" placeholder="Search" title="Filter Search">
     </div>
 
     <!-- Template for displaying posts -->
-    <div id="posts">
-        <template id="posttemplate">
-            <div class="post">
-                <div class="postimage">
-                </div>
-                <div class="posttitle">Post Title</div>
-                <div class="poststatus">Status</div>
-                <div class="postlocation">
-                    Post Location
-                </div>
-                <div class="postoptions">
-                    <div class="savepost">
-                        S
-                    </div>
-                    <div class="messagepost">
-                        M
-                    </div>
-                </div>
-                <div class="postdate">Post date time</div>
+    <template id="posttemplate">
+        <div class="post">
+            <div class="postimage">
             </div>
-        </template>
+            <div class="posttitle">Post Title</div>
+            <div class="poststatus">Status</div>
+            <div class="postlocation">
+                Post Location
+            </div>
+            <div class="postoptions">
+                <div class="savepost">
+                    S
+                </div>
+                <div class="messagepost">
+                    M
+                </div>
+            </div>
+            <div class="postdate">Post date time</div>
+        </div>
+    </template>
+    <div id="posts">
     </div>
 
 
