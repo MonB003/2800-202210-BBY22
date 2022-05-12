@@ -110,7 +110,7 @@ body {
     overflow: scroll;
     background: url("/imgs/background3.jpg") center/cover fixed;
     background-repeat: no-repeat;
-    overflow: hidden;
+    /* overflow: hidden; */
     background-size: cover;
     background-color: lightgray;
     font-family: Arial, Helvetica, sans-serif;
@@ -190,6 +190,7 @@ body {
     margin: auto;
     border-radius: 15px;
     background-color: green;
+    cursor: pointer;
 }
 
 .postlocation {
