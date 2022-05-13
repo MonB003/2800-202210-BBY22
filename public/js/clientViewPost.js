@@ -1,12 +1,12 @@
 "use strict";
 
 // Updates a user's data in the database
-async function editpost(postID) {
+async function getPostOwner() {
 
 
     // Sends data to the server and saves it to a session
     const dataSent = {
-        postID
+
     }
 
     // Additional details needed when sending data to server side
@@ -19,9 +19,12 @@ async function editpost(postID) {
     }
 
     // Get response from server side post request called update-user-data
-    const postResponse = await fetch('/toeditpost', postDetails);
+    const postResponse = await fetch('/getPostOwner', postDetails);
     const jsonData = await postResponse.json();
-    if (jsonData.status == "Success") {
-        window.location.replace("/editpost");
-    }
+
+    document.querySelector("#post-owner").innerHTML = jsonData.name;
+
+
 };
+
+getPostOwner();

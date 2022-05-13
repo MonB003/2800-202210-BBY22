@@ -474,7 +474,7 @@ app.post('/toviewpost', (req, res) => {
     });
 });
 
-//populates the editpost page with the correct information
+//populates the view post page with the correct information
 app.get("/viewPost", function (req, res) {
     if (req.session.loggedIn) {
         let viewPost = fs.readFileSync("./app/viewPost.html", "utf8");
@@ -525,12 +525,40 @@ app.get("/viewPost", function (req, res) {
                 } else {}
             }
         );
-
-
     } else {
         // User is not logged in, so direct to login page
         res.redirect("/");
     }
+});
+
+//to get post owner name from user table and displays it when view post details
+app.post('/getPostOwner', (req, res) => {
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
+    let userName = [];
+    connection.connect();
+    connection.query(
+        "SELECT * FROM BBY_22_users WHERE id = ?",
+        [req.session.postOwnerID],
+        function (error, results, fields) {
+
+            if (error) {} else if (results.length > 0) {
+                results.forEach(user => {
+                    userName = {
+                        "name": `${user.firstName} ${user.lastName}`
+                    }
+                });
+
+
+            } else {}
+            res.send(userName);
+        }
+    );
 });
 
 //saves the postid so that the post can be edited on the editpost page
