@@ -1133,7 +1133,7 @@ async function initializeDatabase() {
     // Promise
 
     //mysql connection setup
-    const mysql = require("mysql2");
+    const mysql = require("mysql2/promise");
     const is_heroku = process.env.IS_HEROKU || false;
     // var db;
 
@@ -1155,7 +1155,13 @@ async function initializeDatabase() {
     //     multipleStatements: true
     // };
 
-    const db = mysql.createConnection(connectionHeroku);
+    const db = await mysql.createConnection({
+        host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
+        user: "biysuiwt6fbjxdfw",
+        password: "llwyk8vg4c7p5rtu",
+        database: "gi80n4hbnupblp0y",
+        multipleStatements: true
+    });
 
     // if (is_heroku) {
     //     db = mysql.createConnection(connectionHeroku);
@@ -1163,7 +1169,6 @@ async function initializeDatabase() {
     //     db = mysql.createConnection(connectionLocal);
     // }
 
-    db.connect();
     // Creates a table for user profiles and item posts
     const createDatabaseTables = `CREATE DATABASE IF NOT EXISTS COMP2800;
         use COMP2800;
@@ -1187,7 +1192,7 @@ async function initializeDatabase() {
             timestamp VARCHAR(50),
             PRIMARY KEY (id),
             FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
-    db.query(createDatabaseTables);
+    await db.query(createDatabaseTables);
 
     // Await allows for us to wait for this line to execute synchronously
     const [rows, fields] = await db.query("SELECT * FROM BBY_22_users");
