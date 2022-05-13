@@ -58,7 +58,7 @@ app.get("/main", function (req, res) {
                 " " + req.session.lastName + "!";
 
             //mysql connection setup
-            const mysql = require("mysql2/promise");
+            const mysql = require("mysql2");
             const is_heroku = process.env.IS_HEROKU || false;
             // var db;
 
@@ -146,7 +146,7 @@ app.get("/main", function (req, res) {
                 " " + req.session.lastName + "!";
 
             //mysql connection setup
-            const mysql = require("mysql2/promise");
+            const mysql = require("mysql2");
             const is_heroku = process.env.IS_HEROKU || false;
             // var db;
 
@@ -223,7 +223,7 @@ app.get("/mylistings", function (req, res) {
         let mylistingsDOM = new JSDOM(mylistings);
 
         //mysql connection setup
-        const mysql = require("mysql2/promise");
+        const mysql = require("mysql2");
         const is_heroku = process.env.IS_HEROKU || false;
         // var db;
 
@@ -299,7 +299,7 @@ app.get("/editpost", function (req, res) {
         let editpostDOM = new JSDOM(editpost);
 
         //mysql connection setup
-        const mysql = require("mysql2/promise");
+        const mysql = require("mysql2");
         const is_heroku = process.env.IS_HEROKU || false;
         // var db;
 
@@ -431,7 +431,7 @@ app.post('/signup', function (req, res) {
             if (recordReturned == null) {
 
                 //mysql connection setup
-                const mysql = require("mysql2/promise");
+                const mysql = require("mysql2");
                 const is_heroku = process.env.IS_HEROKU || false;
                 // var db;
 
@@ -513,7 +513,7 @@ app.post('/newPost', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
     //mysql connection setup
-    const mysql = require("mysql2/promise");
+    const mysql = require("mysql2");
     const is_heroku = process.env.IS_HEROKU || false;
     // var db;
 
@@ -612,7 +612,7 @@ app.get('/profile', function (req, res) {
 app.post('/toeditpost', (req, res) => {
 
     //mysql connection setup
-    const mysql = require("mysql2/promise");
+    const mysql = require("mysql2");
     const is_heroku = process.env.IS_HEROKU || false;
     // var db;
 
@@ -670,7 +670,7 @@ app.post('/toeditpost', (req, res) => {
 //save edits to post
 app.post('/savepostinfo', (req, res) => {
     //mysql connection setup
-    const mysql = require("mysql2/promise");
+    const mysql = require("mysql2");
     const is_heroku = process.env.IS_HEROKU || false;
     // var db;
 
@@ -724,7 +724,7 @@ app.post('/savepostinfo', (req, res) => {
 app.post('/deletepost', (req, res) => {
 
     //mysql connection setup
-    const mysql = require("mysql2/promise");
+    const mysql = require("mysql2");
     const is_heroku = process.env.IS_HEROKU || false;
     // var db;
 
@@ -778,7 +778,7 @@ app.post('/deletepost', (req, res) => {
 app.post('/update-user-data', (req, res) => {
 
     //mysql connection setup
-    const mysql = require("mysql2/promise");
+    const mysql = require("mysql2");
     const is_heroku = process.env.IS_HEROKU || false;
     // var db;
 
@@ -833,7 +833,7 @@ app.post('/update-user-data', (req, res) => {
 app.post('/update-data', (req, res) => {
 
     //mysql connection setup
-    const mysql = require("mysql2/promise");
+    const mysql = require("mysql2");
     const is_heroku = process.env.IS_HEROKU || false;
     // var db;
 
@@ -889,7 +889,7 @@ app.post('/delete-user', (req, res) => {
     let requestName = req.body.firstName + " " + req.body.lastName;
 
     //mysql connection setup
-    const mysql = require("mysql2/promise");
+    const mysql = require("mysql2");
     const is_heroku = process.env.IS_HEROKU || false;
     // var db;
 
@@ -951,7 +951,7 @@ app.post('/add-new-user', (req, res) => {
             // If authenticate() returns null, user isn't currently in database, so they can be added
             if (recordReturned == null) {
                 //mysql connection setup
-                const mysql = require("mysql2/promise");
+                const mysql = require("mysql2");
                 const is_heroku = process.env.IS_HEROKU || false;
                 // var db;
 
@@ -1017,7 +1017,7 @@ app.post('/add-new-user', (req, res) => {
 function authenticateUser(email, pwd, callback) {
 
     //mysql connection setup
-    const mysql = require("mysql2/promise");
+    const mysql = require("mysql2");
     const is_heroku = process.env.IS_HEROKU || false;
     // var db;
 
@@ -1076,7 +1076,7 @@ function authenticateUser(email, pwd, callback) {
 function checkEmailAlreadyExists(email, callback) {
 
     //mysql connection setup
-    const mysql = require("mysql2/promise");
+    const mysql = require("mysql2");
     const is_heroku = process.env.IS_HEROKU || false;
     // var db;
 
@@ -1133,7 +1133,7 @@ async function initializeDatabase() {
     // Promise
 
     //mysql connection setup
-    const mysql = require("mysql2/promise");
+    const mysql = require("mysql2");
     const is_heroku = process.env.IS_HEROKU || false;
     // var db;
 
