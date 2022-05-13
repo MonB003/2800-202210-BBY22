@@ -190,6 +190,7 @@ body {
     margin: auto;
     border-radius: 15px;
     background-color: green;
+    cursor: pointer;
 }
 
 .postlocation {

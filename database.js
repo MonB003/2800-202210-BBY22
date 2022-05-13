@@ -85,8 +85,7 @@ app.get("/main", function (req, res) {
                         strRowData += "<tr><td><input type=\"text\" id=\"userCity" + userIdNum + "\"" + " value=\"" + userResults[row].city + "\">" + "</td></tr>";
                         strRowData += "<tr><td><input type=\"text\" id=\"userEmail" + userIdNum + "\"" + " value=\"" + userResults[row].email + "\">" + "</td></tr>";
                         strRowData += "<tr><td><input type=\"text\" id=\"userPassword" + userIdNum + "\"" + " value=\"" + userResults[row].password + "\">" + "</td></tr>";
-                        strRowData += "<tr><td><input type=\"text\" id=\"userType" + userIdNum + "\"" + " value=\"" + userResults[row].type + "\">" + "</td></tr>";
-                        //doesnt work
+                        strRowData += "<tr><td><input type=\"text\" id=\"userType" + userIdNum + "\"" + " class=\"user-type-input\"" + " value=\"" + userResults[row].type + "\">" + "</td></tr>";
                         strRowData += "<tr><td>" + "<button id=\"editButton" + userIdNum + "\"" + "</td><tr>";
                         strRowData += "<tr><td>" + "<button id=\"deleteButton" + userIdNum + "\"" + "</td></tr>";
 
@@ -134,7 +133,8 @@ app.get("/main", function (req, res) {
             connection.connect();
 
             connection.execute(
-                "SELECT * FROM BBY_22_item_posts",
+                "SELECT * FROM BBY_22_item_posts WHERE status != ?",
+                ["collected"],
                 function (error, results, fields) {
                     myResults = results;
                     let posttemplate = mainDOM.window.document.getElementById("posttemplate");
@@ -143,14 +143,16 @@ app.get("/main", function (req, res) {
                         // Creates a template for each post in the database and displays it on the page
                         results.forEach(post => {
                             let testpost = posttemplate.content.cloneNode(true);
-                            testpost.querySelector(".post").id = `post${post.ID}`;
+                            testpost.querySelector(".post").id = `post${post.id}`;
                             testpost.querySelector(".posttitle").innerHTML = post.title;
                             testpost.querySelector(".poststatus").innerHTML = post.status;
+                            testpost.querySelector(".poststatus").setAttribute("id", "postStatus" + post.id);
+                            testpost.querySelector(".poststatus").setAttribute("onclick", "changePostStatus(" + post.id + ")");
+
                             testpost.querySelector(".postlocation").innerHTML = post.city;
-                            testpost.querySelector(".poststatus").innerHTML = post.status;
                             testpost.querySelector(".postdate").innerHTML = post.timestamp;
-                            testpost.querySelector(".savepost").id = `save${post.ID}`;
-                            testpost.querySelector(".messagepost").id = `message${post.ID}`;
+                            testpost.querySelector(".savepost").id = `save${post.id}`;
+                            testpost.querySelector(".messagepost").id = `message${post.id}`;
                             posts.appendChild(testpost);
                         });
                         connection.end();
@@ -198,8 +200,10 @@ app.get("/mylistings", function (req, res) {
                         testpost.querySelector(".post").id = `post${post.id}`;
                         testpost.querySelector(".posttitle").innerHTML = post.title;
                         testpost.querySelector(".poststatus").innerHTML = post.status;
+                        testpost.querySelector(".poststatus").setAttribute("id", "postStatus" + post.id);
+                        testpost.querySelector(".poststatus").setAttribute("onclick", "changePostStatus(" + post.id + ")");
+
                         testpost.querySelector(".postlocation").innerHTML = post.city;
-                        testpost.querySelector(".poststatus").innerHTML = post.status;
                         testpost.querySelector(".postdate").innerHTML = post.timestamp;
                         testpost.querySelector(".messagepost").id = `message${post.id}`;
                         testpost.querySelector(".editpost").id = `edit${post.id}`;
@@ -696,6 +700,92 @@ app.post('/add-new-user', (req, res) => {
 });
 
 
+// Updates a post's status in the database
+app.post('/update-post-status', (req, res) => {
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
+    connection.connect(); 
+    connection.query(
+        "UPDATE BBY_22_item_posts SET status = ? WHERE id = ?",
+        [req.body.newStatus, req.body.postID],
+        function (error, results) {
+            if (error) {
+                res.send({
+                    status: 'Fail',
+                    msg: 'Error. Post status could not be updated.'
+                });
+            }
+            res.send({
+                status: 'Success',
+                msg: 'Updated post status.'
+            });
+        }
+    );
+});
+
+
+// Saves the current session user as the user who reserved the post that was clicked
+app.post('/save-user-pending-status', (req, res) => {
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
+    connection.connect(); 
+    connection.query(
+        "UPDATE BBY_22_item_posts SET user_reserved = ? WHERE id = ?",
+        [req.session.userID, req.body.postID],
+        function (error, results) {
+            if (error) {
+                res.send({
+                    status: 'Fail',
+                    msg: 'Error. Post status could not be updated.'
+                });
+            }
+        }
+    );
+
+    res.send({
+        status: 'Success',
+        msg: 'Saved pending user in post.'
+    });
+});
+
+
+// Returns the current session user ID and the post ID that was clicked. These get compared to verify if the user
+// pressing the status button has the ability to set the item status to reserved or collected.
+app.post('/get-post-and-session-ids', (req, res) => {
+    let currentSessionUserID = req.session.userID;
+
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
+    connection.connect();
+    connection.query(
+        "SELECT user_id FROM BBY_22_item_posts WHERE id = ?",
+        [req.body.postID],
+        function (error, result) {
+            res.send({
+                status: 'Success',
+                postUserID: result[0],
+                currentUserID: currentSessionUserID
+            });
+        }
+    );
+});
+
+
 
 // Validates user's email and password
 function authenticateUser(email, pwd, callback) {
@@ -795,6 +885,7 @@ async function initializeDatabase() {
             description VARCHAR(1000), 
             city VARCHAR(30), 
             status VARCHAR(30), 
+            user_reserved int, 
             timestamp VARCHAR(50),
             PRIMARY KEY (id),
             FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;

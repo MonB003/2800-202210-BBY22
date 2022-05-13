@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS BBY_22_item_posts(
     description VARCHAR(1000),
     city VARCHAR(30),
     status VARCHAR(30),
+    user_reserved int,
     timestamp VARCHAR(50),
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);
