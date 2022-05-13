@@ -23,15 +23,14 @@ async function uploadImages(e) {
     fetch("/upload-images", options
     ).then(function (res) {
         console.log(res);
-        resultPic = newPicture
-        console.log("result from server side: " + resultPic);
+        resultPic = picRef
+        console.log("result incoming from server side: " + resultPic);
+        console.log("res incoming form server:" + res);
     }).catch(function (err) { ("Error:", err) }
     );
 
 }
 
-
-// Method called when a user updates their own information
 async function updateData() {
     let firstName = document.getElementById('userFirstName').value;
     let lastName = document.getElementById('userLastName').value;
