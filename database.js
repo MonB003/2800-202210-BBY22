@@ -1170,8 +1170,8 @@ async function initializeDatabase() {
     // }
 
     // Creates a table for user profiles and item posts
-    const createDatabaseTables = `CREATE DATABASE IF NOT EXISTS COMP2800;
-        use COMP2800;
+    const createDatabaseTables = `CREATE DATABASE IF NOT EXISTS gi80n4hbnupblp0y;
+        use gi80n4hbnupblp0y;
         CREATE TABLE IF NOT EXISTS BBY_22_users(
         id int NOT NULL AUTO_INCREMENT, 
         firstName VARCHAR(20), 
