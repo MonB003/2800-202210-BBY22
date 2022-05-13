@@ -9,7 +9,7 @@
     <link href="/imgs/OTH-favicon.ico" rel="icon" type="image/x-icon" />
 
     <!-- CSS style -->
-    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/viewPost.css" />
 </head>
 
 <body>
@@ -37,32 +37,30 @@
             <input type="submit" id="backToLogin" value="Go Back" />
         </form>
     </div>
-    <div id="posts">
-        <template id="posttemplate">
-            <div class="post">
-                <div class="postimage">
-                </div>
-                <div id="post-owner"></div>
-                <div id="post-title">Post Title</div>
-                <div id="poststatus">Status: <span id="post-status"></span></div>
-                <div id="postlocation"> Location: <span id="post-location"></span> </div>
-                <div class="postoptions">
-                    <div class="messagepost">
-                        M
-                    </div>
-                    <div class="editpost">
-                        Edit
-                    </div>
-                </div>
-                <div class="postdate">Post date time</div>
+    <div id="post">
+        <div id="postimage">
+        </div>
+        <div id="post-owner">User Name</div>
+        <div id="post-title">Post Title</div>
+        <div id="status">Status: <span id="post-status"></span></div>
+        <div id="location"> City: <span id="post-location"></span> </div>
+        <div id="description">Description: <span id="post-description"></span></div>
+        <div id="postoptions">
+            <div id="messagepost">
+                Messages
             </div>
-        </template>
+            <div id="getItem">
+                Get
+            </div>
+        </div>
+        <div id="postdate">Post date time</div>
     </div>
 
 
 
+
     <!-- JavaScript -->
-    <script src="js/clientViewPostDetails.js"></script>
+    <script src="js/clientViewPost.js"></script>
 
 </body>
 

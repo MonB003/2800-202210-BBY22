@@ -151,6 +151,7 @@ app.get("/main", function (req, res) {
                             testpost.querySelector(".postdate").innerHTML = post.timestamp;
                             testpost.querySelector(".savepost").id = `save${post.ID}`;
                             testpost.querySelector(".messagepost").id = `message${post.ID}`;
+                            testpost.querySelector(".post").setAttribute("onclick", `viewPost(${post.id})`);
                             posts.appendChild(testpost);
                         });
                         connection.end();
@@ -207,7 +208,7 @@ app.get("/mylistings", function (req, res) {
                         posts.appendChild(testpost);
                     });
                     connection.end();
-                } 
+                }
 
                 res.set("Server", "MACT Engine");
                 res.set("X-Powered-By", "MACT");
@@ -364,7 +365,7 @@ app.post('/signup', function (req, res) {
                             req.session.city = req.body.city;
                             req.session.type = req.body.type;
                             req.session.userID = results.insertId;
-                            
+
                             req.session.save(function (err) {
                                 // Session saved
                             });
@@ -461,6 +462,75 @@ app.get('/profile', function (req, res) {
     res.set("Server", "MACT Engine");
     res.set("X-Powered-By", "MACT");
     res.send(profileDOM.serialize());
+});
+
+//saves the postid so that the post can be viewed on the viewPost page
+app.post('/toviewpost', (req, res) => {
+
+    req.session.postID = req.body.postID;
+    res.send({
+        status: 'Success',
+        msg: 'recorded post id'
+    });
+});
+
+//populates the editpost page with the correct information
+app.get("/viewPost", function (req, res) {
+    if (req.session.loggedIn) {
+        let viewPost = fs.readFileSync("./app/viewPost.html", "utf8");
+        let viewPostDOM = new JSDOM(viewPost);
+        const mysql = require("mysql2");
+        const connection = mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "",
+            database: "COMP2800"
+        });
+        let myResults = null;
+        connection.connect();
+        connection.query(
+            "SELECT * FROM BBY_22_item_posts WHERE id = ?",
+            [req.session.postID],
+            function (error, results, fields) {
+                myResults = results;
+                if (error) {} else if (results.length > 0) {
+                    results.forEach(post => {
+                        viewPostDOM.window.document.querySelector("#post-title").innerHTML = `${post.title}`;
+                        viewPostDOM.window.document.querySelector("#post-status").innerHTML = `${post.status}`;
+                        viewPostDOM.window.document.querySelector("#post-description").innerHTML = `${post.description}`;
+                        viewPostDOM.window.document.querySelector("#post-location").innerHTML = `${post.city}`;
+                        viewPostDOM.window.document.querySelector("#postdate").innerHTML = `${post.timestamp}`;
+
+                        req.session.postOwnerID = post.user_id;
+
+                        connection.query(
+                            "SELECT * FROM BBY_22_users WHERE id = ?",
+                            [req.session.postOwnerID],
+                            function (error, results, fields) {
+                                myResults = results;
+                                if (error) {} else if (results.length > 0) {
+                                    results.forEach(user => {
+                                        viewPostDOM.window.document.querySelector("#post-owner").innerHTML = `${user.firstName} ${user.lastName}`;
+                                    });
+                                } else {}
+
+                            }
+                        );
+
+                        res.set("Server", "MACT Engine");
+                        res.set("X-Powered-By", "MACT");
+                        res.send(viewPostDOM.serialize());
+
+                    });
+                } else {}
+            }
+        );
+
+
+    } else {
+        // User is not logged in, so direct to login page
+        res.redirect("/");
+    }
 });
 
 //saves the postid so that the post can be edited on the editpost page

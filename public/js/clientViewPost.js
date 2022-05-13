@@ -2,13 +2,10 @@
 
 // Updates a user's data in the database
 async function editpost(postID) {
-    let firstName = "yes";
-    let lastName = "no";
 
-    // Store user's data that was filled into the text fields on the page
+
+    // Sends data to the server and saves it to a session
     const dataSent = {
-        firstName,
-        lastName,
         postID
     }
 
