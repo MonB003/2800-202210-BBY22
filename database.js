@@ -202,8 +202,7 @@ app.get("/main", function (req, res) {
                         db.end();
                     }
 
-                    res.set("Server", "MACT Engine");
-                    res.set("X-Powered-By", "MACT");
+
                     res.send(mainDOM.serialize());
                 }
             );
