@@ -30,7 +30,7 @@ var database;
 
 // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
 
-const connectionHeroku = await mysql.createConnection({
+var connectionHeroku = mysql.createConnection({
     host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
     user: "biysuiwt6fbjxdfw",
     password: "llwyk8vg4c7p5rtu",
@@ -38,7 +38,7 @@ const connectionHeroku = await mysql.createConnection({
     multipleStatements: true
 });
 
-const connectionLocal = await mysql.createConnection({
+var connectionLocal = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
