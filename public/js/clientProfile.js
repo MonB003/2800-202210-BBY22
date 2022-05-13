@@ -18,17 +18,9 @@ async function uploadImages(e) {
         body: formData
     };
 
-    let resultPic = ""
     // now use fetch
-    fetch("/upload-images", options
-    ).then(function (res) {
-        console.log(res);
-        resultPic = picRef
-        console.log("result incoming from server side: " + resultPic);
-        console.log("res incoming form server:" + res);
-    }).catch(function (err) { ("Error:", err) }
-    );
-
+    await fetch("/upload-images", options);
+    window.location.reload();
 }
 
 async function updateData() {

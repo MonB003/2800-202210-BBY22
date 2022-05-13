@@ -443,13 +443,16 @@ app.post('/upload-images', upload.array("files"), function (req, res) {
                 });
             }
 
+            req.session.profile_pic = newPic; 
+            console.log("req.session in upload method: " + req.session.profile_pic);  
+
             res.set("Server", "MACT Engine");
             res.set("X-Powered-By", "MACT");
             res.send(profileDOM.serialize());
         }
         
     );
-
+    
 });
 
 // Load sign up page
