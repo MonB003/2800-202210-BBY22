@@ -843,7 +843,7 @@ async function initializeDatabase() {
             timestamp VARCHAR(50),
             PRIMARY KEY (id),
             FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
-    await database.query(createDatabaseTables);
+    database.query(createDatabaseTables);
 
     // Await allows for us to wait for this line to execute synchronously
     const [rows, fields] = await database.query("SELECT * FROM BBY_22_users");
