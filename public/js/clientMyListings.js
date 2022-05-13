@@ -15,10 +15,21 @@ document.querySelector("#newPostPageBtn").addEventListener("click", function (e)
     window.location.replace("/newPost");
 });
 
+//togle filter menu
+document.querySelector("#togglefilter").addEventListener("click", function (e) {
+    let filtermenu = document.querySelector("#filtermenu");
+    if (filtermenu.style.display === "none") {
+        filtermenu.style.display = "grid";
+    } else {
+        filtermenu.style.display = "none";
+    }
+});
+
 let postdata = [];
 let sort = "recent";
 let filterstatus = "all";
 
+//sort posts by recent or oldest
 document.querySelector("#sortbutton").addEventListener("click", function (e) {
     if (sort == "recent") {
         sort = "oldest";
@@ -28,6 +39,7 @@ document.querySelector("#sortbutton").addEventListener("click", function (e) {
     displayposts();
 });
 
+//filter posts by status
 document.querySelector("#filterstatus").addEventListener("click", function (e) {
     if (filterstatus == "all") {
         filterstatus = "available";
@@ -48,7 +60,7 @@ document.querySelector("#filterstatus").addEventListener("click", function (e) {
     displayposts();
 });
 
-// Updates a user's data in the database
+// retrieves posts from database
 async function loadposts() {
     
     const dataSent = {
@@ -68,6 +80,7 @@ async function loadposts() {
     displayposts();
 };
 
+//displays posts
 async function displayposts() {
     document.querySelector("#posts").innerHTML = "";
     let search = document.getElementById("search").value;
@@ -157,14 +170,12 @@ async function displayposts() {
 
 loadposts();
 
-// Updates a user's data in the database
+//saves post id to session for editing post on editpost page
 async function editpost(postID) {
-    // Store user's data that was filled into the text fields on the page
     const dataSent = {
         postID
     }
 
-    // Additional details needed when sending data to server side
     const postDetails = {
         method: 'POST',
         headers: {
@@ -173,7 +184,6 @@ async function editpost(postID) {
         body: JSON.stringify(dataSent)
     }
 
-    // Get response from server side post request called update-user-data
     const postResponse = await fetch('/toeditpost', postDetails);
     const jsonData = await postResponse.json();
     if (jsonData.status == "Success") {
