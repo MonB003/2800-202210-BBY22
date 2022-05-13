@@ -60,7 +60,7 @@ app.get("/main", function (req, res) {
             //mysql connection setup
             const mysql = require("mysql2/promise");
             const is_heroku = process.env.IS_HEROKU || false;
-            var db;
+            // var db;
 
             // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
 
@@ -72,19 +72,21 @@ app.get("/main", function (req, res) {
                 multipleStatements: true
             };
 
-            var connectionLocal = {
-                host: "localhost",
-                user: "root",
-                password: "",
-                database: "COMP2800",
-                multipleStatements: true
-            };
+            // var connectionLocal = {
+            //     host: "localhost",
+            //     user: "root",
+            //     password: "",
+            //     database: "COMP2800",
+            //     multipleStatements: true
+            // };
 
-            if (is_heroku) {
-                db = mysql.createConnection(connectionHeroku);
-            } else {
-                db = mysql.createConnection(connectionLocal);
-            }
+            const db = mysql.createConnection(connectionHeroku);
+
+            // if (is_heroku) {
+            //     db = mysql.createConnection(connectionHeroku);
+            // } else {
+            //     db = mysql.createConnection(connectionLocal);
+            // }
             db.connect();
             db.query(
 
@@ -146,7 +148,7 @@ app.get("/main", function (req, res) {
             //mysql connection setup
             const mysql = require("mysql2/promise");
             const is_heroku = process.env.IS_HEROKU || false;
-            var db;
+            // var db;
 
             // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
 
@@ -158,19 +160,21 @@ app.get("/main", function (req, res) {
                 multipleStatements: true
             };
 
-            var connectionLocal = {
-                host: "localhost",
-                user: "root",
-                password: "",
-                database: "COMP2800",
-                multipleStatements: true
-            };
+            // var connectionLocal = {
+            //     host: "localhost",
+            //     user: "root",
+            //     password: "",
+            //     database: "COMP2800",
+            //     multipleStatements: true
+            // };
 
-            if (is_heroku) {
-                db = mysql.createConnection(connectionHeroku);
-            } else {
-                db = mysql.createConnection(connectionLocal);
-            }
+            const db = mysql.createConnection(connectionHeroku);
+
+            // if (is_heroku) {
+            //     db = mysql.createConnection(connectionHeroku);
+            // } else {
+            //     db = mysql.createConnection(connectionLocal);
+            // }
             db.connect();
             let myResults = null;
             db.connect();
@@ -221,7 +225,7 @@ app.get("/mylistings", function (req, res) {
         //mysql connection setup
         const mysql = require("mysql2/promise");
         const is_heroku = process.env.IS_HEROKU || false;
-        var db;
+        // var db;
 
         // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
 
@@ -233,19 +237,21 @@ app.get("/mylistings", function (req, res) {
             multipleStatements: true
         };
 
-        var connectionLocal = {
-            host: "localhost",
-            user: "root",
-            password: "",
-            database: "COMP2800",
-            multipleStatements: true
-        };
+        // var connectionLocal = {
+        //     host: "localhost",
+        //     user: "root",
+        //     password: "",
+        //     database: "COMP2800",
+        //     multipleStatements: true
+        // };
 
-        if (is_heroku) {
-            db = mysql.createConnection(connectionHeroku);
-        } else {
-            db = mysql.createConnection(connectionLocal);
-        }
+        const db = mysql.createConnection(connectionHeroku);
+
+        // if (is_heroku) {
+        //     db = mysql.createConnection(connectionHeroku);
+        // } else {
+        //     db = mysql.createConnection(connectionLocal);
+        // }
 
 
         let myResults = null;
@@ -295,7 +301,7 @@ app.get("/editpost", function (req, res) {
         //mysql connection setup
         const mysql = require("mysql2/promise");
         const is_heroku = process.env.IS_HEROKU || false;
-        var db;
+        // var db;
 
         // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
 
@@ -307,19 +313,21 @@ app.get("/editpost", function (req, res) {
             multipleStatements: true
         };
 
-        var connectionLocal = {
-            host: "localhost",
-            user: "root",
-            password: "",
-            database: "COMP2800",
-            multipleStatements: true
-        };
+        // var connectionLocal = {
+        //     host: "localhost",
+        //     user: "root",
+        //     password: "",
+        //     database: "COMP2800",
+        //     multipleStatements: true
+        // };
 
-        if (is_heroku) {
-            db = mysql.createConnection(connectionHeroku);
-        } else {
-            db = mysql.createConnection(connectionLocal);
-        }
+        const db = mysql.createConnection(connectionHeroku);
+
+        // if (is_heroku) {
+        //     db = mysql.createConnection(connectionHeroku);
+        // } else {
+        //     db = mysql.createConnection(connectionLocal);
+        // }
 
         let myResults = null;
         db.connect();
@@ -425,7 +433,7 @@ app.post('/signup', function (req, res) {
                 //mysql connection setup
                 const mysql = require("mysql2/promise");
                 const is_heroku = process.env.IS_HEROKU || false;
-                var db;
+                // var db;
 
                 // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
 
@@ -437,19 +445,21 @@ app.post('/signup', function (req, res) {
                     multipleStatements: true
                 };
 
-                var connectionLocal = {
-                    host: "localhost",
-                    user: "root",
-                    password: "",
-                    database: "COMP2800",
-                    multipleStatements: true
-                };
+                // var connectionLocal = {
+                //     host: "localhost",
+                //     user: "root",
+                //     password: "",
+                //     database: "COMP2800",
+                //     multipleStatements: true
+                // };
 
-                if (is_heroku) {
-                    db = mysql.createConnection(connectionHeroku);
-                } else {
-                    db = mysql.createConnection(connectionLocal);
-                }
+                const db = mysql.createConnection(connectionHeroku);
+
+                // if (is_heroku) {
+                //     db = mysql.createConnection(connectionHeroku);
+                // } else {
+                //     db = mysql.createConnection(connectionLocal);
+                // }
 
                 db.connect();
 
@@ -505,7 +515,7 @@ app.post('/newPost', function (req, res) {
     //mysql connection setup
     const mysql = require("mysql2/promise");
     const is_heroku = process.env.IS_HEROKU || false;
-    var db;
+    // var db;
 
     // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
 
@@ -517,19 +527,21 @@ app.post('/newPost', function (req, res) {
         multipleStatements: true
     };
 
-    var connectionLocal = {
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800",
-        multipleStatements: true
-    };
+    // var connectionLocal = {
+    //     host: "localhost",
+    //     user: "root",
+    //     password: "",
+    //     database: "COMP2800",
+    //     multipleStatements: true
+    // };
 
-    if (is_heroku) {
-        db = mysql.createConnection(connectionHeroku);
-    } else {
-        db = mysql.createConnection(connectionLocal);
-    }
+    const db = mysql.createConnection(connectionHeroku);
+
+    // if (is_heroku) {
+    //     db = mysql.createConnection(connectionHeroku);
+    // } else {
+    //     db = mysql.createConnection(connectionLocal);
+    // }
 
     db.connect();
 
@@ -602,7 +614,7 @@ app.post('/toeditpost', (req, res) => {
     //mysql connection setup
     const mysql = require("mysql2/promise");
     const is_heroku = process.env.IS_HEROKU || false;
-    var db;
+    // var db;
 
     // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
 
@@ -614,19 +626,21 @@ app.post('/toeditpost', (req, res) => {
         multipleStatements: true
     };
 
-    var connectionLocal = {
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800",
-        multipleStatements: true
-    };
+    // var connectionLocal = {
+    //     host: "localhost",
+    //     user: "root",
+    //     password: "",
+    //     database: "COMP2800",
+    //     multipleStatements: true
+    // };
 
-    if (is_heroku) {
-        db = mysql.createConnection(connectionHeroku);
-    } else {
-        db = mysql.createConnection(connectionLocal);
-    }
+    const db = mysql.createConnection(connectionHeroku);
+
+    // if (is_heroku) {
+    //     db = mysql.createConnection(connectionHeroku);
+    // } else {
+    //     db = mysql.createConnection(connectionLocal);
+    // }
 
     db.connect();
     db.query(
@@ -658,7 +672,7 @@ app.post('/savepostinfo', (req, res) => {
     //mysql connection setup
     const mysql = require("mysql2/promise");
     const is_heroku = process.env.IS_HEROKU || false;
-    var db;
+    // var db;
 
     // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
 
@@ -670,19 +684,21 @@ app.post('/savepostinfo', (req, res) => {
         multipleStatements: true
     };
 
-    var connectionLocal = {
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800",
-        multipleStatements: true
-    };
+    // var connectionLocal = {
+    //     host: "localhost",
+    //     user: "root",
+    //     password: "",
+    //     database: "COMP2800",
+    //     multipleStatements: true
+    // };
 
-    if (is_heroku) {
-        db = mysql.createConnection(connectionHeroku);
-    } else {
-        db = mysql.createConnection(connectionLocal);
-    }
+    const db = mysql.createConnection(connectionHeroku);
+
+    // if (is_heroku) {
+    //     db = mysql.createConnection(connectionHeroku);
+    // } else {
+    //     db = mysql.createConnection(connectionLocal);
+    // }
 
     db.connect();
     db.query(
@@ -710,7 +726,7 @@ app.post('/deletepost', (req, res) => {
     //mysql connection setup
     const mysql = require("mysql2/promise");
     const is_heroku = process.env.IS_HEROKU || false;
-    var db;
+    // var db;
 
     // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
 
@@ -722,19 +738,21 @@ app.post('/deletepost', (req, res) => {
         multipleStatements: true
     };
 
-    var connectionLocal = {
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800",
-        multipleStatements: true
-    };
+    // var connectionLocal = {
+    //     host: "localhost",
+    //     user: "root",
+    //     password: "",
+    //     database: "COMP2800",
+    //     multipleStatements: true
+    // };
 
-    if (is_heroku) {
-        db = mysql.createConnection(connectionHeroku);
-    } else {
-        db = mysql.createConnection(connectionLocal);
-    }
+    const db = mysql.createConnection(connectionHeroku);
+
+    // if (is_heroku) {
+    //     db = mysql.createConnection(connectionHeroku);
+    // } else {
+    //     db = mysql.createConnection(connectionLocal);
+    // }
 
     db.connect();
     db.query(
@@ -762,7 +780,7 @@ app.post('/update-user-data', (req, res) => {
     //mysql connection setup
     const mysql = require("mysql2/promise");
     const is_heroku = process.env.IS_HEROKU || false;
-    var db;
+    // var db;
 
     // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
 
@@ -774,19 +792,21 @@ app.post('/update-user-data', (req, res) => {
         multipleStatements: true
     };
 
-    var connectionLocal = {
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800",
-        multipleStatements: true
-    };
+    // var connectionLocal = {
+    //     host: "localhost",
+    //     user: "root",
+    //     password: "",
+    //     database: "COMP2800",
+    //     multipleStatements: true
+    // };
 
-    if (is_heroku) {
-        db = mysql.createConnection(connectionHeroku);
-    } else {
-        db = mysql.createConnection(connectionLocal);
-    }
+    const db = mysql.createConnection(connectionHeroku);
+
+    // if (is_heroku) {
+    //     db = mysql.createConnection(connectionHeroku);
+    // } else {
+    //     db = mysql.createConnection(connectionLocal);
+    // }
 
     db.connect();
     db.query(
@@ -815,7 +835,7 @@ app.post('/update-data', (req, res) => {
     //mysql connection setup
     const mysql = require("mysql2/promise");
     const is_heroku = process.env.IS_HEROKU || false;
-    var db;
+    // var db;
 
     // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
 
@@ -827,19 +847,21 @@ app.post('/update-data', (req, res) => {
         multipleStatements: true
     };
 
-    var connectionLocal = {
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800",
-        multipleStatements: true
-    };
+    // var connectionLocal = {
+    //     host: "localhost",
+    //     user: "root",
+    //     password: "",
+    //     database: "COMP2800",
+    //     multipleStatements: true
+    // };
 
-    if (is_heroku) {
-        db = mysql.createConnection(connectionHeroku);
-    } else {
-        db = mysql.createConnection(connectionLocal);
-    }
+    const db = mysql.createConnection(connectionHeroku);
+
+    // if (is_heroku) {
+    //     db = mysql.createConnection(connectionHeroku);
+    // } else {
+    //     db = mysql.createConnection(connectionLocal);
+    // }
 
     db.connect();
     db.query(
@@ -869,7 +891,7 @@ app.post('/delete-user', (req, res) => {
     //mysql connection setup
     const mysql = require("mysql2/promise");
     const is_heroku = process.env.IS_HEROKU || false;
-    var db;
+    // var db;
 
     // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
 
@@ -881,19 +903,21 @@ app.post('/delete-user', (req, res) => {
         multipleStatements: true
     };
 
-    var connectionLocal = {
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800",
-        multipleStatements: true
-    };
+    // var connectionLocal = {
+    //     host: "localhost",
+    //     user: "root",
+    //     password: "",
+    //     database: "COMP2800",
+    //     multipleStatements: true
+    // };
 
-    if (is_heroku) {
-        db = mysql.createConnection(connectionHeroku);
-    } else {
-        db = mysql.createConnection(connectionLocal);
-    }
+    const db = mysql.createConnection(connectionHeroku);
+
+    // if (is_heroku) {
+    //     db = mysql.createConnection(connectionHeroku);
+    // } else {
+    //     db = mysql.createConnection(connectionLocal);
+    // }
 
     db.connect();
     db.query(
@@ -929,7 +953,7 @@ app.post('/add-new-user', (req, res) => {
                 //mysql connection setup
                 const mysql = require("mysql2/promise");
                 const is_heroku = process.env.IS_HEROKU || false;
-                var db;
+                // var db;
 
                 // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
 
@@ -941,19 +965,22 @@ app.post('/add-new-user', (req, res) => {
                     multipleStatements: true
                 };
 
-                var connectionLocal = {
-                    host: "localhost",
-                    user: "root",
-                    password: "",
-                    database: "COMP2800",
-                    multipleStatements: true
-                };
+                // var connectionLocal = {
+                //     host: "localhost",
+                //     user: "root",
+                //     password: "",
+                //     database: "COMP2800",
+                //     multipleStatements: true
+                // };
 
-                if (is_heroku) {
-                    db = mysql.createConnection(connectionHeroku);
-                } else {
-                    db = mysql.createConnection(connectionLocal);
-                }
+                const db = mysql.createConnection(connectionHeroku);
+
+                // if (is_heroku) {
+                //     db = mysql.createConnection(connectionHeroku);
+                // } else {
+                //     db = mysql.createConnection(connectionLocal);
+                // }
+
                 db.connect();
                 db.query('INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type) VALUES (?, ?, ?, ?, ?, ?)',
                     [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.body.type],
@@ -992,7 +1019,7 @@ function authenticateUser(email, pwd, callback) {
     //mysql connection setup
     const mysql = require("mysql2/promise");
     const is_heroku = process.env.IS_HEROKU || false;
-    var db;
+    // var db;
 
     // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
 
@@ -1004,19 +1031,21 @@ function authenticateUser(email, pwd, callback) {
         multipleStatements: true
     };
 
-    var connectionLocal = {
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800",
-        multipleStatements: true
-    };
+    // var connectionLocal = {
+    //     host: "localhost",
+    //     user: "root",
+    //     password: "",
+    //     database: "COMP2800",
+    //     multipleStatements: true
+    // };
 
-    if (is_heroku) {
-        db = mysql.createConnection(connectionHeroku);
-    } else {
-        db = mysql.createConnection(connectionLocal);
-    }
+    const db = mysql.createConnection(connectionHeroku);
+
+    // if (is_heroku) {
+    //     db = mysql.createConnection(connectionHeroku);
+    // } else {
+    //     db = mysql.createConnection(connectionLocal);
+    // }
 
     db.connect();
     db.query(
@@ -1049,7 +1078,7 @@ function checkEmailAlreadyExists(email, callback) {
     //mysql connection setup
     const mysql = require("mysql2/promise");
     const is_heroku = process.env.IS_HEROKU || false;
-    var db;
+    // var db;
 
     // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
 
@@ -1061,19 +1090,21 @@ function checkEmailAlreadyExists(email, callback) {
         multipleStatements: true
     };
 
-    var connectionLocal = {
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800",
-        multipleStatements: true
-    };
+    // var connectionLocal = {
+    //     host: "localhost",
+    //     user: "root",
+    //     password: "",
+    //     database: "COMP2800",
+    //     multipleStatements: true
+    // };
 
-    if (is_heroku) {
-        db = mysql.createConnection(connectionHeroku);
-    } else {
-        db = mysql.createConnection(connectionLocal);
-    }
+    const db = mysql.createConnection(connectionHeroku);
+
+    // if (is_heroku) {
+    //     db = mysql.createConnection(connectionHeroku);
+    // } else {
+    //     db = mysql.createConnection(connectionLocal);
+    // }
 
     db.connect();
     db.query(
@@ -1104,7 +1135,7 @@ async function initializeDatabase() {
     //mysql connection setup
     const mysql = require("mysql2/promise");
     const is_heroku = process.env.IS_HEROKU || false;
-    var db;
+    // var db;
 
     // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
 
@@ -1116,19 +1147,22 @@ async function initializeDatabase() {
         multipleStatements: true
     };
 
-    var connectionLocal = {
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800",
-        multipleStatements: true
-    };
+    // var connectionLocal = {
+    //     host: "localhost",
+    //     user: "root",
+    //     password: "",
+    //     database: "COMP2800",
+    //     multipleStatements: true
+    // };
 
-    if (is_heroku) {
-        db = mysql.createConnection(connectionHeroku);
-    } else {
-        db = mysql.createConnection(connectionLocal);
-    }
+    const db = mysql.createConnection(connectionHeroku);
+
+    // if (is_heroku) {
+    //     db = mysql.createConnection(connectionHeroku);
+    // } else {
+    //     db = mysql.createConnection(connectionLocal);
+    // }
+
     db.connect();
     // Creates a table for user profiles and item posts
     const createDatabaseTables = `CREATE DATABASE IF NOT EXISTS COMP2800;
