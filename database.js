@@ -9,10 +9,6 @@ const {
     JSDOM
 } = require('jsdom');
 
-//Setup for Heroku Hosting
-let http = require('http');
-let url = require('url');
-
 // Paths
 app.use('/js', express.static('./public/js'));
 app.use('/css', express.static('./public/css'));
@@ -27,6 +23,34 @@ app.use(session({
     saveUninitialized: true
 }));
 
+//mysql connection setup
+const mysql = require("mysql2/promise");
+const is_heroku = process.env.IS_HEROKU || false;
+var database;
+
+// mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
+
+const connectionHeroku = await mysql.createConnection({
+    host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
+    user: "biysuiwt6fbjxdfw",
+    password: "llwyk8vg4c7p5rtu",
+    database: "gi80n4hbnupblp0y",
+    multipleStatements: true
+});
+
+const connectionLocal = await mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "COMP2800",
+    multipleStatements: true
+});
+
+if (is_heroku) {
+    database = mysql.createConnection(connectionHeroku);
+} else {
+    database = mysql.createConnection(connectionLocal);
+}
 
 // Go to: http://localhost:8000
 app.get('/', function (req, res) {
@@ -62,15 +86,15 @@ app.get("/main", function (req, res) {
             mainDOM.window.document.getElementById("customerName").innerHTML = "Welcome, " + req.session.firstName +
                 " " + req.session.lastName + "!";
 
-            const mysql = require("mysql2");
-            const connection = mysql.createConnection({
-                host: "localhost",
-                user: "root",
-                password: "",
-                database: "COMP2800"
-            });
-            connection.connect();
-            connection.query(
+            // const mysql = require("mysql2");
+            // // const connection = mysql.createConnection({
+            // //     host: "localhost",
+            // //     user: "root",
+            // //     password: "",
+            // //     database: "COMP2800"
+            // // });
+            database.connect();
+            database.query(
 
                 'SELECT * FROM BBY_22_users',
                 function (error, userResults, fields2) {
@@ -127,17 +151,17 @@ app.get("/main", function (req, res) {
             mainDOM.window.document.getElementById("customerName").innerHTML = "Welcome, " + req.session.firstName +
                 " " + req.session.lastName + "!";
 
-            const mysql = require("mysql2");
-            const connection = mysql.createConnection({
-                host: "localhost",
-                user: "root",
-                password: "",
-                database: "COMP2800"
-            });
+            // const mysql = require("mysql2");
+            // const connection = mysql.createConnection({
+            //     host: "localhost",
+            //     user: "root",
+            //     password: "",
+            //     database: "COMP2800"
+            // });
             let myResults = null;
-            connection.connect();
+            database.connect();
 
-            connection.execute(
+            database.execute(
                 "SELECT * FROM BBY_22_item_posts",
                 function (error, results, fields) {
                     myResults = results;
@@ -157,7 +181,7 @@ app.get("/main", function (req, res) {
                             testpost.querySelector(".messagepost").id = `message${post.ID}`;
                             posts.appendChild(testpost);
                         });
-                        connection.end();
+                        database.end();
                     }
 
                     res.set("Server", "MACT Engine");
@@ -179,17 +203,17 @@ app.get("/mylistings", function (req, res) {
         // Display posts the user's listings
         let mylistings = fs.readFileSync("./app/mylistings.html", "utf8");
         let mylistingsDOM = new JSDOM(mylistings);
-        const mysql = require("mysql2");
-        const connection = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "",
-            database: "COMP2800"
-        });
+        // const mysql = require("mysql2");
+        // const connection = mysql.createConnection({
+        //     host: "localhost",
+        //     user: "root",
+        //     password: "",
+        //     database: "COMP2800"
+        // });
         let myResults = null;
-        connection.connect();
+        database.connect();
 
-        connection.execute(
+        database.execute(
             "SELECT * FROM BBY_22_item_posts WHERE user_id = ?",
             [req.session.userID],
             function (error, results, fields) {
@@ -210,7 +234,7 @@ app.get("/mylistings", function (req, res) {
                         testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${post.id})`)
                         posts.appendChild(testpost);
                     });
-                    connection.end();
+                    database.end();
                 }
 
                 res.set("Server", "MACT Engine");
@@ -229,16 +253,16 @@ app.get("/editpost", function (req, res) {
     if (req.session.loggedIn) {
         let editpost = fs.readFileSync("./app/editpost.html", "utf8");
         let editpostDOM = new JSDOM(editpost);
-        const mysql = require("mysql2");
-        const connection = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "",
-            database: "COMP2800"
-        });
+        // const mysql = require("mysql2");
+        // const connection = mysql.createConnection({
+        //     host: "localhost",
+        //     user: "root",
+        //     password: "",
+        //     database: "COMP2800"
+        // });
         let myResults = null;
-        connection.connect();
-        connection.query(
+        database.connect();
+        database.query(
             "SELECT * FROM BBY_22_item_posts WHERE id = ? AND user_id = ?",
             [req.session.editpostID, req.session.userID],
             function (error, results, fields) {
@@ -251,7 +275,7 @@ app.get("/editpost", function (req, res) {
                         editpostDOM.window.document.querySelector("#savepost").setAttribute("onclick", `save_post(${post.id})`);
                         editpostDOM.window.document.querySelector("#deletepost").setAttribute("onclick", `delete_post(${post.id})`);
                     });
-                    connection.end();
+                    database.end();
                 } else {}
 
                 res.set("Server", "MACT Engine");
@@ -337,17 +361,17 @@ app.post('/signup', function (req, res) {
             // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
             if (recordReturned == null) {
 
-                const mysql = require("mysql2");
-                let connection = mysql.createConnection({
-                    host: 'localhost',
-                    user: 'root',
-                    password: '',
-                    database: 'COMP2800'
-                });
-                connection.connect();
+                // const mysql = require("mysql2");
+                // let connection = mysql.createConnection({
+                //     host: 'localhost',
+                //     user: 'root',
+                //     password: '',
+                //     database: 'COMP2800'
+                // });
+                database.connect();
 
                 // Insert the new user into the database
-                connection.query('INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type) values (?, ?, ?, ?, ?, ?)',
+                database.query('INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type) values (?, ?, ?, ?, ?, ?)',
                     [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, "USER"],
 
                     function (error, results, fields) {
@@ -395,14 +419,14 @@ app.post('/signup', function (req, res) {
 app.post('/newPost', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
-    const mysql = require("mysql2");
-    let connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'COMP2800'
-    });
-    connection.connect();
+    // const mysql = require("mysql2");
+    // let connection = mysql.createConnection({
+    //     host: 'localhost',
+    //     user: 'root',
+    //     password: '',
+    //     database: 'COMP2800'
+    // });
+    database.connect();
 
     // Get the current date and time 
     var today = new Date();
@@ -412,7 +436,7 @@ app.post('/newPost', function (req, res) {
 
     // This is where the user input is passed into the database. 
     // User_ID is saved from the current user of the session. The details of the post are sent from the client side.
-    connection.query('INSERT INTO BBY_22_item_posts (user_id, title, city, description, status, timestamp) VALUES (?, ?, ?, ?, ?, ?)',
+    database.query('INSERT INTO BBY_22_item_posts (user_id, title, city, description, status, timestamp) VALUES (?, ?, ?, ?, ?, ?)',
         [req.session.userID, req.body.title, req.body.city, req.body.description, "available", dateAndTime],
 
         function (error, results, fields) {
@@ -469,15 +493,15 @@ app.get('/profile', function (req, res) {
 
 //saves the postid so that the post can be edited on the editpost page
 app.post('/toeditpost', (req, res) => {
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
-    connection.connect();
-    connection.query(
+    // const mysql = require("mysql2");
+    // const connection = mysql.createConnection({
+    //     host: "localhost",
+    //     user: "root",
+    //     password: "",
+    //     database: "COMP2800"
+    // });
+    database.connect();
+    database.query(
         "SELECT * FROM BBY_22_item_posts WHERE id = ?",
         [req.body.postID],
         function (error, results) {
@@ -503,15 +527,15 @@ app.post('/toeditpost', (req, res) => {
 
 //save edits to post
 app.post('/savepostinfo', (req, res) => {
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
-    connection.connect();
-    connection.query(
+    // const mysql = require("mysql2");
+    // const connection = mysql.createConnection({
+    //     host: "localhost",
+    //     user: "root",
+    //     password: "",
+    //     database: "COMP2800"
+    // });
+    database.connect();
+    database.query(
         "UPDATE BBY_22_item_posts SET title = ?, city = ?, description = ? WHERE id = ? AND user_id = ?",
         [req.body.title, req.body.city, req.body.description, req.body.postID, req.session.userID],
         function (error, results) {
@@ -533,15 +557,15 @@ app.post('/savepostinfo', (req, res) => {
 // delete post
 app.post('/deletepost', (req, res) => {
 
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
-    connection.connect();
-    connection.query(
+    // const mysql = require("mysql2");
+    // const connection = mysql.createConnection({
+    //     host: "localhost",
+    //     user: "root",
+    //     password: "",
+    //     database: "COMP2800"
+    // });
+    database.connect();
+    database.query(
         "DELETE FROM BBY_22_item_posts WHERE id = ? AND user_id = ?",
         [req.body.postID, req.session.userID],
         function (error, results) {
@@ -562,15 +586,15 @@ app.post('/deletepost', (req, res) => {
 
 // When an admin updates a user's data
 app.post('/update-user-data', (req, res) => {
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
-    connection.connect();
-    connection.query(
+    // const mysql = require("mysql2");
+    // const connection = mysql.createConnection({
+    //     host: "localhost",
+    //     user: "root",
+    //     password: "",
+    //     database: "COMP2800"
+    // });
+    database.connect();
+    database.query(
         "UPDATE BBY_22_users SET firstName = ?, lastName = ?, city = ?, email = ?, password = ?, type = ? WHERE id = ?",
         [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.body.type, req.body.userID],
         function (error, results) {
@@ -592,15 +616,15 @@ app.post('/update-user-data', (req, res) => {
 
 // When a user updates their own data
 app.post('/update-data', (req, res) => {
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
-    connection.connect();
-    connection.query(
+    // const mysql = require("mysql2");
+    // const connection = mysql.createConnection({
+    //     host: "localhost",
+    //     user: "root",
+    //     password: "",
+    //     database: "COMP2800"
+    // });
+    database.connect();
+    database.query(
         "UPDATE BBY_22_users SET firstName = ?, lastName = ?, city = ?, email = ?, password = ? WHERE email = ? AND password = ?",
         [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.session.email, req.session.password],
         function (error, results) {
@@ -624,15 +648,15 @@ app.post('/update-data', (req, res) => {
 app.post('/delete-user', (req, res) => {
     let requestName = req.body.firstName + " " + req.body.lastName;
 
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
-    connection.connect();
-    connection.query(
+    // const mysql = require("mysql2");
+    // const connection = mysql.createConnection({
+    //     host: "localhost",
+    //     user: "root",
+    //     password: "",
+    //     database: "COMP2800"
+    // });
+    database.connect();
+    database.query(
         "DELETE FROM BBY_22_users WHERE id = ?",
         [req.body.userID],
         function (error, results) {
@@ -662,15 +686,15 @@ app.post('/add-new-user', (req, res) => {
 
             // If authenticate() returns null, user isn't currently in database, so they can be added
             if (recordReturned == null) {
-                const mysql = require("mysql2");
-                let connection = mysql.createConnection({
-                    host: 'localhost',
-                    user: 'root',
-                    password: '',
-                    database: 'COMP2800'
-                });
-                connection.connect();
-                connection.query('INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type) VALUES (?, ?, ?, ?, ?, ?)',
+                // const mysql = require("mysql2");
+                // let connection = mysql.createConnection({
+                //     host: 'localhost',
+                //     user: 'root',
+                //     password: '',
+                //     database: 'COMP2800'
+                // });
+                database.connect();
+                database.query('INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type) VALUES (?, ?, ?, ?, ?, ?)',
                     [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.body.type],
 
                     function (error, results) {
@@ -704,15 +728,15 @@ app.post('/add-new-user', (req, res) => {
 // Validates user's email and password
 function authenticateUser(email, pwd, callback) {
 
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
-    connection.connect();
-    connection.query(
+    // const mysql = require("mysql2");
+    // const connection = mysql.createConnection({
+    //     host: "localhost",
+    //     user: "root",
+    //     password: "",
+    //     database: "COMP2800"
+    // });
+    database.connect();
+    database.query(
         "SELECT * FROM BBY_22_users WHERE email = ? AND password = ?", [email, pwd],
         function (error, results, fields) {
 
@@ -739,15 +763,15 @@ function authenticateUser(email, pwd, callback) {
 // Checks whether or not a new user's email already exists in the database
 function checkEmailAlreadyExists(email, callback) {
 
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
-    connection.connect();
-    connection.query(
+    // const mysql = require("mysql2");
+    // const connection = mysql.createConnection({
+    //     host: "localhost",
+    //     user: "root",
+    //     password: "",
+    //     database: "COMP2800"
+    // });
+    database.connect();
+    database.query(
         "SELECT * FROM BBY_22_users WHERE email = ?", [email],
         function (error, results, fields) {
             if (error) {
@@ -771,13 +795,30 @@ function checkEmailAlreadyExists(email, callback) {
 // Function connects to a database, checks if database exists, if not it creates it
 async function initializeDatabase() {
     // Promise
+
+
+    // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
     const mysql = require("mysql2/promise");
-    const connection = await mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        multipleStatements: true
-    });
+
+    // if (process.envJAWSDB.URL) {
+    //     connection = mysql.createConnection(process.env.JAWSDB_URL);
+    // } else {
+
+    //     const connection = await mysql.createConnection({
+    //         host: "localhost",
+    //         user: "root",
+    //         password: "",
+    //         multipleStatements: true
+    //     });
+    // }
+
+    // const connection = await mysql.createConnection({
+    //     host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
+    //     user: "biysuiwt6fbjxdfw",
+    //     password: "llwyk8vg4c7p5rtu",
+    //     database: "gi80n4hbnupblp0y",
+    //     multipleStatements: true
+    // });
 
     // Creates a table for user profiles and item posts
     const createDatabaseTables = `CREATE DATABASE IF NOT EXISTS COMP2800;
@@ -802,10 +843,10 @@ async function initializeDatabase() {
             timestamp VARCHAR(50),
             PRIMARY KEY (id),
             FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
-    await connection.query(createDatabaseTables);
+    await database.query(createDatabaseTables);
 
     // Await allows for us to wait for this line to execute synchronously
-    const [rows, fields] = await connection.query("SELECT * FROM BBY_22_users");
+    const [rows, fields] = await database.query("SELECT * FROM BBY_22_users");
 
     // Adds a default user account in case there is no data in the table.
     if (rows.length == 0) {
@@ -813,23 +854,11 @@ async function initializeDatabase() {
         let recordValues = [
             ["Test", "Test", "Vancouver", "test@test.ca", "password", "ADMIN"]
         ];
-        await connection.query(recordReturneds, [recordValues]);
+        await database.query(recordReturneds, [recordValues]);
     }
 
 }
 
 // Server runs on port 8000
-// let port = 8000;
-// app.listen(port, initializeDatabase);
-
-
-
-http.createServer((req, res) => {
-    let q = url.parse(req.url, true);
-    console.log(q.query);
-    res.writeHead(200, {
-        "Content-Type": "text/html",
-        "Access-Control-Allow-Origin": "*"
-    });
-    res.end(`Hello ${q.query['name']}`);
-}).listen(process.env.PORT || 5000)
+let port = process.env.PORT || 3306;
+app.listen(port, initializeDatabase);
