@@ -81,7 +81,7 @@ app.get("/main", function (req, res) {
             };
 
             if (is_heroku) {
-                db = await mysql.createConnection(connectionHeroku);
+                db = mysql.createConnection(connectionHeroku);
             } else {
                 db = await mysql.createConnection(connectionLocal);
             }
