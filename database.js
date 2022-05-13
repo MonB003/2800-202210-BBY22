@@ -30,26 +30,26 @@ var database;
 
 // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
 
-var connectionHeroku = mysql.createConnection({
+var connectionHeroku = {
     host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
     user: "biysuiwt6fbjxdfw",
     password: "llwyk8vg4c7p5rtu",
     database: "gi80n4hbnupblp0y",
     multipleStatements: true
-});
+};
 
-var connectionLocal = mysql.createConnection({
+var connectionLocal = {
     host: "localhost",
     user: "root",
     password: "",
     database: "COMP2800",
     multipleStatements: true
-});
+};
 
 if (is_heroku) {
-    database = mysql.createConnection(connectionHeroku);
+    database = await mysql.createConnection(connectionHeroku);
 } else {
-    database = mysql.createConnection(connectionLocal);
+    database = await mysql.createConnection(connectionLocal);
 }
 
 // Go to: http://localhost:8000
@@ -843,7 +843,7 @@ async function initializeDatabase() {
             timestamp VARCHAR(50),
             PRIMARY KEY (id),
             FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
-    database.query(createDatabaseTables);
+    await database.query(createDatabaseTables);
 
     // Await allows for us to wait for this line to execute synchronously
     const [rows, fields] = await database.query("SELECT * FROM BBY_22_users");
