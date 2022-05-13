@@ -486,7 +486,7 @@ app.get('/profile', function (req, res) {
     profileDOM.window.document.getElementById("userPassword").defaultValue = req.session.password;
     
     console.log("req.session.profile_pic: " + req.session.profile_pic);
-    let profileP = "<img src=\"imgs/user-pic-" + req.session.profile_pic + "\" alt=\"profile-pic\" width=\"400px\" height=\"400px\">"
+    let profileP = "<img src=\"imgs/user-pic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
     profileDOM.window.document.getElementById("postimage").innerHTML = profileP
 
     res.set("Server", "MACT Engine");
@@ -494,42 +494,42 @@ app.get('/profile', function (req, res) {
     res.send(profileDOM.serialize());
 });
 
-app.post('/updatePic', (req, res) => {
-    let profile = fs.readFileSync("./app/updateProfile.html", "utf8");
-    let profileDOM = new JSDOM(profile);
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
-    connection.connect();
-    connection.query(
+// app.post('/updatePic', (req, res) => {
+//     let profile = fs.readFileSync("./app/updateProfile.html", "utf8");
+//     let profileDOM = new JSDOM(profile);
+//     const mysql = require("mysql2");
+//     const connection = mysql.createConnection({
+//         host: "localhost",
+//         user: "root",
+//         password: "",
+//         database: "COMP2800"
+//     });
+//     connection.connect();
+//     connection.query(
 
-        "SELECT * FROM BBY_22_users WHERE id = ?",
-        [req.session.userID],
-        function (error, results) {
-            if (error) {
-                res.send({
-                    status: 'Fail',
-                    msg: 'Error. Profile picture could not be updated.'
-                });
-            } 
+//         "SELECT * FROM BBY_22_users WHERE id = ?",
+//         [req.session.userID],
+//         function (error, results) {
+//             if (error) {
+//                 res.send({
+//                     status: 'Fail',
+//                     msg: 'Error. Profile picture could not be updated.'
+//                 });
+//             } 
 
-                let resultP = results[0].profile_pic
-                console.log("resultP function: " + resultP);
+//                 let resultP = results[0].profile_pic
+//                 console.log("resultP function: " + resultP);
 
-                let profileImage = "<img src=\"imgs/user-pic-" + resultP + "\" alt=\"profile-pic\" width=\"400px\" height=\"400px\">"
+//                 let profileImage = "<img src=\"imgs/user-pic-" + resultP + "\" alt=\"profile-pic\" width=\"400px\" height=\"400px\">"
 
-                console.log("profileImage from profile: " + profileImage);
+//                 console.log("profileImage from profile: " + profileImage);
 
-                profileDOM.window.document.getElementById("postimage").innerHTML = "<img src=\"imgs/user-pic-" + resultP + "\" alt=\"profile-pic\" width=\"400px\" height=\"400px\">"
+//                 profileDOM.window.document.getElementById("postimage").innerHTML = "<img src=\"imgs/user-pic-" + resultP + "\" alt=\"profile-pic\" width=\"400px\" height=\"400px\">"
 
-        }
+//         }
 
-    )
-});
+//     )
+// });
 
 
 

@@ -1,15 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Balsamiq+Sans:ital@1&family=Lato:wght@300&family=Nunito:wght@700&family=Orbitron:wght@500&family=Pacifico&family=Raleway:ital@1&family=Shadows+Into+Light&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Balsamiq+Sans:ital@1&family=Lato:wght@300&family=Nanum+Gothic:wght@700&family=Nunito:wght@500;700&family=Orbitron:wght@500&family=Pacifico&family=Raleway:ital@1&family=Shadows+Into+Light&display=swap');
 
-#tempDib{
-  width: 600px;
-  height: 600px;
-}
-
 * {
   margin: 0;
   padding: 0;
 
+}
+
+#picID{
+  width: 200px;
+  height:200px;
+  border-radius: 50%;
 }
 
 #navbar {
@@ -134,8 +135,8 @@ body {
   margin: 0px;
   padding: 0px;
   background: url("/imgs/background3.jpg") center/cover fixed;
-  background-repeat: no-repeat;
-  overflow: hidden;
+  /* background-repeat: no-repeat; */
+  overflow-y: scroll;
   background-size: cover;
   background-color: lightgray;
   font-family: Arial, Helvetica, sans-serif;
@@ -209,8 +210,6 @@ body {
   border-radius: 25px;
   box-shadow: 0 0 10px rgb(20, 19, 19);
   margin-top: 40px;
-  /* border-color: black;
-  border-style: solid; */
 }
 
 #text-input h3 {
