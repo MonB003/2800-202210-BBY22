@@ -1129,7 +1129,7 @@ async function initializeDatabase() {
     } else {
         db = mysql.createConnection(connectionLocal);
     }
-
+    db.connect();
     // Creates a table for user profiles and item posts
     const createDatabaseTables = `CREATE DATABASE IF NOT EXISTS COMP2800;
         use COMP2800;
