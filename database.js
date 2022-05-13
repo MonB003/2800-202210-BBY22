@@ -47,9 +47,9 @@ var connectionLocal = {
 };
 
 if (is_heroku) {
-    database = await mysql.createConnection(connectionHeroku);
+    database = mysql.createConnection(connectionHeroku);
 } else {
-    database = await mysql.createConnection(connectionLocal);
+    database = mysql.createConnection(connectionLocal);
 }
 
 // Go to: http://localhost:8000
