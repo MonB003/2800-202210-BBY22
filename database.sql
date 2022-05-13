@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS BBY_22_users(
     email VARCHAR(30),
     password VARCHAR(30),
     type VARCHAR(10),
+    profile_pic TEXT (999) NOT NULL,
     PRIMARY KEY (id));
 
 CREATE TABLE IF NOT EXISTS BBY_22_item_posts(

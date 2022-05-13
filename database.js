@@ -3,17 +3,41 @@
 // Requires
 const express = require("express");
 const session = require("express-session");
+const res = require("express/lib/response");
 const app = express();
 const fs = require("fs");
+
 const {
     JSDOM
 } = require('jsdom');
+
+
+//clean later!!
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+const multer = require("multer");
+
+// const upload = multer({ storage: multer.memoryStorage() });
+const storage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, "./public/imgs/")
+    },
+    filename: function (req, file, callback) {
+        callback(null, "user-pic-" + file.originalname.split('/').pop().trim());
+    }
+});
+const upload = multer({ storage: storage });
+
+
+
 
 // Paths
 app.use('/js', express.static('./public/js'));
 app.use('/css', express.static('./public/css'));
 app.use('/imgs', express.static('./public/imgs'));
+app.use('/img', express.static('/public/imgs'));
 app.use('/html', express.static('./app'));
+// app.use("/img", express.static("./imgs"));
 
 // Session
 app.use(session({
@@ -279,6 +303,7 @@ app.post("/login", function (req, res) {
                 req.session.city = recordReturned.city;
                 req.session.type = recordReturned.type;
                 req.session.userID = recordReturned.id;
+                req.session.profile_pic = recordReturned.profile_pic;
 
                 req.session.save(function (err) {
                     // session saved
@@ -331,8 +356,8 @@ app.post('/signup', function (req, res) {
                 connection.connect();
 
                 // Insert the new user into the database
-                connection.query('INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type) values (?, ?, ?, ?, ?, ?)',
-                    [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, "USER"],
+                connection.query('INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type, profile_pic) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                    [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, "USER", "user-pic-none.jpg"],
 
                     function (error, results, fields) {
                         if (error) {
@@ -352,7 +377,8 @@ app.post('/signup', function (req, res) {
                             req.session.city = req.body.city;
                             req.session.type = req.body.type;
                             req.session.userID = results.insertId;
-
+                            req.session.profile_pic = "user-pic-none.jpg";
+                            
                             req.session.save(function (err) {
                                 // Session saved
                             });
@@ -415,6 +441,50 @@ app.post('/newPost', function (req, res) {
         });
 });
 
+var picRef =''
+app.post('/upload-images', upload.array("files"), function (req, res) {
+    for (let i = 0; i < req.files.length; i++) {
+        req.files[i].filename = req.files[i].originalname;
+        // console.log(req.files[i].filename);
+    }
+
+    let newPic = req.files[0].filename;
+    console.log("picture in first function: " + newPic);
+
+    let profile = fs.readFileSync("./app/updateProfile.html", "utf8");
+    let profileDOM = new JSDOM(profile);
+
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
+    connection.connect();
+    connection.query(
+
+        "UPDATE BBY_22_users SET profile_pic = ? WHERE email = ? ",
+        [newPic, req.session.email],
+        function (error, results) {
+            if (error) {
+                res.send({
+                    status: 'Fail',
+                    msg: 'Error. Profile picture could not be updated.'
+                });
+            }
+
+            req.session.profile_pic = newPic; 
+            console.log("req.session in upload method: " + req.session.profile_pic);  
+
+            res.set("Server", "MACT Engine");
+            res.set("X-Powered-By", "MACT");
+            res.send(profileDOM.serialize());
+        }
+        
+    );
+    
+});
 
 // Load sign up page
 app.get("/signup", function (req, res) {
@@ -438,13 +508,17 @@ app.get("/newPost", function (req, res) {
 app.get('/profile', function (req, res) {
     let profile = fs.readFileSync("./app/updateProfile.html", "utf8");
     let profileDOM = new JSDOM(profile);
-
+    
     // Load current user's data into the text fields on the page
     profileDOM.window.document.getElementById("userFirstName").defaultValue = req.session.firstName;
     profileDOM.window.document.getElementById("userLastName").defaultValue = req.session.lastName;
     profileDOM.window.document.getElementById("userCity").defaultValue = req.session.city;
     profileDOM.window.document.getElementById("userEmail").defaultValue = req.session.email;
     profileDOM.window.document.getElementById("userPassword").defaultValue = req.session.password;
+    
+    console.log("req.session.profile_pic: " + req.session.profile_pic);
+    let profileP = "<img src=\"imgs/user-pic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+    profileDOM.window.document.getElementById("postimage").innerHTML = profileP
 
     res.set("Server", "MACT Engine");
     res.set("X-Powered-By", "MACT");
@@ -751,8 +825,8 @@ app.post('/add-new-user', (req, res) => {
                     database: 'COMP2800'
                 });
                 connection.connect();
-                connection.query('INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type) VALUES (?, ?, ?, ?, ?, ?)',
-                    [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.body.type],
+                connection.query('INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type, profile_pic) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                    [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.body.type, "user-pic-none.jpg"],
 
                     function (error, results) {
                         if (error) {
@@ -902,7 +976,6 @@ function authenticateUser(email, pwd, callback) {
 
 }
 
-
 // Checks whether or not a new user's email already exists in the database
 function checkEmailAlreadyExists(email, callback) {
 
@@ -957,6 +1030,7 @@ async function initializeDatabase() {
         email VARCHAR(30), 
         password VARCHAR(30), 
         type VARCHAR(10),
+        profile_pic TEXT (999) NOT NULL,
         PRIMARY KEY (id));
         
         CREATE TABLE IF NOT EXISTS BBY_22_item_posts(

@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Balsamiq+Sans:ital@1&family=Lato:wght@300&family=Nunito:wght@700&family=Orbitron:wght@500&family=Pacifico&family=Raleway:ital@1&family=Shadows+Into+Light&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Balsamiq+Sans:ital@1&family=Lato:wght@300&family=Nanum+Gothic:wght@700&family=Nunito:wght@500;700&family=Orbitron:wght@500&family=Pacifico&family=Raleway:ital@1&family=Shadows+Into+Light&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -80,6 +81,8 @@
     grid-area: 1/1/2/2;
     width: 100%;
     padding-top: 15px;
+    align-items: center;
+    text-align: center;
 }
 
 #logoutContainer {
@@ -90,12 +93,16 @@
 
 #logout {
     float: right;
+    margin-right: 5%;
 }
+
 #home{
     float: left;
+    margin-left: 5%;
 }
+
 #profile{
-    float: left;
+    align-items: center;
 }
 
 #logout:hover {
