@@ -17,44 +17,51 @@
     <!-- Header -->
     <header id="header">
 
-        <h2 id="companyName">On the House</h2>
-
         <!-- Navbar -->
         <nav id="navbar">
-            <!-- Directs to profile page to edit user info -->
-            <button id="profile" class="nav-button">Profile</button>
-            <button id="home" class="nav-button">Home</button>
-            <form action="/logout" method="get" id="logoutForm">
-                <input type="submit" id="logout" class="nav-button" value="Logout" />
-            </form>
+            <div id="homeContainer">
+                <a href="" id="home" class="nav-button">Home</a>
+            </div>
+            <div id="profileContainer">
+                <button id="profile" class="nav-button">Profile</button>
+            </div>
+            <div id="logoutContainer">
+                <form action="/logout" method="get" id="logoutForm">
+                    <input type="submit" id="logout" class="nav-button" value="Logout" />
+                </form>
+            </div>
         </nav>
 
     </header>
 
-    <div id="pagename">Item Details</div>
-    <div id="topnav">
-        <form id="backtoMain" action="/main" method="get">
-            <input type="submit" id="backToLogin" value="Go Back" />
-        </form>
-    </div>
-    <div id="post">
-        <div id="postimage">
-        </div>
-        <div id="post-owner">User Name</div>
-        <div id="post-title">Post Title</div>
-        <div id="status">Status: <span id="post-status"></span></div>
-        <div id="location"> City: <span id="post-location"></span> </div>
-        <div id="description">Description: <span id="post-description"></span></div>
-        <div id="postoptions">
-            <div id="messagepost">
-                Messages
+    <section>
+        <div class="grid">
+            <div id="pagename">Item Details</div>
+            <div id="topnav">
+                <form id="backtoMain" action="/main" method="get">
+                    <input type="submit" id="backToLogin" value="Go Back" />
+                </form>
             </div>
-            <div id="getItem">
-                Get
+            <div id="post">
+                <div id="postimage">
+                </div>
+                <div id="post-owner">User Name</div>
+                <div id="post-title">Post Title</div>
+                <div id="status">Status: <span id="post-status"></span></div>
+                <div id="location"> City: <span id="post-location"></span> </div>
+                <div id="description">Description: <span id="post-description"></span></div>
+                <div id="postoptions">
+                    <div id="messagepost">
+                        Message
+                    </div>
+                    <div id="getItem">
+                        Reserve
+                    </div>
+                </div>
+                <div id="postdate">Post date time</div>
             </div>
         </div>
-        <div id="postdate">Post date time</div>
-    </div>
+    </section>
 
 
 
