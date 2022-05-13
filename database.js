@@ -83,7 +83,7 @@ app.get("/main", function (req, res) {
             if (is_heroku) {
                 db = mysql.createConnection(connectionHeroku);
             } else {
-                db = await mysql.createConnection(connectionLocal);
+                db = mysql.createConnection(connectionLocal);
             }
             db.connect();
             db.query(
@@ -167,9 +167,9 @@ app.get("/main", function (req, res) {
             };
 
             if (is_heroku) {
-                db = await mysql.createConnection(connectionHeroku);
+                db = mysql.createConnection(connectionHeroku);
             } else {
-                db = await mysql.createConnection(connectionLocal);
+                db = mysql.createConnection(connectionLocal);
             }
             db.connect();
             let myResults = null;
@@ -242,9 +242,9 @@ app.get("/mylistings", function (req, res) {
         };
 
         if (is_heroku) {
-            db = await mysql.createConnection(connectionHeroku);
+            db = mysql.createConnection(connectionHeroku);
         } else {
-            db = await mysql.createConnection(connectionLocal);
+            db = mysql.createConnection(connectionLocal);
         }
 
 
@@ -316,9 +316,9 @@ app.get("/editpost", function (req, res) {
         };
 
         if (is_heroku) {
-            db = await mysql.createConnection(connectionHeroku);
+            db = mysql.createConnection(connectionHeroku);
         } else {
-            db = await mysql.createConnection(connectionLocal);
+            db = mysql.createConnection(connectionLocal);
         }
 
         let myResults = null;
@@ -446,9 +446,9 @@ app.post('/signup', function (req, res) {
                 };
 
                 if (is_heroku) {
-                    db = await mysql.createConnection(connectionHeroku);
+                    db = mysql.createConnection(connectionHeroku);
                 } else {
-                    db = await mysql.createConnection(connectionLocal);
+                    db = mysql.createConnection(connectionLocal);
                 }
 
                 db.connect();
@@ -526,9 +526,9 @@ app.post('/newPost', function (req, res) {
     };
 
     if (is_heroku) {
-        db = await mysql.createConnection(connectionHeroku);
+        db = mysql.createConnection(connectionHeroku);
     } else {
-        db = await mysql.createConnection(connectionLocal);
+        db = mysql.createConnection(connectionLocal);
     }
 
     db.connect();
@@ -623,9 +623,9 @@ app.post('/toeditpost', (req, res) => {
     };
 
     if (is_heroku) {
-        db = await mysql.createConnection(connectionHeroku);
+        db = mysql.createConnection(connectionHeroku);
     } else {
-        db = await mysql.createConnection(connectionLocal);
+        db = mysql.createConnection(connectionLocal);
     }
 
     db.connect();
@@ -679,9 +679,9 @@ app.post('/savepostinfo', (req, res) => {
     };
 
     if (is_heroku) {
-        db = await mysql.createConnection(connectionHeroku);
+        db = mysql.createConnection(connectionHeroku);
     } else {
-        db = await mysql.createConnection(connectionLocal);
+        db = mysql.createConnection(connectionLocal);
     }
 
     db.connect();
@@ -731,9 +731,9 @@ app.post('/deletepost', (req, res) => {
     };
 
     if (is_heroku) {
-        db = await mysql.createConnection(connectionHeroku);
+        db = mysql.createConnection(connectionHeroku);
     } else {
-        db = await mysql.createConnection(connectionLocal);
+        db = mysql.createConnection(connectionLocal);
     }
 
     db.connect();
@@ -783,9 +783,9 @@ app.post('/update-user-data', (req, res) => {
     };
 
     if (is_heroku) {
-        db = await mysql.createConnection(connectionHeroku);
+        db = mysql.createConnection(connectionHeroku);
     } else {
-        db = await mysql.createConnection(connectionLocal);
+        db = mysql.createConnection(connectionLocal);
     }
 
     db.connect();
@@ -836,9 +836,9 @@ app.post('/update-data', (req, res) => {
     };
 
     if (is_heroku) {
-        db = await mysql.createConnection(connectionHeroku);
+        db = mysql.createConnection(connectionHeroku);
     } else {
-        db = await mysql.createConnection(connectionLocal);
+        db = mysql.createConnection(connectionLocal);
     }
 
     db.connect();
@@ -890,9 +890,9 @@ app.post('/delete-user', (req, res) => {
     };
 
     if (is_heroku) {
-        db = await mysql.createConnection(connectionHeroku);
+        db = mysql.createConnection(connectionHeroku);
     } else {
-        db = await mysql.createConnection(connectionLocal);
+        db = mysql.createConnection(connectionLocal);
     }
 
     db.connect();
@@ -950,9 +950,9 @@ app.post('/add-new-user', (req, res) => {
                 };
 
                 if (is_heroku) {
-                    db = await mysql.createConnection(connectionHeroku);
+                    db = mysql.createConnection(connectionHeroku);
                 } else {
-                    db = await mysql.createConnection(connectionLocal);
+                    db = mysql.createConnection(connectionLocal);
                 }
                 db.connect();
                 db.query('INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type) VALUES (?, ?, ?, ?, ?, ?)',
@@ -1013,9 +1013,9 @@ function authenticateUser(email, pwd, callback) {
     };
 
     if (is_heroku) {
-        db = await mysql.createConnection(connectionHeroku);
+        db = mysql.createConnection(connectionHeroku);
     } else {
-        db = await mysql.createConnection(connectionLocal);
+        db = mysql.createConnection(connectionLocal);
     }
 
     db.connect();
@@ -1070,9 +1070,9 @@ function checkEmailAlreadyExists(email, callback) {
     };
 
     if (is_heroku) {
-        db = await mysql.createConnection(connectionHeroku);
+        db = mysql.createConnection(connectionHeroku);
     } else {
-        db = await mysql.createConnection(connectionLocal);
+        db = mysql.createConnection(connectionLocal);
     }
 
     db.connect();
@@ -1125,9 +1125,9 @@ async function initializeDatabase() {
     };
 
     if (is_heroku) {
-        db = await mysql.createConnection(connectionHeroku);
+        db = mysql.createConnection(connectionHeroku);
     } else {
-        db = await mysql.createConnection(connectionLocal);
+        db = mysql.createConnection(connectionLocal);
     }
 
     // Creates a table for user profiles and item posts
