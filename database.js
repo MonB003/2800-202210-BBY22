@@ -81,9 +81,9 @@ app.get("/main", function (req, res) {
             };
 
             if (is_heroku) {
-                database = await mysql.createConnection(connectionHeroku);
+                db = await mysql.createConnection(connectionHeroku);
             } else {
-                database = await mysql.createConnection(connectionLocal);
+                db = await mysql.createConnection(connectionLocal);
             }
             db.connect();
             db.query(
@@ -167,9 +167,9 @@ app.get("/main", function (req, res) {
             };
 
             if (is_heroku) {
-                database = await mysql.createConnection(connectionHeroku);
+                db = await mysql.createConnection(connectionHeroku);
             } else {
-                database = await mysql.createConnection(connectionLocal);
+                db = await mysql.createConnection(connectionLocal);
             }
             db.connect();
             let myResults = null;
