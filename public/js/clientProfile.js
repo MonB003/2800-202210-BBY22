@@ -1,4 +1,28 @@
-// Method called when a user updates their own information
+"use strict";
+const upLoadForm = document.getElementById("upload-images-form");
+upLoadForm.addEventListener("submit", uploadImages);
+
+async function uploadImages(e) {
+    e.preventDefault();
+
+    //send image to server side
+    const imageUpload = document.querySelector('#image-upload');
+    const formData = new FormData();
+    for (let i = 0; i < imageUpload.files.length; i++) {
+        // put the images from the input into the form data
+        formData.append("files", imageUpload.files[i]);
+    }
+
+    const options = {
+        method: 'POST',
+        body: formData
+    };
+
+    // now use fetch
+    await fetch("/upload-images", options);
+    window.location.reload();
+}
+
 async function updateData() {
     let firstName = document.getElementById('userFirstName').value;
     let lastName = document.getElementById('userLastName').value;

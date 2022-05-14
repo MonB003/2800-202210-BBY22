@@ -48,6 +48,8 @@ body {
   box-sizing: border-box;
   font-size: 15px;
   color: #333;
+  font-family: 'Lato';
+  font-weight: bold;
   margin-bottom: 20px;
   border-radius: 5px;
 }
@@ -114,9 +116,11 @@ body {
   margin-bottom: 20px;
 }
 
-#signupDiv> span > p {
+#signupDiv > p {
   text-decoration: none;
   color: rgba(221, 221, 221, 0.959);
+  font-weight: bold;
+  font-family: 'Lato';
 }
 
 .OTHText>h1 {
@@ -167,9 +171,14 @@ footer > p{
   box-shadow: 1px 1px 3px rgb(73, 71, 71);
 }
 
+#copyright {
+  position: fixed;
+  bottom: 20pt;
+  font-family: 'Lato', sans-serif;
+  color: black;
+}
 
-@media only screen and (max-width : 1000px) {
-
+@media only screen and (max-width : 900px) {
   .grid {
     display: grid;
     grid-template-columns: 100%;
@@ -179,15 +188,52 @@ footer > p{
 
   .container {
     grid-area: 1/1/2/2;
-    width: 380px;
-    height: 650px;
-    margin: 3% auto;
-    border-radius: 25px;
-    background-color: rgba(0, 0, 0, 0.1);
-    box-shadow: 0 0 17px rgb(243, 243, 243);
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    margin-top: 15px;
+    padding-bottom: 30px;
   }
 
   .OTHText>h1 {
+    display: none;
+  }
+
+  .header {
+    padding-top: 25px;
+  }
+
+  .header>h1 {
+    font-size: 8vw;
+  }
+
+  #loginHeading {
+    font-size: 60px;
+  }
+
+  .loginF input{
+    width: 80%;
+    height: 40px;
+  }
+
+  #loginBtn{
+    width: 80%;
+  }
+  
+  #signupDiv > p {
+    font-size: 3.5vw;
+    color: rgba(0, 0, 0, 0.959);
+  }
+
+  #signupForm {
+    font-family: 'Lato', sans-serif;
+  }
+
+  #errorMsg {
+    color: rgb(0, 0, 0);
+  }
+
+  #copyright {
     display: none;
   }
 }

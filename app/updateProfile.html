@@ -5,6 +5,8 @@
     <title>Update Profile</title>
     <meta charset="utf-8" />
     <link href="/imgs/OTH-favicon.ico" rel="icon" type="image/x-icon" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- CSS style -->
     <link rel="stylesheet" href="/css/profile.css" />
@@ -13,34 +15,67 @@
 <body>
 
     <header id="header">
-        <nav id="navbar">
-            <button id="home">Home</button>
-            <button id="mylistings">My Listings</button>
-            <form action="/logout" method="get" id="logout-form">
-                <input id="logout" class="nav-items" type="submit" value="Logout" />
-            </form>
-        </nav>
+        <div class="headerContainer">
+            <nav id="navbar">
+                <div id="homeContainer">
+                    <button id="home" class="nav-button">Home</button>
+                </div>
+                <div id="listingContainer">
+                    <button id="mylistings" class="nav-button">My Listings</button>
+                </div>
+                <div id="logoutContainer">
+                    <form action="/logout" method="get" id="logout-form">
+                        <input id="logout" class="nav-items nav-button" type="submit" value="Logout" />
+                    </form>
+                </div>
+            </nav>
+        </div>
     </header>
 
     <section>
-        <h3>Edit Profile</h3>
-        <input type="text" id="userFirstName" name="firstName">
-        <br>
-        <input type="text" id="userLastName" name="lastName">
-        <br>
-        <input type="text" id="userCity" name="city">
-        <br>
-        <input type="text" id="userEmail" name="email">
-        <br>
-        <input type="text" id="userPassword" name="password">
-        <button id="saveBtn" onclick="updateData()">Save</button>
-        <p id="message"></p>
+        <div class="grid">
+            <div id="posttemplate">
+                <div class="post">
+                    <div id="postimage">
+                        Picture
+                    </div>
+                </div>
+            </div>
+            <div id="change-input">
+                <p>Update Profile Picture</p>
+                <br>
+                <div id="container">
+                    <form id="upload-images-form">
+                        <input id="image-upload" type="file"  
+                            accept="image/png, image/gif, image/jpg, image/jpeg" />
+                        <input id="submit" type="submit" value="Submit"/>
+                    </form>
+                </div>
+            </div>
+            <div id="text-input">
+                <h3>Edit Profile</h3>
+                <input type="text" id="userFirstName" name="firstName">
+                <br>
+                <input type="text" id="userLastName" name="lastName">
+                <br>
+                <input type="text" id="userCity" name="city">
+                <br>
+                <input type="text" id="userEmail" name="email">
+                <br>
+                <input type="text" id="userPassword" name="password">
+                <br>
+                <button id="saveBtn" onclick="updateData()">Save</button>
+                <p id="message"></p>
+            </div>
+        </div>
     </section>
 
 
 
     <!-- JavaScript -->
     <script src="js/clientProfile.js"></script>
+
+
 
 </body>
 

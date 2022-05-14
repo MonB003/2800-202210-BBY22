@@ -42,6 +42,8 @@ body {
   box-sizing: border-box;
   font-size: 15px;
   color: #333;
+  font-family: 'Lato';
+  font-weight: bold;
   margin-bottom: 20px;
   border-radius: 5px;
 }
@@ -124,4 +126,41 @@ body {
 
 #accExistsMsg {
   color: aliceblue;
+}
+
+@media only screen and (max-width: 600px) {
+  .container {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    margin-top: 15px;
+    padding-bottom: 30px;
+  }
+
+  .header>h1 {
+    font-size: 10vw;
+  }
+
+  #signUpForm input {
+    width: 80%;
+    height: 40px;
+    font-size: 15px;
+    font-family: 'Lato';
+    font-weight: bold;
+  }
+
+  #signUpBtn {
+    width: 80%;
+    height: 40px;
+    font-size: 15px;
+    margin-bottom: 0px;
+  }
+
+  .return {
+    font-size: 20px;
+  }
+
+  #backToLogin {
+    font-size: 15px;
+  }
 }

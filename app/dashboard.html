@@ -5,6 +5,8 @@
     <meta charset="utf-8" />
     <title>Admin Dashboard</title>
     <link href="/imgs/OTH-favicon.ico" rel="icon" type="image/x-icon" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- CSS style -->
     <link rel="stylesheet" href="/css/dashboard.css" />
@@ -26,58 +28,61 @@
         </nav>
     </header>
 
-    <body>
-        <div class="grid">
-            <!--Grid 1-->
-            <div id="adminHeading">
-                <h1 id="companyName">Admin Dashboard</h1>
-                <br>
-                <h2 id="customerName"></h2>
-            </div>
-            <!-- Displays user's name -->
+    <div class="grid">
+        <!--Grid 1-->
+        <div id="adminHeading">
+            <h1 id="companyName">Admin Dashboard</h1>
             <br>
+            <h2 id="customerName">placeholder</h2>
+        </div>
+        <!-- Displays user's name -->
+        <br>
 
-            <!--Grid 2-->
-            <!-- Display user dashboard data -->
-            <div id="tableContainer">
-                <div id="tableScroll">
-                    <div id="userTableDiv"></div>
-                </div>
-            </div>
-
-            <!--Grid 3-->
-            <!-- Message for user feedback when a user's data is changed -->
-            <div id="changeMsg">
-                <p id="message"></p>
-            </div>
-
-            <!-- Section to add a new user -->
-            <div id="userAdd">
-                <section>
-                    <div id="userDiv">
-                        <h3>Add New User</h3>
-                        <input type="text" id="newUserFirstName" name="firstName" placeholder="First Name" pattern="[A-Za-z]{1,20}" required="required">
-                        <br>
-                        <input type="text" id="newUserLastName" name="lastName" placeholder="Last Name" pattern="[A-Za-z]{1,20}" required="required">
-                        <br>
-                        <input type="text" id="newUserCity" name="city" placeholder="City" pattern="[A-Za-z]{1,30}" required="required">
-                        <br>
-                        <input type="text" id="newUserEmail" name="email" placeholder="Email@email.ca" required="required">
-                        <br>
-                        <input type="password" id="newUserPassword" name="password" placeholder="Password" required="required">
-                        <br>
-                        <select name="user-type" id="newUserType">
-                            <option value="USER">User</option>
-                            <option value="ADMIN">Admin</option>
-                        </select>
-
-                        <button id="addNewUserBtn" onclick="addAUser()">Add User</button>
-                        <p id="addUserMessage"></p>
-                    </div>
-                </section>
+        <!--Grid 2-->
+        <!-- Display user dashboard data -->
+        <div id="tableContainer">
+            <div id="tableScroll">
+                <div id="userTableDiv"></div>
             </div>
         </div>
-    </body>
+
+        <!--Grid 3-->
+        <!-- Message for user feedback when a user's data is changed -->
+        <div id="changeMsg">
+        </div>
+
+        <!-- Section to add a new user -->
+        <div id="userAdd">
+            <section>
+                <div id="userDiv">
+                    <h3>Add New User</h3>
+                    <input type="text" id="newUserFirstName" name="firstName" placeholder="First Name"
+                        pattern="[A-Za-z]{1,20}" required="required">
+                    <br>
+                    <input type="text" id="newUserLastName" name="lastName" placeholder="Last Name"
+                        pattern="[A-Za-z]{1,20}" required="required">
+                    <br>
+                    <input type="text" id="newUserCity" name="city" placeholder="City" pattern="[A-Za-z]{1,30}"
+                        required="required">
+                    <br>
+                    <input type="text" id="newUserEmail" name="email" placeholder="Email@email.ca" required="required">
+                    <br>
+                    <input type="password" id="newUserPassword" name="password" placeholder="Password"
+                        required="required">
+                    <br>
+                    <select name="user-type" id="newUserType">
+                        <option value="USER">User</option>
+                        <option value="ADMIN">Admin</option>
+                    </select>
+
+                    <button id="addNewUserBtn" onclick="addAUser()">Add User</button>
+                    <p id="addUserMessage"></p>
+                    <p id="message"></p>
+                </div>
+            </section>
+        </div>
+    </div>
+
 
     <!-- JavaScript -->
     <script src="js/clientDashboard.js"></script>

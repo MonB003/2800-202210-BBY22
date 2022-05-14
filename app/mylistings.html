@@ -17,16 +17,19 @@
     <!-- Header -->
     <header id="header">
 
-        <h2 id="companyName">On the House</h2>
-
         <!-- Navbar -->
         <nav id="navbar">
-            <!-- Directs to profile page to edit user info -->
-            <button id="profile" class="nav-button">Profile</button>
-            <button id="home" class="nav-button">Home</button>
-            <form action="/logout" method="get" id="logoutForm">
-                <input type="submit" id="logout" class="nav-button" value="Logout" />
-            </form>
+            <div id="homeContainer">
+                <a href="" id="home" class="nav-button">Home</a>
+            </div>
+            <div id="profileContainer">
+                <button id="profile" class="nav-button">Profile</button>
+            </div>
+            <div id="logoutContainer">
+                <form action="/logout" method="get" id="logoutForm">
+                    <input type="submit" id="logout" class="nav-button" value="Logout" />
+                </form>
+            </div>
         </nav>
 
     </header>
@@ -34,33 +37,49 @@
     <div id="pagename">My Listings</div>
     <div id="topnav">
         <button type="button" class="navbutton" id="newPostPageBtn">New Post</button>
-        <button type="button" class="navbutton" id="filter">Filter</button>
+        <button type="button" class="navbutton" id="togglefilter">Filter</button>
     </div>
-    <div id="posts">
-        <template id="posttemplate">
-            <div class="post">
-                <div class="postimage">
-                    <img src="https://dummyimage.com/600x400/000/fff" alt="placeholder">
-                </div>
-                <div class="posttitle">Post Title</div>
-                <div class="poststatus">Status</div>
-                <div class="postlocation">
-                    Post Location
-                </div>
-                <div class="postoptions">
-                    <div class="messagepost">
-                        M
-                    </div>
-                </div>
-                <div class="postdate">Post date time</div>
+    
+    <div id="filtermenu" style="display: none;">
+        <div id="filtersearchcontainer">
+            <div id="filtersearch">
+                <input type="text" id="search" onkeyup="displayposts()" placeholder="Search" title="Filter Search">
+                <select name="filter" id="filter">
+                    <option value="title">Title</option>
+                    <option value="city">City</option>
+                </select>
             </div>
-        </template>
+        </div>
+        <button type="button" class="filtermenubtn" id="filterstatus">All</button>
+        <button type="button" class="filtermenubtn" id="sortbutton">Sort</button>
+    </div>
+    <template id="posttemplate">
+        <div class="post">
+            <div class="postimage">
+            </div>
+            <div class="posttitle">Post Title</div>
+            <div class="poststatus">Status</div>
+            <div class="postlocation">
+                Post Location
+            </div>
+            <div class="postoptions">
+                <div class="messagepost">
+                    M
+                </div>
+                <div class="editpost">
+                    Edit
+                </div>
+            </div>
+            <div class="postdate">Post date time</div>
+        </div>
+    </template>
+    <div id="posts">
     </div>
 
 
 
     <!-- JavaScript -->
-    <script src="js/clientMain.js"></script>
+    <script src="js/clientMyListings.js"></script>
 
 </body>
 

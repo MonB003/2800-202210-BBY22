@@ -1,3 +1,5 @@
+"use strict";
+
 // Updates a user's data in the database
 async function updateAUsersData(userID) {
     let firstName = document.getElementById('userFirstName' + userID).value;
@@ -43,38 +45,59 @@ async function deleteAUser(userID) {
     let password = document.getElementById('userPassword' + userID).value;
     let type = document.getElementById('userType' + userID).value;
 
-    const dataSent = {
-        firstName,
-        lastName,
-        city,
-        email,
-        password,
-        type,
-        userID
+    // Get all user's input values for their type
+    var formInputFields = document.querySelectorAll('.user-type-input');
+    var adminCount = 0;
+
+    // Check for input fields of type admin
+    for (let i = 0; i < formInputFields.length; i++) {
+        var currentInput = formInputFields[i];
+
+        // If a value is admin, increment count
+        if (currentInput.value == "ADMIN") {
+            adminCount++;
+        }
     }
 
-    const postDetails = {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(dataSent)
+    // If there's only 1 admin, they cannot be deleted
+    if (adminCount < 2) {
+        document.getElementById('message').innerHTML = "Admin user cannot be deleted.";
+
+    } else {
+
+        const dataSent = {
+            firstName,
+            lastName,
+            city,
+            email,
+            password,
+            type,
+            userID
+        }
+
+        const postDetails = {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(dataSent)
+        }
+
+        // Get response from server side post request called delete-user
+        const postResponse = await fetch('/delete-user', postDetails);
+        const jsonData = await postResponse.json();
+        document.getElementById('message').innerHTML = jsonData.msg;
+
+        // Remove that user's text fields from the page
+        document.getElementById('userFirstName' + userID).remove();
+        document.getElementById('userLastName' + userID).remove();
+        document.getElementById('userCity' + userID).remove();
+        document.getElementById('userEmail' + userID).remove();
+        document.getElementById('userPassword' + userID).remove();
+        document.getElementById('userType' + userID).remove();
+        document.getElementById("editButton" + userID).remove();
+        document.getElementById("deleteButton" + userID).remove();
     }
-
-    // Get response from server side post request called delete-user
-    const postResponse = await fetch('/delete-user', postDetails);
-    const jsonData = await postResponse.json();
-    document.getElementById('message').innerHTML = jsonData.msg;
-
-    // Remove that user's text fields from the page
-    document.getElementById('userFirstName' + userID).remove();
-    document.getElementById('userLastName' + userID).remove();
-    document.getElementById('userCity' + userID).remove();
-    document.getElementById('userEmail' + userID).remove();
-    document.getElementById('userPassword' + userID).remove();
-    document.getElementById('userType' + userID).remove();
-    document.getElementById("editButton" + userID).remove();
-    document.getElementById("deleteButton" + userID).remove();
 };
 
 
@@ -87,28 +110,51 @@ async function addAUser() {
     let password = document.getElementById('newUserPassword').value;
     let type = document.getElementById('newUserType').value;
 
-    const dataSent = {
-        firstName,
-        lastName,
-        city,
-        email,
-        password,
-        type
+    // Get all the text fields in the add user form to check the values entered
+    var userDiv = document.getElementById('userDiv');
+    var formInputFields = userDiv.querySelectorAll('input');
+    var checkEmptyInput = false;
+
+    // Check for input fields with empty values
+    for (let i = 0; i < formInputFields.length; i++) {
+        var currentInput = formInputFields[i];
+
+        // If a value is empty
+        if (currentInput.value == "") {
+            checkEmptyInput = true;
+        }
     }
 
-    const postDetails = {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(dataSent)
+    // If at least one of the inputs is empty
+    if (checkEmptyInput) {
+        document.getElementById('addUserMessage').innerHTML = "Please fill out all fields.";
+
+    } else {
+
+        // If all data entered is valid
+        const dataSent = {
+            firstName,
+            lastName,
+            city,
+            email,
+            password,
+            type
+        }
+
+        const postDetails = {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(dataSent)
+        }
+
+        // Get response from server side post request called add-new-user
+        const postResponse = await fetch('/add-new-user', postDetails);
+        const jsonData = await postResponse.json();
+        document.getElementById('addUserMessage').innerHTML = jsonData.msg;
+
+        // Reload page to show updated dashboard with added user
+        window.location.reload();
     }
-
-    // Get response from server side post request called add-new-user
-    const postResponse = await fetch('/add-new-user', postDetails);
-    const jsonData = await postResponse.json();
-    document.getElementById('addUserMessage').innerHTML = jsonData.msg;
-
-    // Reload page to show updated dashboard with added user
-    window.location.reload();
 };

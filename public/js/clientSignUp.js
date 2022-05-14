@@ -1,16 +1,14 @@
-ready(function() {
+"use strict";
 
-    console.log("Client script loaded.");
+ready(function () {
 
     function ajaxGET(url, callback) {
 
         const xhr = new XMLHttpRequest();
-        xhr.onload = function() {
+        xhr.onload = function () {
             if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
                 callback(this.responseText);
 
-            } else {
-                console.log(this.status);
             }
         }
         xhr.open("GET", url);
@@ -20,17 +18,16 @@ ready(function() {
     function ajaxPOST(url, callback, data) {
 
         let params = typeof data == 'string' ? data : Object.keys(data).map(
-                function(k){ return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]) }
-            ).join('&');
-        console.log("params in ajaxPOST", params);
+            function (k) {
+                return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
+            }
+        ).join('&');
 
         const xhr = new XMLHttpRequest();
-        xhr.onload = function() {
+        xhr.onload = function () {
             if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
                 callback(this.responseText);
 
-            } else {
-                console.log(this.status);
             }
         }
         xhr.open("POST", url);
@@ -53,7 +50,7 @@ ready(function() {
         var checkEmptyInput = false;
 
         // Check for input fields with empty values
-        for (i = 0; i < formInputFields.length; i++) {
+        for (let i = 0; i < formInputFields.length; i++) {
             var currentInput = formInputFields[i];
 
             // If value is empty
@@ -66,7 +63,7 @@ ready(function() {
         // If at least one of the inputs is empty
         if (checkEmptyInput) {
             document.getElementById("accExistsMsg").innerHTML = "Please fill out all fields.";
-            
+
         } else {
             // Data being sent to the server
             let dataSent = "firstName=" + fName.value + "&lastName=" + lName.value + "&city=" + city.value + "&email=" + email.value + "&password=" + password.value;
@@ -91,9 +88,7 @@ ready(function() {
 function ready(callback) {
     if (document.readyState != "loading") {
         callback();
-        console.log("ready state is 'complete'");
     } else {
         document.addEventListener("DOMContentLoaded", callback);
-        console.log("Listener was invoked");
     }
 }
