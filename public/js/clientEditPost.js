@@ -32,7 +32,7 @@ async function save_post(postID) {
 };
 
 
-// Deletes a user from the database
+// Deletes a post from the database
 async function delete_post(postID) {
 
     const dataSent = {
@@ -47,7 +47,7 @@ async function delete_post(postID) {
         body: JSON.stringify(dataSent)
     }
 
-    // Get response from server side post request called delete-user
+    // Get response from server side post request called delete-post
     const postResponse = await fetch('/deletepost', postDetails);
     const jsonData = await postResponse.json();
     window.location.replace("/mylistings");

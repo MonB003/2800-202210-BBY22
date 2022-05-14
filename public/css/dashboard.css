@@ -276,7 +276,6 @@ body {
   }
 
   #adminHeading>h2 {
-    /* display: none; */
     font-size: 15px;
     color: #6B9080;
     position: fixed;

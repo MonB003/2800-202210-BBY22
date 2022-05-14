@@ -125,7 +125,6 @@ body {
   margin: 0px;
   padding: 0px;
   background: url("/imgs/background3.jpg") center/cover fixed;
-  /* background-repeat: no-repeat; */
   overflow-y: scroll;
   background-size: cover;
   background-color: lightgray;

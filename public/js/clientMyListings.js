@@ -15,7 +15,7 @@ document.querySelector("#newPostPageBtn").addEventListener("click", function (e)
     window.location.replace("/newPost");
 });
 
-//togle filter menu
+//toggle filter menu
 document.querySelector("#togglefilter").addEventListener("click", function (e) {
     let filtermenu = document.querySelector("#filtermenu");
     if (filtermenu.style.display === "none") {
