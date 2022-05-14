@@ -14,7 +14,9 @@ const {
 
 //clean later!!
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({
+    extended: true
+}));
 const multer = require("multer");
 
 //mysql connection setup
@@ -46,7 +48,9 @@ const storage = multer.diskStorage({
         callback(null, "user-pic-" + file.originalname.split('/').pop().trim());
     }
 });
-const upload = multer({ storage: storage });
+const upload = multer({
+    storage: storage
+});
 
 // Paths
 app.use('/js', express.static('./public/js'));
@@ -232,11 +236,12 @@ app.post("/loadposts", function (req, res) {
             myResults = results;
             if (error) {} else if (results.length > 0) {
                 results.forEach(post => {
-                    posts.push({"postid":post.id, 
-                        "title":post.title, 
-                        "status":post.status, 
-                        "city":post.city, 
-                        "timestamp":post.timestamp
+                    posts.push({
+                        "postid": post.id,
+                        "title": post.title,
+                        "status": post.status,
+                        "city": post.city,
+                        "timestamp": post.timestamp
                     });
                 });
             }
@@ -258,11 +263,12 @@ app.post("/loadmyposts", function (req, res) {
             myResults = results;
             if (error) {} else if (results.length > 0) {
                 results.forEach(post => {
-                    posts.push({"postid":post.id, 
-                        "title":post.title, 
-                        "status":post.status, 
-                        "city":post.city, 
-                        "timestamp":post.timestamp
+                    posts.push({
+                        "postid": post.id,
+                        "title": post.title,
+                        "status": post.status,
+                        "city": post.city,
+                        "timestamp": post.timestamp
                     });
                 });
             }
@@ -370,7 +376,7 @@ app.post('/signup', function (req, res) {
                             req.session.type = req.body.type;
                             req.session.userID = results.insertId;
                             req.session.profile_pic = "user-pic-none.jpg";
-                            
+
                             req.session.save(function (err) {
                                 // Session saved
                             });
@@ -428,7 +434,7 @@ app.post('/newPost', function (req, res) {
         });
 });
 
-var picRef =''
+var picRef = ''
 app.post('/upload-images', upload.array("files"), function (req, res) {
     for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
@@ -456,16 +462,16 @@ app.post('/upload-images', upload.array("files"), function (req, res) {
                 });
             }
 
-            req.session.profile_pic = newPic; 
-            console.log("req.session in upload method: " + req.session.profile_pic);  
+            req.session.profile_pic = newPic;
+            console.log("req.session in upload method: " + req.session.profile_pic);
 
             res.set("Server", "MACT Engine");
             res.set("X-Powered-By", "MACT");
             res.send(profileDOM.serialize());
         }
-        
+
     );
-    
+
 });
 
 // Load sign up page
@@ -490,14 +496,14 @@ app.get("/newPost", function (req, res) {
 app.get('/profile', function (req, res) {
     let profile = fs.readFileSync("./app/updateProfile.html", "utf8");
     let profileDOM = new JSDOM(profile);
-    
+
     // Load current user's data into the text fields on the page
     profileDOM.window.document.getElementById("userFirstName").defaultValue = req.session.firstName;
     profileDOM.window.document.getElementById("userLastName").defaultValue = req.session.lastName;
     profileDOM.window.document.getElementById("userCity").defaultValue = req.session.city;
     profileDOM.window.document.getElementById("userEmail").defaultValue = req.session.email;
     profileDOM.window.document.getElementById("userPassword").defaultValue = req.session.password;
-    
+
     console.log("req.session.profile_pic: " + req.session.profile_pic);
     let profileP = "<img src=\"imgs/user-pic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
     profileDOM.window.document.getElementById("postimage").innerHTML = profileP
@@ -796,7 +802,7 @@ app.post('/add-new-user', (req, res) => {
 app.post('/update-post-status', (req, res) => {
     const mysql = require("mysql2");
     const connection = mysql.createConnection(database);
-    connection.connect(); 
+    connection.connect();
     connection.query(
         "UPDATE BBY_22_item_posts SET status = ? WHERE id = ?",
         [req.body.newStatus, req.body.postID],
@@ -820,7 +826,7 @@ app.post('/update-post-status', (req, res) => {
 app.post('/save-user-pending-status', (req, res) => {
     const mysql = require("mysql2");
     const connection = mysql.createConnection(database);
-    connection.connect(); 
+    connection.connect();
     connection.query(
         "UPDATE BBY_22_item_posts SET user_reserved = ? WHERE id = ?",
         [req.session.userID, req.body.postID],
@@ -927,8 +933,8 @@ async function initializeDatabase() {
     const connection = await mysql.createConnection(database);
 
     // Creates a table for user profiles and item posts
-    const createDatabaseTables = `CREATE DATABASE IF NOT EXISTS COMP2800;
-        use COMP2800;
+    const createDatabaseTables = `CREATE DATABASE IF NOT EXISTS gi80n4hbnupblp0y;
+        use gi80n4hbnupblp0y;
         CREATE TABLE IF NOT EXISTS BBY_22_users(
         id int NOT NULL AUTO_INCREMENT, 
         firstName VARCHAR(20), 
