@@ -17,6 +17,26 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const multer = require("multer");
 
+//mysql connection setup
+const is_heroku = process.env.IS_HEROKU || false;
+var database = {
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "COMP2800",
+    multipleStatements: true
+};
+
+if (is_heroku) {
+    database = {
+        host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
+        user: "biysuiwt6fbjxdfw",
+        password: "llwyk8vg4c7p5rtu",
+        database: "gi80n4hbnupblp0y",
+        multipleStatements: true
+    };
+}
+
 // const upload = multer({ storage: multer.memoryStorage() });
 const storage = multer.diskStorage({
     destination: function (req, file, callback) {
@@ -27,9 +47,6 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({ storage: storage });
-
-
-
 
 // Paths
 app.use('/js', express.static('./public/js'));
@@ -83,12 +100,7 @@ app.get("/main", function (req, res) {
                 " " + req.session.lastName + "!";
 
             const mysql = require("mysql2");
-            const connection = mysql.createConnection({
-                host: "localhost",
-                user: "root",
-                password: "",
-                database: "COMP2800"
-            });
+            const connection = mysql.createConnection(database);
             connection.connect();
             connection.query(
 
@@ -178,12 +190,7 @@ app.get("/editpost", function (req, res) {
         let editpost = fs.readFileSync("./app/editpost.html", "utf8");
         let editpostDOM = new JSDOM(editpost);
         const mysql = require("mysql2");
-        const connection = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "",
-            database: "COMP2800"
-        });
+        const connection = mysql.createConnection(database);
         let myResults = null;
         connection.connect();
         connection.query(
@@ -215,12 +222,7 @@ app.get("/editpost", function (req, res) {
 
 app.post("/loadposts", function (req, res) {
     const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
+    const connection = mysql.createConnection(database);
     let myResults = null;
     let posts = [];
     connection.connect();
@@ -245,12 +247,7 @@ app.post("/loadposts", function (req, res) {
 
 app.post("/loadmyposts", function (req, res) {
     const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
+    const connection = mysql.createConnection(database);
     let myResults = null;
     let posts = [];
     connection.connect();
@@ -347,12 +344,7 @@ app.post('/signup', function (req, res) {
             if (recordReturned == null) {
 
                 const mysql = require("mysql2");
-                let connection = mysql.createConnection({
-                    host: 'localhost',
-                    user: 'root',
-                    password: '',
-                    database: 'COMP2800'
-                });
+                let connection = mysql.createConnection(database);
                 connection.connect();
 
                 // Insert the new user into the database
@@ -406,12 +398,7 @@ app.post('/newPost', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
     const mysql = require("mysql2");
-    let connection = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: '',
-        database: 'COMP2800'
-    });
+    let connection = mysql.createConnection(database);
     connection.connect();
 
     // Get the current date and time 
@@ -455,12 +442,7 @@ app.post('/upload-images', upload.array("files"), function (req, res) {
     let profileDOM = new JSDOM(profile);
 
     const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
+    const connection = mysql.createConnection(database);
     connection.connect();
     connection.query(
 
@@ -541,12 +523,7 @@ app.get("/viewPost", function (req, res) {
         let viewPost = fs.readFileSync("./app/viewPost.html", "utf8");
         let viewPostDOM = new JSDOM(viewPost);
         const mysql = require("mysql2");
-        const connection = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "",
-            database: "COMP2800"
-        });
+        const connection = mysql.createConnection(database);
         let myResults = null;
         connection.connect();
         connection.query(
@@ -595,12 +572,7 @@ app.get("/viewPost", function (req, res) {
 //to get post owner name from user table and displays it when view post details
 app.post('/getPostOwner', (req, res) => {
     const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
+    const connection = mysql.createConnection(database);
     let userName = [];
     connection.connect();
     connection.query(
@@ -625,12 +597,7 @@ app.post('/getPostOwner', (req, res) => {
 //saves the postid so that the post can be edited on the editpost page
 app.post('/toeditpost', (req, res) => {
     const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
+    const connection = mysql.createConnection(database);
     connection.connect();
     connection.query(
         "SELECT * FROM BBY_22_item_posts WHERE id = ?",
@@ -659,12 +626,7 @@ app.post('/toeditpost', (req, res) => {
 //save edits to post
 app.post('/savepostinfo', (req, res) => {
     const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
+    const connection = mysql.createConnection(database);
     connection.connect();
     connection.query(
         "UPDATE BBY_22_item_posts SET title = ?, city = ?, description = ? WHERE id = ? AND user_id = ?",
@@ -689,12 +651,7 @@ app.post('/savepostinfo', (req, res) => {
 app.post('/deletepost', (req, res) => {
 
     const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
+    const connection = mysql.createConnection(database);
     connection.connect();
     connection.query(
         "DELETE FROM BBY_22_item_posts WHERE id = ? AND user_id = ?",
@@ -718,12 +675,7 @@ app.post('/deletepost', (req, res) => {
 // When an admin updates a user's data
 app.post('/update-user-data', (req, res) => {
     const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
+    const connection = mysql.createConnection(database);
     connection.connect();
     connection.query(
         "UPDATE BBY_22_users SET firstName = ?, lastName = ?, city = ?, email = ?, password = ?, type = ? WHERE id = ?",
@@ -748,12 +700,7 @@ app.post('/update-user-data', (req, res) => {
 // When a user updates their own data
 app.post('/update-data', (req, res) => {
     const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
+    const connection = mysql.createConnection(database);
     connection.connect();
     connection.query(
         "UPDATE BBY_22_users SET firstName = ?, lastName = ?, city = ?, email = ?, password = ? WHERE email = ? AND password = ?",
@@ -780,12 +727,7 @@ app.post('/delete-user', (req, res) => {
     let requestName = req.body.firstName + " " + req.body.lastName;
 
     const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
+    const connection = mysql.createConnection(database);
     connection.connect();
     connection.query(
         "DELETE FROM BBY_22_users WHERE id = ?",
@@ -818,12 +760,7 @@ app.post('/add-new-user', (req, res) => {
             // If authenticate() returns null, user isn't currently in database, so they can be added
             if (recordReturned == null) {
                 const mysql = require("mysql2");
-                let connection = mysql.createConnection({
-                    host: 'localhost',
-                    user: 'root',
-                    password: '',
-                    database: 'COMP2800'
-                });
+                let connection = mysql.createConnection(database);
                 connection.connect();
                 connection.query('INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type, profile_pic) VALUES (?, ?, ?, ?, ?, ?, ?)',
                     [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.body.type, "user-pic-none.jpg"],
@@ -858,12 +795,7 @@ app.post('/add-new-user', (req, res) => {
 // Updates a post's status in the database
 app.post('/update-post-status', (req, res) => {
     const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
+    const connection = mysql.createConnection(database);
     connection.connect(); 
     connection.query(
         "UPDATE BBY_22_item_posts SET status = ? WHERE id = ?",
@@ -887,12 +819,7 @@ app.post('/update-post-status', (req, res) => {
 // Saves the current session user as the user who reserved the post that was clicked
 app.post('/save-user-pending-status', (req, res) => {
     const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
+    const connection = mysql.createConnection(database);
     connection.connect(); 
     connection.query(
         "UPDATE BBY_22_item_posts SET user_reserved = ? WHERE id = ?",
@@ -920,12 +847,7 @@ app.post('/get-post-and-session-ids', (req, res) => {
     let currentSessionUserID = req.session.userID;
 
     const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
+    const connection = mysql.createConnection(database);
     connection.connect();
     connection.query(
         "SELECT user_id FROM BBY_22_item_posts WHERE id = ?",
@@ -946,12 +868,7 @@ app.post('/get-post-and-session-ids', (req, res) => {
 function authenticateUser(email, pwd, callback) {
 
     const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
+    const connection = mysql.createConnection(database);
     connection.connect();
     connection.query(
         "SELECT * FROM BBY_22_users WHERE email = ? AND password = ?", [email, pwd],
@@ -980,12 +897,7 @@ function authenticateUser(email, pwd, callback) {
 function checkEmailAlreadyExists(email, callback) {
 
     const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
+    const connection = mysql.createConnection(database);
     connection.connect();
     connection.query(
         "SELECT * FROM BBY_22_users WHERE email = ?", [email],
@@ -1012,12 +924,7 @@ function checkEmailAlreadyExists(email, callback) {
 async function initializeDatabase() {
     // Promise
     const mysql = require("mysql2/promise");
-    const connection = await mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        multipleStatements: true
-    });
+    const connection = await mysql.createConnection(database);
 
     // Creates a table for user profiles and item posts
     const createDatabaseTables = `CREATE DATABASE IF NOT EXISTS COMP2800;
@@ -1061,5 +968,5 @@ async function initializeDatabase() {
 }
 
 // Server runs on port 8000
-let port = 8000;
+let port = process.env.PORT || 8000;
 app.listen(port, initializeDatabase);
