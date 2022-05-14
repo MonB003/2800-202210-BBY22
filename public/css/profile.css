@@ -128,7 +128,6 @@ body {
   margin: 0px;
   padding: 0px;
   background: url("/imgs/background3.jpg") center/cover fixed;
-  /* background-repeat: no-repeat; */
   overflow-y: scroll;
   background-size: cover;
   background-color: lightgray;
@@ -260,7 +259,7 @@ body {
 
 @media only screen and (max-width : 1000px) {
   #navbar {
-    height: 100px;
+    height: 50px;
   }
 
   #customerName {
@@ -277,13 +276,14 @@ body {
 
   .grid {
     display: grid;
-    grid-template-columns: 10% 80% 10%;
+    grid-template-columns: 5% 90% 5%;
     grid-template-rows: 30% 15% 55%;
+    height: min-content;
   }
 
   .post {
     grid-area: 1/2/2/3;
-    margin-top: 70px;
+    margin-top: 0px;
     padding: 10px;
     position: relative;
     align-items: center;
@@ -291,10 +291,10 @@ body {
   }
 
   #picID {
-    width: 300px;
-    height: 300px;
-    max-width: 400px;
-    max-height: 400px;
+    width: 150px;
+    height: 150px;
+    max-width: 150px;
+    max-height: 150px;
     position: relative;
     align-items: center;
     text-align: center;
@@ -303,25 +303,25 @@ body {
 
   #change-input {
     grid-area: 2/2/3/3;
-    width: auto;
-    height: auto;
+    width: 90%;
+    height: 80px;
     margin: 0 auto;
     padding-top: 30px;
-    font-size: 35px;
+    font-size: 15px;
     font-weight: bold;
-    margin-top: 30px;
+    margin-top: 0px;
   }
 
   #change-input form input {
-    font-size: 25px;
+    font-size: 15px;
   }
 
   #text-input {
     grid-area: 3/2/4/3;
-    width: 600px;
+    width: 90%;
     box-shadow: 0 0 15px rgb(20, 19, 19);
-    margin-top: 40px;
-    margin-bottom: 40px;
+    margin-top: 30px;
+    margin-bottom: 20px;
   }
 
   #text-input h3 {
@@ -329,23 +329,23 @@ body {
   }
 
   #text-input input {
-    width: 580px;
-    height: 80px;
-    font-size: 35px;
+    width: 90%;
+    height: 30px;
+    font-size: 15px;
     margin-bottom: 5px;
     border-radius: 5px;
   }
 
   #message {
-    margin-bottom: 100px;
-    font-size: 35px;
+    margin-bottom: 10px;
+    font-size: 15px;
   }
 
   #saveBtn {
-    width: 580px;
-    height: 80px;
-    font-size: 40px;
-    margin-top: 10px;
-    margin-bottom: 20px;
+    width: 90%;
+    height: 30px;
+    font-size: 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
   }
 }

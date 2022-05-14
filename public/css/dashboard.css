@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Balsamiq+Sans:ital@1&family=Lato:wght@300&family=Nunito:wght@700&family=Orbitron:wght@500&family=Pacifico&family=Raleway:ital@1&family=Shadows+Into+Light&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Balsamiq+Sans:ital@1&family=Lato:wght@300&family=Nanum+Gothic:wght@700&family=Nunito:wght@500;700&family=Orbitron:wght@500&family=Pacifico&family=Raleway:ital@1&family=Shadows+Into+Light&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -166,71 +167,103 @@ body {
   font-family: 'Lato',sans-serif;
 }
 
-
 @media only screen and (max-width : 1000px) {
+
   .headerContainer {
-    height: 80px;
+    height: 35px;
   }
 
   #navLogout {
     position: fixed;
-    right: 0;
+    left: 0;
     width: 8em;
     margin-top: 0.8em;
     margin-right: 0em;
   }
 
   #logout {
-    font-size: 30px;
+    font-size: 15px;
   }
 
   .grid {
     display: grid;
     grid-template-columns: 10% 80% 10%;
-    grid-template-rows: 20% 20% 60%;
-    height: 1500px;
+    grid-template-rows: 10% 20% 70%;
+    height: auto;
   }
 
   #adminHeading {
     grid-area: 1/2/2/3;
-    font-size: 3vw;
-    height: 250px;
-    margin-top: 20px;
+    font-size: 2vw;
+    height: 80%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-bottom: 0px;
+  }
+
+  #adminHeading>h1 {
+    font-family: 'Pacifico';
+    padding-top: 7px;
+    text-align: center;
+    font-size: 20px;
   }
 
   #userAdd {
     grid-area: 2/2/3/3;
-    width: 500px;
-    box-shadow: 0 0 17px rgb(31, 31, 31);
+    width: 100%;
+    box-shadow: 0 0 4px rgb(31, 31, 31);
     align-items: center;
     justify-content: center;
-    font-size: 30px;
+    font-size: 15px;
     text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: auto;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    height: 100%;
   }
 
   #tableContainer {
     grid-area: 3/2/4/3;
-    margin-top: 30px;
+    margin-top: 10px;
+    width: 75%;
+    margin: auto;
+    margin-top: 50px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-radius: 25px;
+    box-shadow: 0 0 17px rgb(243, 243, 243);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
+  #tableScroll {
+    max-height: 300px;
+    overflow: hidden;
+    overflow-y: scroll;
+  }
   #userDiv {
     padding: 10px;
   }
 
+  #userDiv > input {
+    width: 100%;
+  }
+
   #userDiv > input, button {
-    font-size: 30px;
+    font-size: 15px;
   }
 
   #userDiv > select {
-    font-size: 30px;
+    font-size: 15px;
   }
 
   #userTableDiv tr td input {
-    font-size: 20px;
+    font-size: 15px;
   }
 
   #changeMsg {
@@ -240,5 +273,14 @@ body {
     bottom: 40px;
     position: fixed;
     font-size: 2vw;
+  }
+
+  #adminHeading>h2 {
+    /* display: none; */
+    font-size: 15px;
+    color: #6B9080;
+    position: fixed;
+    top: 8px;
+    left: 38%;
   }
 }

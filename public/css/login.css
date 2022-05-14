@@ -48,6 +48,8 @@ body {
   box-sizing: border-box;
   font-size: 15px;
   color: #333;
+  font-family: 'Lato';
+  font-weight: bold;
   margin-bottom: 20px;
   border-radius: 5px;
 }
@@ -117,6 +119,8 @@ body {
 #signupDiv > p {
   text-decoration: none;
   color: rgba(221, 221, 221, 0.959);
+  font-weight: bold;
+  font-family: 'Lato';
 }
 
 .OTHText>h1 {
@@ -133,8 +137,8 @@ footer > p{
   position: absolute;
   max-width: 100%;
   bottom: -50px;
-  left: 47%;
-  font-size: 1vw;
+  left: 50%;
+  font-size: 10px;
   color: aliceblue;
 }
 
@@ -174,7 +178,7 @@ footer > p{
   color: black;
 }
 
-@media only screen and (max-width : 1000px) {
+@media only screen and (max-width : 900px) {
   .grid {
     display: grid;
     grid-template-columns: 100%;
@@ -183,57 +187,53 @@ footer > p{
   }
 
   .container {
-    width: 680px;
-    height: 1050px;
-    margin: 30% auto;
+    grid-area: 1/1/2/2;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    margin-top: 15px;
+    padding-bottom: 30px;
   }
 
   .OTHText>h1 {
     display: none;
   }
 
-  .header>h1 {
-    font-size: 9vw;
+  .header {
+    padding-top: 25px;
   }
 
- 
+  .header>h1 {
+    font-size: 8vw;
+  }
+
+  #loginHeading {
+    font-size: 60px;
+  }
+
   .loginF input{
-    width: 500px;
-    height: 60px;
-    font-size: 30px;
-    font-family: 'Lato';
-    font-weight: bold;
+    width: 80%;
+    height: 40px;
   }
 
   #loginBtn{
-    width: 500px;
-    height: 60px;
-    font-size: 30px;
+    width: 80%;
   }
-
+  
   #signupDiv > p {
-    font-size: 3vw;
-    font-weight: bold;
-    font-family: 'Lato';
-    text-decoration: none;
+    font-size: 3.5vw;
     color: rgba(0, 0, 0, 0.959);
   }
 
-  footer > p{
-    left: 40%;;
-    text-align: center;
-  }
-
-  #signup {
-    font-size: 30px;
-
-  }
- 
-  #copyright {
-    position: fixed;
-    bottom: 20pt;
+  #signupForm {
     font-family: 'Lato', sans-serif;
-    color: black;
-    font-size: 2vw;
+  }
+
+  #errorMsg {
+    color: rgb(0, 0, 0);
+  }
+
+  #copyright {
+    display: none;
   }
 }
