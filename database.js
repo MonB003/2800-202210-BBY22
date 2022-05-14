@@ -932,8 +932,33 @@ async function initializeDatabase() {
     const mysql = require("mysql2/promise");
     const connection = await mysql.createConnection(database);
 
-    // Creates a table for user profiles and item posts
-    const createDatabaseTables = `CREATE DATABASE IF NOT EXISTS gi80n4hbnupblp0y;
+    const createDatabaseTables = `CREATE DATABASE IF NOT EXISTS COMP2800;
+        use COMP2800;
+        CREATE TABLE IF NOT EXISTS BBY_22_users(
+        id int NOT NULL AUTO_INCREMENT, 
+        firstName VARCHAR(20), 
+        lastName VARCHAR(20), 
+        city VARCHAR(30), 
+        email VARCHAR(30), 
+        password VARCHAR(30), 
+        type VARCHAR(10),
+        profile_pic TEXT (999) NOT NULL,
+        PRIMARY KEY (id));
+        
+        CREATE TABLE IF NOT EXISTS BBY_22_item_posts(
+            id int NOT NULL AUTO_INCREMENT, 
+            user_id int NOT NULL,
+            title VARCHAR(50), 
+            description VARCHAR(1000), 
+            city VARCHAR(30), 
+            status VARCHAR(30), 
+            user_reserved int, 
+            timestamp VARCHAR(50),
+            PRIMARY KEY (id),
+            FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
+
+    if (is_heroku) {
+        createDatabaseTables = `CREATE DATABASE IF NOT EXISTS gi80n4hbnupblp0y;
         use gi80n4hbnupblp0y;
         CREATE TABLE IF NOT EXISTS BBY_22_users(
         id int NOT NULL AUTO_INCREMENT, 
@@ -957,6 +982,9 @@ async function initializeDatabase() {
             timestamp VARCHAR(50),
             PRIMARY KEY (id),
             FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
+    }
+
+    // Creates a table for user profiles and item posts
     await connection.query(createDatabaseTables);
 
     // Await allows for us to wait for this line to execute synchronously
