@@ -22,6 +22,14 @@ CREATE TABLE IF NOT EXISTS BBY_22_item_posts(
     timestamp VARCHAR(50),
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);
+    
+CREATE TABLE IF NOT EXISTS BBY_22_messages(
+    id int NOT NULL AUTO_INCREMENT, 
+    userSending VARCHAR(30) NOT NULL,                
+    userReceiving VARCHAR(30) NOT NULL, 
+    message VARCHAR(300), 
+    time VARCHAR(50), 
+    PRIMARY KEY (id));
 
 INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type) 
 VALUES ("Test", "Test", "Vancouver", "test@test.ca", "password", "ADMIN");

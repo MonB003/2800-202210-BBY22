@@ -11,6 +11,13 @@ const {
 } = require('jsdom');
 
 
+var http = require("http").createServer(app);
+
+var io = require("socket.io")(http);
+
+var users = [];
+
+
 app.use(express.json());
 app.use(express.urlencoded({
     extended: true
@@ -863,6 +870,138 @@ app.post('/get-post-and-session-ids', (req, res) => {
 
 
 
+
+
+app.get("/message", (req, res) => {
+    let message = fs.readFileSync("./app/message.html", "utf8");
+    let messageDOM = new JSDOM(message);
+
+    messageDOM.window.document.getElementById("thisUsersEmail").textContent = req.session.email;
+    messageDOM.window.document.getElementById("getAllIdsBtn").setAttribute("onclick", "getAllUserPostIDs(" + req.session.userID + ")");
+
+    res.set("Server", "MACT Engine");
+    res.set("X-Powered-By", "MACT");
+    res.send(messageDOM.serialize());
+});
+
+
+app.post("/all-user-post-ids", function (req, res) {
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
+    connection.connect();
+    // Gets all users in the database who have created a post except the current session user
+    connection.query("SELECT DISTINCT user_id FROM BBY_22_item_posts WHERE user_id != ?",
+        [req.session.userID],
+        function (error, allIDs) {
+            res.send({
+                status: "Success",
+                idResult: allIDs
+            })
+        }
+    );
+});
+
+
+app.post("/get-unique-user-email", function (req, res) {
+    const mysql = require("mysql2");
+    
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
+    connection.connect();
+
+    // Gets all users in the database who have created a post except the current session user
+    connection.query("SELECT * FROM BBY_22_users WHERE id = ?",
+        [req.body.currentID],
+        function (error, currEmail) {
+            res.send({
+                status: "Success",
+                currentUserEmail: currEmail[0]
+            })
+        }
+    );
+});
+
+
+app.post("/all-messages-between-two-users", function (req, res) {
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
+    connection.connect();
+    // Gets past messages from the 2 users in the database
+    connection.query("SELECT * FROM BBY_22_messages WHERE (userSending = ? AND userReceiving = ?) OR (userSending = ? AND userReceiving = ?)",
+        [req.body.userSending, req.body.userReceiving, req.body.userReceiving, req.body.userSending],
+        function (error, messages) {
+            res.send({
+                status: "Success",
+                dbResult: messages
+            })
+        }
+    );
+});
+
+
+/* 
+ * Setup for messaging feature using socket.io
+ * This is the source that was referenced and modified: https://www.youtube.com/watch?v=Ozrm_xftcjQ
+ */
+io.on("connection", function (socket) {
+    console.log("User connected", socket.id);
+
+    // Add a listener for new user
+    socket.on("a-user-connects", function (username) {
+        // Save in array
+        users[username] = socket.id;
+
+        // socket ID will be used to send message to individual person
+        io.emit("a-user-connects", username);
+    });
+
+    socket.on("send-message-to-other-user", function (data) {
+        // send event to userReceiving
+        var socketId = users[data.userReceiving];
+
+        io.to(socketId).emit("new-message-from-other-user", data);
+
+        var today = new Date();
+        var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        var dateAndTime = date + ' ' + time;
+
+        const mysql = require("mysql2");
+        const connection = mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "",
+            database: "COMP2800"
+        });
+        connection.connect();
+        connection.query("INSERT INTO BBY_22_messages (userSending, userReceiving, message, time) VALUES (?, ?, ?, ?)",
+            [data.userSending, data.userReceiving, data.message, dateAndTime],
+            function (error, result) {}
+        );
+    });
+});
+
+
+
+
+
+
+
+
 // Validates user's email and password
 function authenticateUser(email, pwd, callback) {
 
@@ -948,7 +1087,15 @@ async function initializeDatabase() {
             user_reserved int, 
             timestamp VARCHAR(50),
             PRIMARY KEY (id),
-            FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
+            FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);
+            
+        CREATE TABLE IF NOT EXISTS BBY_22_messages(
+            id int NOT NULL AUTO_INCREMENT, 
+            userSending VARCHAR(30) NOT NULL,                
+            userReceiving VARCHAR(30) NOT NULL, 
+            message VARCHAR(300), 
+            time VARCHAR(50), 
+            PRIMARY KEY (id));`;
 
     if (is_heroku) {
         createDatabaseTables = `CREATE DATABASE IF NOT EXISTS gi80n4hbnupblp0y;
@@ -974,7 +1121,15 @@ async function initializeDatabase() {
             user_reserved int, 
             timestamp VARCHAR(50),
             PRIMARY KEY (id),
-            FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
+            FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);
+            
+        CREATE TABLE IF NOT EXISTS BBY_22_messages(
+            id int NOT NULL AUTO_INCREMENT, 
+            userSending VARCHAR(30) NOT NULL,                
+            userReceiving VARCHAR(30) NOT NULL, 
+            message VARCHAR(300), 
+            time VARCHAR(50), 
+            PRIMARY KEY (id));`;
     }
 
     // Creates a table for user profiles and item posts
@@ -996,4 +1151,8 @@ async function initializeDatabase() {
 
 // Server runs on port 8000
 let port = process.env.PORT || 8000;
-app.listen(port, initializeDatabase);
+// app.listen(port, initializeDatabase);
+http.listen(port, function () {
+    initializeDatabase();
+    console.log("Server started");
+});
