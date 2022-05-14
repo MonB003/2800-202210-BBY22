@@ -28,7 +28,6 @@ async function save_post(postID) {
 
     const postResponse = await fetch('/savepostinfo', postDetails);
     const jsonData = await postResponse.json();
-    // document.getElementById('message').innerHTML = jsonData.msg;
     window.location.replace("/mylistings");
 };
 
@@ -51,6 +50,5 @@ async function delete_post(postID) {
     // Get response from server side post request called delete-user
     const postResponse = await fetch('/deletepost', postDetails);
     const jsonData = await postResponse.json();
-    // document.getElementById('message').innerHTML = jsonData.msg;
     window.location.replace("/mylistings");
 };

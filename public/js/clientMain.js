@@ -59,7 +59,6 @@ document.querySelector("#filterstatus").addEventListener("click", function (e) {
 
 // retrieves posts from database
 async function loadposts() {
-    
     const dataSent = {
     }
 
@@ -219,7 +218,6 @@ loadposts();
 
 // Saves the post ID to the session and redirects to the view post html if validated
 async function viewPost(postID) {
-
 
     // Sends data in an array to the server and saves it to a session
     const dataSent = {

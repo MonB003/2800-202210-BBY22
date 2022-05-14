@@ -6,18 +6,18 @@ const session = require("express-session");
 const res = require("express/lib/response");
 const app = express();
 const fs = require("fs");
-
 const {
     JSDOM
 } = require('jsdom');
 
 
-//clean later!!
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({
+    extended: true
+}));
 const multer = require("multer");
 
-// const upload = multer({ storage: multer.memoryStorage() });
+
 const storage = multer.diskStorage({
     destination: function (req, file, callback) {
         callback(null, "./public/imgs/")
@@ -26,9 +26,9 @@ const storage = multer.diskStorage({
         callback(null, "user-pic-" + file.originalname.split('/').pop().trim());
     }
 });
-const upload = multer({ storage: storage });
-
-
+const upload = multer({
+    storage: storage
+});
 
 
 // Paths
@@ -37,7 +37,6 @@ app.use('/css', express.static('./public/css'));
 app.use('/imgs', express.static('./public/imgs'));
 app.use('/img', express.static('/public/imgs'));
 app.use('/html', express.static('./app'));
-// app.use("/img", express.static("./imgs"));
 
 // Session
 app.use(session({
@@ -230,11 +229,12 @@ app.post("/loadposts", function (req, res) {
             myResults = results;
             if (error) {} else if (results.length > 0) {
                 results.forEach(post => {
-                    posts.push({"postid":post.id, 
-                        "title":post.title, 
-                        "status":post.status, 
-                        "city":post.city, 
-                        "timestamp":post.timestamp
+                    posts.push({
+                        "postid": post.id,
+                        "title": post.title,
+                        "status": post.status,
+                        "city": post.city,
+                        "timestamp": post.timestamp
                     });
                 });
             }
@@ -261,11 +261,12 @@ app.post("/loadmyposts", function (req, res) {
             myResults = results;
             if (error) {} else if (results.length > 0) {
                 results.forEach(post => {
-                    posts.push({"postid":post.id, 
-                        "title":post.title, 
-                        "status":post.status, 
-                        "city":post.city, 
-                        "timestamp":post.timestamp
+                    posts.push({
+                        "postid": post.id,
+                        "title": post.title,
+                        "status": post.status,
+                        "city": post.city,
+                        "timestamp": post.timestamp
                     });
                 });
             }
@@ -378,7 +379,7 @@ app.post('/signup', function (req, res) {
                             req.session.type = req.body.type;
                             req.session.userID = results.insertId;
                             req.session.profile_pic = "user-pic-none.jpg";
-                            
+
                             req.session.save(function (err) {
                                 // Session saved
                             });
@@ -401,7 +402,7 @@ app.post('/signup', function (req, res) {
         });
 });
 
-//Gets the user input from newPost.html and passes it into the database server.
+// Gets the user input from newPost.html and passes it into the database server.
 app.post('/newPost', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
@@ -441,15 +442,15 @@ app.post('/newPost', function (req, res) {
         });
 });
 
-var picRef =''
+
+// Stores image in database
+var picRef = ''
 app.post('/upload-images', upload.array("files"), function (req, res) {
     for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
-        // console.log(req.files[i].filename);
     }
 
     let newPic = req.files[0].filename;
-    console.log("picture in first function: " + newPic);
 
     let profile = fs.readFileSync("./app/updateProfile.html", "utf8");
     let profileDOM = new JSDOM(profile);
@@ -463,7 +464,6 @@ app.post('/upload-images', upload.array("files"), function (req, res) {
     });
     connection.connect();
     connection.query(
-
         "UPDATE BBY_22_users SET profile_pic = ? WHERE email = ? ",
         [newPic, req.session.email],
         function (error, results) {
@@ -474,16 +474,14 @@ app.post('/upload-images', upload.array("files"), function (req, res) {
                 });
             }
 
-            req.session.profile_pic = newPic; 
-            console.log("req.session in upload method: " + req.session.profile_pic);  
+            // Store value of new image in the session
+            req.session.profile_pic = newPic;
 
             res.set("Server", "MACT Engine");
             res.set("X-Powered-By", "MACT");
             res.send(profileDOM.serialize());
         }
-        
     );
-    
 });
 
 // Load sign up page
@@ -508,15 +506,14 @@ app.get("/newPost", function (req, res) {
 app.get('/profile', function (req, res) {
     let profile = fs.readFileSync("./app/updateProfile.html", "utf8");
     let profileDOM = new JSDOM(profile);
-    
+
     // Load current user's data into the text fields on the page
     profileDOM.window.document.getElementById("userFirstName").defaultValue = req.session.firstName;
     profileDOM.window.document.getElementById("userLastName").defaultValue = req.session.lastName;
     profileDOM.window.document.getElementById("userCity").defaultValue = req.session.city;
     profileDOM.window.document.getElementById("userEmail").defaultValue = req.session.email;
     profileDOM.window.document.getElementById("userPassword").defaultValue = req.session.password;
-    
-    console.log("req.session.profile_pic: " + req.session.profile_pic);
+
     let profileP = "<img src=\"imgs/user-pic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
     profileDOM.window.document.getElementById("postimage").innerHTML = profileP
 
@@ -864,7 +861,7 @@ app.post('/update-post-status', (req, res) => {
         password: "",
         database: "COMP2800"
     });
-    connection.connect(); 
+    connection.connect();
     connection.query(
         "UPDATE BBY_22_item_posts SET status = ? WHERE id = ?",
         [req.body.newStatus, req.body.postID],
@@ -893,7 +890,7 @@ app.post('/save-user-pending-status', (req, res) => {
         password: "",
         database: "COMP2800"
     });
-    connection.connect(); 
+    connection.connect();
     connection.query(
         "UPDATE BBY_22_item_posts SET user_reserved = ? WHERE id = ?",
         [req.session.userID, req.body.postID],
