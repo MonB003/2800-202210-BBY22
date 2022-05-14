@@ -19,6 +19,9 @@ document.querySelector("#newPostPageBtn").addEventListener("click", function (e)
 function getMessagePage(postID) {
     console.log("post id: " + postID);
     window.location.replace("/message");
+    
+    // This method is in clientMessage.js
+    saveConnectedUserInfo();
 }
 
 //toggle filter menu

@@ -7,6 +7,7 @@
 
 let socket = io.connect('/');
 
+// Stores the users sending and receiving the messages
 var userReceiving = "";
 var userSending = "";
 
@@ -25,7 +26,7 @@ function saveConnectedUserInfo() {
     // Prevent form from submitting
     return false;
 }
-saveConnectedUserInfo();
+// saveConnectedUserInfo();
 
 
 // When a user connects to the message page
