@@ -5,7 +5,7 @@
  * This is the source that was referenced and modified: https://www.youtube.com/watch?v=Ozrm_xftcjQ
  */
 
-let socket = io.connect('/');
+let privateSocket = io.connect('/');
 
 // Stores the users sending and receiving the messages
 var userReceiving = "";
@@ -17,24 +17,18 @@ function saveConnectedUserInfo() {
     // Get user's email
     var currentEmail = document.getElementById("thisUsersEmail").textContent;
 
-    // Send it to the server
-    socket.emit("a-user-connects", currentEmail);
-
     // Save the email into a global variable
     userSending = currentEmail;
+
+    let postIDFromMain = localStorage.getItem("currentPostID");
+    console.log("post id local storage: " + postIDFromMain)
+
+    getPostOwnersEmail(postIDFromMain);
 
     // Prevent form from submitting
     return false;
 }
 saveConnectedUserInfo();
-
-
-// When a user connects to the message page
-socket.on("a-user-connects", function (userEmail) {
-    let onlineUser = document.createElement("p");
-    onlineUser.textContent = "Online: " + userEmail;
-    document.getElementById("users").appendChild(onlineUser);
-});
 
 
 // Gets past messages between this user and the user selected, then displays them on the page
@@ -95,13 +89,56 @@ async function getSelectedUser(userEmail) {
 }
 
 
+
+async function getPostOwnersEmail(postID) {
+    console.log("get post owner method postID: " + postID)
+    const dataSent1 = {
+        postID
+    }
+    const postDetails1 = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(dataSent1)
+    }
+    const postResponse = await fetch('/get-other-user-by-post', postDetails1);
+    const jsonData = await postResponse.json();
+    let returnedUserID = jsonData.otherUserID;
+    let postOwnerID = returnedUserID.user_id;   // Post owner
+    console.log("post owner: " + postOwnerID);
+    let currentUserID = jsonData.sessionUserID; // Current user logged in
+    console.log("curr user: " + currentUserID);
+
+
+    const dataSent2 = {
+        postOwnerID
+    }
+    const postDetails2 = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(dataSent2)
+    }
+    const postResponse2 = await fetch('/get-owner-email-with-id', postDetails2);
+    const jsonData2 = await postResponse2.json();
+    let returnedUserEmail = jsonData2.otherUserEmail;
+    let postOwnerEmail = returnedUserEmail.email;   // Post owner's email
+    console.log("email: " + postOwnerEmail);
+
+    getSelectedUser(postOwnerEmail);
+}
+
+
+
 // Sends a private message to other user
 function sendMessageToUser() {
     // Get the message value of the text field
     var messageInput = document.getElementById("messageInput").value;
 
     // Send message to server
-    socket.emit("send-message-to-other-user", {
+    privateSocket.emit("send-message-to-other-user", {
         userSending: userSending,
         userReceiving: userReceiving,
         message: messageInput
@@ -131,7 +168,7 @@ function sendMessageToUser() {
 
 
 // Listens from the server when the other user sends a message to this user
-socket.on("new-message-from-other-user", function (data) {
+privateSocket.on("new-message-from-other-user", function (data) {
     // Create HTML element to display the other user's messsage
     let newMessage = document.createElement("p");
     newMessage.textContent = data.userSending + ": " + data.message;
@@ -143,75 +180,6 @@ socket.on("new-message-from-other-user", function (data) {
     var allMessages = document.getElementById("allMessages");
     allMessages.scrollTop = allMessages.scrollHeight;
 });
-
-
-// Function to get each user with a post's button
-async function getAllUserPostIDs(thisUsersID) {
-    const dataSent = {
-        thisUsersID
-    }
-
-    const postDetails = {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(dataSent)
-    }
-
-    // Get response from server side post request called add-new-user
-    const postResponse = await fetch('/all-user-post-ids', postDetails);
-    const jsonData = await postResponse.json();
-
-    let allUserIDs = jsonData.idResult;
-
-    let usersIDsArray = new Array();
-    for (var index = 0; index < allUserIDs.length; index++) {
-        var currObj = allUserIDs[index];
-
-        // Add ID to array
-        usersIDsArray.push(currObj.user_id);
-    }
-
-    // Creates buttons for each user based on the IDs returned from the database
-    for (let currUserId = 0; currUserId < usersIDsArray.length; currUserId++) {
-        const currentID = usersIDsArray[currUserId];
-
-        const dataSent = {
-            currentID
-        }
-
-        const postDetails = {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dataSent)
-        }
-
-        // Get response from server side post request called add-new-user
-        const postResponse = await fetch('/get-unique-user-email', postDetails);
-        const jsonData = await postResponse.json();
-        let jsonUserResult = jsonData.currentUserEmail;
-
-        // Create button for each of those users
-        let newBtn = document.createElement("button");
-        newBtn.setAttribute("id", "user" + currentID);
-        newBtn.setAttribute("class", "email-message-btns");
-        newBtn.innerHTML = jsonUserResult.email;
-        newBtn.setAttribute("onclick", "getSelectedUser(this.innerHTML);");
-        document.getElementById("usersBtnsDiv").appendChild(newBtn);
-
-        let newLine = document.createElement("br");
-        document.getElementById("usersBtnsDiv").appendChild(newLine);
-    }
-
-    // Disable button to view all users otherwise it will add all the users when clicked again
-    document.getElementById("getAllIdsBtn").disabled = true;
-
-    // Enable message text field
-    document.getElementById("messageInput").disabled = false;
-}
 
 
 // Redirects to main page
@@ -227,7 +195,7 @@ document.getElementById("messageInput").addEventListener("input", function (e) {
     let sendMessageBtn = document.getElementById("sendMessageBtn");
 
     // If there's no input in the text field, disable the send button
-    if (messageInputValue == "") {
+    if (messageInputValue.trim() == "") {
         sendMessageBtn.disabled = true;
     } else {
         // If there's input, enable the button

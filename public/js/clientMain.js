@@ -15,13 +15,19 @@ document.querySelector("#newPostPageBtn").addEventListener("click", function (e)
     window.location.replace("/newPost");
 });
 
+document.querySelector("#allMessagesBtn").addEventListener("click", function (e) {
+    window.location.replace("/message");
+});
+
 // Redirects to message page
 function getMessagePage(postID) {
     console.log("post id: " + postID);
-    window.location.replace("/message");
-    
-    // This method is in clientMessage.js
-    saveConnectedUserInfo();
+
+    // Store this post ID for message JS file
+    localStorage.setItem("currentPostID", postID);
+
+    // Redirects to private message page
+    window.location.replace("/postMessage");
 }
 
 //toggle filter menu

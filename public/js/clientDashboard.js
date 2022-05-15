@@ -59,8 +59,8 @@ async function deleteAUser(userID) {
         }
     }
 
-    // If there's only 1 admin, they cannot be deleted
-    if (adminCount < 2) {
+    // If there's only 1 admin, and that user is the admin, they cannot be deleted
+    if (adminCount < 2 && type == "ADMIN") {
         document.getElementById('message').innerHTML = "Admin user cannot be deleted.";
 
     } else {

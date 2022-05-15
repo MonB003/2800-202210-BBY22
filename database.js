@@ -884,6 +884,17 @@ app.get("/message", (req, res) => {
     res.send(messageDOM.serialize());
 });
 
+app.get("/postMessage", (req, res) => {
+    let message = fs.readFileSync("./app/postMessage.html", "utf8");
+    let messageDOM = new JSDOM(message);
+
+    messageDOM.window.document.getElementById("thisUsersEmail").textContent = req.session.email;
+
+    res.set("Server", "MACT Engine");
+    res.set("X-Powered-By", "MACT");
+    res.send(messageDOM.serialize());
+});
+
 
 app.post("/all-user-post-ids", function (req, res) {
     const mysql = require("mysql2");
@@ -947,6 +958,52 @@ app.post("/all-messages-between-two-users", function (req, res) {
             res.send({
                 status: "Success",
                 dbResult: messages
+            })
+        }
+    );
+});
+
+app.post("/get-other-user-by-post", function (req, res) {
+    const mysql = require("mysql2");
+    
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
+    connection.connect();
+
+    connection.query("SELECT user_id FROM BBY_22_item_posts WHERE id = ?",
+        [req.body.postID],
+        function (error, otherID) {
+            res.send({
+                status: "Success",
+                otherUserID: otherID[0],
+                sessionUserID: req.session.userID
+            })
+        }
+    );
+});
+
+app.post("/get-owner-email-with-id", function (req, res) {
+    const mysql = require("mysql2");
+    
+    const connection = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        database: "COMP2800"
+    });
+    connection.connect();
+
+    // Gets all users in the database who have created a post except the current session user
+    connection.query("SELECT email FROM BBY_22_users WHERE id = ?",
+        [req.body.postOwnerID],
+        function (error, otherEmail) {
+            res.send({
+                status: "Success",
+                otherUserEmail: otherEmail[0]
             })
         }
     );
