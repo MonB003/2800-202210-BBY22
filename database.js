@@ -1006,7 +1006,7 @@ async function initializeDatabase() {
     await connection.query(createDatabaseTables);
 
     // Await allows for us to wait for this line to execute synchronously
-    const [rows, fields] = await db.query("SELECT * FROM BBY_22_users");
+    const [rows, fields] = await connection.query("SELECT * FROM BBY_22_users");
 
     // Adds a default user account in case there is no data in the table.
     if (rows.length == 0) {
@@ -1014,7 +1014,7 @@ async function initializeDatabase() {
         let recordValues = [
             ["Test", "Test", "Vancouver", "test@test.ca", "password", "ADMIN"]
         ];
-        await db.query(recordReturneds, [recordValues]);
+        await connection.query(recordReturneds, [recordValues]);
     }
 
 }
