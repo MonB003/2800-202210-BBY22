@@ -950,7 +950,7 @@ async function initializeDatabase() {
     const mysql = require("mysql2/promise");
     const connection = await mysql.createConnection(database);
 
-    const createDatabaseTables = `CREATE DATABASE IF NOT EXISTS COMP2800;
+    let createDatabaseTables = `CREATE DATABASE IF NOT EXISTS COMP2800;
         use COMP2800;
         CREATE TABLE IF NOT EXISTS BBY_22_users(
         id int NOT NULL AUTO_INCREMENT, 
