@@ -3,17 +3,62 @@
 // Requires
 const express = require("express");
 const session = require("express-session");
+const res = require("express/lib/response");
 const app = express();
 const fs = require("fs");
+
 const {
     JSDOM
 } = require('jsdom');
+
+
+//clean later!!
+app.use(express.json());
+app.use(express.urlencoded({
+    extended: true
+}));
+const multer = require("multer");
+
+//mysql connection setup
+const is_heroku = process.env.IS_HEROKU || false;
+var database = {
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "COMP2800",
+    multipleStatements: true
+};
+
+if (is_heroku) {
+    database = {
+        host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
+        user: "biysuiwt6fbjxdfw",
+        password: "llwyk8vg4c7p5rtu",
+        database: "gi80n4hbnupblp0y",
+        multipleStatements: true
+    };
+}
+
+// const upload = multer({ storage: multer.memoryStorage() });
+const storage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, "./public/imgs/")
+    },
+    filename: function (req, file, callback) {
+        callback(null, "user-pic-" + file.originalname.split('/').pop().trim());
+    }
+});
+const upload = multer({
+    storage: storage
+});
 
 // Paths
 app.use('/js', express.static('./public/js'));
 app.use('/css', express.static('./public/css'));
 app.use('/imgs', express.static('./public/imgs'));
+app.use('/img', express.static('/public/imgs'));
 app.use('/html', express.static('./app'));
+// app.use("/img", express.static("./imgs"));
 
 // Session
 app.use(session({
@@ -59,36 +104,9 @@ app.get("/main", function (req, res) {
 
             //mysql connection setup
             const mysql = require("mysql2");
-            const is_heroku = process.env.IS_HEROKU || false;
-            // var db;
-
-            // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
-
-            var connectionHeroku = {
-                host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
-                user: "biysuiwt6fbjxdfw",
-                password: "llwyk8vg4c7p5rtu",
-                database: "gi80n4hbnupblp0y",
-                multipleStatements: true
-            };
-
-            // var connectionLocal = {
-            //     host: "localhost",
-            //     user: "root",
-            //     password: "",
-            //     database: "COMP2800",
-            //     multipleStatements: true
-            // };
-
-            const db = mysql.createConnection(connectionHeroku);
-
-            // if (is_heroku) {
-            //     db = mysql.createConnection(connectionHeroku);
-            // } else {
-            //     db = mysql.createConnection(connectionLocal);
-            // }
-            db.connect();
-            db.query(
+            const connection = mysql.createConnection(database);
+            connection.connect();
+            connection.query(
 
                 'SELECT * FROM BBY_22_users',
                 function (error, userResults, fields2) {
@@ -107,8 +125,7 @@ app.get("/main", function (req, res) {
                         strRowData += "<tr><td><input type=\"text\" id=\"userCity" + userIdNum + "\"" + " value=\"" + userResults[row].city + "\">" + "</td></tr>";
                         strRowData += "<tr><td><input type=\"text\" id=\"userEmail" + userIdNum + "\"" + " value=\"" + userResults[row].email + "\">" + "</td></tr>";
                         strRowData += "<tr><td><input type=\"text\" id=\"userPassword" + userIdNum + "\"" + " value=\"" + userResults[row].password + "\">" + "</td></tr>";
-                        strRowData += "<tr><td><input type=\"text\" id=\"userType" + userIdNum + "\"" + " value=\"" + userResults[row].type + "\">" + "</td></tr>";
-                        //doesnt work
+                        strRowData += "<tr><td><input type=\"text\" id=\"userType" + userIdNum + "\"" + " class=\"user-type-input\"" + " value=\"" + userResults[row].type + "\">" + "</td></tr>";
                         strRowData += "<tr><td>" + "<button id=\"editButton" + userIdNum + "\"" + "</td><tr>";
                         strRowData += "<tr><td>" + "<button id=\"deleteButton" + userIdNum + "\"" + "</td></tr>";
 
@@ -144,68 +161,9 @@ app.get("/main", function (req, res) {
 
             mainDOM.window.document.getElementById("customerName").innerHTML = "Welcome, " + req.session.firstName +
                 " " + req.session.lastName + "!";
-
-            //mysql connection setup
-            const mysql = require("mysql2");
-            const is_heroku = process.env.IS_HEROKU || false;
-            // var db;
-
-            // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
-
-            var connectionHeroku = {
-                host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
-                user: "biysuiwt6fbjxdfw",
-                password: "llwyk8vg4c7p5rtu",
-                database: "gi80n4hbnupblp0y",
-                multipleStatements: true
-            };
-
-            // var connectionLocal = {
-            //     host: "localhost",
-            //     user: "root",
-            //     password: "",
-            //     database: "COMP2800",
-            //     multipleStatements: true
-            // };
-
-            const db = mysql.createConnection(connectionHeroku);
-
-            // if (is_heroku) {
-            //     db = mysql.createConnection(connectionHeroku);
-            // } else {
-            //     db = mysql.createConnection(connectionLocal);
-            // }
-            db.connect();
-            let myResults = null;
-            db.connect();
-
-            db.execute(
-                "SELECT * FROM BBY_22_item_posts",
-                function (error, results, fields) {
-                    myResults = results;
-                    let posttemplate = mainDOM.window.document.getElementById("posttemplate");
-                    let posts = mainDOM.window.document.getElementById("posts");
-                    if (error) {} else if (results.length > 0) {
-                        // Creates a template for each post in the database and displays it on the page
-                        results.forEach(post => {
-                            let testpost = posttemplate.content.cloneNode(true);
-                            testpost.querySelector(".post").id = `post${post.ID}`;
-                            testpost.querySelector(".posttitle").innerHTML = post.title;
-                            testpost.querySelector(".poststatus").innerHTML = post.status;
-                            testpost.querySelector(".postlocation").innerHTML = post.city;
-                            testpost.querySelector(".poststatus").innerHTML = post.status;
-                            testpost.querySelector(".postdate").innerHTML = post.timestamp;
-                            testpost.querySelector(".savepost").id = `save${post.ID}`;
-                            testpost.querySelector(".messagepost").id = `message${post.ID}`;
-                            posts.appendChild(testpost);
-                        });
-                        db.end();
-                    }
-
-
-                    res.send(mainDOM.serialize());
-                }
-            );
+            res.set("Server", "MACT Engine");
+            res.set("X-Powered-By", "MACT");
+            res.send(mainDOM.serialize());
         }
     } else {
         // User is not logged in, so direct to login page
@@ -213,78 +171,17 @@ app.get("/main", function (req, res) {
     }
 });
 
+
+
 app.get("/mylistings", function (req, res) {
 
     // Check if user is logged in
     if (req.session.loggedIn) {
-        // Display posts the user's listings
         let mylistings = fs.readFileSync("./app/mylistings.html", "utf8");
         let mylistingsDOM = new JSDOM(mylistings);
-
-        //mysql connection setup
-        const mysql = require("mysql2");
-        const is_heroku = process.env.IS_HEROKU || false;
-        // var db;
-
-        // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
-
-        var connectionHeroku = {
-            host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
-            user: "biysuiwt6fbjxdfw",
-            password: "llwyk8vg4c7p5rtu",
-            database: "gi80n4hbnupblp0y",
-            multipleStatements: true
-        };
-
-        // var connectionLocal = {
-        //     host: "localhost",
-        //     user: "root",
-        //     password: "",
-        //     database: "COMP2800",
-        //     multipleStatements: true
-        // };
-
-        const db = mysql.createConnection(connectionHeroku);
-
-        // if (is_heroku) {
-        //     db = mysql.createConnection(connectionHeroku);
-        // } else {
-        //     db = mysql.createConnection(connectionLocal);
-        // }
-
-
-        let myResults = null;
-        db.connect();
-
-        db.execute(
-            "SELECT * FROM BBY_22_item_posts WHERE user_id = ?",
-            [req.session.userID],
-            function (error, results, fields) {
-                myResults = results;
-                let posttemplate = mylistingsDOM.window.document.getElementById("posttemplate");
-                let posts = mylistingsDOM.window.document.getElementById("posts");
-                if (error) {} else if (results.length > 0) {
-                    results.forEach(post => {
-                        let testpost = posttemplate.content.cloneNode(true);
-                        testpost.querySelector(".post").id = `post${post.id}`;
-                        testpost.querySelector(".posttitle").innerHTML = post.title;
-                        testpost.querySelector(".poststatus").innerHTML = post.status;
-                        testpost.querySelector(".postlocation").innerHTML = post.city;
-                        testpost.querySelector(".poststatus").innerHTML = post.status;
-                        testpost.querySelector(".postdate").innerHTML = post.timestamp;
-                        testpost.querySelector(".messagepost").id = `message${post.id}`;
-                        testpost.querySelector(".editpost").id = `edit${post.id}`;
-                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${post.id})`)
-                        posts.appendChild(testpost);
-                    });
-                    db.end();
-                }
-
-                res.set("Server", "MACT Engine");
-                res.set("X-Powered-By", "MACT");
-                res.send(mylistingsDOM.serialize());
-            }
-        );
+        res.set("Server", "MACT Engine");
+        res.set("X-Powered-By", "MACT");
+        res.send(mylistingsDOM.serialize());
     } else {
         // User is not logged in, so direct to login page
         res.redirect("/");
@@ -299,35 +196,7 @@ app.get("/editpost", function (req, res) {
 
         //mysql connection setup
         const mysql = require("mysql2");
-        const is_heroku = process.env.IS_HEROKU || false;
-        // var db;
-
-        // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
-
-        var connectionHeroku = {
-            host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
-            user: "biysuiwt6fbjxdfw",
-            password: "llwyk8vg4c7p5rtu",
-            database: "gi80n4hbnupblp0y",
-            multipleStatements: true
-        };
-
-        // var connectionLocal = {
-        //     host: "localhost",
-        //     user: "root",
-        //     password: "",
-        //     database: "COMP2800",
-        //     multipleStatements: true
-        // };
-
-        const db = mysql.createConnection(connectionHeroku);
-
-        // if (is_heroku) {
-        //     db = mysql.createConnection(connectionHeroku);
-        // } else {
-        //     db = mysql.createConnection(connectionLocal);
-        // }
-
+        const connection = mysql.createConnection(database);
         let myResults = null;
         db.connect();
         db.query(
@@ -357,6 +226,58 @@ app.get("/editpost", function (req, res) {
     }
 });
 
+app.post("/loadposts", function (req, res) {
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection(database);
+    let myResults = null;
+    let posts = [];
+    connection.connect();
+    connection.query(
+        "SELECT * FROM BBY_22_item_posts where status != 'collected'",
+        function (error, results, fields) {
+            myResults = results;
+            if (error) {} else if (results.length > 0) {
+                results.forEach(post => {
+                    posts.push({
+                        "postid": post.id,
+                        "title": post.title,
+                        "status": post.status,
+                        "city": post.city,
+                        "timestamp": post.timestamp
+                    });
+                });
+            }
+            res.send(posts);
+        }
+    );
+})
+
+app.post("/loadmyposts", function (req, res) {
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection(database);
+    let myResults = null;
+    let posts = [];
+    connection.connect();
+    connection.query(
+        "SELECT * FROM BBY_22_item_posts where user_id = ?",
+        [req.session.userID],
+        function (error, results, fields) {
+            myResults = results;
+            if (error) {} else if (results.length > 0) {
+                results.forEach(post => {
+                    posts.push({
+                        "postid": post.id,
+                        "title": post.title,
+                        "status": post.status,
+                        "city": post.city,
+                        "timestamp": post.timestamp
+                    });
+                });
+            }
+            res.send(posts);
+        }
+    );
+})
 
 app.use(express.json());
 app.use(express.urlencoded({
@@ -387,6 +308,7 @@ app.post("/login", function (req, res) {
                 req.session.city = recordReturned.city;
                 req.session.type = recordReturned.type;
                 req.session.userID = recordReturned.id;
+                req.session.profile_pic = recordReturned.profile_pic;
 
                 req.session.save(function (err) {
                     // session saved
@@ -431,40 +353,12 @@ app.post('/signup', function (req, res) {
 
                 //mysql connection setup
                 const mysql = require("mysql2");
-                const is_heroku = process.env.IS_HEROKU || false;
-                // var db;
-
-                // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
-
-                var connectionHeroku = {
-                    host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
-                    user: "biysuiwt6fbjxdfw",
-                    password: "llwyk8vg4c7p5rtu",
-                    database: "gi80n4hbnupblp0y",
-                    multipleStatements: true
-                };
-
-                // var connectionLocal = {
-                //     host: "localhost",
-                //     user: "root",
-                //     password: "",
-                //     database: "COMP2800",
-                //     multipleStatements: true
-                // };
-
-                const db = mysql.createConnection(connectionHeroku);
-
-                // if (is_heroku) {
-                //     db = mysql.createConnection(connectionHeroku);
-                // } else {
-                //     db = mysql.createConnection(connectionLocal);
-                // }
-
-                db.connect();
+                let connection = mysql.createConnection(database);
+                connection.connect();
 
                 // Insert the new user into the database
-                db.query('INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type) values (?, ?, ?, ?, ?, ?)',
-                    [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, "USER"],
+                connection.query('INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type, profile_pic) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                    [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, "USER", "user-pic-none.jpg"],
 
                     function (error, results, fields) {
                         if (error) {
@@ -484,6 +378,7 @@ app.post('/signup', function (req, res) {
                             req.session.city = req.body.city;
                             req.session.type = req.body.type;
                             req.session.userID = results.insertId;
+                            req.session.profile_pic = "user-pic-none.jpg";
 
                             req.session.save(function (err) {
                                 // Session saved
@@ -513,36 +408,8 @@ app.post('/newPost', function (req, res) {
 
     //mysql connection setup
     const mysql = require("mysql2");
-    const is_heroku = process.env.IS_HEROKU || false;
-    // var db;
-
-    // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
-
-    var connectionHeroku = {
-        host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
-        user: "biysuiwt6fbjxdfw",
-        password: "llwyk8vg4c7p5rtu",
-        database: "gi80n4hbnupblp0y",
-        multipleStatements: true
-    };
-
-    // var connectionLocal = {
-    //     host: "localhost",
-    //     user: "root",
-    //     password: "",
-    //     database: "COMP2800",
-    //     multipleStatements: true
-    // };
-
-    const db = mysql.createConnection(connectionHeroku);
-
-    // if (is_heroku) {
-    //     db = mysql.createConnection(connectionHeroku);
-    // } else {
-    //     db = mysql.createConnection(connectionLocal);
-    // }
-
-    db.connect();
+    let connection = mysql.createConnection(database);
+    connection.connect();
 
     // Get the current date and time 
     var today = new Date();
@@ -571,6 +438,45 @@ app.post('/newPost', function (req, res) {
         });
 });
 
+var picRef = ''
+app.post('/upload-images', upload.array("files"), function (req, res) {
+    for (let i = 0; i < req.files.length; i++) {
+        req.files[i].filename = req.files[i].originalname;
+        // console.log(req.files[i].filename);
+    }
+
+    let newPic = req.files[0].filename;
+    console.log("picture in first function: " + newPic);
+
+    let profile = fs.readFileSync("./app/updateProfile.html", "utf8");
+    let profileDOM = new JSDOM(profile);
+
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection(database);
+    connection.connect();
+    connection.query(
+
+        "UPDATE BBY_22_users SET profile_pic = ? WHERE email = ? ",
+        [newPic, req.session.email],
+        function (error, results) {
+            if (error) {
+                res.send({
+                    status: 'Fail',
+                    msg: 'Error. Profile picture could not be updated.'
+                });
+            }
+
+            req.session.profile_pic = newPic;
+            console.log("req.session in upload method: " + req.session.profile_pic);
+
+            res.set("Server", "MACT Engine");
+            res.set("X-Powered-By", "MACT");
+            res.send(profileDOM.serialize());
+        }
+
+    );
+
+});
 
 // Load sign up page
 app.get("/signup", function (req, res) {
@@ -602,9 +508,100 @@ app.get('/profile', function (req, res) {
     profileDOM.window.document.getElementById("userEmail").defaultValue = req.session.email;
     profileDOM.window.document.getElementById("userPassword").defaultValue = req.session.password;
 
+    console.log("req.session.profile_pic: " + req.session.profile_pic);
+    let profileP = "<img src=\"imgs/user-pic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+    profileDOM.window.document.getElementById("postimage").innerHTML = profileP
+
     res.set("Server", "MACT Engine");
     res.set("X-Powered-By", "MACT");
     res.send(profileDOM.serialize());
+});
+
+//saves the postid so that the post can be viewed on the viewPost page
+app.post('/toviewpost', (req, res) => {
+
+    req.session.postID = req.body.postID;
+    res.send({
+        status: 'Success',
+        msg: 'recorded post id'
+    });
+});
+
+//populates the view post page with the correct information
+app.get("/viewPost", function (req, res) {
+    if (req.session.loggedIn) {
+        let viewPost = fs.readFileSync("./app/viewPost.html", "utf8");
+        let viewPostDOM = new JSDOM(viewPost);
+        const mysql = require("mysql2");
+        const connection = mysql.createConnection(database);
+        let myResults = null;
+        connection.connect();
+        connection.query(
+            "SELECT * FROM BBY_22_item_posts WHERE id = ?",
+            [req.session.postID],
+            function (error, results, fields) {
+                myResults = results;
+                if (error) {} else if (results.length > 0) {
+                    results.forEach(post => {
+                        viewPostDOM.window.document.querySelector("#post-title").innerHTML = `${post.title}`;
+                        viewPostDOM.window.document.querySelector("#post-status").innerHTML = `${post.status}`;
+                        viewPostDOM.window.document.querySelector("#post-description").innerHTML = `${post.description}`;
+                        viewPostDOM.window.document.querySelector("#post-location").innerHTML = `${post.city}`;
+                        viewPostDOM.window.document.querySelector("#postdate").innerHTML = `${post.timestamp}`;
+
+                        req.session.postOwnerID = post.user_id;
+
+                        connection.query(
+                            "SELECT * FROM BBY_22_users WHERE id = ?",
+                            [req.session.postOwnerID],
+                            function (error, results, fields) {
+                                myResults = results;
+                                if (error) {} else if (results.length > 0) {
+                                    results.forEach(user => {
+                                        viewPostDOM.window.document.querySelector("#post-owner").innerHTML = `${user.firstName} ${user.lastName}`;
+                                    });
+                                } else {}
+
+                            }
+                        );
+
+                        res.set("Server", "MACT Engine");
+                        res.set("X-Powered-By", "MACT");
+                        res.send(viewPostDOM.serialize());
+
+                    });
+                } else {}
+            }
+        );
+    } else {
+        // User is not logged in, so direct to login page
+        res.redirect("/");
+    }
+});
+
+//to get post owner name from user table and displays it when view post details
+app.post('/getPostOwner', (req, res) => {
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection(database);
+    let userName = [];
+    connection.connect();
+    connection.query(
+        "SELECT * FROM BBY_22_users WHERE id = ?",
+        [req.session.postOwnerID],
+        function (error, results, fields) {
+
+            if (error) {} else if (results.length > 0) {
+                results.forEach(user => {
+                    userName = {
+                        "name": `${user.firstName} ${user.lastName}`
+                    }
+                });
+
+
+            } else {}
+            res.send(userName);
+        }
+    );
 });
 
 //saves the postid so that the post can be edited on the editpost page
@@ -612,37 +609,9 @@ app.post('/toeditpost', (req, res) => {
 
     //mysql connection setup
     const mysql = require("mysql2");
-    const is_heroku = process.env.IS_HEROKU || false;
-    // var db;
-
-    // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
-
-    var connectionHeroku = {
-        host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
-        user: "biysuiwt6fbjxdfw",
-        password: "llwyk8vg4c7p5rtu",
-        database: "gi80n4hbnupblp0y",
-        multipleStatements: true
-    };
-
-    // var connectionLocal = {
-    //     host: "localhost",
-    //     user: "root",
-    //     password: "",
-    //     database: "COMP2800",
-    //     multipleStatements: true
-    // };
-
-    const db = mysql.createConnection(connectionHeroku);
-
-    // if (is_heroku) {
-    //     db = mysql.createConnection(connectionHeroku);
-    // } else {
-    //     db = mysql.createConnection(connectionLocal);
-    // }
-
-    db.connect();
-    db.query(
+    const connection = mysql.createConnection(database);
+    connection.connect();
+    connection.query(
         "SELECT * FROM BBY_22_item_posts WHERE id = ?",
         [req.body.postID],
         function (error, results) {
@@ -670,37 +639,9 @@ app.post('/toeditpost', (req, res) => {
 app.post('/savepostinfo', (req, res) => {
     //mysql connection setup
     const mysql = require("mysql2");
-    const is_heroku = process.env.IS_HEROKU || false;
-    // var db;
-
-    // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
-
-    var connectionHeroku = {
-        host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
-        user: "biysuiwt6fbjxdfw",
-        password: "llwyk8vg4c7p5rtu",
-        database: "gi80n4hbnupblp0y",
-        multipleStatements: true
-    };
-
-    // var connectionLocal = {
-    //     host: "localhost",
-    //     user: "root",
-    //     password: "",
-    //     database: "COMP2800",
-    //     multipleStatements: true
-    // };
-
-    const db = mysql.createConnection(connectionHeroku);
-
-    // if (is_heroku) {
-    //     db = mysql.createConnection(connectionHeroku);
-    // } else {
-    //     db = mysql.createConnection(connectionLocal);
-    // }
-
-    db.connect();
-    db.query(
+    const connection = mysql.createConnection(database);
+    connection.connect();
+    connection.query(
         "UPDATE BBY_22_item_posts SET title = ?, city = ?, description = ? WHERE id = ? AND user_id = ?",
         [req.body.title, req.body.city, req.body.description, req.body.postID, req.session.userID],
         function (error, results) {
@@ -724,37 +665,9 @@ app.post('/deletepost', (req, res) => {
 
     //mysql connection setup
     const mysql = require("mysql2");
-    const is_heroku = process.env.IS_HEROKU || false;
-    // var db;
-
-    // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
-
-    var connectionHeroku = {
-        host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
-        user: "biysuiwt6fbjxdfw",
-        password: "llwyk8vg4c7p5rtu",
-        database: "gi80n4hbnupblp0y",
-        multipleStatements: true
-    };
-
-    // var connectionLocal = {
-    //     host: "localhost",
-    //     user: "root",
-    //     password: "",
-    //     database: "COMP2800",
-    //     multipleStatements: true
-    // };
-
-    const db = mysql.createConnection(connectionHeroku);
-
-    // if (is_heroku) {
-    //     db = mysql.createConnection(connectionHeroku);
-    // } else {
-    //     db = mysql.createConnection(connectionLocal);
-    // }
-
-    db.connect();
-    db.query(
+    const connection = mysql.createConnection(database);
+    connection.connect();
+    connection.query(
         "DELETE FROM BBY_22_item_posts WHERE id = ? AND user_id = ?",
         [req.body.postID, req.session.userID],
         function (error, results) {
@@ -778,37 +691,9 @@ app.post('/update-user-data', (req, res) => {
 
     //mysql connection setup
     const mysql = require("mysql2");
-    const is_heroku = process.env.IS_HEROKU || false;
-    // var db;
-
-    // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
-
-    var connectionHeroku = {
-        host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
-        user: "biysuiwt6fbjxdfw",
-        password: "llwyk8vg4c7p5rtu",
-        database: "gi80n4hbnupblp0y",
-        multipleStatements: true
-    };
-
-    // var connectionLocal = {
-    //     host: "localhost",
-    //     user: "root",
-    //     password: "",
-    //     database: "COMP2800",
-    //     multipleStatements: true
-    // };
-
-    const db = mysql.createConnection(connectionHeroku);
-
-    // if (is_heroku) {
-    //     db = mysql.createConnection(connectionHeroku);
-    // } else {
-    //     db = mysql.createConnection(connectionLocal);
-    // }
-
-    db.connect();
-    db.query(
+    const connection = mysql.createConnection(database);
+    connection.connect();
+    connection.query(
         "UPDATE BBY_22_users SET firstName = ?, lastName = ?, city = ?, email = ?, password = ?, type = ? WHERE id = ?",
         [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.body.type, req.body.userID],
         function (error, results) {
@@ -833,37 +718,9 @@ app.post('/update-data', (req, res) => {
 
     //mysql connection setup
     const mysql = require("mysql2");
-    const is_heroku = process.env.IS_HEROKU || false;
-    // var db;
-
-    // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
-
-    var connectionHeroku = {
-        host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
-        user: "biysuiwt6fbjxdfw",
-        password: "llwyk8vg4c7p5rtu",
-        database: "gi80n4hbnupblp0y",
-        multipleStatements: true
-    };
-
-    // var connectionLocal = {
-    //     host: "localhost",
-    //     user: "root",
-    //     password: "",
-    //     database: "COMP2800",
-    //     multipleStatements: true
-    // };
-
-    const db = mysql.createConnection(connectionHeroku);
-
-    // if (is_heroku) {
-    //     db = mysql.createConnection(connectionHeroku);
-    // } else {
-    //     db = mysql.createConnection(connectionLocal);
-    // }
-
-    db.connect();
-    db.query(
+    const connection = mysql.createConnection(database);
+    connection.connect();
+    connection.query(
         "UPDATE BBY_22_users SET firstName = ?, lastName = ?, city = ?, email = ?, password = ? WHERE email = ? AND password = ?",
         [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.session.email, req.session.password],
         function (error, results) {
@@ -889,37 +746,9 @@ app.post('/delete-user', (req, res) => {
 
     //mysql connection setup
     const mysql = require("mysql2");
-    const is_heroku = process.env.IS_HEROKU || false;
-    // var db;
-
-    // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
-
-    var connectionHeroku = {
-        host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
-        user: "biysuiwt6fbjxdfw",
-        password: "llwyk8vg4c7p5rtu",
-        database: "gi80n4hbnupblp0y",
-        multipleStatements: true
-    };
-
-    // var connectionLocal = {
-    //     host: "localhost",
-    //     user: "root",
-    //     password: "",
-    //     database: "COMP2800",
-    //     multipleStatements: true
-    // };
-
-    const db = mysql.createConnection(connectionHeroku);
-
-    // if (is_heroku) {
-    //     db = mysql.createConnection(connectionHeroku);
-    // } else {
-    //     db = mysql.createConnection(connectionLocal);
-    // }
-
-    db.connect();
-    db.query(
+    const connection = mysql.createConnection(database);
+    connection.connect();
+    connection.query(
         "DELETE FROM BBY_22_users WHERE id = ?",
         [req.body.userID],
         function (error, results) {
@@ -951,38 +780,10 @@ app.post('/add-new-user', (req, res) => {
             if (recordReturned == null) {
                 //mysql connection setup
                 const mysql = require("mysql2");
-                const is_heroku = process.env.IS_HEROKU || false;
-                // var db;
-
-                // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
-
-                var connectionHeroku = {
-                    host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
-                    user: "biysuiwt6fbjxdfw",
-                    password: "llwyk8vg4c7p5rtu",
-                    database: "gi80n4hbnupblp0y",
-                    multipleStatements: true
-                };
-
-                // var connectionLocal = {
-                //     host: "localhost",
-                //     user: "root",
-                //     password: "",
-                //     database: "COMP2800",
-                //     multipleStatements: true
-                // };
-
-                const db = mysql.createConnection(connectionHeroku);
-
-                // if (is_heroku) {
-                //     db = mysql.createConnection(connectionHeroku);
-                // } else {
-                //     db = mysql.createConnection(connectionLocal);
-                // }
-
-                db.connect();
-                db.query('INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type) VALUES (?, ?, ?, ?, ?, ?)',
-                    [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.body.type],
+                let connection = mysql.createConnection(database);
+                connection.connect();
+                connection.query('INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type, profile_pic) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                    [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.body.type, "user-pic-none.jpg"],
 
                     function (error, results) {
                         if (error) {
@@ -1011,43 +812,86 @@ app.post('/add-new-user', (req, res) => {
 });
 
 
+// Updates a post's status in the database
+app.post('/update-post-status', (req, res) => {
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection(database);
+    connection.connect();
+    connection.query(
+        "UPDATE BBY_22_item_posts SET status = ? WHERE id = ?",
+        [req.body.newStatus, req.body.postID],
+        function (error, results) {
+            if (error) {
+                res.send({
+                    status: 'Fail',
+                    msg: 'Error. Post status could not be updated.'
+                });
+            }
+            res.send({
+                status: 'Success',
+                msg: 'Updated post status.'
+            });
+        }
+    );
+});
+
+
+// Saves the current session user as the user who reserved the post that was clicked
+app.post('/save-user-pending-status', (req, res) => {
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection(database);
+    connection.connect();
+    connection.query(
+        "UPDATE BBY_22_item_posts SET user_reserved = ? WHERE id = ?",
+        [req.session.userID, req.body.postID],
+        function (error, results) {
+            if (error) {
+                res.send({
+                    status: 'Fail',
+                    msg: 'Error. Post status could not be updated.'
+                });
+            }
+        }
+    );
+
+    res.send({
+        status: 'Success',
+        msg: 'Saved pending user in post.'
+    });
+});
+
+
+// Returns the current session user ID and the post ID that was clicked. These get compared to verify if the user
+// pressing the status button has the ability to set the item status to reserved or collected.
+app.post('/get-post-and-session-ids', (req, res) => {
+    let currentSessionUserID = req.session.userID;
+
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection(database);
+    connection.connect();
+    connection.query(
+        "SELECT user_id FROM BBY_22_item_posts WHERE id = ?",
+        [req.body.postID],
+        function (error, result) {
+            res.send({
+                status: 'Success',
+                postUserID: result[0],
+                currentUserID: currentSessionUserID
+            });
+        }
+    );
+});
+
+
 
 // Validates user's email and password
 function authenticateUser(email, pwd, callback) {
 
     //mysql connection setup
     const mysql = require("mysql2");
-    const is_heroku = process.env.IS_HEROKU || false;
-    // var db;
-
-    // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
-
-    var connectionHeroku = {
-        host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
-        user: "biysuiwt6fbjxdfw",
-        password: "llwyk8vg4c7p5rtu",
-        database: "gi80n4hbnupblp0y",
-        multipleStatements: true
-    };
-
-    // var connectionLocal = {
-    //     host: "localhost",
-    //     user: "root",
-    //     password: "",
-    //     database: "COMP2800",
-    //     multipleStatements: true
-    // };
-
-    const db = mysql.createConnection(connectionHeroku);
-
-    // if (is_heroku) {
-    //     db = mysql.createConnection(connectionHeroku);
-    // } else {
-    //     db = mysql.createConnection(connectionLocal);
-    // }
-
-    db.connect();
-    db.query(
+    const connection = mysql.createConnection(database);
+    connection.connect();
+    connection.query(
         "SELECT * FROM BBY_22_users WHERE email = ? AND password = ?", [email, pwd],
         function (error, results, fields) {
 
@@ -1070,43 +914,14 @@ function authenticateUser(email, pwd, callback) {
 
 }
 
-
 // Checks whether or not a new user's email already exists in the database
 function checkEmailAlreadyExists(email, callback) {
 
     //mysql connection setup
     const mysql = require("mysql2");
-    const is_heroku = process.env.IS_HEROKU || false;
-    // var db;
-
-    // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
-
-    var connectionHeroku = {
-        host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
-        user: "biysuiwt6fbjxdfw",
-        password: "llwyk8vg4c7p5rtu",
-        database: "gi80n4hbnupblp0y",
-        multipleStatements: true
-    };
-
-    // var connectionLocal = {
-    //     host: "localhost",
-    //     user: "root",
-    //     password: "",
-    //     database: "COMP2800",
-    //     multipleStatements: true
-    // };
-
-    const db = mysql.createConnection(connectionHeroku);
-
-    // if (is_heroku) {
-    //     db = mysql.createConnection(connectionHeroku);
-    // } else {
-    //     db = mysql.createConnection(connectionLocal);
-    // }
-
-    db.connect();
-    db.query(
+    const connection = mysql.createConnection(database);
+    connection.connect();
+    connection.query(
         "SELECT * FROM BBY_22_users WHERE email = ?", [email],
         function (error, results, fields) {
             if (error) {
@@ -1133,44 +948,10 @@ async function initializeDatabase() {
 
     //mysql connection setup
     const mysql = require("mysql2/promise");
-    const is_heroku = process.env.IS_HEROKU || false;
-    // var db;
+    const connection = await mysql.createConnection(database);
 
-    // mysql://biysuiwt6fbjxdfw:llwyk8vg4c7p5rtu@nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/gi80n4hbnupblp0y
-
-    var connectionHeroku = {
-        host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
-        user: "biysuiwt6fbjxdfw",
-        password: "llwyk8vg4c7p5rtu",
-        database: "gi80n4hbnupblp0y",
-        multipleStatements: true
-    };
-
-    // var connectionLocal = {
-    //     host: "localhost",
-    //     user: "root",
-    //     password: "",
-    //     database: "COMP2800",
-    //     multipleStatements: true
-    // };
-
-    const db = await mysql.createConnection({
-        host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
-        user: "biysuiwt6fbjxdfw",
-        password: "llwyk8vg4c7p5rtu",
-        database: "gi80n4hbnupblp0y",
-        multipleStatements: true
-    });
-
-    // if (is_heroku) {
-    //     db = mysql.createConnection(connectionHeroku);
-    // } else {
-    //     db = mysql.createConnection(connectionLocal);
-    // }
-
-    // Creates a table for user profiles and item posts
-    const createDatabaseTables = `CREATE DATABASE IF NOT EXISTS gi80n4hbnupblp0y;
-        use gi80n4hbnupblp0y;
+    const createDatabaseTables = `CREATE DATABASE IF NOT EXISTS COMP2800;
+        use COMP2800;
         CREATE TABLE IF NOT EXISTS BBY_22_users(
         id int NOT NULL AUTO_INCREMENT, 
         firstName VARCHAR(20), 
@@ -1179,6 +960,7 @@ async function initializeDatabase() {
         email VARCHAR(30), 
         password VARCHAR(30), 
         type VARCHAR(10),
+        profile_pic TEXT (999) NOT NULL,
         PRIMARY KEY (id));
         
         CREATE TABLE IF NOT EXISTS BBY_22_item_posts(
@@ -1188,10 +970,40 @@ async function initializeDatabase() {
             description VARCHAR(1000), 
             city VARCHAR(30), 
             status VARCHAR(30), 
+            user_reserved int, 
             timestamp VARCHAR(50),
             PRIMARY KEY (id),
             FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
-    await db.query(createDatabaseTables);
+
+    if (is_heroku) {
+        createDatabaseTables = `CREATE DATABASE IF NOT EXISTS gi80n4hbnupblp0y;
+        use gi80n4hbnupblp0y;
+        CREATE TABLE IF NOT EXISTS BBY_22_users(
+        id int NOT NULL AUTO_INCREMENT, 
+        firstName VARCHAR(20), 
+        lastName VARCHAR(20), 
+        city VARCHAR(30), 
+        email VARCHAR(30), 
+        password VARCHAR(30), 
+        type VARCHAR(10),
+        profile_pic TEXT (999) NOT NULL,
+        PRIMARY KEY (id));
+        
+        CREATE TABLE IF NOT EXISTS BBY_22_item_posts(
+            id int NOT NULL AUTO_INCREMENT, 
+            user_id int NOT NULL,
+            title VARCHAR(50), 
+            description VARCHAR(1000), 
+            city VARCHAR(30), 
+            status VARCHAR(30), 
+            user_reserved int, 
+            timestamp VARCHAR(50),
+            PRIMARY KEY (id),
+            FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
+    }
+
+    // Creates a table for user profiles and item posts
+    await connection.query(createDatabaseTables);
 
     // Await allows for us to wait for this line to execute synchronously
     const [rows, fields] = await db.query("SELECT * FROM BBY_22_users");
@@ -1208,5 +1020,5 @@ async function initializeDatabase() {
 }
 
 // Server runs on port 8000
-let port = process.env.PORT || 3306;
+let port = process.env.PORT || 8000;
 app.listen(port, initializeDatabase);

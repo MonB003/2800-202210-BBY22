@@ -34,35 +34,48 @@
     <div id="pagename">My Listings</div>
     <div id="topnav">
         <button type="button" class="navbutton" id="newPostPageBtn">New Post</button>
-        <button type="button" class="navbutton" id="filter">Filter</button>
+        <button type="button" class="navbutton" id="togglefilter">Filter</button>
     </div>
-    <div id="posts">
-        <template id="posttemplate">
-            <div class="post">
-                <div class="postimage">
-                </div>
-                <div class="posttitle">Post Title</div>
-                <div class="poststatus">Status</div>
-                <div class="postlocation">
-                    Post Location
-                </div>
-                <div class="postoptions">
-                    <div class="messagepost">
-                        M
-                    </div>
-                    <div class="editpost">
-                        Edit
-                    </div>
-                </div>
-                <div class="postdate">Post date time</div>
+    
+    <div id="filtermenu" style="display: none;">
+        <div id="filtersearchcontainer">
+            <div id="filtersearch">
+                <input type="text" id="search" onkeyup="displayposts()" placeholder="Search" title="Filter Search">
+                <select name="filter" id="filter">
+                    <option value="title">Title</option>
+                    <option value="city">City</option>
+                </select>
             </div>
-        </template>
+        </div>
+        <button type="button" class="filtermenubtn" id="filterstatus">All</button>
+        <button type="button" class="filtermenubtn" id="sortbutton">Sort</button>
+    </div>
+    <template id="posttemplate">
+        <div class="post">
+            <div class="postimage">
+            </div>
+            <div class="posttitle">Post Title</div>
+            <div class="poststatus">Status</div>
+            <div class="postlocation">
+                Post Location
+            </div>
+            <div class="postoptions">
+                <div class="messagepost">
+                    M
+                </div>
+                <div class="editpost">
+                    Edit
+                </div>
+            </div>
+            <div class="postdate">Post date time</div>
+        </div>
+    </template>
+    <div id="posts">
     </div>
 
 
 
     <!-- JavaScript -->
-    <script src="js/clientMain.js"></script>
     <script src="js/clientMyListings.js"></script>
 
 </body>

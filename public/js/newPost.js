@@ -26,7 +26,7 @@ ready(function () {
         xhr.onload = function () {
             if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
                 callback(this.responseText);
-            } 
+            }
         }
         xhr.open("POST", url);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -45,8 +45,7 @@ ready(function () {
         ajaxPOST("/newPost", function (data) {
             if (data) {
                 let dataParsed = JSON.parse(data);
-                if (dataParsed.status == "Fail") {
-                } else {
+                if (dataParsed.status == "Fail") {} else {
                     window.location.replace("/main");
                 }
             }
