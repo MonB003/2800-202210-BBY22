@@ -198,8 +198,8 @@ app.get("/editpost", function (req, res) {
         const mysql = require("mysql2");
         const connection = mysql.createConnection(database);
         let myResults = null;
-        db.connect();
-        db.query(
+        connection.connect();
+        connection.query(
             "SELECT * FROM BBY_22_item_posts WHERE id = ? AND user_id = ?",
             [req.session.editpostID, req.session.userID],
             function (error, results, fields) {
@@ -212,7 +212,7 @@ app.get("/editpost", function (req, res) {
                         editpostDOM.window.document.querySelector("#savepost").setAttribute("onclick", `save_post(${post.id})`);
                         editpostDOM.window.document.querySelector("#deletepost").setAttribute("onclick", `delete_post(${post.id})`);
                     });
-                    db.end();
+                    connection.end();
                 } else {}
 
                 res.set("Server", "MACT Engine");
@@ -419,7 +419,7 @@ app.post('/newPost', function (req, res) {
 
     // This is where the user input is passed into the database. 
     // User_ID is saved from the current user of the session. The details of the post are sent from the client side.
-    db.query('INSERT INTO BBY_22_item_posts (user_id, title, city, description, status, timestamp) VALUES (?, ?, ?, ?, ?, ?)',
+    connection.query('INSERT INTO BBY_22_item_posts (user_id, title, city, description, status, timestamp) VALUES (?, ?, ?, ?, ?, ?)',
         [req.session.userID, req.body.title, req.body.city, req.body.description, "available", dateAndTime],
 
         function (error, results, fields) {
