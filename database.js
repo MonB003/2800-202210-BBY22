@@ -119,6 +119,7 @@ app.get("/main", function (req, res) {
                         // Add each row of data and append each attribute to strRowData
                         let strRowData = "<tr><td><input type=\"text\" id=\"userFirstName" + userIdNum + "\"" + " value=\"" + userResults[row].firstName + "\">" + "</td></tr>";
                         strRowData += "<tr><td><input type=\"text\" id=\"userLastName" + userIdNum + "\"" + " value=\"" + userResults[row].lastName + "\">" + "</td></tr>";
+                        strRowData += "<tr><td><input type=\"text\" id=\"userName" + userIdNum + "\"" + " value=\"" + userResults[row].userName + "\">" + "</td></tr>";
                         strRowData += "<tr><td><input type=\"text\" id=\"userCity" + userIdNum + "\"" + " value=\"" + userResults[row].city + "\">" + "</td></tr>";
                         strRowData += "<tr><td><input type=\"text\" id=\"userEmail" + userIdNum + "\"" + " value=\"" + userResults[row].email + "\">" + "</td></tr>";
                         strRowData += "<tr><td><input type=\"text\" id=\"userPassword" + userIdNum + "\"" + " value=\"" + userResults[row].password + "\">" + "</td></tr>";
@@ -293,6 +294,7 @@ app.post("/login", function (req, res) {
                 req.session.password = recordReturned.password;
                 req.session.firstName = recordReturned.firstName;
                 req.session.lastName = recordReturned.lastName;
+                req.session.userName = recordReturned.userName;
                 req.session.city = recordReturned.city;
                 req.session.type = recordReturned.type;
                 req.session.userID = recordReturned.id;
@@ -340,8 +342,8 @@ app.post('/signup', function (req, res) {
             if (recordReturned == null) {
 
                 // Insert the new user into the database
-                connection.query('INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type, profile_pic) VALUES (?, ?, ?, ?, ?, ?, ?)',
-                    [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, "USER", "user-pic-none.jpg"],
+                connection.query('INSERT INTO BBY_22_users (firstName, lastName, userName, city, email, password, type, profile_pic) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+                    [req.body.firstName, req.body.lastName, req.body.userName, req.body.city, req.body.email, req.body.password, "USER", "user-pic-none.jpg"],
 
                     function (error, results, fields) {
                         if (error) {
@@ -358,6 +360,7 @@ app.post('/signup', function (req, res) {
                             req.session.password = req.body.password;
                             req.session.firstName = req.body.firstName;
                             req.session.lastName = req.body.lastName;
+                            req.session.userName = req.body.userName;
                             req.session.city = req.body.city;
                             req.session.type = req.body.type;
                             req.session.userID = results.insertId;
@@ -476,6 +479,7 @@ app.get('/profile', function (req, res) {
     // Load current user's data into the text fields on the page
     profileDOM.window.document.getElementById("userFirstName").defaultValue = req.session.firstName;
     profileDOM.window.document.getElementById("userLastName").defaultValue = req.session.lastName;
+    profileDOM.window.document.getElementById("userName").defaultValue = req.session.userName;
     profileDOM.window.document.getElementById("userCity").defaultValue = req.session.city;
     profileDOM.window.document.getElementById("userEmail").defaultValue = req.session.email;
     profileDOM.window.document.getElementById("userPassword").defaultValue = req.session.password;
@@ -646,8 +650,8 @@ app.post('/deletepost', (req, res) => {
 app.post('/update-user-data', (req, res) => {
 
     connection.query(
-        "UPDATE BBY_22_users SET firstName = ?, lastName = ?, city = ?, email = ?, password = ?, type = ? WHERE id = ?",
-        [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.body.type, req.body.userID],
+        "UPDATE BBY_22_users SET firstName = ?, lastName = ?, userName = ?, city = ?, email = ?, password = ?, type = ? WHERE id = ?",
+        [req.body.firstName, req.body.lastName, req.body.userName, req.body.city, req.body.email, req.body.password, req.body.type, req.body.userID],
         function (error, results) {
             if (error) {
                 res.send({
@@ -669,8 +673,8 @@ app.post('/update-user-data', (req, res) => {
 app.post('/update-data', (req, res) => {
 
     connection.query(
-        "UPDATE BBY_22_users SET firstName = ?, lastName = ?, city = ?, email = ?, password = ? WHERE email = ? AND password = ?",
-        [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.session.email, req.session.password],
+        "UPDATE BBY_22_users SET firstName = ?, lastName = ?, userName = ?, city = ?, email = ?, password = ? WHERE email = ? AND password = ?",
+        [req.body.firstName, req.body.lastName, req.body.userName, req.body.city, req.body.email, req.body.password, req.session.email, req.session.password],
         function (error, results) {
             if (error) {
                 res.send({
@@ -723,8 +727,8 @@ app.post('/add-new-user', (req, res) => {
             // If authenticate() returns null, user isn't currently in database, so they can be added
             if (recordReturned == null) {
                  
-                connection.query('INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type, profile_pic) VALUES (?, ?, ?, ?, ?, ?, ?)',
-                    [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.body.type, "user-pic-none.jpg"],
+                connection.query('INSERT INTO BBY_22_users (firstName, lastName, userName, city, email, password, type, profile_pic) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+                    [req.body.firstName, req.body.lastName, req.body.userName, req.body.city, req.body.email, req.body.password, req.body.type, "user-pic-none.jpg"],
 
                     function (error, results) {
                         if (error) {
@@ -737,7 +741,7 @@ app.post('/add-new-user', (req, res) => {
                         } else {
                             res.send({
                                 status: "Success",
-                                msg: req.body.firstName + " " + req.body.lastName + " was added."
+                                msg: req.body.userName + " was added."
                             });
                         }
                     });

@@ -41,6 +41,7 @@ ready(function () {
         e.preventDefault();
         let fName = document.getElementById("firstName");
         let lName = document.getElementById("lastName");
+        let uName = document.getElementById("userName");
         let city = document.getElementById("city");
         let email = document.getElementById("userEmail");
         let password = document.getElementById("userPassword");
@@ -66,7 +67,7 @@ ready(function () {
 
         } else {
             // Data being sent to the server
-            let dataSent = "firstName=" + fName.value + "&lastName=" + lName.value + "&city=" + city.value + "&email=" + email.value + "&password=" + password.value;
+            let dataSent = "firstName=" + fName.value + "&lastName=" + lName.value + "&userName=" + uName.value + "&city=" + city.value + "&email=" + email.value + "&password=" + password.value;
 
             ajaxPOST("/signup", function (data) {
 

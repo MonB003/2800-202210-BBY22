@@ -4,6 +4,7 @@
 async function updateAUsersData(userID) {
     let firstName = document.getElementById('userFirstName' + userID).value;
     let lastName = document.getElementById('userLastName' + userID).value;
+    let userName = document.getElementById('userName' + userID).value;
     let city = document.getElementById('userCity' + userID).value;
     let email = document.getElementById('userEmail' + userID).value;
     let password = document.getElementById('userPassword' + userID).value;
@@ -13,6 +14,7 @@ async function updateAUsersData(userID) {
     const dataSent = {
         firstName,
         lastName,
+        userName,
         city,
         email,
         password,
@@ -40,6 +42,7 @@ async function updateAUsersData(userID) {
 async function deleteAUser(userID) {
     let firstName = document.getElementById('userFirstName' + userID).value;
     let lastName = document.getElementById('userLastName' + userID).value;
+    let userName = document.getElementById('userName' + userID).value;
     let city = document.getElementById('userCity' + userID).value;
     let email = document.getElementById('userEmail' + userID).value;
     let password = document.getElementById('userPassword' + userID).value;
@@ -68,6 +71,7 @@ async function deleteAUser(userID) {
         const dataSent = {
             firstName,
             lastName,
+            userName,
             city,
             email,
             password,
@@ -91,6 +95,7 @@ async function deleteAUser(userID) {
         // Remove that user's text fields from the page
         document.getElementById('userFirstName' + userID).remove();
         document.getElementById('userLastName' + userID).remove();
+        document.getElementById('userName' + userID).remove();
         document.getElementById('userCity' + userID).remove();
         document.getElementById('userEmail' + userID).remove();
         document.getElementById('userPassword' + userID).remove();
@@ -105,6 +110,7 @@ async function deleteAUser(userID) {
 async function addAUser() {
     let firstName = document.getElementById('newUserFirstName').value;
     let lastName = document.getElementById('newUserLastName').value;
+    let userName = document.getElementById('newUserName').value;
     let city = document.getElementById('newUserCity').value;
     let email = document.getElementById('newUserEmail').value;
     let password = document.getElementById('newUserPassword').value;
@@ -135,6 +141,7 @@ async function addAUser() {
         const dataSent = {
             firstName,
             lastName,
+            userName,
             city,
             email,
             password,
