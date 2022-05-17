@@ -348,7 +348,7 @@ app.post('/signup', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
     // Checks if the new user's email is already in the database (email must be unique)
-    checkEmailAlreadyExists(req.body.email, req.body.username,
+    checkEmailAlreadyExists(req.body.email,
         function (recordReturned) {
 
             // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
@@ -1069,13 +1069,13 @@ function authenticateUser(email, pwd, callback) {
 }
 
 // Checks whether or not a new user's email already exists in the database
-function checkEmailAlreadyExists(email, username, callback) {
+function checkEmailAlreadyExists(email, callback) {
 
     const mysql = require("mysql2");
     const connection = mysql.createConnection(database);
     connection.connect();
     connection.query(
-        "SELECT * FROM BBY_22_users WHERE email = ? OR username = ?", [email, username],
+        "SELECT * FROM BBY_22_users WHERE email = ?", [email],
         function (error, results, fields) {
             if (error) {
                 res.send({

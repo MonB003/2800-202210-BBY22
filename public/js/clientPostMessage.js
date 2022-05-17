@@ -23,6 +23,7 @@ function saveConnectedUserInfo() {
     // Get stored post ID from clientMain.js
     let postIDFromMain = localStorage.getItem("currentPostID");
 
+    // Get the post owner's data
     getPostOwnersUsername(postIDFromMain);
 
     // Prevent form from submitting
