@@ -5,6 +5,7 @@ const express = require("express");
 const session = require("express-session");
 const res = require("express/lib/response");
 const app = express();
+const multer = require("multer");
 const fs = require("fs");
 const {
     JSDOM
@@ -12,17 +13,13 @@ const {
 
 
 var http = require("http").createServer(app);
-
 var io = require("socket.io")(http);
-
 var users = [];
-
 
 app.use(express.json());
 app.use(express.urlencoded({
     extended: true
 }));
-const multer = require("multer");
 
 //mysql connection setup
 const is_heroku = process.env.IS_HEROKU || false;
@@ -53,7 +50,7 @@ const storage = multer.diskStorage({
         callback(null, "./public/imgs/")
     },
     filename: function (req, file, callback) {
-        callback(null, "user-pic-" + file.originalname.split('/').pop().trim());
+        callback(null, "userPic-" + file.originalname.split('/').pop().trim());
     }
 });
 const upload = multer({
@@ -75,7 +72,6 @@ app.use(session({
     saveUninitialized: true
 }));
 
-
 // Go to: http://localhost:8000
 app.get('/', function (req, res) {
 
@@ -93,7 +89,6 @@ app.get('/', function (req, res) {
         res.send(loginDOM.serialize());
     }
 });
-
 
 // When user successfully logs in
 app.get("/main", function (req, res) {
@@ -175,8 +170,6 @@ app.get("/main", function (req, res) {
     }
 });
 
-
-
 app.get("/mylistings", function (req, res) {
 
     // Check if user is logged in
@@ -240,7 +233,8 @@ app.post("/loadposts", function (req, res) {
                         "title": post.title,
                         "status": post.status,
                         "city": post.city,
-                        "timestamp": post.timestamp
+                        "timestamp": post.timestamp,
+                        "item_pic": post.item_pic
                     });
                 });
             }
@@ -265,7 +259,8 @@ app.post("/loadmyposts", function (req, res) {
                         "title": post.title,
                         "status": post.status,
                         "city": post.city,
-                        "timestamp": post.timestamp
+                        "timestamp": post.timestamp,
+                        "item_pic": post.item_pic
                     });
                 });
             }
@@ -394,6 +389,8 @@ app.post('/signup', function (req, res) {
         });
 });
 
+
+var timeStampPhoto = ""
 // Gets the user input from newPost.html and passes it into the database server.
 app.post('/newPost', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
@@ -403,12 +400,12 @@ app.post('/newPost', function (req, res) {
     var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dateAndTime = date + ' ' + time;
+    timeStampPhoto = dateAndTime
 
     // This is where the user input is passed into the database. 
     // User_ID is saved from the current user of the session. The details of the post are sent from the client side.
     connection.query('INSERT INTO BBY_22_item_posts (user_id, title, city, description, status, timestamp) VALUES (?, ?, ?, ?, ?, ?)',
         [req.session.userID, req.body.title, req.body.city, req.body.description, "available", dateAndTime],
-
         function (error, results, fields) {
             if (error) {
 
@@ -427,7 +424,6 @@ app.post('/newPost', function (req, res) {
 
 
 // Stores image in database
-var picRef = ''
 app.post('/upload-images', upload.array("files"), function (req, res) {
     for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
@@ -439,8 +435,8 @@ app.post('/upload-images', upload.array("files"), function (req, res) {
     let profileDOM = new JSDOM(profile);
 
     connection.query(
-        "UPDATE BBY_22_users SET profile_pic = ? WHERE email = ? ",
-        [newPic, req.session.email],
+        "UPDATE BBY_22_users SET profile_pic = ? WHERE id = ? ",
+        [newPic, req.session.userID],
         function (error, results) {
             if (error) {
                 res.send({
@@ -459,6 +455,33 @@ app.post('/upload-images', upload.array("files"), function (req, res) {
     );
 });
 
+app.post('/upload-images2', upload.array("files"), function (req, res) {
+    for (let i = 0; i < req.files.length; i++) {
+        req.files[i].filename = req.files[i].originalname;
+    }
+
+    let newPic = req.files[0].filename;
+    let main = fs.readFileSync("./app/main.html", "utf8");
+    let mainDOM = new JSDOM(main);
+
+    connection.query(
+        "UPDATE BBY_22_item_posts SET item_pic = ? WHERE user_id = ? AND timestamp = ?",
+        [newPic, req.session.userID, timeStampPhoto],
+        function (error, results) {
+            if (error) {
+                res.send({
+                    status: 'Fail',
+                    msg: 'Error. Profile picture could not be updated.'
+                });
+            }
+
+            res.set("Server", "MACT Engine");
+            res.set("X-Powered-By", "MACT");
+            res.send(mainDOM.serialize());
+        }
+    );
+});
+
 // Load sign up page
 app.get("/signup", function (req, res) {
     let signup = fs.readFileSync("./app/account.html", "utf8");
@@ -469,6 +492,7 @@ app.get("/signup", function (req, res) {
     res.send(signupDOM.serialize());
 });
 
+//Load newPost page
 app.get("/newPost", function (req, res) {
     let newPost = fs.readFileSync("./app/newPost.html", "utf8");
     let newPostDOM = new JSDOM(newPost);
@@ -476,6 +500,13 @@ app.get("/newPost", function (req, res) {
     res.send(newPostDOM.serialize());
 });
 
+//Load newPostPhoto page
+app.get("/newPostPhoto", function (req, res) {
+    let newPost = fs.readFileSync("./app/newPostPhoto.html", "utf8");
+    let newPostDOM = new JSDOM(newPost);
+
+    res.send(newPostDOM.serialize());
+});
 
 // Load profile page
 app.get('/profile', function (req, res) {
@@ -488,8 +519,7 @@ app.get('/profile', function (req, res) {
     profileDOM.window.document.getElementById("userCity").defaultValue = req.session.city;
     profileDOM.window.document.getElementById("userEmail").defaultValue = req.session.email;
     profileDOM.window.document.getElementById("userPassword").defaultValue = req.session.password;
-
-    let profileP = "<img src=\"imgs/user-pic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+    let profileP = "<img src=\"imgs/userPic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
     profileDOM.window.document.getElementById("postimage").innerHTML = profileP
 
     res.set("Server", "MACT Engine");
@@ -855,9 +885,6 @@ app.get("/postMessage", (req, res) => {
 
 // Gets all messages between 2 users
 app.post("/all-messages-between-two-users", function (req, res) {
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection(database);
-    connection.connect();
     // Gets past messages from the 2 users in the database
     connection.query("SELECT * FROM BBY_22_messages WHERE (userSending = ? AND userReceiving = ?) OR (userSending = ? AND userReceiving = ?)",
         [req.body.userSending, req.body.userReceiving, req.body.userReceiving, req.body.userSending],
@@ -873,9 +900,6 @@ app.post("/all-messages-between-two-users", function (req, res) {
 
 // Gets a post owner's user ID from the post ID
 app.post("/get-other-user-by-post", function (req, res) {
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection(database);
-    connection.connect();
 
     connection.query("SELECT user_id FROM BBY_22_item_posts WHERE id = ?",
         [req.body.postID],
@@ -892,9 +916,6 @@ app.post("/get-other-user-by-post", function (req, res) {
 
 // Gets a post owner's username from the post ID
 app.post("/get-owner-username-with-id", function (req, res) {
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection(database);
-    connection.connect();
 
     // Gets the email of the user with this user ID
     connection.query("SELECT username FROM BBY_22_users WHERE id = ?",
@@ -911,9 +932,6 @@ app.post("/get-owner-username-with-id", function (req, res) {
 
 // Get all people the user has received a message from
 app.post("/people-who-messaged-this-user", function (req, res) {
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection(database);
-    connection.connect();
 
     // Gets all emails who have sent this user a message
     let sqlStatement = "SELECT DISTINCT userSending from bby_22_messages WHERE userReceiving = '" + req.body.username + "'";
@@ -930,9 +948,6 @@ app.post("/people-who-messaged-this-user", function (req, res) {
 
 // Get current session user ID
 app.post("/get-this-users-id", function (req, res) {
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection(database);
-    connection.connect();
 
     connection.query("SELECT id FROM bby_22_users WHERE email = ? AND password = ?",
     [req.session.email, req.session.password],
@@ -989,8 +1004,6 @@ io.on("connection", function (socket) {
         );
     });
 });
-
-
 
 
 
@@ -1073,6 +1086,7 @@ async function initializeDatabase() {
             status VARCHAR(30), 
             user_reserved int, 
             timestamp VARCHAR(50),
+            item_pic TEXT (999),
             PRIMARY KEY (id),
             FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);
             
@@ -1108,6 +1122,7 @@ async function initializeDatabase() {
             status VARCHAR(30), 
             user_reserved int, 
             timestamp VARCHAR(50),
+            item_pic TEXT (999),
             PRIMARY KEY (id),
             FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);
             

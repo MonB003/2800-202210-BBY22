@@ -37,16 +37,19 @@ ready(function () {
     // POST TO THE SERVER
     document.querySelector("#newPostBtn").addEventListener("click", function (e) {
         e.preventDefault();
+        // alert(itemPostName); //delete later on!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         let title = document.getElementById("title");
         let description = document.getElementById("newPostDescription");
         let city = document.getElementById("city");
+        // let queryString = "title=" + title.value + "&description=" + description.value + "&city=" + city.value + "&item_pic=" + itemPostName;
+
         let queryString = "title=" + title.value + "&description=" + description.value + "&city=" + city.value;
 
         ajaxPOST("/newPost", function (data) {
             if (data) {
                 let dataParsed = JSON.parse(data);
                 if (dataParsed.status == "Fail") {} else {
-                    window.location.replace("/main");
+                    window.location.replace("/newPostPhoto");
                 }
             }
         }, queryString);

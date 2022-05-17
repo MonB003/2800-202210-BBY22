@@ -1,6 +1,6 @@
 "use strict";
 
-// When profile button is clicked, direct to profile page
+// When profile button is clicked, redirect to profile page
 document.querySelector("#profile").addEventListener("click", function (e) {
     window.location.replace("/profile");
 });
@@ -10,13 +10,18 @@ document.querySelector("#home").addEventListener("click", function (e) {
     window.location.replace("/main");
 });
 
-// When new post button is clicked, direct to newPost page
+// When new post button is clicked, redirect to newPost page
 document.querySelector("#newPostPageBtn").addEventListener("click", function (e) {
     window.location.replace("/newPost");
 });
 
 document.querySelector("#allMessagesBtn").addEventListener("click", function (e) {
     window.location.replace("/message");
+});
+
+// When my listings button is clicked, redirect to myListings page
+document.querySelector("#mylistings").addEventListener("click", function (e) {
+    window.location.replace("/mylistings");
 });
 
 
@@ -57,7 +62,6 @@ async function checkPostOwnerAndSessionUser(postID) {
         window.location.replace("/postMessage");
     }
 }
-
 
 //toggle filter menu
 document.querySelector("#togglefilter").addEventListener("click", function (e) {
@@ -142,6 +146,8 @@ async function displayposts() {
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
 
+                        let postpic = "<img src=\"imgs/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     } else if (filterstatus == "all") {
@@ -157,6 +163,8 @@ async function displayposts() {
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
 
+                        let postpic = "<img src=\"imgs/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     }
@@ -176,6 +184,8 @@ async function displayposts() {
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
 
+                        let postpic = "<img src=\"imgs/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     } else if (filterstatus == "all") {
@@ -191,6 +201,8 @@ async function displayposts() {
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
 
+                        let postpic = "<img src=\"imgs/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     }
@@ -214,6 +226,8 @@ async function displayposts() {
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
 
+                        let postpic = "<img src=\"imgs/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     } else if (filterstatus == "all") {
@@ -229,6 +243,8 @@ async function displayposts() {
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
 
+                        let postpic = "<img src=\"imgs/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     }
@@ -248,6 +264,8 @@ async function displayposts() {
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
 
+                        let postpic = "<img src=\"imgs/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     } else if (filterstatus == "all") {
@@ -263,6 +281,8 @@ async function displayposts() {
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
 
+                        let postpic = "<img src=\"imgs/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     }

@@ -99,20 +99,7 @@ body {
   align-items: center;
 }
 
-#signUpForm input {
-  width: 400px;
-  height: 40px;
-  border: none;
-  outline: none;
-  padding-left: 40px;
-  box-sizing: border-box;
-  font-size: 15px;
-  color: #333;
-  margin-bottom: 20px;
-  border-radius: 5px;
-}
-
-#newPostBtn {
+#submit{
   width: 400px;
   height: 40px;
   border: none;
@@ -122,51 +109,17 @@ body {
   color: rgb(255, 255, 255);
   background-color: #6B9080;
   border-radius: 5px;
-  margin-bottom: 15px;
+  margin-left : 10%;
+  margin-top: 5%;
 }
 
-#newPostBtn:hover {
-  background-color: #526e62;
-  box-shadow: 1px 1px 3px rgb(73, 71, 71);
-}
-
-#backtoMain {
-  text-align: center;
-}
-
-#backToLogin {
-  width: 400px;
-  height: 40px;
-  border: none;
-  outline: none;
-  box-sizing: border-box;
-  font-size: 15px;
-  color: rgb(255, 255, 255);
-  background-color: rgb(121, 119, 119);
-  margin-bottom: 20px;
-  border-radius: 5px;
-}
-
-#newPostDescription {
-  width: 400px;
-  height: 150px;
-}
-
-#backToLogin:hover {
-  background-color: rgb(89, 88, 88);
-  box-shadow: 1px 1px 3px rgb(73, 71, 71);
-}
-
-#submit {
-  font-family: 'Pacifico';
-  max-width: 150px;
-  background-color: rgb(187, 187, 187);
-  text-align: left;
-  box-shadow: 1px 1px 3px rgb(73, 71, 71);
+#image-upload {
+  margin-left : 10%;
+  margin-top: 5%;
 }
 
 #submit:hover {
-  background-color: rgb(144, 143, 143);
+  background-color: #526e62;
   box-shadow: 1px 1px 3px rgb(73, 71, 71);
 }
 
@@ -182,7 +135,7 @@ body {
 
   #content {
     width: 300px;
-    margin-top: 20px;
+    margin-top: 30px;
   }
 
   #signUpForm input {
@@ -191,23 +144,13 @@ body {
     margin-bottom: 5px;
   }
 
-  #newPostBtn {
+  #submit {
     width: 280px;
     height: 35px;
     margin-left: 0%;
     margin-bottom: 8px;
-    margin-top: 8px;
-  }
-
-  #backToLogin {
-    width: 280px;
-    height: 35px;
-    margin-bottom: 10px;
-  }
-
-  #newPostDescription {
-    width: 280px;
-    height: 120px;
+    margin-top: 20px;
+    margin-bottom: -15px;
   }
 
   #uploadFile {
