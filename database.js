@@ -121,6 +121,7 @@ app.get("/main", function (req, res) {
                         // Add each row of data and append each attribute to strRowData
                         let strRowData = "<tr><td><input type=\"text\" id=\"userFirstName" + userIdNum + "\"" + " value=\"" + userResults[row].firstName + "\">" + "</td></tr>";
                         strRowData += "<tr><td><input type=\"text\" id=\"userLastName" + userIdNum + "\"" + " value=\"" + userResults[row].lastName + "\">" + "</td></tr>";
+                        strRowData += "<tr><td><input type=\"text\" id=\"userName" + userIdNum + "\"" + " value=\"" + userResults[row].userName + "\">" + "</td></tr>";
                         strRowData += "<tr><td><input type=\"text\" id=\"userCity" + userIdNum + "\"" + " value=\"" + userResults[row].city + "\">" + "</td></tr>";
                         strRowData += "<tr><td><input type=\"text\" id=\"userEmail" + userIdNum + "\"" + " value=\"" + userResults[row].email + "\">" + "</td></tr>";
                         strRowData += "<tr><td><input type=\"text\" id=\"userPassword" + userIdNum + "\"" + " value=\"" + userResults[row].password + "\">" + "</td></tr>";
@@ -295,6 +296,7 @@ app.post("/login", function (req, res) {
                 req.session.password = recordReturned.password;
                 req.session.firstName = recordReturned.firstName;
                 req.session.lastName = recordReturned.lastName;
+                req.session.userName = recordReturned.userName;
                 req.session.city = recordReturned.city;
                 req.session.type = recordReturned.type;
                 req.session.userID = recordReturned.id;
@@ -336,54 +338,69 @@ app.post('/signup', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
     // Checks if the new user's email is already in the database (email must be unique)
-    checkEmailAlreadyExists(req.body.email,
+    checkEmailAlreadyExists(req.body.email, req.session.email,
         function (recordReturned) {
 
             // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
             if (recordReturned == null) {
-
-                // Insert the new user into the database
-                connection.query('INSERT INTO BBY_22_users (username, firstName, lastName, city, email, password, type, profile_pic) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-                    [req.body.username, req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, "USER", "user-pic-none.jpg"],
-
-                    function (error, results, fields) {
-                        if (error) {
-                            // Send message saying account already exists
+                //Checks if the new user's username is already in the database (username must be unique)
+                checkUsernameAlreadyExists(req.body.userName, req.session.userName,
+                    function (recordReturned) {
+            
+                        // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
+                        if (recordReturned == null) {
+            
+                            // Insert the new user into the database
+                            connection.query('INSERT INTO BBY_22_users (firstName, lastName, userName, city, email, password, type, profile_pic) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+                                [req.body.firstName, req.body.lastName, req.body.userName, req.body.city, req.body.email, req.body.password, "USER", "user-pic-none.jpg"],
+            
+                                function (error, results, fields) {
+                                    if (error) {
+                                        // Send message saying there was an error when signing up.
+                                        res.send({
+                                            status: "Fail",
+                                            msg: "Error when signing up."
+                                        });
+            
+                                    } else {
+                                        // User is logged in, so save their data into a session
+                                        req.session.loggedIn = true;
+                                        req.session.email = req.body.email;
+                                        req.session.password = req.body.password;
+                                        req.session.firstName = req.body.firstName;
+                                        req.session.lastName = req.body.lastName;
+                                        req.session.userName = req.body.userName;
+                                        req.session.city = req.body.city;
+                                        req.session.type = req.body.type;
+                                        req.session.userID = results.insertId;
+                                        req.session.profile_pic = "user-pic-none.jpg";
+            
+                                        req.session.save(function (err) {
+                                            // Session saved
+                                        });
+            
+                                        res.send({
+                                            status: "Success",
+                                            msg: "New user logged in."
+                                        });
+                                    }
+                                });
+            
+                        } else {
+            
+                            // Send message saying email already exists
                             res.send({
                                 status: "Fail",
-                                msg: "Account already exists with this information."
-                            });
-
-                        } else {
-                            // User is logged in, so save their data into a session
-                            req.session.loggedIn = true;
-                            req.session.email = req.body.email;
-                            req.session.password = req.body.password;
-                            req.session.firstName = req.body.firstName;
-                            req.session.lastName = req.body.lastName;
-                            req.session.city = req.body.city;
-                            req.session.type = req.body.type;
-                            req.session.userID = results.insertId;
-                            req.session.profile_pic = "user-pic-none.jpg";
-                            req.session.username = req.body.username;
-
-                            req.session.save(function (err) {
-                                // Session saved
-                            });
-
-                            res.send({
-                                status: "Success",
-                                msg: "New user logged in."
+                                msg: "Username already exists."
                             });
                         }
                     });
-
             } else {
 
-                // Send message saying account already exists
+                // Send message saying email already exists
                 res.send({
                     status: "Fail",
-                    msg: "Account already exists with this information."
+                    msg: "Email already exists."
                 });
             }
         });
@@ -516,6 +533,7 @@ app.get('/profile', function (req, res) {
     // Load current user's data into the text fields on the page
     profileDOM.window.document.getElementById("userFirstName").defaultValue = req.session.firstName;
     profileDOM.window.document.getElementById("userLastName").defaultValue = req.session.lastName;
+    profileDOM.window.document.getElementById("userName").defaultValue = req.session.userName;
     profileDOM.window.document.getElementById("userCity").defaultValue = req.session.city;
     profileDOM.window.document.getElementById("userEmail").defaultValue = req.session.email;
     profileDOM.window.document.getElementById("userPassword").defaultValue = req.session.password;
@@ -599,7 +617,7 @@ app.post('/getPostOwner', (req, res) => {
             if (error) {} else if (results.length > 0) {
                 results.forEach(user => {
                     userName = {
-                        "name": `${user.firstName} ${user.lastName}`
+                        "name": `${user.userName}`
                     }
                 });
 
@@ -684,22 +702,59 @@ app.post('/deletepost', (req, res) => {
 // When an admin updates a user's data
 app.post('/update-user-data', (req, res) => {
 
-    connection.query(
-        "UPDATE BBY_22_users SET firstName = ?, lastName = ?, city = ?, email = ?, password = ?, type = ? WHERE id = ?",
-        [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.body.type, req.body.userID],
-        function (error, results) {
-            if (error) {
+    checkEmailAlreadyExists(req.body.email, req.session.email,
+        function (recordReturned) {
+
+            // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
+            if (recordReturned == null) {
+                //Checks if the new user's username is already in the database (username must be unique)
+                checkUsernameAlreadyExists(req.body.userName, req.session.userName,
+                    function (recordReturned) {
+            
+                        // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
+                        if (recordReturned == null) {
+            
+                            // Insert the new user into the database
+                            connection.query(
+                                "UPDATE BBY_22_users SET firstName = ?, lastName = ?, userName = ?, city = ?, email = ?, password = ? WHERE email = ? AND password = ?",
+                                [req.body.firstName, req.body.lastName, req.body.userName, req.body.city, req.body.email, req.body.password, req.session.email, req.session.password],
+                                function (error, results) {
+                                    if (error) {
+                                        res.send({
+                                            status: "Fail",
+                                            msg: "Error updating data."
+                                        });
+                                    }
+                                }
+                            );
+            
+                        } else {
+            
+                            // Send message saying email already exists
+                            res.send({
+                                status: "Fail",
+                                msg: "Username already exists."
+                            });
+                        }
+                    });
+            } else {
+
+                // Send message saying email already exists
                 res.send({
-                    status: 'Fail',
-                    msg: 'Error. User could not be updated.'
+                    status: "Fail",
+                    msg: "Email already exists."
                 });
             }
-        }
-    );
+        });
 
     res.send({
         status: 'Success',
-        msg: 'Updated ' + req.body.firstName + ' ' + req.body.lastName + '\'s data.'
+        msg: 'Data updated.'
+    });
+
+    res.send({
+        status: 'Success',
+        msg: 'Updated ' + req.body.userName + '\'s data.'
     });
 });
 
@@ -707,29 +762,68 @@ app.post('/update-user-data', (req, res) => {
 // When a user updates their own data
 app.post('/update-data', (req, res) => {
 
-    connection.query(
-        "UPDATE BBY_22_users SET firstName = ?, lastName = ?, city = ?, email = ?, password = ? WHERE email = ? AND password = ?",
-        [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.session.email, req.session.password],
-        function (error, results) {
-            if (error) {
+    checkEmailAlreadyExists(req.body.email, req.session.email,
+        function (recordReturned) {
+
+            // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
+            if (recordReturned == null) {
+                //Checks if the new user's username is already in the database (username must be unique)
+                checkUsernameAlreadyExists(req.body.userName, req.session.userName,
+                    function (recordReturned) {
+            
+                        // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
+                        if (recordReturned == null) {
+            
+                            // Insert the new user into the database
+                            connection.query(
+                                "UPDATE BBY_22_users SET firstName = ?, lastName = ?, userName = ?, city = ?, email = ?, password = ? WHERE email = ? AND password = ?",
+                                [req.body.firstName, req.body.lastName, req.body.userName, req.body.city, req.body.email, req.body.password, req.session.email, req.session.password],
+                                function (error, results) {
+                                    if (error) {
+                                        res.send({
+                                            status: "Fail",
+                                            msg: "Error updating data."
+                                        });
+                                    } else {
+                                        req.session.email = req.body.email;
+                                        req.session.password = req.body.password;
+                                        req.session.firstName = req.body.firstName;
+                                        req.session.lastName = req.body.lastName;
+                                        req.session.userName = req.body.userName;
+                                        req.session.city = req.body.city;
+
+                                        res.send({
+                                            status: 'Success',
+                                            msg: 'Data updated.'
+                                        });
+                                    }
+                                }
+                            );
+            
+                        } else {
+            
+                            // Send message saying email already exists
+                            res.send({
+                                status: "Fail",
+                                msg: "Username already exists."
+                            });
+                        }
+                    });
+            } else {
+
+                // Send message saying email already exists
                 res.send({
                     status: "Fail",
-                    msg: "Error updating data."
+                    msg: "Email already exists."
                 });
             }
-        }
-    );
-
-    res.send({
-        status: 'Success',
-        msg: 'Data updated.'
-    });
+        });
 });
 
 
 // When an admin deletes a user from the database
 app.post('/delete-user', (req, res) => {
-    let requestName = req.body.firstName + " " + req.body.lastName;
+    let requestName = req.body.userName;
 
     connection.query(
         "DELETE FROM BBY_22_users WHERE id = ?",
@@ -755,37 +849,53 @@ app.post('/delete-user', (req, res) => {
 // When an admin adds a new user to the database
 app.post('/add-new-user', (req, res) => {
 
-    // Checks if the new user's email is already in the database
-    checkEmailAlreadyExists(req.body.email,
+    checkEmailAlreadyExists(req.body.email, req.session.email,
         function (recordReturned) {
 
-            // If authenticate() returns null, user isn't currently in database, so they can be added
+            // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
             if (recordReturned == null) {
-                 
-                connection.query('INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type, profile_pic) VALUES (?, ?, ?, ?, ?, ?, ?)',
-                    [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.body.type, "user-pic-none.jpg"],
-
-                    function (error, results) {
-                        if (error) {
-                            // Send message saying account already exists
+                //Checks if the new user's username is already in the database (username must be unique)
+                checkUsernameAlreadyExists(req.body.userName, req.session.userName,
+                    function (recordReturned) {
+            
+                        // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
+                        if (recordReturned == null) {
+            
+                            // Insert the new user into the database
+                            connection.query('INSERT INTO BBY_22_users (firstName, lastName, userName, city, email, password, type, profile_pic) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+                                [req.body.firstName, req.body.lastName, req.body.userName, req.body.city, req.body.email, req.body.password, "USER", "user-pic-none.jpg"],
+            
+                                function (error, results, fields) {
+                                    if (error) {
+                                        // Send message saying there was an error when signing up.
+                                        res.send({
+                                            status: "Fail",
+                                            msg: "Error adding user."
+                                        });
+            
+                                    } else {            
+                                        res.send({
+                                            status: "Success",
+                                            msg: req.body.userName + " was added."
+                                        });
+                                    }
+                                });
+            
+                        } else {
+            
+                            // Send message saying email already exists
                             res.send({
                                 status: "Fail",
-                                msg: "Error adding user."
-                            });
-
-                        } else {
-                            res.send({
-                                status: "Success",
-                                msg: req.body.firstName + " " + req.body.lastName + " was added."
+                                msg: "Username already exists."
                             });
                         }
                     });
-
             } else {
-                // Account already exists in the database
+
+                // Send message saying email already exists
                 res.send({
                     status: "Fail",
-                    msg: "Account already exists with this information."
+                    msg: "Email already exists."
                 });
             }
         });
@@ -1033,7 +1143,7 @@ function authenticateUser(email, pwd, callback) {
 }
 
 // Checks whether or not a new user's email already exists in the database
-function checkEmailAlreadyExists(email, callback) {
+function checkEmailAlreadyExists(email, sessionemail, callback) {
 
     connection.query(
         "SELECT * FROM BBY_22_users WHERE email = ?", [email],
@@ -1044,11 +1154,34 @@ function checkEmailAlreadyExists(email, callback) {
                     msg: "Error finding the user."
                 });
             }
-            if (results.length > 0) {
-                // Email already exists
-                return callback(results[0]);
+            if (results.length > 0 && email != sessionemail) {
+                // Email already and is not current user email
+                 return callback(results[0]);
             } else {
                 // Email does not exist
+                return callback(null);
+            }
+        }
+    );
+}
+
+// Checks whether or not a new user's username already exists in the database
+function checkUsernameAlreadyExists(username, sessionusername, callback) {
+
+    connection.query(
+        "SELECT * FROM BBY_22_users WHERE userName = ?", [username],
+        function (error, results, fields) {
+            if (error) {
+                res.send({
+                    status: "Fail",
+                    msg: "Error finding the user."
+                });
+            }
+            if (results.length > 0 && username != sessionusername) {
+                // username already and is not current user username
+                 return callback(results[0]);
+            } else {
+                // username does not exist
                 return callback(null);
             }
         }
@@ -1077,6 +1210,7 @@ async function initializeDatabase() {
         id int NOT NULL AUTO_INCREMENT, 
         firstName VARCHAR(20), 
         lastName VARCHAR(20), 
+        userName VARCHAR(20), 
         city VARCHAR(30), 
         email VARCHAR(30), 
         password VARCHAR(30), 
@@ -1136,9 +1270,9 @@ async function initializeDatabase() {
 
     // Adds a default user account in case there is no data in the table.
     if (rows.length == 0) {
-        let recordReturneds = "INSERT INTO BBY_22_users (username, firstName, lastName, city, email, password, type, profile_pic) VALUES ?";
+        let recordReturneds = "INSERT INTO BBY_22_users (firstName, lastName, userName, city, email, password, type) VALUES ?";
         let recordValues = [
-            ["test1", "Test", "Test", "Vancouver", "test@test.ca", "password", "ADMIN", "user-pic-none.jpg"]
+            ["Test", "Test", "Test", "Vancouver", "test@test.ca", "password", "ADMIN"]
         ];
         await connection.query(recordReturneds, [recordValues]);
     }

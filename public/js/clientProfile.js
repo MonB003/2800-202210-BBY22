@@ -26,6 +26,7 @@ async function uploadImages(e) {
 async function updateData() {
     let firstName = document.getElementById('userFirstName').value;
     let lastName = document.getElementById('userLastName').value;
+    let userName = document.getElementById('userName').value;
     let city = document.getElementById('userCity').value;
     let email = document.getElementById('userEmail').value;
     let password = document.getElementById('userPassword').value;
@@ -34,6 +35,7 @@ async function updateData() {
     const dataSent = {
         firstName,
         lastName,
+        userName,
         city,
         email,
         password
