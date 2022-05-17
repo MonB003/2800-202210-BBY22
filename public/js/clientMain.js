@@ -97,7 +97,7 @@ async function displayposts() {
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
-                        let postpic = "<img src=\"imgs/" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"imgs/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
@@ -112,7 +112,7 @@ async function displayposts() {
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
-                        let postpic = "<img src=\"imgs/" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"imgs/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
@@ -131,7 +131,7 @@ async function displayposts() {
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
-                        let postpic = "<img src=\"imgs/" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"imgs/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
@@ -146,7 +146,7 @@ async function displayposts() {
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
-                        let postpic = "<img src=\"imgs/" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"imgs/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
@@ -169,7 +169,7 @@ async function displayposts() {
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
-                        let postpic = "<img src=\"imgs/" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"imgs/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
@@ -184,7 +184,7 @@ async function displayposts() {
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
-                        let postpic = "<img src=\"imgs/" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"imgs/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
@@ -203,7 +203,7 @@ async function displayposts() {
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
-                        let postpic = "<img src=\"imgs/" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"imgs/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
@@ -218,7 +218,7 @@ async function displayposts() {
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
-                        let postpic = "<img src=\"imgs/" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"imgs/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);

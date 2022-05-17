@@ -1,12 +1,19 @@
 "use strict";
 
-//grabs name of file input
-let itemPostName =""
+// //grabs name of file input
+// let itemPostName =""
 
-function upload(fakepath) {
-    var splits = fakepath.split('fakepath\\');
-    itemPostName = splits[1];
-}
+// function upload(fakepath) {
+//     var splits = fakepath.split('fakepath\\');
+//     itemPostName = splits[1];
+// }
+
+
+
+
+
+
+
 
 ready(function () {
     function ajaxGET(url, callback) {
@@ -49,13 +56,15 @@ ready(function () {
         let title = document.getElementById("title");
         let description = document.getElementById("newPostDescription");
         let city = document.getElementById("city");
-        let queryString = "title=" + title.value + "&description=" + description.value + "&city=" + city.value + "&item_pic=" + itemPostName;
+        // let queryString = "title=" + title.value + "&description=" + description.value + "&city=" + city.value + "&item_pic=" + itemPostName;
+
+        let queryString = "title=" + title.value + "&description=" + description.value + "&city=" + city.value;
 
         ajaxPOST("/newPost", function (data) {
             if (data) {
                 let dataParsed = JSON.parse(data);
                 if (dataParsed.status == "Fail") {} else {
-                    window.location.replace("/main");
+                    window.location.replace("/newPostPhoto");
                 }
             }
         }, queryString);

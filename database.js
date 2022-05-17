@@ -403,6 +403,8 @@ app.post('/signup', function (req, res) {
         });
 });
 
+
+var timeStampPhoto = ""
 // Gets the user input from newPost.html and passes it into the database server.
 app.post('/newPost', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
@@ -416,12 +418,14 @@ app.post('/newPost', function (req, res) {
     var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dateAndTime = date + ' ' + time;
+    timeStampPhoto = dateAndTime
 
     // This is where the user input is passed into the database. 
     // User_ID is saved from the current user of the session. The details of the post are sent from the client side.
-    connection.query('INSERT INTO BBY_22_item_posts (user_id, title, city, description, status, timestamp, item_pic) VALUES (?, ?, ?, ?, ?, ?, ?)',
-        [req.session.userID, req.body.title, req.body.city, req.body.description, "available", dateAndTime, req.body.item_pic],
-
+    // connection.query('INSERT INTO BBY_22_item_posts (user_id, title, city, description, status, timestamp, item_pic) VALUES (?, ?, ?, ?, ?, ?, ?)',
+    //     [req.session.userID, req.body.title, req.body.city, req.body.description, "available", dateAndTime, req.body.item_pic],
+    connection.query('INSERT INTO BBY_22_item_posts (user_id, title, city, description, status, timestamp) VALUES (?, ?, ?, ?, ?, ?)',
+        [req.session.userID, req.body.title, req.body.city, req.body.description, "available", dateAndTime],
         function (error, results, fields) {
             if (error) {
 
@@ -475,25 +479,34 @@ app.post('/upload-images', upload.array("files"), function (req, res) {
 });
 
 app.post('/upload-images2', upload.array("files"), function (req, res) {
-
-    //console.log(req.body);
-    // console.log(req.files);
-
     for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
     }
 
-});
+    let newPic = req.files[0].filename;
+    let main = fs.readFileSync("./app/main.html", "utf8");
+    let mainDOM = new JSDOM(main);
 
-// app.post('/profile-upload-single', upload.single('profile-file'), function (req, res, next) {
-//     // req.file is the `profile-file` file
-//     // req.body will hold the text fields, if there were any
-//     console.log(JSON.stringify(req.file))
-//     var response = '<a href="/">Home</a><br>'
-//     response += "Files uploaded successfully.<br>"
-//     response += `<img src="${req.file.path}" /><br>`
-//     return res.send(response)
-// })
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection(database);
+    connection.connect();
+    connection.query(
+        "UPDATE BBY_22_item_posts SET item_pic = ? WHERE user_id = ? AND timestamp = ?",
+        [newPic, req.session.userID, timeStampPhoto],
+        function (error, results) {
+            if (error) {
+                res.send({
+                    status: 'Fail',
+                    msg: 'Error. Profile picture could not be updated.'
+                });
+            }
+
+            res.set("Server", "MACT Engine");
+            res.set("X-Powered-By", "MACT");
+            res.send(mainDOM.serialize());
+        }
+    );
+});
 
 // Load sign up page
 app.get("/signup", function (req, res) {
@@ -505,6 +518,7 @@ app.get("/signup", function (req, res) {
     res.send(signupDOM.serialize());
 });
 
+//Load newPost page
 app.get("/newPost", function (req, res) {
     let newPost = fs.readFileSync("./app/newPost.html", "utf8");
     let newPostDOM = new JSDOM(newPost);
@@ -512,6 +526,13 @@ app.get("/newPost", function (req, res) {
     res.send(newPostDOM.serialize());
 });
 
+//Load newPostPhoto page
+app.get("/newPostPhoto", function (req, res) {
+    let newPost = fs.readFileSync("./app/newPostPhoto.html", "utf8");
+    let newPostDOM = new JSDOM(newPost);
+
+    res.send(newPostDOM.serialize());
+});
 
 // Load profile page
 app.get('/profile', function (req, res) {
@@ -524,7 +545,6 @@ app.get('/profile', function (req, res) {
     profileDOM.window.document.getElementById("userCity").defaultValue = req.session.city;
     profileDOM.window.document.getElementById("userEmail").defaultValue = req.session.email;
     profileDOM.window.document.getElementById("userPassword").defaultValue = req.session.password;
-
     let profileP = "<img src=\"imgs/userPic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
     profileDOM.window.document.getElementById("postimage").innerHTML = profileP
 
