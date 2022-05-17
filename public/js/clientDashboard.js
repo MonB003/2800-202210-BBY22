@@ -9,6 +9,29 @@ async function updateAUsersData(userID) {
     let password = document.getElementById('userPassword' + userID).value;
     let type = document.getElementById('userType' + userID).value;
 
+
+    // Get all user's input values for their type
+    var formInputFields = document.querySelectorAll('.user-type-input');
+    var adminCount = 0;
+
+    // Check for input fields of type admin
+    for (let i = 0; i < formInputFields.length; i++) {
+        var currentInput = formInputFields[i];
+
+        // If a value is admin, increment count
+        if (currentInput.value == "ADMIN") {
+            adminCount++;
+        }
+    }
+
+    // If there's only 1 admin, and that user is the admin, they cannot be edited
+    if (adminCount < 1) {
+        document.getElementById('message').innerHTML = "Admin user cannot be edited.";
+        document.getElementById('userType' + userID).value = "ADMIN";    // Keep type as admin
+        return;
+    }
+
+
     // Store user's data that was filled into the text fields on the page
     const dataSent = {
         firstName,

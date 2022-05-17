@@ -39,6 +39,7 @@ ready(function () {
     // Sends a post request to the server side when sign up button is clicked
     document.querySelector("#signUpBtn").addEventListener("click", function (e) {
         e.preventDefault();
+        let username = document.getElementById("username");
         let fName = document.getElementById("firstName");
         let lName = document.getElementById("lastName");
         let city = document.getElementById("city");
@@ -66,7 +67,7 @@ ready(function () {
 
         } else {
             // Data being sent to the server
-            let dataSent = "firstName=" + fName.value + "&lastName=" + lName.value + "&city=" + city.value + "&email=" + email.value + "&password=" + password.value;
+            let dataSent = "username=" + username.value + "&firstName=" + fName.value + "&lastName=" + lName.value + "&city=" + city.value + "&email=" + email.value + "&password=" + password.value;
 
             ajaxPOST("/signup", function (data) {
 

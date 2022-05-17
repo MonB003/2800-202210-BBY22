@@ -12,18 +12,18 @@ var userReceiving = "";
 var userSending = "";
 
 
-// Saves a user's email as the userSending when they connect to the message page
+// Saves a user's username as the userSending when they connect to the message page
 function saveConnectedUserInfo() {
-    // Get user's email
-    var currentEmail = document.getElementById("thisUsersEmail").textContent;
+    // Get username
+    var currUsername = document.getElementById("thisUserName").textContent;
 
-    // Save the email into a global variable
-    userSending = currentEmail;
+    // Save the username into a global variable
+    userSending = currUsername;
 
+    // Get stored post ID from clientMain.js
     let postIDFromMain = localStorage.getItem("currentPostID");
-    console.log("post id local storage: " + postIDFromMain)
 
-    getPostOwnersEmail(postIDFromMain);
+    getPostOwnersUsername(postIDFromMain);
 
     // Prevent form from submitting
     return false;
@@ -31,10 +31,51 @@ function saveConnectedUserInfo() {
 saveConnectedUserInfo();
 
 
+// Uses the post ID to get the post owner's ID, which can get the username
+async function getPostOwnersUsername(postID) {
+    const idDataSent = {
+        postID
+    }
+    const idPostDetails = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(idDataSent)
+    }
+
+    // Get post owner's ID
+    const postResponseID = await fetch('/get-other-user-by-post', idPostDetails);
+    const jsonDataID = await postResponseID.json();
+    let returnedUserID = jsonDataID.otherUserID;
+    let postOwnerID = returnedUserID.user_id;   // Post owner
+
+
+    const dataSentUsername = {
+        postOwnerID
+    }
+    const postDetailsUsername = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(dataSentUsername)
+    }
+
+    // Get post owner's username from their ID
+    const postResponseUsername = await fetch('/get-owner-username-with-id', postDetailsUsername);
+    const jsonDataUsername = await postResponseUsername.json();
+    let returnedUsername = jsonDataUsername.otherUsername;
+    let postOwnerUsername = returnedUsername.username;   // Post owner's username
+
+    getSelectedUser(postOwnerUsername);
+}
+
+
 // Gets past messages between this user and the user selected, then displays them on the page
-async function getSelectedUser(userEmail) {
-    userReceiving = userEmail;
-    userSending = document.getElementById("thisUsersEmail").textContent;
+async function getSelectedUser(username) {
+    userReceiving = username;
+    userSending = document.getElementById("thisUserName").textContent;
 
     document.getElementById("allMessages").innerHTML = "";
 
@@ -49,9 +90,11 @@ async function getSelectedUser(userEmail) {
         },
         body: JSON.stringify(dataSent)
     }
+
     const postResponse = await fetch('/all-messages-between-two-users', postDetails);
     const jsonData = await postResponse.json();
     let dbMessageObjs = jsonData.dbResult;
+
 
     // Gets each of the past messages saved in the database and styles them based on 
     // if the message was from this user or the other
@@ -60,7 +103,7 @@ async function getSelectedUser(userEmail) {
 
         // Create HTML p tag element to store the current message
         let currMessage = document.createElement("p");
-        let thisUser = document.getElementById("thisUsersEmail").textContent;
+        let thisUser = document.getElementById("thisUserName").textContent;
 
         if (currObj.userSending == thisUser) {
             // Message is from you
@@ -87,49 +130,6 @@ async function getSelectedUser(userEmail) {
     var messages = document.getElementById("allMessages");
     messages.scrollTop = messages.scrollHeight;
 }
-
-
-
-async function getPostOwnersEmail(postID) {
-    console.log("get post owner method postID: " + postID)
-    const dataSent1 = {
-        postID
-    }
-    const postDetails1 = {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(dataSent1)
-    }
-    const postResponse = await fetch('/get-other-user-by-post', postDetails1);
-    const jsonData = await postResponse.json();
-    let returnedUserID = jsonData.otherUserID;
-    let postOwnerID = returnedUserID.user_id;   // Post owner
-    console.log("post owner: " + postOwnerID);
-    let currentUserID = jsonData.sessionUserID; // Current user logged in
-    console.log("curr user: " + currentUserID);
-
-
-    const dataSent2 = {
-        postOwnerID
-    }
-    const postDetails2 = {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(dataSent2)
-    }
-    const postResponse2 = await fetch('/get-owner-email-with-id', postDetails2);
-    const jsonData2 = await postResponse2.json();
-    let returnedUserEmail = jsonData2.otherUserEmail;
-    let postOwnerEmail = returnedUserEmail.email;   // Post owner's email
-    console.log("email: " + postOwnerEmail);
-
-    getSelectedUser(postOwnerEmail);
-}
-
 
 
 // Sends a private message to other user

@@ -311,6 +311,7 @@ app.post("/login", function (req, res) {
                 req.session.type = recordReturned.type;
                 req.session.userID = recordReturned.id;
                 req.session.profile_pic = recordReturned.profile_pic;
+                req.session.username = recordReturned.username;
 
                 req.session.save(function (err) {
                     // session saved
@@ -347,7 +348,7 @@ app.post('/signup', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
     // Checks if the new user's email is already in the database (email must be unique)
-    checkEmailAlreadyExists(req.body.email,
+    checkEmailAlreadyExists(req.body.email, req.body.username,
         function (recordReturned) {
 
             // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
@@ -358,8 +359,8 @@ app.post('/signup', function (req, res) {
                 connection.connect();
 
                 // Insert the new user into the database
-                connection.query('INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type, profile_pic) VALUES (?, ?, ?, ?, ?, ?, ?)',
-                    [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, "USER", "user-pic-none.jpg"],
+                connection.query('INSERT INTO BBY_22_users (username, firstName, lastName, city, email, password, type, profile_pic) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+                    [req.body.username, req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, "USER", "user-pic-none.jpg"],
 
                     function (error, results, fields) {
                         if (error) {
@@ -380,6 +381,7 @@ app.post('/signup', function (req, res) {
                             req.session.type = req.body.type;
                             req.session.userID = results.insertId;
                             req.session.profile_pic = "user-pic-none.jpg";
+                            req.session.username = req.body.username;
 
                             req.session.save(function (err) {
                                 // Session saved
@@ -870,25 +872,25 @@ app.post('/get-post-and-session-ids', (req, res) => {
 
 
 
-
-
+// Loads all messages page
 app.get("/message", (req, res) => {
     let message = fs.readFileSync("./app/message.html", "utf8");
     let messageDOM = new JSDOM(message);
 
-    messageDOM.window.document.getElementById("thisUsersEmail").textContent = req.session.email;
-    messageDOM.window.document.getElementById("getAllIdsBtn").setAttribute("onclick", "getAllUserPostIDs(" + req.session.userID + ")");
+    messageDOM.window.document.getElementById("thisUserName").textContent = req.session.username;
 
     res.set("Server", "MACT Engine");
     res.set("X-Powered-By", "MACT");
     res.send(messageDOM.serialize());
 });
 
+
+// Loads private message page after clicking a post
 app.get("/postMessage", (req, res) => {
     let message = fs.readFileSync("./app/postMessage.html", "utf8");
     let messageDOM = new JSDOM(message);
 
-    messageDOM.window.document.getElementById("thisUsersEmail").textContent = req.session.email;
+    messageDOM.window.document.getElementById("thisUserName").textContent = req.session.username;
 
     res.set("Server", "MACT Engine");
     res.set("X-Powered-By", "MACT");
@@ -896,60 +898,10 @@ app.get("/postMessage", (req, res) => {
 });
 
 
-app.post("/all-user-post-ids", function (req, res) {
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
-    connection.connect();
-    // Gets all users in the database who have created a post except the current session user
-    connection.query("SELECT DISTINCT user_id FROM BBY_22_item_posts WHERE user_id != ?",
-        [req.session.userID],
-        function (error, allIDs) {
-            res.send({
-                status: "Success",
-                idResult: allIDs
-            })
-        }
-    );
-});
-
-
-app.post("/get-unique-user-email", function (req, res) {
-    const mysql = require("mysql2");
-    
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
-    connection.connect();
-
-    // Gets all users in the database who have created a post except the current session user
-    connection.query("SELECT * FROM BBY_22_users WHERE id = ?",
-        [req.body.currentID],
-        function (error, currEmail) {
-            res.send({
-                status: "Success",
-                currentUserEmail: currEmail[0]
-            })
-        }
-    );
-});
-
-
+// Gets all messages between 2 users
 app.post("/all-messages-between-two-users", function (req, res) {
     const mysql = require("mysql2");
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
+    const connection = mysql.createConnection(database);
     connection.connect();
     // Gets past messages from the 2 users in the database
     connection.query("SELECT * FROM BBY_22_messages WHERE (userSending = ? AND userReceiving = ?) OR (userSending = ? AND userReceiving = ?)",
@@ -963,15 +915,11 @@ app.post("/all-messages-between-two-users", function (req, res) {
     );
 });
 
+
+// Gets a post owner's user ID from the post ID
 app.post("/get-other-user-by-post", function (req, res) {
     const mysql = require("mysql2");
-    
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
+    const connection = mysql.createConnection(database);
     connection.connect();
 
     connection.query("SELECT user_id FROM BBY_22_item_posts WHERE id = ?",
@@ -986,32 +934,67 @@ app.post("/get-other-user-by-post", function (req, res) {
     );
 });
 
-app.post("/get-owner-email-with-id", function (req, res) {
+
+// Gets a post owner's username from the post ID
+app.post("/get-owner-username-with-id", function (req, res) {
     const mysql = require("mysql2");
-    
-    const connection = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "COMP2800"
-    });
+    const connection = mysql.createConnection(database);
     connection.connect();
 
-    // Gets all users in the database who have created a post except the current session user
-    connection.query("SELECT email FROM BBY_22_users WHERE id = ?",
+    // Gets the email of the user with this user ID
+    connection.query("SELECT username FROM BBY_22_users WHERE id = ?",
         [req.body.postOwnerID],
-        function (error, otherEmail) {
+        function (error, username) {
             res.send({
                 status: "Success",
-                otherUserEmail: otherEmail[0]
+                otherUsername: username[0]
             })
         }
     );
 });
 
 
+// Get all people the user has received a message from
+app.post("/people-who-messaged-this-user", function (req, res) {
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection(database);
+    connection.connect();
+
+    // Gets all emails who have sent this user a message
+    let sqlStatement = "SELECT DISTINCT userSending from bby_22_messages WHERE userReceiving = '" + req.body.username + "'";
+    connection.query(sqlStatement,
+        function (error, contacts) {
+            res.send({
+                status: "Success",
+                thisUsersContacts: contacts
+            })
+        }
+    );
+});
+
+
+// Get current session user ID
+app.post("/get-this-users-id", function (req, res) {
+    const mysql = require("mysql2");
+    const connection = mysql.createConnection(database);
+    connection.connect();
+
+    connection.query("SELECT id FROM bby_22_users WHERE email = ? AND password = ?",
+    [req.session.email, req.session.password],
+        function (error, id) {
+            res.send({
+                status: "Success",
+                thisUsersID: id[0]
+            })
+        }
+    );
+});
+
+
+
 /* 
  * Setup for messaging feature using socket.io
+ * Handles all methods called when a user connects
  * This is the source that was referenced and modified: https://www.youtube.com/watch?v=Ozrm_xftcjQ
  */
 io.on("connection", function (socket) {
@@ -1056,9 +1039,6 @@ io.on("connection", function (socket) {
 
 
 
-
-
-
 // Validates user's email and password
 function authenticateUser(email, pwd, callback) {
 
@@ -1089,13 +1069,13 @@ function authenticateUser(email, pwd, callback) {
 }
 
 // Checks whether or not a new user's email already exists in the database
-function checkEmailAlreadyExists(email, callback) {
+function checkEmailAlreadyExists(email, username, callback) {
 
     const mysql = require("mysql2");
     const connection = mysql.createConnection(database);
     connection.connect();
     connection.query(
-        "SELECT * FROM BBY_22_users WHERE email = ?", [email],
+        "SELECT * FROM BBY_22_users WHERE email = ? OR username = ?", [email, username],
         function (error, results, fields) {
             if (error) {
                 res.send({
@@ -1125,6 +1105,7 @@ async function initializeDatabase() {
         use COMP2800;
         CREATE TABLE IF NOT EXISTS BBY_22_users(
         id int NOT NULL AUTO_INCREMENT, 
+        username VARCHAR(30), 
         firstName VARCHAR(20), 
         lastName VARCHAR(20), 
         city VARCHAR(30), 
@@ -1159,6 +1140,7 @@ async function initializeDatabase() {
         use gi80n4hbnupblp0y;
         CREATE TABLE IF NOT EXISTS BBY_22_users(
         id int NOT NULL AUTO_INCREMENT, 
+        username VARCHAR(30), 
         firstName VARCHAR(20), 
         lastName VARCHAR(20), 
         city VARCHAR(30), 
@@ -1197,9 +1179,9 @@ async function initializeDatabase() {
 
     // Adds a default user account in case there is no data in the table.
     if (rows.length == 0) {
-        let recordReturneds = "INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type) VALUES ?";
+        let recordReturneds = "INSERT INTO BBY_22_users (username, firstName, lastName, city, email, password, type, profile_pic) VALUES ?";
         let recordValues = [
-            ["Test", "Test", "Vancouver", "test@test.ca", "password", "ADMIN"]
+            ["test1", "Test", "Test", "Vancouver", "test@test.ca", "password", "ADMIN", "user-pic-none.jpg"]
         ];
         await connection.query(recordReturneds, [recordValues]);
     }
@@ -1208,7 +1190,6 @@ async function initializeDatabase() {
 
 // Server runs on port 8000
 let port = process.env.PORT || 8000;
-// app.listen(port, initializeDatabase);
 http.listen(port, function () {
     initializeDatabase();
     console.log("Server started");
