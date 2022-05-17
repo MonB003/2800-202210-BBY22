@@ -221,7 +221,7 @@ app.get("/editpost", function (req, res) {
 app.post("/loadposts", function (req, res) {
     let myResults = null;
     let posts = [];
-    
+
     connection.query(
         "SELECT * FROM BBY_22_item_posts where status != 'collected'",
         function (error, results, fields) {
@@ -246,7 +246,7 @@ app.post("/loadposts", function (req, res) {
 app.post("/loadmyposts", function (req, res) {
     let myResults = null;
     let posts = [];
-    
+
     connection.query(
         "SELECT * FROM BBY_22_item_posts where user_id = ?",
         [req.session.userID],
@@ -500,6 +500,14 @@ app.get("/newPost", function (req, res) {
     res.send(newPostDOM.serialize());
 });
 
+//Load game page
+app.get("/game", function (req, res) {
+    let game = fs.readFileSync("./app/game.html", "utf8");
+    let gameDOM = new JSDOM(game);
+
+    res.send(gameDOM.serialize());
+});
+
 //Load newPostPhoto page
 app.get("/newPostPhoto", function (req, res) {
     let newPost = fs.readFileSync("./app/newPostPhoto.html", "utf8");
@@ -543,7 +551,7 @@ app.get("/viewPost", function (req, res) {
         let viewPost = fs.readFileSync("./app/viewPost.html", "utf8");
         let viewPostDOM = new JSDOM(viewPost);
         let myResults = null;
-        
+
         connection.query(
             "SELECT * FROM BBY_22_item_posts WHERE id = ?",
             [req.session.postID],
@@ -590,7 +598,7 @@ app.get("/viewPost", function (req, res) {
 //to get post owner name from user table and displays it when view post details
 app.post('/getPostOwner', (req, res) => {
     let userName = [];
-    
+
     connection.query(
         "SELECT * FROM BBY_22_users WHERE id = ?",
         [req.session.postOwnerID],
@@ -612,7 +620,7 @@ app.post('/getPostOwner', (req, res) => {
 
 //saves the postid so that the post can be edited on the editpost page
 app.post('/toeditpost', (req, res) => {
-    
+
     connection.query(
         "SELECT * FROM BBY_22_item_posts WHERE id = ?",
         [req.body.postID],
@@ -761,7 +769,7 @@ app.post('/add-new-user', (req, res) => {
 
             // If authenticate() returns null, user isn't currently in database, so they can be added
             if (recordReturned == null) {
-                 
+
                 connection.query('INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type, profile_pic) VALUES (?, ?, ?, ?, ?, ?, ?)',
                     [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.body.type, "user-pic-none.jpg"],
 
@@ -794,7 +802,7 @@ app.post('/add-new-user', (req, res) => {
 
 // Updates a post's status in the database
 app.post('/update-post-status', (req, res) => {
-    
+
     connection.query(
         "UPDATE BBY_22_item_posts SET status = ? WHERE id = ?",
         [req.body.newStatus, req.body.postID],
@@ -816,7 +824,7 @@ app.post('/update-post-status', (req, res) => {
 
 // Saves the current session user as the user who reserved the post that was clicked
 app.post('/save-user-pending-status', (req, res) => {
-    
+
     connection.query(
         "UPDATE BBY_22_item_posts SET user_reserved = ? WHERE id = ?",
         [req.session.userID, req.body.postID],
@@ -950,7 +958,7 @@ app.post("/people-who-messaged-this-user", function (req, res) {
 app.post("/get-this-users-id", function (req, res) {
 
     connection.query("SELECT id FROM bby_22_users WHERE email = ? AND password = ?",
-    [req.session.email, req.session.password],
+        [req.session.email, req.session.password],
         function (error, id) {
             res.send({
                 status: "Success",
@@ -1062,7 +1070,7 @@ async function initializeDatabase() {
     const mysql = require("mysql2/promise");
     let connection;
     let createDatabaseTables;
-    
+
     if (is_heroku) {
         connection = await mysql.createConnection({
             host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
