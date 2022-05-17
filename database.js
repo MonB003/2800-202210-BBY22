@@ -37,6 +37,9 @@ if (is_heroku) {
     };
 }
 
+const mysql = require("mysql2");
+const connection = mysql.createPool(database);
+
 // const upload = multer({ storage: multer.memoryStorage() });
 const storage = multer.diskStorage({
     destination: function (req, file, callback) {
@@ -100,9 +103,6 @@ app.get("/main", function (req, res) {
             mainDOM.window.document.getElementById("customerName").innerHTML = "Welcome, " + req.session.firstName +
                 " " + req.session.lastName + "!";
 
-            const mysql = require("mysql2");
-            const connection = mysql.createConnection(database);
-            connection.connect();
             connection.query(
 
                 'SELECT * FROM BBY_22_users',
@@ -190,10 +190,8 @@ app.get("/editpost", function (req, res) {
     if (req.session.loggedIn) {
         let editpost = fs.readFileSync("./app/editpost.html", "utf8");
         let editpostDOM = new JSDOM(editpost);
-        const mysql = require("mysql2");
-        const connection = mysql.createConnection(database);
         let myResults = null;
-        connection.connect();
+
         connection.query(
             "SELECT * FROM BBY_22_item_posts WHERE id = ? AND user_id = ?",
             [req.session.editpostID, req.session.userID],
@@ -207,7 +205,6 @@ app.get("/editpost", function (req, res) {
                         editpostDOM.window.document.querySelector("#savepost").setAttribute("onclick", `save_post(${post.id})`);
                         editpostDOM.window.document.querySelector("#deletepost").setAttribute("onclick", `delete_post(${post.id})`);
                     });
-                    connection.end();
                 } else {}
 
                 res.set("Server", "MACT Engine");
@@ -222,11 +219,9 @@ app.get("/editpost", function (req, res) {
 });
 
 app.post("/loadposts", function (req, res) {
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection(database);
     let myResults = null;
     let posts = [];
-    connection.connect();
+    
     connection.query(
         "SELECT * FROM BBY_22_item_posts where status != 'collected'",
         function (error, results, fields) {
@@ -248,11 +243,9 @@ app.post("/loadposts", function (req, res) {
 })
 
 app.post("/loadmyposts", function (req, res) {
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection(database);
     let myResults = null;
     let posts = [];
-    connection.connect();
+    
     connection.query(
         "SELECT * FROM BBY_22_item_posts where user_id = ?",
         [req.session.userID],
@@ -346,10 +339,6 @@ app.post('/signup', function (req, res) {
             // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
             if (recordReturned == null) {
 
-                const mysql = require("mysql2");
-                let connection = mysql.createConnection(database);
-                connection.connect();
-
                 // Insert the new user into the database
                 connection.query('INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type, profile_pic) VALUES (?, ?, ?, ?, ?, ?, ?)',
                     [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, "USER", "user-pic-none.jpg"],
@@ -400,10 +389,6 @@ app.post('/signup', function (req, res) {
 app.post('/newPost', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
-    const mysql = require("mysql2");
-    let connection = mysql.createConnection(database);
-    connection.connect();
-
     // Get the current date and time 
     var today = new Date();
     var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
@@ -444,9 +429,6 @@ app.post('/upload-images', upload.array("files"), function (req, res) {
     let profile = fs.readFileSync("./app/updateProfile.html", "utf8");
     let profileDOM = new JSDOM(profile);
 
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection(database);
-    connection.connect();
     connection.query(
         "UPDATE BBY_22_users SET profile_pic = ? WHERE email = ? ",
         [newPic, req.session.email],
@@ -521,10 +503,8 @@ app.get("/viewPost", function (req, res) {
     if (req.session.loggedIn) {
         let viewPost = fs.readFileSync("./app/viewPost.html", "utf8");
         let viewPostDOM = new JSDOM(viewPost);
-        const mysql = require("mysql2");
-        const connection = mysql.createConnection(database);
         let myResults = null;
-        connection.connect();
+        
         connection.query(
             "SELECT * FROM BBY_22_item_posts WHERE id = ?",
             [req.session.postID],
@@ -570,10 +550,8 @@ app.get("/viewPost", function (req, res) {
 
 //to get post owner name from user table and displays it when view post details
 app.post('/getPostOwner', (req, res) => {
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection(database);
     let userName = [];
-    connection.connect();
+    
     connection.query(
         "SELECT * FROM BBY_22_users WHERE id = ?",
         [req.session.postOwnerID],
@@ -595,9 +573,7 @@ app.post('/getPostOwner', (req, res) => {
 
 //saves the postid so that the post can be edited on the editpost page
 app.post('/toeditpost', (req, res) => {
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection(database);
-    connection.connect();
+    
     connection.query(
         "SELECT * FROM BBY_22_item_posts WHERE id = ?",
         [req.body.postID],
@@ -624,9 +600,7 @@ app.post('/toeditpost', (req, res) => {
 
 //save edits to post
 app.post('/savepostinfo', (req, res) => {
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection(database);
-    connection.connect();
+
     connection.query(
         "UPDATE BBY_22_item_posts SET title = ?, city = ?, description = ? WHERE id = ? AND user_id = ?",
         [req.body.title, req.body.city, req.body.description, req.body.postID, req.session.userID],
@@ -649,9 +623,6 @@ app.post('/savepostinfo', (req, res) => {
 // delete post
 app.post('/deletepost', (req, res) => {
 
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection(database);
-    connection.connect();
     connection.query(
         "DELETE FROM BBY_22_item_posts WHERE id = ? AND user_id = ?",
         [req.body.postID, req.session.userID],
@@ -673,9 +644,7 @@ app.post('/deletepost', (req, res) => {
 
 // When an admin updates a user's data
 app.post('/update-user-data', (req, res) => {
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection(database);
-    connection.connect();
+
     connection.query(
         "UPDATE BBY_22_users SET firstName = ?, lastName = ?, city = ?, email = ?, password = ?, type = ? WHERE id = ?",
         [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.body.type, req.body.userID],
@@ -698,9 +667,7 @@ app.post('/update-user-data', (req, res) => {
 
 // When a user updates their own data
 app.post('/update-data', (req, res) => {
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection(database);
-    connection.connect();
+
     connection.query(
         "UPDATE BBY_22_users SET firstName = ?, lastName = ?, city = ?, email = ?, password = ? WHERE email = ? AND password = ?",
         [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.session.email, req.session.password],
@@ -725,9 +692,6 @@ app.post('/update-data', (req, res) => {
 app.post('/delete-user', (req, res) => {
     let requestName = req.body.firstName + " " + req.body.lastName;
 
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection(database);
-    connection.connect();
     connection.query(
         "DELETE FROM BBY_22_users WHERE id = ?",
         [req.body.userID],
@@ -758,9 +722,7 @@ app.post('/add-new-user', (req, res) => {
 
             // If authenticate() returns null, user isn't currently in database, so they can be added
             if (recordReturned == null) {
-                const mysql = require("mysql2");
-                let connection = mysql.createConnection(database);
-                connection.connect();
+                 
                 connection.query('INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type, profile_pic) VALUES (?, ?, ?, ?, ?, ?, ?)',
                     [req.body.firstName, req.body.lastName, req.body.city, req.body.email, req.body.password, req.body.type, "user-pic-none.jpg"],
 
@@ -793,9 +755,7 @@ app.post('/add-new-user', (req, res) => {
 
 // Updates a post's status in the database
 app.post('/update-post-status', (req, res) => {
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection(database);
-    connection.connect();
+    
     connection.query(
         "UPDATE BBY_22_item_posts SET status = ? WHERE id = ?",
         [req.body.newStatus, req.body.postID],
@@ -817,9 +777,7 @@ app.post('/update-post-status', (req, res) => {
 
 // Saves the current session user as the user who reserved the post that was clicked
 app.post('/save-user-pending-status', (req, res) => {
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection(database);
-    connection.connect();
+    
     connection.query(
         "UPDATE BBY_22_item_posts SET user_reserved = ? WHERE id = ?",
         [req.session.userID, req.body.postID],
@@ -845,9 +803,6 @@ app.post('/save-user-pending-status', (req, res) => {
 app.post('/get-post-and-session-ids', (req, res) => {
     let currentSessionUserID = req.session.userID;
 
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection(database);
-    connection.connect();
     connection.query(
         "SELECT user_id FROM BBY_22_item_posts WHERE id = ?",
         [req.body.postID],
@@ -866,9 +821,6 @@ app.post('/get-post-and-session-ids', (req, res) => {
 // Validates user's email and password
 function authenticateUser(email, pwd, callback) {
 
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection(database);
-    connection.connect();
     connection.query(
         "SELECT * FROM BBY_22_users WHERE email = ? AND password = ?", [email, pwd],
         function (error, results, fields) {
@@ -895,9 +847,6 @@ function authenticateUser(email, pwd, callback) {
 // Checks whether or not a new user's email already exists in the database
 function checkEmailAlreadyExists(email, callback) {
 
-    const mysql = require("mysql2");
-    const connection = mysql.createConnection(database);
-    connection.connect();
     connection.query(
         "SELECT * FROM BBY_22_users WHERE email = ?", [email],
         function (error, results, fields) {
@@ -925,7 +874,7 @@ async function initializeDatabase() {
     const mysql = require("mysql2/promise");
     const connection = await mysql.createConnection(database);
 
-    const createDatabaseTables = `CREATE DATABASE IF NOT EXISTS COMP2800;
+    let createDatabaseTables = `CREATE DATABASE IF NOT EXISTS COMP2800;
         use COMP2800;
         CREATE TABLE IF NOT EXISTS BBY_22_users(
         id int NOT NULL AUTO_INCREMENT, 
