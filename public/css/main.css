@@ -254,6 +254,10 @@ body {
     border-radius: 0px 0px 15px 15px;
 }
 
+.messagepost {
+    cursor: pointer;
+}
+
 /* mobile view */
 @media only screen and (max-width : 425px) {
 

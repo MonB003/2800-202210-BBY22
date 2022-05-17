@@ -15,6 +15,50 @@ document.querySelector("#newPostPageBtn").addEventListener("click", function (e)
     window.location.replace("/newPost");
 });
 
+document.querySelector("#allMessagesBtn").addEventListener("click", function (e) {
+    window.location.replace("/message");
+});
+
+
+// Redirects to message page if both users are different
+function getMessagePage(postID) {
+    // Store this post ID for message JS file
+    localStorage.setItem("currentPostID", postID);
+
+    // Check for same user
+    checkPostOwnerAndSessionUser(postID);
+}
+
+
+// Checks if post owner and current session user are the same
+// If they are the same, the user cannot message themself
+async function checkPostOwnerAndSessionUser(postID) {
+    const idDataSent = {
+        postID
+    }
+    const idPostDetails = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(idDataSent)
+    }
+
+    // Get post owner's ID
+    const postResponseID = await fetch('/get-other-user-by-post', idPostDetails);
+    const jsonDataID = await postResponseID.json();
+    let returnedUserID = jsonDataID.otherUserID;
+    let postOwnerID = returnedUserID.user_id; // Post owner userID
+    let returnedSessionID = jsonDataID.sessionUserID; // Current session userID
+
+    // Compare post owner and session user IDs
+    if (postOwnerID != returnedSessionID) {
+        // If they are different, redirect to private message page
+        window.location.replace("/postMessage");
+    }
+}
+
+
 //toggle filter menu
 document.querySelector("#togglefilter").addEventListener("click", function (e) {
     let filtermenu = document.querySelector("#filtermenu");
@@ -59,8 +103,7 @@ document.querySelector("#filterstatus").addEventListener("click", function (e) {
 
 // retrieves posts from database
 async function loadposts() {
-    const dataSent = {
-    }
+    const dataSent = {}
 
     const getDetails = {
         method: 'POST',
@@ -83,7 +126,7 @@ async function displayposts() {
     let posttemplate = document.getElementById("posttemplate");
     let posts = document.getElementById("posts");
     if (sort == "recent") {
-        for (let i = postdata.length-1; i > -1; i--) {
+        for (let i = postdata.length - 1; i > -1; i--) {
             if (document.querySelector("#filter").value == "title") {
                 if (postdata[i].title.toLowerCase().includes(search.toLowerCase())) {
                     if (postdata[i].status == filterstatus) {
@@ -97,9 +140,11 @@ async function displayposts() {
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
-                    } else if (filterstatus == "all"){
+                    } else if (filterstatus == "all") {
                         let testpost = posttemplate.content.cloneNode(true);
                         testpost.querySelector(".post").id = `post${postdata[i].postid}`;
                         testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
@@ -110,6 +155,8 @@ async function displayposts() {
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     }
@@ -127,9 +174,11 @@ async function displayposts() {
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
-                    } else if (filterstatus == "all"){
+                    } else if (filterstatus == "all") {
                         let testpost = posttemplate.content.cloneNode(true);
                         testpost.querySelector(".post").id = `post${postdata[i].postid}`;
                         testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
@@ -140,11 +189,13 @@ async function displayposts() {
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     }
                 }
-            } 
+            }
         }
     } else {
         for (let i = 0; i < postdata.length; i++) {
@@ -161,9 +212,11 @@ async function displayposts() {
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
-                    } else if (filterstatus == "all"){
+                    } else if (filterstatus == "all") {
                         let testpost = posttemplate.content.cloneNode(true);
                         testpost.querySelector(".post").id = `post${postdata[i].postid}`;
                         testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
@@ -174,6 +227,8 @@ async function displayposts() {
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     }
@@ -191,9 +246,11 @@ async function displayposts() {
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
-                    } else if (filterstatus == "all"){
+                    } else if (filterstatus == "all") {
                         let testpost = posttemplate.content.cloneNode(true);
                         testpost.querySelector(".post").id = `post${postdata[i].postid}`;
                         testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
@@ -204,11 +261,13 @@ async function displayposts() {
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     }
                 }
-            } 
+            }
         }
     }
 
@@ -289,7 +348,7 @@ async function changeAvailableStatus(postID) {
     // If post user_id matches current session user id, they are the same user. A user cannot request their own post
     if (currentIDReturned == postUserID) {
         return;
-    } 
+    }
 
     let postStatusDiv = document.getElementById('postStatus' + postID);
     let newStatus = "pending";

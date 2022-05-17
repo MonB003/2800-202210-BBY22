@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Message Post Owner</title>
+    <meta charset="utf-8" />
+    <link href="/imgs/OTH-favicon.ico" rel="icon" type="image/x-icon" />
+
+    <!-- CSS style -->
+    <link rel="stylesheet" href="/css/message.css" />
+</head>
+
+<body>
+    <button id="backToMain">Back</button>
+    <br>
+
+    <!-- Current session username -->
+    <p id="thisUserName"></p>
+    <br>
+
+    <!-- Message list (all past and current messages) -->
+    <div id="allMessages"></div>
+
+    <br>
+
+    <!-- Message form -->
+    <div>
+        <input id="messageInput" placeholder="Type message">
+        <button id="sendMessageBtn" type="submit" onclick="sendMessageToUser()" disabled="true">Send</button>
+    </div>
+
+
+
+    <!-- JavaScript -->
+    <script src="http://localhost:8000/socket.io/socket.io.js"></script>
+    <script src="js/clientPostMessage.js"></script>
+
+</body>
+
+</html>
