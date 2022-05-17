@@ -968,7 +968,6 @@ app.post("/get-this-users-id", function (req, res) {
  * This is the source that was referenced and modified: https://www.youtube.com/watch?v=Ozrm_xftcjQ
  */
 io.on("connection", function (socket) {
-    console.log("User connected", socket.id);
 
     // Add a listener for new user
     socket.on("a-user-connects", function (username) {
@@ -1156,5 +1155,4 @@ async function initializeDatabase() {
 let port = process.env.PORT || 8000;
 http.listen(port, function () {
     initializeDatabase();
-    console.log("Server started");
 });
