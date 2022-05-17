@@ -879,7 +879,8 @@ async function initializeDatabase() {
         CREATE TABLE IF NOT EXISTS BBY_22_users(
         id int NOT NULL AUTO_INCREMENT, 
         firstName VARCHAR(20), 
-        lastName VARCHAR(20), 
+        lastName VARCHAR(20),
+        userName VARCHAR(20), 
         city VARCHAR(30), 
         email VARCHAR(30), 
         password VARCHAR(30), 
@@ -906,6 +907,7 @@ async function initializeDatabase() {
         id int NOT NULL AUTO_INCREMENT, 
         firstName VARCHAR(20), 
         lastName VARCHAR(20), 
+        userName VARCHAR(20), 
         city VARCHAR(30), 
         email VARCHAR(30), 
         password VARCHAR(30), 
@@ -934,9 +936,9 @@ async function initializeDatabase() {
 
     // Adds a default user account in case there is no data in the table.
     if (rows.length == 0) {
-        let recordReturneds = "INSERT INTO BBY_22_users (firstName, lastName, city, email, password, type) VALUES ?";
+        let recordReturneds = "INSERT INTO BBY_22_users (firstName, lastName, userName, city, email, password, type) VALUES ?";
         let recordValues = [
-            ["Test", "Test", "Vancouver", "test@test.ca", "password", "ADMIN"]
+            ["Test", "Test", "Test", "Vancouver", "test@test.ca", "password", "ADMIN"]
         ];
         await connection.query(recordReturneds, [recordValues]);
     }
