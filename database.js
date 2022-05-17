@@ -972,7 +972,7 @@ app.get("/message", (req, res) => {
     let message = fs.readFileSync("./app/message.html", "utf8");
     let messageDOM = new JSDOM(message);
 
-    messageDOM.window.document.getElementById("thisUserName").textContent = req.session.username;
+    messageDOM.window.document.getElementById("thisUserName").textContent = req.session.userName;
 
     res.set("Server", "MACT Engine");
     res.set("X-Powered-By", "MACT");
@@ -985,7 +985,7 @@ app.get("/postMessage", (req, res) => {
     let message = fs.readFileSync("./app/postMessage.html", "utf8");
     let messageDOM = new JSDOM(message);
 
-    messageDOM.window.document.getElementById("thisUserName").textContent = req.session.username;
+    messageDOM.window.document.getElementById("thisUserName").textContent = req.session.userName;
 
     res.set("Server", "MACT Engine");
     res.set("X-Powered-By", "MACT");
