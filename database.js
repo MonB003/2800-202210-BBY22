@@ -1250,7 +1250,8 @@ async function initializeDatabase() {
         CREATE TABLE IF NOT EXISTS BBY_22_users(
         id int NOT NULL AUTO_INCREMENT, 
         firstName VARCHAR(20), 
-        lastName VARCHAR(20), 
+        lastName VARCHAR(20),
+        userName VARCHAR(20),  
         city VARCHAR(30), 
         email VARCHAR(30), 
         password VARCHAR(30), 
