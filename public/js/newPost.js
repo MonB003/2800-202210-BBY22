@@ -1,20 +1,5 @@
 "use strict";
 
-// //grabs name of file input
-// let itemPostName =""
-
-// function upload(fakepath) {
-//     var splits = fakepath.split('fakepath\\');
-//     itemPostName = splits[1];
-// }
-
-
-
-
-
-
-
-
 ready(function () {
     function ajaxGET(url, callback) {
 

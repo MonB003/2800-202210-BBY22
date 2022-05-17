@@ -63,7 +63,6 @@ app.use(session({
     saveUninitialized: true
 }));
 
-
 // Go to: http://localhost:8000
 app.get('/', function (req, res) {
 
@@ -81,14 +80,6 @@ app.get('/', function (req, res) {
         res.send(loginDOM.serialize());
     }
 });
-
-
-
-
-
-
-
-
 
 // When user successfully logs in
 app.get("/main", function (req, res) {
@@ -172,8 +163,6 @@ app.get("/main", function (req, res) {
         res.redirect("/");
     }
 });
-
-
 
 app.get("/mylistings", function (req, res) {
 
@@ -422,8 +411,6 @@ app.post('/newPost', function (req, res) {
 
     // This is where the user input is passed into the database. 
     // User_ID is saved from the current user of the session. The details of the post are sent from the client side.
-    // connection.query('INSERT INTO BBY_22_item_posts (user_id, title, city, description, status, timestamp, item_pic) VALUES (?, ?, ?, ?, ?, ?, ?)',
-    //     [req.session.userID, req.body.title, req.body.city, req.body.description, "available", dateAndTime, req.body.item_pic],
     connection.query('INSERT INTO BBY_22_item_posts (user_id, title, city, description, status, timestamp) VALUES (?, ?, ?, ?, ?, ?)',
         [req.session.userID, req.body.title, req.body.city, req.body.description, "available", dateAndTime],
         function (error, results, fields) {
@@ -907,7 +894,6 @@ app.post('/get-post-and-session-ids', (req, res) => {
         }
     );
 });
-
 
 
 // Validates user's email and password

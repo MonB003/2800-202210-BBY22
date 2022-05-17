@@ -1,65 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
-    <title>Upload Images Example</title>
-    <meta charset="utf-8"/>
-    <style media="screen">
-      @import url(https://fonts.googleapis.com/css?family=Hind);
+    <title>Post New Item</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/imgs/OTH-favicon.ico" rel="icon" type="image/x-icon" />
 
-      body {
-        font-family: 'Hind', sans-serif;
-        font-size: 12pt;
-      }
-      form {
-        margin: 2em;
-        padding: 2em;
-        background-color: beige;
-      }
-    </style>
-    <link href="/img/favicon.ico" rel="icon" type="image/x-icon" />
+    <!-- Styles Page for New Post -->
+    <link rel="stylesheet" href="/css/newPostPhoto.css">
   </head>
+
   <body>
-    <div id="container">
-      <form id="upload-images-form">
-        <input id="image-upload" type="file" value="Upload Image" accept="image/png, image/gif, image/jpeg" multiple="multiple"/>
-        <input id="submit" type="submit" value="Submit"/>
-      </form>
+    <!-- Header -->
+    <header id="header">
+      <!-- Navbar -->
+      <nav id="navbar">
+        <div class="headerContainer">
+          <div id="navLogout">
+            <form action="/logout" method="get" id="logoutForm">
+              <input type="submit" id="logout" class="nav-button" value="Logout" />
+            </form>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div id="content">
+      <div id="newPostHeading">
+        <h1 id="postTitle">Select Image</h1>
+        <br>
+      </div>
+      <div id="container">
+        <form id="upload-images-form">
+          <input id="image-upload" type="file" value="Upload Image" accept="image/png, image/gif, image/jpeg"/>
+          <input id="submit" type="submit" value="Create Post"/>
+        </form>
+        <br>
+      </div>
     </div>
-    <script>
-        const upLoadForm = document.getElementById("upload-images-form");
-        upLoadForm.addEventListener("submit", uploadImages);
 
-        function uploadImages(e) {
-            e.preventDefault();
+    <!-- JavaScript -->
+    <script src="/js/newPostPhoto.js"></script>
 
-            const imageUpload = document.querySelector('#image-upload');
-            const formData = new FormData();
-
-            for(let i =0; i < imageUpload.files.length; i++) {
-                // put the images from the input into the form data
-                formData.append("files", imageUpload.files[i]);
-            }
-
-            const options = {
-                method: 'POST',
-                body: formData,
-                // don't put a header in, the browser will do that for us
-//                headers: {
-//                  "Content-Type": "multipart/form-data"
-//                }
-            };
-            //delete options.headers['Content-Type'];
-
-            // now use fetch
-            fetch("/upload-images2", options
-            ).then(function(res) {
-              console.log(res);
-              window.location.replace("/main")
-            }).catch(function(err) {("Error:", err)}
-            );
-        }
-
-
-    </script>
   </body>
+
 </html>
