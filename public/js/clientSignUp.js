@@ -39,7 +39,6 @@ ready(function () {
     // Sends a post request to the server side when sign up button is clicked
     document.querySelector("#signUpBtn").addEventListener("click", function (e) {
         e.preventDefault();
-        let username = document.getElementById("username");
         let fName = document.getElementById("firstName");
         let lName = document.getElementById("lastName");
         let uName = document.getElementById("userName");
