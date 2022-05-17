@@ -1061,49 +1061,21 @@ function checkEmailAlreadyExists(email, callback) {
 async function initializeDatabase() {
     // Promise
     const mysql = require("mysql2/promise");
-    const connection = await mysql.createConnection(database);
-
-    let createDatabaseTables = `CREATE DATABASE IF NOT EXISTS COMP2800;
-        use COMP2800;
-        CREATE TABLE IF NOT EXISTS BBY_22_users(
-        id int NOT NULL AUTO_INCREMENT, 
-        username VARCHAR(30), 
-        firstName VARCHAR(20), 
-        lastName VARCHAR(20), 
-        city VARCHAR(30), 
-        email VARCHAR(30), 
-        password VARCHAR(30), 
-        type VARCHAR(10),
-        profile_pic TEXT (999) NOT NULL,
-        PRIMARY KEY (id));
-        
-        CREATE TABLE IF NOT EXISTS BBY_22_item_posts(
-            id int NOT NULL AUTO_INCREMENT, 
-            user_id int NOT NULL,
-            title VARCHAR(50), 
-            description VARCHAR(1000), 
-            city VARCHAR(30), 
-            status VARCHAR(30), 
-            user_reserved int, 
-            timestamp VARCHAR(50),
-            item_pic TEXT (999),
-            PRIMARY KEY (id),
-            FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);
-            
-        CREATE TABLE IF NOT EXISTS BBY_22_messages(
-            id int NOT NULL AUTO_INCREMENT, 
-            userSending VARCHAR(30) NOT NULL,                
-            userReceiving VARCHAR(30) NOT NULL, 
-            message VARCHAR(300), 
-            time VARCHAR(50), 
-            PRIMARY KEY (id));`;
-
+    let connection;
+    let createDatabaseTables;
+    
     if (is_heroku) {
+        connection = await mysql.createConnection({
+            host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
+            user: "biysuiwt6fbjxdfw",
+            password: "llwyk8vg4c7p5rtu",
+            database: "gi80n4hbnupblp0y",
+            multipleStatements: true
+        });
         createDatabaseTables = `CREATE DATABASE IF NOT EXISTS gi80n4hbnupblp0y;
         use gi80n4hbnupblp0y;
         CREATE TABLE IF NOT EXISTS BBY_22_users(
         id int NOT NULL AUTO_INCREMENT, 
-        username VARCHAR(30), 
         firstName VARCHAR(20), 
         lastName VARCHAR(20), 
         city VARCHAR(30), 
@@ -1122,17 +1094,39 @@ async function initializeDatabase() {
             status VARCHAR(30), 
             user_reserved int, 
             timestamp VARCHAR(50),
-            item_pic TEXT (999),
             PRIMARY KEY (id),
-            FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);
-            
-        CREATE TABLE IF NOT EXISTS BBY_22_messages(
+            FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
+    } else {
+        connection = await mysql.createConnection({
+            host: "localhost",
+            user: "root",
+            password: "",
+            multipleStatements: true
+        });
+        createDatabaseTables = `CREATE DATABASE IF NOT EXISTS COMP2800;
+        use COMP2800;
+        CREATE TABLE IF NOT EXISTS BBY_22_users(
+        id int NOT NULL AUTO_INCREMENT, 
+        firstName VARCHAR(20), 
+        lastName VARCHAR(20), 
+        city VARCHAR(30), 
+        email VARCHAR(30), 
+        password VARCHAR(30), 
+        type VARCHAR(10),
+        profile_pic TEXT (999) NOT NULL,
+        PRIMARY KEY (id));
+
+        CREATE TABLE IF NOT EXISTS BBY_22_item_posts(
             id int NOT NULL AUTO_INCREMENT, 
-            userSending VARCHAR(30) NOT NULL,                
-            userReceiving VARCHAR(30) NOT NULL, 
-            message VARCHAR(300), 
-            time VARCHAR(50), 
-            PRIMARY KEY (id));`;
+            user_id int NOT NULL,
+            title VARCHAR(50), 
+            description VARCHAR(1000), 
+            city VARCHAR(30), 
+            status VARCHAR(30), 
+            user_reserved int, 
+            timestamp VARCHAR(50),
+            PRIMARY KEY (id),
+            FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
     }
 
     // Creates a table for user profiles and item posts
