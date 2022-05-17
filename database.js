@@ -37,13 +37,13 @@ if (is_heroku) {
     };
 }
 
-// const upload = multer({ storage: multer.memoryStorage() });
 const storage = multer.diskStorage({
     destination: function (req, file, callback) {
         callback(null, "./public/imgs/")
     },
     filename: function (req, file, callback) {
-        callback(null, "user-pic-" + file.originalname.split('/').pop().trim());
+        callback(null, "userPic-" + file.originalname.split('/').pop().trim());
+        // callback(null, req.session.userID + file.originalname.split('/').pop().trim());
     }
 });
 const upload = multer({
@@ -83,6 +83,13 @@ app.get('/', function (req, res) {
         res.send(loginDOM.serialize());
     }
 });
+
+
+
+
+
+
+
 
 
 // When user successfully logs in
@@ -238,7 +245,8 @@ app.post("/loadposts", function (req, res) {
                         "title": post.title,
                         "status": post.status,
                         "city": post.city,
-                        "timestamp": post.timestamp
+                        "timestamp": post.timestamp,
+                        "item_pic": post.item_pic
                     });
                 });
             }
@@ -265,7 +273,8 @@ app.post("/loadmyposts", function (req, res) {
                         "title": post.title,
                         "status": post.status,
                         "city": post.city,
-                        "timestamp": post.timestamp
+                        "timestamp": post.timestamp,
+                        "item_pic": post.item_pic
                     });
                 });
             }
@@ -412,8 +421,8 @@ app.post('/newPost', function (req, res) {
 
     // This is where the user input is passed into the database. 
     // User_ID is saved from the current user of the session. The details of the post are sent from the client side.
-    connection.query('INSERT INTO BBY_22_item_posts (user_id, title, city, description, status, timestamp) VALUES (?, ?, ?, ?, ?, ?)',
-        [req.session.userID, req.body.title, req.body.city, req.body.description, "available", dateAndTime],
+    connection.query('INSERT INTO BBY_22_item_posts (user_id, title, city, description, status, timestamp, item_pic) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [req.session.userID, req.body.title, req.body.city, req.body.description, "available", dateAndTime, req.body.item_pic],
 
         function (error, results, fields) {
             if (error) {
@@ -433,7 +442,6 @@ app.post('/newPost', function (req, res) {
 
 
 // Stores image in database
-var picRef = ''
 app.post('/upload-images', upload.array("files"), function (req, res) {
     for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
@@ -448,8 +456,8 @@ app.post('/upload-images', upload.array("files"), function (req, res) {
     const connection = mysql.createConnection(database);
     connection.connect();
     connection.query(
-        "UPDATE BBY_22_users SET profile_pic = ? WHERE email = ? ",
-        [newPic, req.session.email],
+        "UPDATE BBY_22_users SET profile_pic = ? WHERE id = ? ",
+        [newPic, req.session.userID],
         function (error, results) {
             if (error) {
                 res.send({
@@ -467,6 +475,27 @@ app.post('/upload-images', upload.array("files"), function (req, res) {
         }
     );
 });
+
+app.post('/upload-images2', upload.array("files"), function (req, res) {
+
+    //console.log(req.body);
+    // console.log(req.files);
+
+    for (let i = 0; i < req.files.length; i++) {
+        req.files[i].filename = req.files[i].originalname;
+    }
+
+});
+
+// app.post('/profile-upload-single', upload.single('profile-file'), function (req, res, next) {
+//     // req.file is the `profile-file` file
+//     // req.body will hold the text fields, if there were any
+//     console.log(JSON.stringify(req.file))
+//     var response = '<a href="/">Home</a><br>'
+//     response += "Files uploaded successfully.<br>"
+//     response += `<img src="${req.file.path}" /><br>`
+//     return res.send(response)
+// })
 
 // Load sign up page
 app.get("/signup", function (req, res) {
@@ -498,7 +527,7 @@ app.get('/profile', function (req, res) {
     profileDOM.window.document.getElementById("userEmail").defaultValue = req.session.email;
     profileDOM.window.document.getElementById("userPassword").defaultValue = req.session.password;
 
-    let profileP = "<img src=\"imgs/user-pic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+    let profileP = "<img src=\"imgs/userPic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
     profileDOM.window.document.getElementById("postimage").innerHTML = profileP
 
     res.set("Server", "MACT Engine");
@@ -947,6 +976,7 @@ async function initializeDatabase() {
             status VARCHAR(30), 
             user_reserved int, 
             timestamp VARCHAR(50),
+            item_pic TEXT (999),
             PRIMARY KEY (id),
             FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
 
@@ -973,6 +1003,7 @@ async function initializeDatabase() {
             status VARCHAR(30), 
             user_reserved int, 
             timestamp VARCHAR(50),
+            item_pic TEXT (999),
             PRIMARY KEY (id),
             FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
     }

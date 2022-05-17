@@ -1,5 +1,13 @@
 "use strict";
 
+//grabs name of file input
+let itemPostName =""
+
+function upload(fakepath) {
+    var splits = fakepath.split('fakepath\\');
+    itemPostName = splits[1];
+}
+
 ready(function () {
     function ajaxGET(url, callback) {
 
@@ -37,10 +45,11 @@ ready(function () {
     // POST TO THE SERVER
     document.querySelector("#newPostBtn").addEventListener("click", function (e) {
         e.preventDefault();
+        // alert(itemPostName); //delete later on!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         let title = document.getElementById("title");
         let description = document.getElementById("newPostDescription");
         let city = document.getElementById("city");
-        let queryString = "title=" + title.value + "&description=" + description.value + "&city=" + city.value;
+        let queryString = "title=" + title.value + "&description=" + description.value + "&city=" + city.value + "&item_pic=" + itemPostName;
 
         ajaxPOST("/newPost", function (data) {
             if (data) {
