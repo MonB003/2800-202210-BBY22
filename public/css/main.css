@@ -222,9 +222,12 @@ body {
     font-weight: bold;
     text-align: center;
     margin: auto;
-    border-radius: 15px;
-    background-color: green;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    background-color: #526e62;
     cursor: pointer;
+    color: white;
+    padding-bottom: 3px;
 }
 
 .postlocation {

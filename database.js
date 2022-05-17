@@ -5,17 +5,16 @@ const express = require("express");
 const session = require("express-session");
 const res = require("express/lib/response");
 const app = express();
+const multer = require("multer");
 const fs = require("fs");
 const {
     JSDOM
 } = require('jsdom');
 
-
 app.use(express.json());
 app.use(express.urlencoded({
     extended: true
 }));
-const multer = require("multer");
 
 //mysql connection setup
 const is_heroku = process.env.IS_HEROKU || false;
@@ -43,7 +42,6 @@ const storage = multer.diskStorage({
     },
     filename: function (req, file, callback) {
         callback(null, "userPic-" + file.originalname.split('/').pop().trim());
-        // callback(null, req.session.userID + file.originalname.split('/').pop().trim());
     }
 });
 const upload = multer({
