@@ -1227,8 +1227,17 @@ async function initializeDatabase() {
             status VARCHAR(30), 
             user_reserved int, 
             timestamp VARCHAR(50),
+            item_pic TEXT (999),
             PRIMARY KEY (id),
-            FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
+            FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);
+            
+        CREATE TABLE IF NOT EXISTS BBY_22_messages(
+            id int NOT NULL AUTO_INCREMENT, 
+            userSending VARCHAR(30) NOT NULL,                
+            userReceiving VARCHAR(30) NOT NULL, 
+            message VARCHAR(300), 
+            time VARCHAR(50), 
+            PRIMARY KEY (id));`;
     } else {
         connection = await mysql.createConnection({
             host: "localhost",
@@ -1258,8 +1267,17 @@ async function initializeDatabase() {
             status VARCHAR(30), 
             user_reserved int, 
             timestamp VARCHAR(50),
+            item_pic TEXT (999),
             PRIMARY KEY (id),
-            FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
+            FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);
+            
+        CREATE TABLE IF NOT EXISTS BBY_22_messages(
+            id int NOT NULL AUTO_INCREMENT, 
+            userSending VARCHAR(30) NOT NULL,                
+            userReceiving VARCHAR(30) NOT NULL, 
+            message VARCHAR(300), 
+            time VARCHAR(50), 
+            PRIMARY KEY (id));`;
     }
 
     // Creates a table for user profiles and item posts
