@@ -1,6 +1,6 @@
 "use strict";
 
-// When profile button is clicked, direct to profile page
+// When profile button is clicked, redirect to profile page
 document.querySelector("#profile").addEventListener("click", function (e) {
     window.location.replace("/profile");
 });
@@ -10,9 +10,14 @@ document.querySelector("#home").addEventListener("click", function (e) {
     window.location.replace("/main");
 });
 
-// When new post button is clicked, direct to newPost page
+// When new post button is clicked, redirect to newPost page
 document.querySelector("#newPostPageBtn").addEventListener("click", function (e) {
     window.location.replace("/newPost");
+});
+
+// When my listings button is clicked, redirect to myListings page
+document.querySelector("#mylistings").addEventListener("click", function (e) {
+    window.location.replace("/mylistings");
 });
 
 //toggle filter menu

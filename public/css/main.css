@@ -8,7 +8,7 @@
 
 #navbar {
     display: grid;
-    grid-template-columns: 33% 33% 33%;
+    grid-template-columns: 25% 25% 25% 25%;
     font-family: 'Nanum Gothic', sans-serif;
     font-weight: bold;
     border-bottom-style: solid;
@@ -71,13 +71,13 @@
 }
 
 #homeContainer {
-    grid-area: 1/2/2/3;
+    grid-area: 1/1/2/2;
     width: 100%;
     padding-top: 15px;
 }
 
 #profileContainer {
-    grid-area: 1/1/2/2;
+    grid-area: 1/2/2/3;
     width: 100%;
     padding-top: 15px;
     align-items: center;
@@ -85,7 +85,7 @@
 }
 
 #logoutContainer {
-    grid-area: 1/3/2/4;
+    grid-area: 1/4/2/5;
     width: 100%;
     padding-top: 15px;
 }
