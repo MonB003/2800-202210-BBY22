@@ -1099,14 +1099,14 @@ io.on("connection", function (socket) {
         var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         var dateAndTime = date + ' ' + time;
 
-        const mysql = require("mysql2");
-        const connection = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "",
-            database: "COMP2800"
-        });
-        connection.connect();
+        // const mysql = require("mysql2");
+        // const connection = mysql.createConnection({
+        //     host: "localhost",
+        //     user: "root",
+        //     password: "",
+        //     database: "COMP2800"
+        // });
+        // connection.connect();
         connection.query("INSERT INTO BBY_22_messages (userSending, userReceiving, message, time) VALUES (?, ?, ?, ?)",
             [data.userSending, data.userReceiving, data.message, dateAndTime],
             function (error, result) {}
