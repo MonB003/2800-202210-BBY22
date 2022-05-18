@@ -203,6 +203,8 @@ app.get("/editpost", function (req, res) {
                         editpostDOM.window.document.querySelector("#title").setAttribute("value", `${post.title}`);
                         editpostDOM.window.document.querySelector("#city").setAttribute("value", `${post.city}`);
                         editpostDOM.window.document.querySelector("#description").innerHTML = `${post.description}`;
+                        editpostDOM.window.document.querySelector("#reserveUserBtn").setAttribute("onclick", `reserveUserForItem(${post.id})`);
+
                         editpostDOM.window.document.querySelector("#savepost").setAttribute("onclick", `save_post(${post.id})`);
                         editpostDOM.window.document.querySelector("#deletepost").setAttribute("onclick", `delete_post(${post.id})`);
                     });
@@ -222,7 +224,7 @@ app.get("/editpost", function (req, res) {
 app.post("/loadposts", function (req, res) {
     let myResults = null;
     let posts = [];
-    
+
     connection.query(
         "SELECT * FROM BBY_22_item_posts where status != 'collected'",
         function (error, results, fields) {
@@ -247,7 +249,7 @@ app.post("/loadposts", function (req, res) {
 app.post("/loadmyposts", function (req, res) {
     let myResults = null;
     let posts = [];
-    
+
     connection.query(
         "SELECT * FROM BBY_22_item_posts where user_id = ?",
         [req.session.userID],
@@ -346,14 +348,14 @@ app.post('/signup', function (req, res) {
                 //Checks if the new user's username is already in the database (username must be unique)
                 checkUsernameAlreadyExists(req.body.userName, req.session.userName,
                     function (recordReturned) {
-            
+
                         // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
                         if (recordReturned == null) {
-            
+
                             // Insert the new user into the database
                             connection.query('INSERT INTO BBY_22_users (firstName, lastName, userName, city, email, password, type, profile_pic) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
                                 [req.body.firstName, req.body.lastName, req.body.userName, req.body.city, req.body.email, req.body.password, "USER", "user-pic-none.jpg"],
-            
+
                                 function (error, results, fields) {
                                     if (error) {
                                         // Send message saying there was an error when signing up.
@@ -361,7 +363,7 @@ app.post('/signup', function (req, res) {
                                             status: "Fail",
                                             msg: "Error when signing up."
                                         });
-            
+
                                     } else {
                                         // User is logged in, so save their data into a session
                                         req.session.loggedIn = true;
@@ -374,20 +376,20 @@ app.post('/signup', function (req, res) {
                                         req.session.type = req.body.type;
                                         req.session.userID = results.insertId;
                                         req.session.profile_pic = "user-pic-none.jpg";
-            
+
                                         req.session.save(function (err) {
                                             // Session saved
                                         });
-            
+
                                         res.send({
                                             status: "Success",
                                             msg: "New user logged in."
                                         });
                                     }
                                 });
-            
+
                         } else {
-            
+
                             // Send message saying email already exists
                             res.send({
                                 status: "Fail",
@@ -561,7 +563,7 @@ app.get("/viewPost", function (req, res) {
         let viewPost = fs.readFileSync("./app/viewPost.html", "utf8");
         let viewPostDOM = new JSDOM(viewPost);
         let myResults = null;
-        
+
         connection.query(
             "SELECT * FROM BBY_22_item_posts WHERE id = ?",
             [req.session.postID],
@@ -608,7 +610,7 @@ app.get("/viewPost", function (req, res) {
 //to get post owner name from user table and displays it when view post details
 app.post('/getPostOwner', (req, res) => {
     let userName = [];
-    
+
     connection.query(
         "SELECT * FROM BBY_22_users WHERE id = ?",
         [req.session.postOwnerID],
@@ -630,7 +632,7 @@ app.post('/getPostOwner', (req, res) => {
 
 //saves the postid so that the post can be edited on the editpost page
 app.post('/toeditpost', (req, res) => {
-    
+
     connection.query(
         "SELECT * FROM BBY_22_item_posts WHERE id = ?",
         [req.body.postID],
@@ -710,10 +712,10 @@ app.post('/update-user-data', (req, res) => {
                 //Checks if the new user's username is already in the database (username must be unique)
                 checkUsernameAlreadyExists(req.body.userName, req.session.userName,
                     function (recordReturned) {
-            
+
                         // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
                         if (recordReturned == null) {
-            
+
                             // Insert the new user into the database
                             connection.query(
                                 "UPDATE BBY_22_users SET firstName = ?, lastName = ?, userName = ?, city = ?, email = ?, password = ? WHERE email = ? AND password = ?",
@@ -727,9 +729,9 @@ app.post('/update-user-data', (req, res) => {
                                     }
                                 }
                             );
-            
+
                         } else {
-            
+
                             // Send message saying email already exists
                             res.send({
                                 status: "Fail",
@@ -770,10 +772,10 @@ app.post('/update-data', (req, res) => {
                 //Checks if the new user's username is already in the database (username must be unique)
                 checkUsernameAlreadyExists(req.body.userName, req.session.userName,
                     function (recordReturned) {
-            
+
                         // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
                         if (recordReturned == null) {
-            
+
                             // Insert the new user into the database
                             connection.query(
                                 "UPDATE BBY_22_users SET firstName = ?, lastName = ?, userName = ?, city = ?, email = ?, password = ? WHERE email = ? AND password = ?",
@@ -799,9 +801,9 @@ app.post('/update-data', (req, res) => {
                                     }
                                 }
                             );
-            
+
                         } else {
-            
+
                             // Send message saying email already exists
                             res.send({
                                 status: "Fail",
@@ -857,14 +859,14 @@ app.post('/add-new-user', (req, res) => {
                 //Checks if the new user's username is already in the database (username must be unique)
                 checkUsernameAlreadyExists(req.body.userName, req.session.userName,
                     function (recordReturned) {
-            
+
                         // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
                         if (recordReturned == null) {
-            
+
                             // Insert the new user into the database
                             connection.query('INSERT INTO BBY_22_users (firstName, lastName, userName, city, email, password, type, profile_pic) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
                                 [req.body.firstName, req.body.lastName, req.body.userName, req.body.city, req.body.email, req.body.password, "USER", "user-pic-none.jpg"],
-            
+
                                 function (error, results, fields) {
                                     if (error) {
                                         // Send message saying there was an error when signing up.
@@ -872,17 +874,17 @@ app.post('/add-new-user', (req, res) => {
                                             status: "Fail",
                                             msg: "Error adding user."
                                         });
-            
-                                    } else {            
+
+                                    } else {
                                         res.send({
                                             status: "Success",
                                             msg: req.body.userName + " was added."
                                         });
                                     }
                                 });
-            
+
                         } else {
-            
+
                             // Send message saying email already exists
                             res.send({
                                 status: "Fail",
@@ -904,7 +906,7 @@ app.post('/add-new-user', (req, res) => {
 
 // Updates a post's status in the database
 app.post('/update-post-status', (req, res) => {
-    
+
     connection.query(
         "UPDATE BBY_22_item_posts SET status = ? WHERE id = ?",
         [req.body.newStatus, req.body.postID],
@@ -926,7 +928,7 @@ app.post('/update-post-status', (req, res) => {
 
 // Saves the current session user as the user who reserved the post that was clicked
 app.post('/save-user-pending-status', (req, res) => {
-    
+
     connection.query(
         "UPDATE BBY_22_item_posts SET user_reserved = ? WHERE id = ?",
         [req.session.userID, req.body.postID],
@@ -966,6 +968,50 @@ app.post('/get-post-and-session-ids', (req, res) => {
 });
 
 
+app.post('/check-username-exists', (req, res) => {
+    connection.query("SELECT * FROM BBY_22_users WHERE username = ?",
+        [req.body.userReserved],
+        function (error, results) {
+            if (error) {}
+            if (results.length > 0) {
+                // Username exists
+                res.send({
+                    status: 'Success',
+                    username: results[0]
+                });
+            } else {
+                // Username does not exist
+                res.send({
+                    status: 'Fail',
+                    msg: "Username does not exist."
+                });
+            }
+        }
+    );
+});
+
+
+app.post('/reserve-user-for-item', (req, res) => {
+
+    connection.query(
+        "UPDATE BBY_22_item_posts SET user_reserved = ? WHERE id = ?",
+        [req.body.userReserved, req.body.postID],
+        function (error, results) {
+            if (error) {
+                res.send({
+                    status: 'Fail',
+                    msg: 'Error. Item could not be reserved.'
+                });
+            }
+            res.send({
+                status: 'Success',
+                msg: 'Reserved item.'
+            });
+        }
+    );
+});
+
+
 
 // Loads all messages page
 app.get("/message", (req, res) => {
@@ -979,7 +1025,7 @@ app.get("/message", (req, res) => {
     let socketScript = messageDOM.window.document.createElement("script");
     if (is_heroku) {
         socketScript.src = "https://on-the-house-bby-22.herokuapp.com/socket.io/socket.io.js";
-    
+
     } else {
         socketScript.src = "http://localhost:8000/socket.io/socket.io.js";
     }
@@ -1016,6 +1062,20 @@ app.get("/postMessage", (req, res) => {
     let messageDOM = new JSDOM(message);
 
     messageDOM.window.document.getElementById("thisUserName").textContent = req.session.userName;
+
+    // Create the appropriate HTML script for socket.io
+    let socketScript = messageDOM.window.document.createElement("script");
+    if (is_heroku) {
+        socketScript.src = "https://on-the-house-bby-22.herokuapp.com/socket.io/socket.io.js";
+
+    } else {
+        socketScript.src = "http://localhost:8000/socket.io/socket.io.js";
+    }
+    messageDOM.window.document.body.appendChild(socketScript);
+
+    let clientScript = messageDOM.window.document.createElement("script");
+    clientScript.src = "js/clientPostMessage.js";
+    messageDOM.window.document.body.appendChild(clientScript);
 
     res.set("Server", "MACT Engine");
     res.set("X-Powered-By", "MACT");
@@ -1090,7 +1150,7 @@ app.post("/people-who-messaged-this-user", function (req, res) {
 app.post("/get-this-users-id", function (req, res) {
 
     connection.query("SELECT id FROM bby_22_users WHERE email = ? AND password = ?",
-    [req.session.email, req.session.password],
+        [req.session.email, req.session.password],
         function (error, id) {
             res.send({
                 status: "Success",
@@ -1178,7 +1238,7 @@ function checkEmailAlreadyExists(email, sessionemail, callback) {
             }
             if (results.length > 0 && email != sessionemail) {
                 // Email already and is not current user email
-                 return callback(results[0]);
+                return callback(results[0]);
             } else {
                 // Email does not exist
                 return callback(null);
@@ -1201,7 +1261,7 @@ function checkUsernameAlreadyExists(username, sessionusername, callback) {
             }
             if (results.length > 0 && username != sessionusername) {
                 // username already and is not current user username
-                 return callback(results[0]);
+                return callback(results[0]);
             } else {
                 // username does not exist
                 return callback(null);
@@ -1217,7 +1277,7 @@ async function initializeDatabase() {
     const mysql = require("mysql2/promise");
     let connection;
     let createDatabaseTables;
-    
+
     if (is_heroku) {
         connection = await mysql.createConnection({
             host: "nnsgluut5mye50or.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
@@ -1288,7 +1348,7 @@ async function initializeDatabase() {
             description VARCHAR(1000), 
             city VARCHAR(30), 
             status VARCHAR(30), 
-            user_reserved int, 
+            user_reserved VARCHAR(20), 
             timestamp VARCHAR(50),
             item_pic TEXT (999),
             PRIMARY KEY (id),
