@@ -228,6 +228,7 @@ body {
     cursor: pointer;
     color: white;
     padding-bottom: 3px;
+    margin-top: -1px;
 }
 
 .postlocation {

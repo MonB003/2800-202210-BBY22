@@ -9,7 +9,7 @@
     <link href="/imgs/OTH-favicon.ico" rel="icon" type="image/x-icon" />
 
     <!-- Styles Page for New Post -->
-    <link rel="stylesheet" href="/css/newPost.css">
+    <link rel="stylesheet" href="/css/editpost.css">
 </head>
 
 <body>
@@ -18,8 +18,14 @@
 
     <!-- Sign up form -->
     <div id="content">
+        <form id="image-form">
+            <input id="image-upload" type="file" value="Upload Image" accept="image/png, image/gif, image/jpeg"/>
+            <input id="submit" type="submit" value="Save Photo"/>
+        </form>
+        <br>
+        <p id="savedMsg"></p>
+        <br>
         <form id="signUpForm">
-            <button id="updatePicBtn">Change Photo</button>
             <br><br>
             <label>Title:</label>
             <br>
@@ -37,7 +43,7 @@
             <button id="deletepost">Delete</button>
             <br><br>
         </form>
-        <button id="cancel">Cancel</button>
+        <button id="cancel">Done</button>
     </div>
 
     <!-- Footer -->

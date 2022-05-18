@@ -44,7 +44,6 @@ if (is_heroku) {
 const mysql = require("mysql2");
 const connection = mysql.createPool(database);
 
-// const upload = multer({ storage: multer.memoryStorage() });
 const storage = multer.diskStorage({
     destination: function (req, file, callback) {
         callback(null, "./public/imgs/")
@@ -186,12 +185,14 @@ app.get("/mylistings", function (req, res) {
     }
 });
 
+var currentPostID = ""
 //populates the editpost page with the correct information
 app.get("/editpost", function (req, res) {
     if (req.session.loggedIn) {
         let editpost = fs.readFileSync("./app/editpost.html", "utf8");
         let editpostDOM = new JSDOM(editpost);
         let myResults = null;
+        currentPostID = req.session.editpostID;
 
         connection.query(
             "SELECT * FROM BBY_22_item_posts WHERE id = ? AND user_id = ?",
@@ -499,6 +500,34 @@ app.post('/upload-images2', upload.array("files"), function (req, res) {
     );
 });
 
+app.post('/upload-images3', upload.array("files"), function (req, res) {
+    for (let i = 0; i < req.files.length; i++) {
+        req.files[i].filename = req.files[i].originalname;
+    }
+
+    let newPic = req.files[0].filename;
+    // console.log("newPic in upload-iamges2: " + newPic + "     req.session.userID: " + req.session.userID + "   postID: " + currentPostID);
+    let main = fs.readFileSync("./app/main.html", "utf8");
+    let mainDOM = new JSDOM(main);
+
+    connection.query(
+        "UPDATE BBY_22_item_posts SET item_pic = ? WHERE user_id = ? AND id = ?",
+        [newPic, req.session.userID, currentPostID],
+        function (error, results) {
+            if (error) {
+                res.send({
+                    status: 'Fail',
+                    msg: 'Error. Profile picture could not be updated.'
+                });
+            }
+
+            res.set("Server", "MACT Engine");
+            res.set("X-Powered-By", "MACT");
+            res.send(mainDOM.serialize());
+        }
+    );
+});
+
 // Load sign up page
 app.get("/signup", function (req, res) {
     let signup = fs.readFileSync("./app/account.html", "utf8");
@@ -532,20 +561,20 @@ app.get("/newPostPhoto", function (req, res) {
 
 //     res.send(editPostPhotoDOM.serialize());
 // });
-app.get("/editpostPhoto", function (req, res) {
+// app.get("/editpostPhoto", function (req, res) {
 
-    // Check if user is logged in
-    if (req.session.loggedIn) {
-        let mylistings = fs.readFileSync("./app/editpostPhoto.html", "utf8");
-        let mylistingsDOM = new JSDOM(mylistings);
-        res.set("Server", "MACT Engine");
-        res.set("X-Powered-By", "MACT");
-        res.send(mylistingsDOM.serialize());
-    } else {
-        // User is not logged in, so direct to login page
-        res.redirect("/");
-    }
-});
+//     // Check if user is logged in
+//     if (req.session.loggedIn) {
+//         let mylistings = fs.readFileSync("./app/editpostPhoto.html", "utf8");
+//         let mylistingsDOM = new JSDOM(mylistings);
+//         res.set("Server", "MACT Engine");
+//         res.set("X-Powered-By", "MACT");
+//         res.send(mylistingsDOM.serialize());
+//     } else {
+//         // User is not logged in, so direct to login page
+//         res.redirect("/");
+//     }
+// });
 
 // Load profile page
 app.get('/profile', function (req, res) {
