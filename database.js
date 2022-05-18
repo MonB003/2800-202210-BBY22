@@ -990,20 +990,6 @@ app.get("/message", (req, res) => {
 });
 
 
-
-// app.set('view engine', 'ejs');
-// app.set('views', 'app');
-
-// app.get("/message", (req, res) => {
-
-//     // const heroku = {is_heroku}
-//     // res.render('message', heroku);
-
-//     res.render('message', {is_heroku: is_heroku});
-// });
-
-
-
 // Loads private message page after clicking a post
 app.get("/postMessage", (req, res) => {
     let message = fs.readFileSync("./app/postMessage.html", "utf8");
@@ -1255,7 +1241,7 @@ async function initializeDatabase() {
             description VARCHAR(1000), 
             city VARCHAR(30), 
             status VARCHAR(30), 
-            user_reserved int, 
+            user_reserved VARCHAR(20),
             timestamp VARCHAR(50),
             item_pic TEXT (999),
             PRIMARY KEY (id),
