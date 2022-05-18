@@ -257,6 +257,11 @@ body {
   color: aliceblue;
 }
 
+#userinfo {
+   grid-column: 2;
+   padding-top: 25px;
+}
+
 #username {
   font-family: 'Lato', sans-serif;
   font-weight: bold;
@@ -276,7 +281,7 @@ body {
   width: 75%;
   height: 26px;
   margin: auto;
-  padding: auto;
+  margin-top: 10px;
   border: none;
   border-radius: 5px;
   outline: none;

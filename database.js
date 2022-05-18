@@ -560,7 +560,7 @@ app.get('/profile/:username', function (req, res) {
                     results.forEach(user => {
                         // Load current user's data into the text fields on the page
                         profileDOM.window.document.querySelector("#username").innerHTML = user.userName;
-                        let profileP = "<img src=\"imgs/userPic-" + user.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let profileP = "<img src=\"/imgs/userPic-" + user.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         profileDOM.window.document.getElementById("postimage").innerHTML = profileP
                     });
                 } else {}
