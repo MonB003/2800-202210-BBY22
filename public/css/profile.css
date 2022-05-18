@@ -257,6 +257,36 @@ body {
   color: aliceblue;
 }
 
+#username {
+  font-family: 'Lato', sans-serif;
+  font-weight: bold;
+  font-size: 24px;
+  text-align: center;
+}
+
+#userrating {
+  text-align: center;
+  font-size: 18px;
+}
+
+#itemlistings {
+  font-family: 'Lato', sans-serif;
+  font-weight: bold;
+  font-size: 20px;
+  width: 75%;
+  height: 26px;
+  margin: auto;
+  padding: auto;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  box-sizing: border-box;
+  background-color: #526E62;
+  color: aliceblue;
+  grid-column: 2;
+}
+
+
 @media only screen and (max-width : 1000px) {
   #navbar {
     height: 50px;
