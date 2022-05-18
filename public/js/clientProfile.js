@@ -54,6 +54,11 @@ async function updateData() {
     const postResponse = await fetch('/update-data', postDetails);
     const jsonData = await postResponse.json();
     document.getElementById('message').innerHTML = jsonData.msg;
+
+    // If update is a success, redirect to main page
+    if (jsonData.status == "Success") {
+        window.location.replace("/main");
+    }
 };
 
 

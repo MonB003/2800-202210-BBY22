@@ -661,8 +661,8 @@ app.post('/toeditpost', (req, res) => {
 app.post('/savepostinfo', (req, res) => {
 
     connection.query(
-        "UPDATE BBY_22_item_posts SET title = ?, city = ?, description = ? WHERE id = ? AND user_id = ?",
-        [req.body.title, req.body.city, req.body.description, req.body.postID, req.session.userID],
+        "UPDATE BBY_22_item_posts SET title = ?, city = ?, description = ?, status = ? WHERE id = ? AND user_id = ?",
+        [req.body.title, req.body.city, req.body.description, req.body.status, req.body.postID, req.session.userID],
         function (error, results) {
             if (error) {
                 res.send({
@@ -904,81 +904,29 @@ app.post('/add-new-user', (req, res) => {
 });
 
 
-// Updates a post's status in the database
-app.post('/update-post-status', (req, res) => {
 
-    connection.query(
-        "UPDATE BBY_22_item_posts SET status = ? WHERE id = ?",
-        [req.body.newStatus, req.body.postID],
-        function (error, results) {
-            if (error) {
-                res.send({
-                    status: 'Fail',
-                    msg: 'Error. Post status could not be updated.'
-                });
-            }
-            res.send({
-                status: 'Success',
-                msg: 'Updated post status.'
-            });
-        }
-    );
-});
-
-
-// Saves the current session user as the user who reserved the post that was clicked
-app.post('/save-user-pending-status', (req, res) => {
-
-    connection.query(
-        "UPDATE BBY_22_item_posts SET user_reserved = ? WHERE id = ?",
-        [req.session.userID, req.body.postID],
-        function (error, results) {
-            if (error) {
-                res.send({
-                    status: 'Fail',
-                    msg: 'Error. Post status could not be updated.'
-                });
-            }
-        }
-    );
-
-    res.send({
-        status: 'Success',
-        msg: 'Saved pending user in post.'
-    });
-});
-
-
-// Returns the current session user ID and the post ID that was clicked. These get compared to verify if the user
-// pressing the status button has the ability to set the item status to reserved or collected.
-app.post('/get-post-and-session-ids', (req, res) => {
-    let currentSessionUserID = req.session.userID;
-
-    connection.query(
-        "SELECT user_id FROM BBY_22_item_posts WHERE id = ?",
-        [req.body.postID],
-        function (error, result) {
-            res.send({
-                status: 'Success',
-                postUserID: result[0],
-                currentUserID: currentSessionUserID
-            });
-        }
-    );
-});
-
-
+// Checks if a username exists in the database
 app.post('/check-username-exists', (req, res) => {
-    connection.query("SELECT * FROM BBY_22_users WHERE username = ?",
+    connection.query("SELECT * FROM BBY_22_users WHERE username = ? AND type = 'USER'",
         [req.body.userReserved],
         function (error, results) {
             if (error) {}
             if (results.length > 0) {
-                // Username exists
-                res.send({
-                    status: 'Success',
-                    username: results[0]
-                });
+                // If username matches the post owner's, they can't reserve it for themself
+                if (results[0].userName == req.session.userName) {
+                    res.send({
+                        status: 'Fail',
+                        msg: "You cannot reserve an item for yourself."
+                    });
+
+                } else {
+                    // Username exists and is valid
+                    res.send({
+                        status: 'Success',
+                        username: results[0]
+                    });
+                }
+
             } else {
                 // Username does not exist
                 res.send({
@@ -991,10 +939,10 @@ app.post('/check-username-exists', (req, res) => {
 });
 
 
+// Reserves an item for a user
 app.post('/reserve-user-for-item', (req, res) => {
-
     connection.query(
-        "UPDATE BBY_22_item_posts SET user_reserved = ? WHERE id = ?",
+        "UPDATE BBY_22_item_posts SET user_reserved = ?, status = 'reserved' WHERE id = ?",
         [req.body.userReserved, req.body.postID],
         function (error, results) {
             if (error) {

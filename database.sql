@@ -2,7 +2,7 @@ CREATE DATABASE IF NOT EXISTS COMP2800;
 use COMP2800;
 CREATE TABLE IF NOT EXISTS BBY_22_users(
     id int NOT NULL AUTO_INCREMENT,
-    username VARCHAR(30),
+    username VARCHAR(20),
     firstName VARCHAR(20),
     lastName VARCHAR(20),
     city VARCHAR(30),
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS BBY_22_item_posts(
     description VARCHAR(1000),
     city VARCHAR(30),
     status VARCHAR(30),
-    user_reserved int,
+    user_reserved VARCHAR(20),
     timestamp VARCHAR(50),
     item_pic TEXT (999),
     PRIMARY KEY (id),

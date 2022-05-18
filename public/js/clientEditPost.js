@@ -10,11 +10,18 @@ async function save_post(postID) {
     let title = document.querySelector("#title").value;
     let city = document.querySelector("#city").value;
     let description = document.querySelector("#description").value;
+    let status = document.querySelector("#itemStatus").value;
+
+    if (status == "available") {
+        // If there's a user reserved and item status changes to available, set user reserved back to null
+        removePotentialUserReserved(postID);
+    }
 
     const dataSent = {
         title,
         city,
         description,
+        status,
         postID
     }
 
@@ -26,10 +33,31 @@ async function save_post(postID) {
         body: JSON.stringify(dataSent)
     }
 
-    const postResponse = await fetch('/savepostinfo', postDetails);
-    const jsonData = await postResponse.json();
+    await fetch('/savepostinfo', postDetails);
     window.location.replace("/mylistings");
 };
+
+
+// Sets user_reserved variable back to null if item status becomes available again
+async function removePotentialUserReserved(postID) {
+    let userReserved = null;
+
+    const dataSentUpdate = {
+        userReserved,
+        postID
+    }
+
+    const postDetailsUpdate = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(dataSentUpdate)
+    }
+
+    // Get response from server side post request
+    await fetch('/reserve-user-for-item', postDetailsUpdate);
+}
 
 
 // Deletes a post from the database
@@ -48,31 +76,36 @@ async function delete_post(postID) {
     }
 
     // Get response from server side post request called delete-post
-    const postResponse = await fetch('/deletepost', postDetails);
-    const jsonData = await postResponse.json();
+    await fetch('/deletepost', postDetails);
     window.location.replace("/mylistings");
 };
 
 
-
+// Gets the currently selected item status in the dropdown
 function getItemStatus() {
     // Get dropdown menu item selected
     let itemStatusDropdown = document.getElementById("itemStatus");
-    var selectedValue = itemStatusDropdown.value;
-
+    var statusSelected = itemStatusDropdown.value;
+    
     let reserveStatusDiv = document.getElementById("reserveStatusDiv");
+    let savepostBtn = document.getElementById("savepost");
 
-    if (selectedValue == "reserved") {
+    if (statusSelected == "reserved") {
         // Make div to input username visible
         reserveStatusDiv.style.visibility = "visible";
 
+        // Disable save button until user is reserved
+        savepostBtn.disabled = true;
+
     } else {
+        // Hide reserve elements
         reserveStatusDiv.style.visibility = "hidden";
+        savepostBtn.disabled = false;
     }
 }
 
 
-
+// Reserves a user's username for an item in the database
 async function reserveUserForItem(postID) {
     let userReserved = document.getElementById("userReserved").value;
 
@@ -91,23 +124,18 @@ async function reserveUserForItem(postID) {
     // Get response from server side post request
     const postResponseCheck = await fetch('/check-username-exists', postDetailsCheck);
     const jsonDataCheck = await postResponseCheck.json();
-    let usernameReturned = jsonDataCheck.username;
-
-    // let test1 = usernameReturned.userName;
-    // if (test1 == undefined) {
-    //     document.getElementById("errorMessage").textContent = "Username does not exist.";
-    //     return;
-    // }
-    // console.log("username returned: " + test1); 
 
     if (jsonDataCheck.status == "Fail") {
-        // Username does not exist
-        document.getElementById("errorMessage").textContent = jsonDataCheck.msg;
+        // Username is not valid
+        document.getElementById("reserveMsg").textContent = jsonDataCheck.msg;
 
+        // Clear text field
         document.getElementById("userReserved").value = "";
+
+        // Disable save button
+        document.getElementById("savepost").disabled = true;
         return;
     }
-    // console.log("Username exists")
 
 
     // If username exists, update user_reserved in database
@@ -128,41 +156,12 @@ async function reserveUserForItem(postID) {
     const postResponseUpdate = await fetch('/reserve-user-for-item', postDetailsUpdate);
     const jsonDataUpdate = await postResponseUpdate.json();
 
-    document.getElementById("errorMessage").textContent = jsonDataUpdate.msg;
+    // Display message feedback for user
+    document.getElementById("reserveMsg").textContent = jsonDataUpdate.msg;
 
-    // if (jsonDataUpdate.status == "Fail") {
-    //     // Display msg
-    //     document.getElementById("errorMessage").textContent = jsonDataUpdate.msg;
-    // } 
-
+    // Enable save button
+    document.getElementById("savepost").disabled = false;
 };
-
-
-// CALL THIS WHEN SAVEPOST BUTTON CLICKED
-async function changeItemStatus(postID, newStatus) {
-    const dataSent = {
-        postID,
-        newStatus
-    }
-
-    const postDetails = {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(dataSent)
-    }
-
-    // Get response from server side post request to update status
-    const postResponse = await fetch('/update-post-status', postDetails);
-    const jsonData = await postResponse.json();
-
-    if (jsonData.status == "Success") {
-        // let postStatusDiv = document.getElementById('postStatus' + postID);
-        // postStatusDiv.innerHTML = newStatus;
-    }
-}
-
 
 
 // Method to disable reserve button if there's no input
@@ -174,6 +173,7 @@ document.getElementById("userReserved").addEventListener("input", function (e) {
     // If there's no input in the text field, disable the reserve button
     if (userReservedValue.trim() == "") {
         reserveUserBtn.disabled = true;
+
     } else {
         // If there's input, enable the button
         reserveUserBtn.disabled = false;
