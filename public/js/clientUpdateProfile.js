@@ -1,5 +1,4 @@
 "use strict";
-<<<<<<< HEAD
 const upLoadForm = document.getElementById("upload-images-form");
 upLoadForm.addEventListener("submit", uploadImages);
 
@@ -55,15 +54,8 @@ async function updateData() {
     const postResponse = await fetch('/update-data', postDetails);
     const jsonData = await postResponse.json();
     document.getElementById('message').innerHTML = jsonData.msg;
-
-    // If update is a success, redirect to main page
-    if (jsonData.status == "Success") {
-        window.location.replace("/main");
-    }
 };
 
-=======
->>>>>>> Alan_View_User_Profile
 
 // Directs to main page when home button is clicked
 document.querySelector("#home").addEventListener("click", function (e) {

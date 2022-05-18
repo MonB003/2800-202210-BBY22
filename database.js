@@ -547,6 +547,37 @@ app.get('/profile', function (req, res) {
     res.send(profileDOM.serialize());
 });
 
+//view user profile
+app.get('/profile/:username', function (req, res) {
+    if (req.session.loggedIn) {
+        let profile = fs.readFileSync("./app/profile.html", "utf8");
+        let profileDOM = new JSDOM(profile);
+
+        connection.query(
+            "SELECT * FROM BBY_22_users WHERE userName = ?",
+            [req.params.username],
+            function (error, results, fields) {
+    
+                if (error) {} else if (results.length > 0) {
+                    results.forEach(user => {
+                        // Load current user's data into the text fields on the page
+                        profileDOM.window.document.querySelector("#username").innerHTML = user.userName;
+                        let profileP = "<img src=\"/imgs/userPic-" + user.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        profileDOM.window.document.getElementById("postimage").innerHTML = profileP
+                    });
+                } else {}
+
+                res.set("Server", "MACT Engine");
+                res.set("X-Powered-By", "MACT");
+                res.send(profileDOM.serialize());
+            }
+        );
+    } else {
+        // User is not logged in, so direct to login page
+        res.redirect("/");
+    }
+});
+
 //saves the postid so that the post can be viewed on the viewPost page
 app.post('/toviewpost', (req, res) => {
 
