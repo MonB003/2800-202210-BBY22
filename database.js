@@ -203,6 +203,8 @@ app.get("/editpost", function (req, res) {
                         editpostDOM.window.document.querySelector("#title").setAttribute("value", `${post.title}`);
                         editpostDOM.window.document.querySelector("#city").setAttribute("value", `${post.city}`);
                         editpostDOM.window.document.querySelector("#description").innerHTML = `${post.description}`;
+                        editpostDOM.window.document.querySelector("#reserveUserBtn").setAttribute("onclick", `reserveUserForItem(${post.id})`);
+
                         editpostDOM.window.document.querySelector("#savepost").setAttribute("onclick", `save_post(${post.id})`);
                         editpostDOM.window.document.querySelector("#deletepost").setAttribute("onclick", `delete_post(${post.id})`);
                     });
@@ -659,8 +661,8 @@ app.post('/toeditpost', (req, res) => {
 app.post('/savepostinfo', (req, res) => {
 
     connection.query(
-        "UPDATE BBY_22_item_posts SET title = ?, city = ?, description = ? WHERE id = ? AND user_id = ?",
-        [req.body.title, req.body.city, req.body.description, req.body.postID, req.session.userID],
+        "UPDATE BBY_22_item_posts SET title = ?, city = ?, description = ?, status = ? WHERE id = ? AND user_id = ?",
+        [req.body.title, req.body.city, req.body.description, req.body.status, req.body.postID, req.session.userID],
         function (error, results) {
             if (error) {
                 res.send({
@@ -902,64 +904,56 @@ app.post('/add-new-user', (req, res) => {
 });
 
 
-// Updates a post's status in the database
-app.post('/update-post-status', (req, res) => {
 
-    connection.query(
-        "UPDATE BBY_22_item_posts SET status = ? WHERE id = ?",
-        [req.body.newStatus, req.body.postID],
+// Checks if a username exists in the database
+app.post('/check-username-exists', (req, res) => {
+    connection.query("SELECT * FROM BBY_22_users WHERE username = ? AND type = 'USER'",
+        [req.body.userReserved],
         function (error, results) {
-            if (error) {
+            if (error) {}
+            if (results.length > 0) {
+                // If username matches the post owner's, they can't reserve it for themself
+                if (results[0].userName == req.session.userName) {
+                    res.send({
+                        status: 'Fail',
+                        msg: "You cannot reserve an item for yourself."
+                    });
+
+                } else {
+                    // Username exists and is valid
+                    res.send({
+                        status: 'Success',
+                        username: results[0]
+                    });
+                }
+
+            } else {
+                // Username does not exist
                 res.send({
                     status: 'Fail',
-                    msg: 'Error. Post status could not be updated.'
+                    msg: "Username does not exist."
                 });
             }
-            res.send({
-                status: 'Success',
-                msg: 'Updated post status.'
-            });
         }
     );
 });
 
 
-// Saves the current session user as the user who reserved the post that was clicked
-app.post('/save-user-pending-status', (req, res) => {
-
+// Reserves an item for a user
+app.post('/reserve-user-for-item', (req, res) => {
     connection.query(
-        "UPDATE BBY_22_item_posts SET user_reserved = ? WHERE id = ?",
-        [req.session.userID, req.body.postID],
+        "UPDATE BBY_22_item_posts SET user_reserved = ?, status = 'reserved' WHERE id = ?",
+        [req.body.userReserved, req.body.postID],
         function (error, results) {
             if (error) {
                 res.send({
                     status: 'Fail',
-                    msg: 'Error. Post status could not be updated.'
+                    msg: 'Error. Item could not be reserved.'
                 });
             }
-        }
-    );
-
-    res.send({
-        status: 'Success',
-        msg: 'Saved pending user in post.'
-    });
-});
-
-
-// Returns the current session user ID and the post ID that was clicked. These get compared to verify if the user
-// pressing the status button has the ability to set the item status to reserved or collected.
-app.post('/get-post-and-session-ids', (req, res) => {
-    let currentSessionUserID = req.session.userID;
-
-    connection.query(
-        "SELECT user_id FROM BBY_22_item_posts WHERE id = ?",
-        [req.body.postID],
-        function (error, result) {
             res.send({
                 status: 'Success',
-                postUserID: result[0],
-                currentUserID: currentSessionUserID
+                msg: 'Reserved item.'
             });
         }
     );
@@ -1018,7 +1012,7 @@ app.get("/postMessage", (req, res) => {
     clientScript.src = "js/clientPostMessage.js";
     messageDOM.window.document.body.appendChild(clientScript);
 
-
+    
     res.set("Server", "MACT Engine");
     res.set("X-Powered-By", "MACT");
     res.send(messageDOM.serialize());
@@ -1075,7 +1069,7 @@ app.post("/get-owner-username-with-id", function (req, res) {
 // Get all people the user has received a message from
 app.post("/people-who-messaged-this-user", function (req, res) {
 
-    // Gets all emails who have sent this user a message
+    // Gets all usernames who have sent this user a message or received one from them
     let sqlStatement = "SELECT DISTINCT userSending, userReceiving FROM bby_22_messages WHERE userReceiving = '" + req.body.username + "'" + " OR userSending = '" + req.body.username + "'";
     connection.query(sqlStatement,
         function (error, contacts) {
@@ -1249,7 +1243,7 @@ async function initializeDatabase() {
             description VARCHAR(1000), 
             city VARCHAR(30), 
             status VARCHAR(30), 
-            user_reserved int, 
+            user_reserved VARCHAR(20),
             timestamp VARCHAR(50),
             item_pic TEXT (999),
             PRIMARY KEY (id),
@@ -1290,7 +1284,7 @@ async function initializeDatabase() {
             description VARCHAR(1000), 
             city VARCHAR(30), 
             status VARCHAR(30), 
-            user_reserved int, 
+            user_reserved VARCHAR(20), 
             timestamp VARCHAR(50),
             item_pic TEXT (999),
             PRIMARY KEY (id),

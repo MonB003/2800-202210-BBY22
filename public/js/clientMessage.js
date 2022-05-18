@@ -170,7 +170,8 @@ async function getUsersThisUserMessaged() {
     const postResponse = await fetch('/people-who-messaged-this-user', postDetails);
     const jsonData = await postResponse.json();
 
-    let allContacts = jsonData.thisUsersContacts;
+    // Gets all users this user has been in contact with
+    let allContacts = jsonData.thisUsersContacts;   
 
     let contactsArray = new Array();
     for (let index = 0; index < allContacts.length; index++) {
@@ -190,6 +191,7 @@ async function getUsersThisUserMessaged() {
         }
     }
     
+
 
     // Creates buttons for each user based on the IDs returned from the database
     for (let contact = 0; contact < contactsArray.length; contact++) {

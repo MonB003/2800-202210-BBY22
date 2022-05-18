@@ -37,7 +37,6 @@ ready(function () {
     // POST TO THE SERVER
     document.querySelector("#newPostBtn").addEventListener("click", function (e) {
         e.preventDefault();
-        // alert(itemPostName); //delete later on!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         let title = document.getElementById("title");
         let description = document.getElementById("newPostDescription");
         let city = document.getElementById("city");

@@ -16,7 +16,7 @@
     <!-- Nav bar -->
     <header id="header"></header>
 
-    <!-- Sign up form -->
+    <!-- Edit post form -->
     <div id="content">
         <form id="signUpForm">
             <label>Title:</label>
@@ -31,6 +31,23 @@
             <br>
             <textarea name="description" id="description" maxlength="1000" minlength="20" cols="100"
                 rows="10"></textarea>
+            <br>
+            <label>Status:</label>
+            <br>
+            <select name="item-status" id="itemStatus" onchange="getItemStatus()">
+                <option value="available">available</option>
+                <option value="reserved">reserved</option>
+                <option value="collected">collected</option>
+            </select>
+
+            <!-- This div only appears if status selected is reserved -->
+            <div id="reserveStatusDiv" style="visibility:hidden;">
+                <input type="text" id="userReserved" name="userReserved" placeholder="Username" pattern="[A-Za-z]{1,20}">
+                <button id="reserveUserBtn" disabled="true">Reserve</button>
+                <br>
+                <p id="reserveMsg"></p>
+            </div>
+
             <br><br>
             <button id="savepost">Save</button>
             <button id="deletepost">Delete</button>
