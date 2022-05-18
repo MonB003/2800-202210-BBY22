@@ -147,7 +147,7 @@ body {
   border-radius: 5px;
 }
 
-#newPostDescription {
+#newPostDescription, #description {
   width: 400px;
   height: 150px;
 }
@@ -168,6 +168,13 @@ body {
 #submit:hover {
   background-color: rgb(144, 143, 143);
   box-shadow: 1px 1px 3px rgb(73, 71, 71);
+}
+
+footer {
+  position: absolute;
+  bottom: 20px;
+  text-align: center;
+  align-items: center;
 }
 
 @media only screen and (max-width : 1000px) {
@@ -205,7 +212,7 @@ body {
     margin-bottom: 10px;
   }
 
-  #newPostDescription {
+  #newPostDescription, #description {
     width: 280px;
     height: 120px;
   }

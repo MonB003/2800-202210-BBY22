@@ -1,5 +1,11 @@
 "use strict";
 
+//redirects to update photo page
+document.querySelector("#updatePicBtn").addEventListener("click", function (e) {
+    alert("clicked redirect to photo");
+    window.location.replace("/editpostPhoto");
+});
+
 //Returns user to listing page
 document.querySelector("#cancel").addEventListener("click", function (e) {
     window.location.replace("/mylistings");

@@ -525,6 +525,28 @@ app.get("/newPostPhoto", function (req, res) {
     res.send(newPostDOM.serialize());
 });
 
+//Load editpostPhoto page
+// app.get("/editpostPhoto", function (req, res) {
+//     let editpostPhoto = fs.readFileSync("./app/editpostPhoto.html", "utf8");
+//     let editPostPhotoDOM = new JSDOM(editpostPhoto);
+
+//     res.send(editPostPhotoDOM.serialize());
+// });
+app.get("/editpostPhoto", function (req, res) {
+
+    // Check if user is logged in
+    if (req.session.loggedIn) {
+        let mylistings = fs.readFileSync("./app/editpostPhoto.html", "utf8");
+        let mylistingsDOM = new JSDOM(mylistings);
+        res.set("Server", "MACT Engine");
+        res.set("X-Powered-By", "MACT");
+        res.send(mylistingsDOM.serialize());
+    } else {
+        // User is not logged in, so direct to login page
+        res.redirect("/");
+    }
+});
+
 // Load profile page
 app.get('/profile', function (req, res) {
     let profile = fs.readFileSync("./app/updateProfile.html", "utf8");
@@ -574,6 +596,8 @@ app.get("/viewPost", function (req, res) {
                         viewPostDOM.window.document.querySelector("#post-description").innerHTML = `${post.description}`;
                         viewPostDOM.window.document.querySelector("#post-location").innerHTML = `${post.city}`;
                         viewPostDOM.window.document.querySelector("#postdate").innerHTML = `${post.timestamp}`;
+                        let profileP = "<img src=\"imgs/userPic-" + post.item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        viewPostDOM.window.document.getElementById("postimage").innerHTML = profileP
 
                         req.session.postOwnerID = post.user_id;
 
