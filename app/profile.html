@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Update Profile</title>
+    <title>Profile</title>
     <meta charset="utf-8" />
     <link href="/imgs/OTH-favicon.ico" rel="icon" type="image/x-icon" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -41,44 +41,20 @@
                     </div>
                 </div>
             </div>
-            <div id="change-input">
-                <p>Update Profile Picture</p>
-                <br>
-                <div id="container">
-                    <form id="upload-images-form">
-                        <input id="image-upload" type="file"  
-                            accept="image/png, image/gif, image/jpg, image/jpeg" />
-                        <input id="submit" type="submit" value="Submit"/>
-                    </form>
+            <div id="userinfo">
+                <div id="username">
+                Username
                 </div>
+                <div id="userrating">Rating</div>
             </div>
-            <div id="text-input">
-                <h3>Edit Profile</h3>
-                <input type="text" id="userFirstName" name="firstName">
-                <br>
-                <input type="text" id="userLastName" name="lastName">
-                <br>
-                <input type="text" id="userName" name="userName">
-                <br>
-                <input type="text" id="userCity" name="city">
-                <br>
-                <input type="text" id="userEmail" name="email">
-                <br>
-                <input type="text" id="userPassword" name="password">
-                <br>
-                <button id="saveBtn" onclick="updateData()">Save</button>
-                <p id="message"></p>
-            </div>
+            <button id="itemlistings">View Listings</button>          
         </div>
     </section>
 
 
 
     <!-- JavaScript -->
-    <script src="js/clientUpdateProfile.js"></script>
-
-
-
+    <script src="/js/clientProfile.js"></script>
 </body>
 
 </html>
