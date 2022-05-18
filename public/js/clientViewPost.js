@@ -22,6 +22,10 @@ async function getPostOwner() {
     const jsonData = await postResponse.json();
 
     document.querySelector("#post-owner").innerHTML = jsonData.name;
+    document.querySelector("#post-owner").addEventListener("click", function (e) {
+        window.location.replace(`/profile/${jsonData.name}`);
+    });
+    
 };
 
 getPostOwner();
