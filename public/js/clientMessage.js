@@ -170,15 +170,27 @@ async function getUsersThisUserMessaged() {
     const postResponse = await fetch('/people-who-messaged-this-user', postDetails);
     const jsonData = await postResponse.json();
 
-    let allContacts = jsonData.thisUsersContacts;
+    // Gets all users this user has been in contact with
+    let allContacts = jsonData.thisUsersContacts;   
 
     let contactsArray = new Array();
     for (let index = 0; index < allContacts.length; index++) {
         let currObj = allContacts[index];
 
-        // Add each username to the array
-        contactsArray.push(currObj.userSending);
+        // Check if users are already in the array
+        let containsSender = contactsArray.includes(currObj.userSending);
+        let containsReceiver = contactsArray.includes(currObj.userReceiving);
+
+        // Add each username that isn't the current session user to the array
+        if (currObj.userSending != username && containsSender == false) {
+            contactsArray.push(currObj.userSending);
+        } 
+        
+        if (currObj.userReceiving != username && containsReceiver == false) {
+            contactsArray.push(currObj.userReceiving);
+        }
     }
+
 
     // Creates buttons for each user based on the IDs returned from the database
     for (let contact = 0; contact < contactsArray.length; contact++) {

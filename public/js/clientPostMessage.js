@@ -69,6 +69,8 @@ async function getPostOwnersUsername(postID) {
     let returnedUsername = jsonDataUsername.otherUsername;
     let postOwnerUsername = returnedUsername.username;   // Post owner's username
 
+    document.getElementById("postOwnerUserName").textContent = postOwnerUsername;
+
     getSelectedUser(postOwnerUsername);
 }
 

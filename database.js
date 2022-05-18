@@ -974,10 +974,40 @@ app.get("/message", (req, res) => {
 
     messageDOM.window.document.getElementById("thisUserName").textContent = req.session.userName;
 
+
+    // Create the appropriate HTML script for socket.io
+    let socketScript = messageDOM.window.document.createElement("script");
+    if (is_heroku) {
+        socketScript.src = "https://on-the-house-bby-22.herokuapp.com/socket.io/socket.io.js";
+    
+    } else {
+        socketScript.src = "http://localhost:8000/socket.io/socket.io.js";
+    }
+    messageDOM.window.document.body.appendChild(socketScript);
+
+    let clientScript = messageDOM.window.document.createElement("script");
+    clientScript.src = "js/clientMessage.js";
+    messageDOM.window.document.body.appendChild(clientScript);
+
+
     res.set("Server", "MACT Engine");
     res.set("X-Powered-By", "MACT");
     res.send(messageDOM.serialize());
 });
+
+
+
+// app.set('view engine', 'ejs');
+// app.set('views', 'app');
+
+// app.get("/message", (req, res) => {
+
+//     // const heroku = {is_heroku}
+//     // res.render('message', heroku);
+
+//     res.render('message', {is_heroku: is_heroku});
+// });
+
 
 
 // Loads private message page after clicking a post
@@ -1043,8 +1073,8 @@ app.post("/get-owner-username-with-id", function (req, res) {
 // Get all people the user has received a message from
 app.post("/people-who-messaged-this-user", function (req, res) {
 
-    // Gets all emails who have sent this user a message
-    let sqlStatement = "SELECT DISTINCT userSending from bby_22_messages WHERE userReceiving = '" + req.body.username + "'";
+    // Gets all usernames who have sent this user a message or received one from them
+    let sqlStatement = "SELECT DISTINCT userSending, userReceiving FROM bby_22_messages WHERE userReceiving = '" + req.body.username + "'" + " OR userSending = '" + req.body.username + "'";
     connection.query(sqlStatement,
         function (error, contacts) {
             res.send({
@@ -1099,14 +1129,6 @@ io.on("connection", function (socket) {
         var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         var dateAndTime = date + ' ' + time;
 
-        // const mysql = require("mysql2");
-        // const connection = mysql.createConnection({
-        //     host: "localhost",
-        //     user: "root",
-        //     password: "",
-        //     database: "COMP2800"
-        // });
-        // connection.connect();
         connection.query("INSERT INTO BBY_22_messages (userSending, userReceiving, message, time) VALUES (?, ?, ?, ?)",
             [data.userSending, data.userReceiving, data.message, dateAndTime],
             function (error, result) {}
