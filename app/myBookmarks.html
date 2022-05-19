@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>On The House</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/imgs/OTH-favicon.ico" rel="icon" type="image/x-icon" />
+
+    <!-- CSS style -->
+    <link rel="stylesheet" href="/css/myBookmarks.css" />
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header id="header">
+
+        <!-- Navbar -->
+        <nav id="navbar">
+            <div id="homeContainer">
+                <button id="home" class="nav-button">Home</button>
+            </div>
+            <div id="profileContainer">
+                <button id="profile" class="nav-button">Profile</button>
+            </div>
+            <div id="logoutContainer">
+                <form action="/logout" method="get" id="logoutForm">
+                    <input type="submit" id="logout" class="nav-button" value="Logout" />
+                </form>
+            </div>
+        </nav>
+
+    </header>
+
+    <div id="pagename">My Listings</div>
+    <div id="topnav">
+        <button type="button" class="navbutton" id="newPostPageBtn">New Post</button>
+        <button type="button" class="navbutton" id="togglefilter">Filter</button>
+    </div>
+
+    <div id="filtermenu" style="display: none;">
+        <div id="filtersearchcontainer">
+            <div id="filtersearch">
+                <input type="text" id="search" onkeyup="displayposts()" placeholder="Search" title="Filter Search">
+                <select name="filter" id="filter">
+                    <option value="title">Title</option>
+                    <option value="city">City</option>
+                </select>
+            </div>
+        </div>
+        <button type="button" class="filtermenubtn" id="filterstatus">All</button>
+        <button type="button" class="filtermenubtn" id="sortbutton">Sort</button>
+    </div>
+    <template id="posttemplate">
+        <div class="post">
+            <div class="postimage">
+            </div>
+            <div class="posttitle">Post Title</div>
+            <div class="poststatus">Status</div>
+            <div class="postlocation">
+                Post Location
+            </div>
+            <div class="postoptions">
+                <div class="messagepost">
+                    M
+                </div>
+                <div class="editpost">
+                    Edit
+                </div>
+            </div>
+            <div class="postdate">Post date time</div>
+        </div>
+    </template>
+    <div id="posts">
+    </div>
+
+
+
+    <!-- JavaScript -->
+    <script src="js/clientMyBookmarks.js"></script>
+
+</body>
+
+</html>
