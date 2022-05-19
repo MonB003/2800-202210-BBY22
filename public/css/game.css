@@ -78,12 +78,12 @@
     flex-direction: column;
     justify-content: center;
     align-items: baseline;
-
 }
 
 #start{
-    position:relative;
-    left: 35vw;
+    /* position:relative;
+    left: 35vw; */
+    margin: auto;
     height: 3vh;
 }
 
@@ -92,6 +92,7 @@
     padding-top: 10vh;
     color: black;
     text-align: center;
+    margin: auto;
 }
 
 /* Assigns the position of the left and right div for touch screen use */
