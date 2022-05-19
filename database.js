@@ -546,6 +546,14 @@ app.get("/newPost", function (req, res) {
     res.send(newPostDOM.serialize());
 });
 
+//Load game page
+app.get("/game", function (req, res) {
+    let game = fs.readFileSync("./app/game.html", "utf8");
+    let gameDOM = new JSDOM(game);
+
+    res.send(gameDOM.serialize());
+});
+
 //Load newPostPhoto page
 app.get("/newPostPhoto", function (req, res) {
     let newPost = fs.readFileSync("./app/newPostPhoto.html", "utf8");
