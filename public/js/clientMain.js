@@ -132,13 +132,14 @@ async function displayposts() {
     if (search.toLowerCase() == "game") {
         let testpost = posttemplate.content.cloneNode(true);
         testpost.querySelector(".post").id = `game`;
-        testpost.querySelector(".posttitle").innerHTML = "On The House Game";
-        testpost.querySelector(".poststatus").innerHTML = "Game";
-        testpost.querySelector(".postlocation").innerHTML = "Click Title to Play";
-        testpost.querySelector(".postdate").innerHTML = "Game";
+        testpost.querySelector(".posttitle").innerHTML = "On The House Surprise";
+        testpost.querySelector(".posttitle").style.color = "lightgreen";
+        testpost.querySelector(".poststatus").innerHTML = "Available";
+        testpost.querySelector(".postlocation").innerHTML = "Click Title to Find Out";
+        testpost.querySelector(".postdate").innerHTML = "";
         testpost.querySelector(".savepost").innerHTML = "";
         testpost.querySelector(".messagepost").innerHTML = "";
-        let postpic = `<img src="imgs/gamepic.png" alt="profile-pic" id="picID"`;
+        let postpic = `<img src="imgs/stickman1.png" alt="profile-pic" id="picID"`;
         testpost.querySelector(".postimage").innerHTML = postpic;
         testpost.querySelector(".posttitle").setAttribute("onclick", `window.location.replace("/game")`);
         posts.appendChild(testpost);
