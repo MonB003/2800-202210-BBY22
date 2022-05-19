@@ -554,28 +554,6 @@ app.get("/newPostPhoto", function (req, res) {
     res.send(newPostDOM.serialize());
 });
 
-//Load editpostPhoto page
-// app.get("/editpostPhoto", function (req, res) {
-//     let editpostPhoto = fs.readFileSync("./app/editpostPhoto.html", "utf8");
-//     let editPostPhotoDOM = new JSDOM(editpostPhoto);
-
-//     res.send(editPostPhotoDOM.serialize());
-// });
-// app.get("/editpostPhoto", function (req, res) {
-
-//     // Check if user is logged in
-//     if (req.session.loggedIn) {
-//         let mylistings = fs.readFileSync("./app/editpostPhoto.html", "utf8");
-//         let mylistingsDOM = new JSDOM(mylistings);
-//         res.set("Server", "MACT Engine");
-//         res.set("X-Powered-By", "MACT");
-//         res.send(mylistingsDOM.serialize());
-//     } else {
-//         // User is not logged in, so direct to login page
-//         res.redirect("/");
-//     }
-// });
-
 // Load profile page
 app.get('/profile', function (req, res) {
     let profile = fs.readFileSync("./app/updateProfile.html", "utf8");
@@ -588,11 +566,7 @@ app.get('/profile', function (req, res) {
     profileDOM.window.document.getElementById("userCity").defaultValue = req.session.city;
     profileDOM.window.document.getElementById("userEmail").defaultValue = req.session.email;
     profileDOM.window.document.getElementById("userPassword").defaultValue = req.session.password;
-    if (req.session.profile_pic === "user-pic-none.jpg" ){
-        var profileP = "<img src=\"imgs/userPic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
-    } else {
-        var profileP = "<img src=\"imgs/uploads/userPic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
-    }
+    var profileP = "<img src=\"imgs/uploads/userPic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
     profileDOM.window.document.getElementById("postimage").innerHTML = profileP
 
     res.set("Server", "MACT Engine");
@@ -615,7 +589,7 @@ app.get('/profile/:username', function (req, res) {
                     results.forEach(user => {
                         // Load current user's data into the text fields on the page
                         profileDOM.window.document.querySelector("#username").innerHTML = user.userName;
-                        let profileP = "<img src=\"/imgs/userPic-" + user.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let profileP = "<img src=\"/imgs/uploads/userPic-" + user.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         profileDOM.window.document.getElementById("postimage").innerHTML = profileP
                     });
                 } else {}

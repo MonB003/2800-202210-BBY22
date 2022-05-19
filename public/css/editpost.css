@@ -5,51 +5,97 @@
   padding: 0;
 }
 
-.headerContainer {
-  display: grid;
-  grid-template-columns: 100%;
-  font-family: 'Nanum Gothic', sans-serif;
-  font-weight: bold;
-  border-bottom-style: solid;
-  border-color: #BCC1BA;
-  height: 42px;
-  background-color: #FCFFFD;
-  color: rgb(77, 82, 86);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.container {
+  width: 100%;
+  margin: auto;
+  position: relative;
 }
 
-#navLogout {
-  position: fixed;
-  right: 0;
-  width: 8em;
-  margin-top: 0.8em;
-  margin-right: -2.5em;
+.navbar, .navbar ul {
+  list-style: none;
+  margin: 0;
 }
 
-#logout {
+.navbar {
+  font-family: 'Lato', Helvetica, sans-serif;
+  line-height: 1;
+  background: #5C6F68;
+}
+
+.navbar {
+  padding: 0;
+  display: block;
+  overflow: visible;
+  width: 100%;
+}
+
+.navbar > li > a, .navbar > li > form{
+  padding: 18px 22px;
+  font-size: 18px;
+}
+
+.navbar:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.navbar > li {
+  float: left;
+  display: block;
+  position: relative;
+}
+
+.navbar li a, .navbar>li>form {
+  color: #ffffff;
+  -webkit-transition: color .2s ease-out;
+  -moz-transition: color .2s ease-out;
+  -ms-transition: color .2s ease-out;
+  -o-transition: color .2s ease-out;
+  transition: color .2s ease-out;
+}
+
+.navbar>li>a, .navbar>li>form {
+  display: block;
+  font-weight: 300;
+  text-decoration: none;
+}
+
+.navbar li a:hover, .navbar>li>form:hover {
+  color: rgb(163, 163, 163);
+}
+
+#fright {
+  float:right
+}
+
+.navbar>li>form {
+  float: right;
+}
+
+#logoutBtn {
+  float: right;
+  background: none;
+  color: inherit;
   border: none;
-  outline: none;
-  background-color: transparent;
-  padding: 5pt;
-  padding-left: 8pt;
-  padding-right: 8pt;
-  font-family: 'Lato', sans-serif;
-  letter-spacing: 1px;
-  font-size: 15px;
-  color: #6B9080;
-  margin-bottom: 10pt;
-  font-weight: bold;
-  border: 10px;
-  border-color: aliceblue;
-  border-radius: 10px;
-  box-shadow: 0 0 2px rgb(243, 243, 243);
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
 }
 
-#logout:hover {
-  background-color: rgb(216, 215, 215);
-  box-shadow: 1px 1px 3px #CCE3DE;
+/* ****************************************************************************** */
+#pagename {
+  grid-area: 1/2/2/3;
+  font-family: 'Lato';
+  font-size: 3vw;
+  text-align: center;
+  text-transform: uppercase;
+  margin-top: 20px;
+}
+
+hr.solid {
+  border-top: 3px solid #bbb;
 }
 
 body {
@@ -57,6 +103,7 @@ body {
   background: url("/imgs/background3.jpg") center/cover fixed;
   background-repeat: no-repeat;
   overflow: hidden;
+  overflow-y: scroll;
   background-size: cover;
 }
 
@@ -66,28 +113,11 @@ body {
   grid-template-rows: 20% 70% 10%;
 }
 
-#newPostHeading {
-  grid-area: 2/2/3/3;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-  font-size: 17px;
-
-}
-
-#newPostHeading>h1 {
-  font-family: 'Pacifico';
-  padding-top: 5px;
-  text-align: center;
-}
-
 #content {
   grid-area: 2/2/3/3;
   background-color: rgba(0, 0, 0, 0.1);
   width: 500px;
   margin: 2% auto;
-  border-top-left-radius: 25px;
-  border-bottom-right-radius: 25px;
   box-shadow: 0 0 10px rgb(40, 39, 39);
   padding: 20px;
   font-family: 'Lato', sans-serif;
@@ -96,13 +126,13 @@ body {
   text-align: center;
 }
 
-#signUpForm {
+#editForm {
   text-align: center;
   align-items: center;
   margin-bottom: -20px;
 }
 
-#signUpForm input {
+#editForm input {
   width: 400px;
   height: 40px;
   border: none;
@@ -115,72 +145,13 @@ body {
   border-radius: 5px;
 }
 
-#newPostBtn {
-  width: 400px;
-  height: 40px;
-  border: none;
-  outline: none;
-  box-sizing: border-box;
-  font-size: 15px;
-  color: rgb(255, 255, 255);
-  background-color: #6B9080;
-  border-radius: 5px;
-  margin-bottom: 15px;
-}
-
-#newPostBtn:hover {
-  background-color: #526e62;
-  box-shadow: 1px 1px 3px rgb(73, 71, 71);
-}
-
-#backtoMain {
-  text-align: center;
-}
-
-#backToLogin {
-  width: 400px;
-  height: 40px;
-  border: none;
-  outline: none;
-  box-sizing: border-box;
-  font-size: 15px;
-  color: rgb(255, 255, 255);
-  background-color: rgb(121, 119, 119);
-  margin-bottom: 20px;
-  border-radius: 5px;
-}
-
-#newPostDescription, #description {
+#description {
   width: 400px;
   height: 150px;
 }
 
-#backToLogin:hover {
-  background-color: rgb(89, 88, 88);
-  box-shadow: 1px 1px 3px rgb(73, 71, 71);
-}
-
-#submit {
-  font-family: 'Pacifico';
-  max-width: 150px;
-  background-color: rgb(187, 187, 187);
-  text-align: left;
-  box-shadow: 1px 1px 3px rgb(73, 71, 71);
-}
-
-#submit:hover {
-  background-color: rgb(144, 143, 143);
-  box-shadow: 1px 1px 3px rgb(73, 71, 71);
-}
-
-#pagename {
-  grid-area: 1/2/2/3;
-  font-family: 'Pacifico';
-  font-size: 3vw;
-  text-align: center;
-}
-
 footer {
+  display: none;
   position: absolute;
   bottom: 20px;
   text-align: center;
@@ -190,24 +161,24 @@ footer {
 #submit, #savepost, #deletepost {
   border: none;
   outline: none;
-  background-color: #3b4f4c;
+  background-color: #8AA39B;
   padding: 5pt;
   padding-left: 8pt;
   padding-right: 8pt;
-  font-family: 'Lato',sans-serif;
+  font-family: 'Lato', sans-serif;
   letter-spacing: 1px;
   font-size: 15px;
   color: aliceblue;
-  border-radius: 5pt;
+  border-radius: 5px;
   margin-bottom: 10pt;
-  font-weight: bold;
+  text-transform: uppercase;
 }
 
 #deletepost {
-  background-color: rgb(91, 54, 54);
+  background-color: #714955;
 }
 
-#cancelDiv{
+#cancelDiv {
   align-items: center;
   text-align: center;
 }
@@ -228,9 +199,9 @@ footer {
 #cancel {
   padding-left: 0;
   font-family: 'Lato', sans-serif;
-  background-color: #526e62;
+  background-color: #5C6F68;
   letter-spacing: 1px;
-  font-weight: bold;
+  text-transform: uppercase;
   margin-bottom: 25px;
   color: aliceblue;
 }
@@ -248,7 +219,7 @@ footer {
 
 @media only screen and (max-width : 600px) {
 
-.headerContainer {
+  .headerContainer {
     height: 40px;
   }
 
@@ -256,7 +227,7 @@ footer {
     margin-bottom: 5pt;
   }
 
-  #signUpForm {
+  #editForm {
     margin-top: -30px;
   }
 
@@ -272,7 +243,7 @@ footer {
     margin-top: 20px;
   }
 
-  #signUpForm input {
+  #editForm input {
     width: 280px;
     height: 35px;
     margin-bottom: 5px;
@@ -286,8 +257,8 @@ footer {
   #uploadFile {
     padding-top: 5px;
   }
-  
-  footer{
+
+  footer {
     display: none;
   }
 }

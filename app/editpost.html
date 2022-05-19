@@ -14,6 +14,23 @@
 
 <body>
     <!-- Nav bar -->
+    <nav>
+        <div class="container">
+            <ul class="navbar" data-breakpoint="800">
+                <li id="home"><a href="#">HOME</a></li>
+                <li id="bookmark"><a href="#">SAVED</a></li>
+                <li id="messages"><a href="#">MESSAGES</a></li>
+                <li id="listings"><a href="#">MY LISTINGS</a></li>
+                <li id="profile"><a href="#">PROFILE</a></li>
+                <li id ="fright">
+                    <form action="/logout" method="get" id="logoutForm">
+                        <input type="submit" id="logoutBtn" class="nav-button" value="LOGOUT" />
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
     <header id="pagename">Edit Post</header>
 
     <!-- Edit post form -->
@@ -24,8 +41,9 @@
         </form>
         <p id="savedMsg"></p>
         <br>
-        <form id="signUpForm">
-            <br><br>
+        <form id="editForm">
+            <hr class="solid">
+            <br>
             <label>Title:</label>
             <br>
             <input type="text" id="title" name="title" pattern="[A-Za-z]{1,50}">
@@ -36,10 +54,7 @@
             <br><br>
             <label>Description:</label>
             <br>
-            <!-- <textarea name="description" id="description" maxlength="1000" minlength="20" cols="100"
-                rows="10"></textarea> -->
             <textarea name="description" id="description" maxlength="1000" minlength="20"></textarea>
-
             <br>
             <label>Status:</label>
             <br>
@@ -48,7 +63,6 @@
                 <option value="reserved">reserved</option>
                 <option value="collected">collected</option>
             </select>
-
             <!-- This div only appears if status selected is reserved -->
             <div id="reserveStatusDiv" style="visibility:hidden;">
                 <input type="text" id="userReserved" name="userReserved" placeholder="Username" pattern="[A-Za-z]{1,20}">
@@ -56,9 +70,6 @@
                 <br>
                 <p id="reserveMsg"></p>
             </div>
-
-            <!-- <textarea name="description" id="description" maxlength="1000" minlength="20"></textarea> -->
-            <br><br>
             <button id="savepost">Save Details</button>
             <button id="deletepost">Delete Post</button>
             <br><br>

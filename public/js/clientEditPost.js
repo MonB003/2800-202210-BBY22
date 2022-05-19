@@ -1,10 +1,31 @@
 "use strict";
 
+// When profile button is clicked, redirect to profile page
+document.querySelector("#profile").addEventListener("click", function (e) {
+    window.location.replace("/profile");
+});
+
+// Redirects to main page
+document.querySelector("#home").addEventListener("click", function (e) {
+    window.location.replace("/main");
+});
+
+document.querySelector("#messages").addEventListener("click", function (e) {
+    window.location.replace("/message");
+});
+
+// When my listings button is clicked, redirect to myListings page
+document.querySelector("#listings").addEventListener("click", function (e) {
+    window.location.replace("/mylistings");
+});
+
 //Returns user to listing page
 document.querySelector("#cancel").addEventListener("click", function (e) {
     window.location.replace("/mylistings");
 });
 
+
+//upload image
 const upLoadForm = document.getElementById("image-form");
 upLoadForm.addEventListener("submit", uploadImages);
 
@@ -41,13 +62,6 @@ function uploadImages(e) {
     );
     document.getElementById("savedMsg").innerHTML = "Photo Saved";
 }
-
-
-//redirects to update photo page
-// document.querySelector("#updatePicBtn").addEventListener("click", function (e) {
-//     alert("clicked redirect to photo");
-//     window.location.replace("/editpostPhoto");
-// });
 
 
 // saves post information into database
