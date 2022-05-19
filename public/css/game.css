@@ -75,14 +75,21 @@
     background-color: white;
     z-index: 100000;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: baseline;
 
 }
 
+#start{
+    position:relative;
+    left: 35vw;
+    height: 3vh;
+}
+
 /* The Game title that appears in the white block */
-#white>#game-title {
-    padding-top: 20px;
+#game-title {
+    padding-top: 10vh;
     color: black;
     text-align: center;
 }
@@ -103,7 +110,7 @@
 /* Aligns the pop up box to the middle */
 #msg-box{
     top: 30vh;
-    left: 18vw;
+    left: 12vw;
     padding: 50px;
     position: absolute;
     border: 3px solid black;
