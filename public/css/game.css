@@ -17,10 +17,18 @@
 #gamer {
     width: 100px;
     height: 100px;
-    background-color: red;
     position: relative;
     top: 300px;
     left: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+
+}
+
+#gamer>#stickman {
+    height: 100px;
+    
 }
 
 /* The obstacle that moves downwards */
