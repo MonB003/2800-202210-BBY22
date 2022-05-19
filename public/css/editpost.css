@@ -92,11 +92,14 @@ body {
   padding: 20px;
   font-family: 'Lato', sans-serif;
   font-weight: bold;
+  align-items: center;
+  text-align: center;
 }
 
 #signUpForm {
   text-align: center;
   align-items: center;
+  margin-bottom: -20px;
 }
 
 #signUpForm input {
@@ -170,6 +173,13 @@ body {
   box-shadow: 1px 1px 3px rgb(73, 71, 71);
 }
 
+#pagename {
+  grid-area: 1/2/2/3;
+  font-family: 'Pacifico';
+  font-size: 3vw;
+  text-align: center;
+}
+
 footer {
   position: absolute;
   bottom: 20px;
@@ -177,7 +187,66 @@ footer {
   align-items: center;
 }
 
-@media only screen and (max-width : 1000px) {
+#submit, #savepost, #deletepost {
+  border: none;
+  outline: none;
+  background-color: #3b4f4c;
+  padding: 5pt;
+  padding-left: 8pt;
+  padding-right: 8pt;
+  font-family: 'Lato',sans-serif;
+  letter-spacing: 1px;
+  font-size: 15px;
+  color: aliceblue;
+  border-radius: 5pt;
+  margin-bottom: 10pt;
+  font-weight: bold;
+}
+
+#deletepost {
+  background-color: rgb(91, 54, 54);
+}
+
+#cancelDiv{
+  align-items: center;
+  text-align: center;
+}
+
+#cancel {
+  width: 80%;
+  height: 40px;
+  border: none;
+  outline: none;
+  padding-left: 40px;
+  box-sizing: border-box;
+  font-size: 15px;
+  color: #333;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+#cancel {
+  padding-left: 0;
+  font-family: 'Lato', sans-serif;
+  background-color: #526e62;
+  letter-spacing: 1px;
+  font-weight: bold;
+  margin-bottom: 25px;
+  color: aliceblue;
+}
+
+#cancel:hover, #submit:hover, #savepost:hover {
+  background-color: #435a50;
+  box-shadow: 1px 1px 3px rgb(73, 71, 71);
+}
+
+#deletepost:hover {
+  background-color: rgb(98, 62, 62);
+  box-shadow: 1px 1px 3px rgb(73, 71, 71);
+}
+
+
+@media only screen and (max-width : 600px) {
 
 .headerContainer {
     height: 40px;
@@ -185,6 +254,17 @@ footer {
 
   #logout {
     margin-bottom: 5pt;
+  }
+
+  #signUpForm {
+    margin-top: -30px;
+  }
+
+  #pagename {
+    grid-area: 1/2/2/3;
+    font-family: 'Pacifico', cursive;
+    font-size: 8vw;
+    text-align: center;
   }
 
   #content {
@@ -198,20 +278,6 @@ footer {
     margin-bottom: 5px;
   }
 
-  #newPostBtn {
-    width: 280px;
-    height: 35px;
-    margin-left: 0%;
-    margin-bottom: 8px;
-    margin-top: 8px;
-  }
-
-  #backToLogin {
-    width: 280px;
-    height: 35px;
-    margin-bottom: 10px;
-  }
-
   #newPostDescription, #description {
     width: 280px;
     height: 120px;
@@ -219,5 +285,9 @@ footer {
 
   #uploadFile {
     padding-top: 5px;
+  }
+  
+  footer{
+    display: none;
   }
 }

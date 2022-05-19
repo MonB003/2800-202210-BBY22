@@ -44,13 +44,12 @@ if (is_heroku) {
 const mysql = require("mysql2");
 const connection = mysql.createPool(database);
 
-// const upload = multer({ storage: multer.memoryStorage() });
 const storage = multer.diskStorage({
     destination: function (req, file, callback) {
-        callback(null, "./public/imgs/")
+        callback(null, "./public/imgs/uploads/")
     },
     filename: function (req, file, callback) {
-        callback(null, "userPic-" + file.originalname.split('/').pop().trim());
+        callback(null, "userPic-" + req.session.userID + file.originalname.split('/').pop().trim());
     }
 });
 const upload = multer({
@@ -186,12 +185,14 @@ app.get("/mylistings", function (req, res) {
     }
 });
 
+var currentPostID = ""
 //populates the editpost page with the correct information
 app.get("/editpost", function (req, res) {
     if (req.session.loggedIn) {
         let editpost = fs.readFileSync("./app/editpost.html", "utf8");
         let editpostDOM = new JSDOM(editpost);
         let myResults = null;
+        currentPostID = req.session.editpostID;
 
         connection.query(
             "SELECT * FROM BBY_22_item_posts WHERE id = ? AND user_id = ?",
@@ -441,14 +442,13 @@ app.post('/newPost', function (req, res) {
         });
 });
 
-
 // Stores image in database
 app.post('/upload-images', upload.array("files"), function (req, res) {
     for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
     }
 
-    let newPic = req.files[0].filename;
+    let newPic = req.session.userID + req.files[0].filename;
 
     let profile = fs.readFileSync("./app/updateProfile.html", "utf8");
     let profileDOM = new JSDOM(profile);
@@ -479,13 +479,40 @@ app.post('/upload-images2', upload.array("files"), function (req, res) {
         req.files[i].filename = req.files[i].originalname;
     }
 
-    let newPic = req.files[0].filename;
+    let newPic = req.session.userID + req.files[0].filename;
     let main = fs.readFileSync("./app/main.html", "utf8");
     let mainDOM = new JSDOM(main);
 
     connection.query(
         "UPDATE BBY_22_item_posts SET item_pic = ? WHERE user_id = ? AND timestamp = ?",
         [newPic, req.session.userID, timeStampPhoto],
+        function (error, results) {
+            if (error) {
+                res.send({
+                    status: 'Fail',
+                    msg: 'Error. Profile picture could not be updated.'
+                });
+            }
+
+            res.set("Server", "MACT Engine");
+            res.set("X-Powered-By", "MACT");
+            res.send(mainDOM.serialize());
+        }
+    );
+});
+
+app.post('/upload-images3', upload.array("files"), function (req, res) {
+    for (let i = 0; i < req.files.length; i++) {
+        req.files[i].filename = req.files[i].originalname;
+    }
+
+    let newPic = req.session.userID + req.files[0].filename;
+    let main = fs.readFileSync("./app/main.html", "utf8");
+    let mainDOM = new JSDOM(main);
+
+    connection.query(
+        "UPDATE BBY_22_item_posts SET item_pic = ? WHERE user_id = ? AND id = ?",
+        [newPic, req.session.userID, currentPostID],
         function (error, results) {
             if (error) {
                 res.send({
@@ -527,6 +554,28 @@ app.get("/newPostPhoto", function (req, res) {
     res.send(newPostDOM.serialize());
 });
 
+//Load editpostPhoto page
+// app.get("/editpostPhoto", function (req, res) {
+//     let editpostPhoto = fs.readFileSync("./app/editpostPhoto.html", "utf8");
+//     let editPostPhotoDOM = new JSDOM(editpostPhoto);
+
+//     res.send(editPostPhotoDOM.serialize());
+// });
+// app.get("/editpostPhoto", function (req, res) {
+
+//     // Check if user is logged in
+//     if (req.session.loggedIn) {
+//         let mylistings = fs.readFileSync("./app/editpostPhoto.html", "utf8");
+//         let mylistingsDOM = new JSDOM(mylistings);
+//         res.set("Server", "MACT Engine");
+//         res.set("X-Powered-By", "MACT");
+//         res.send(mylistingsDOM.serialize());
+//     } else {
+//         // User is not logged in, so direct to login page
+//         res.redirect("/");
+//     }
+// });
+
 // Load profile page
 app.get('/profile', function (req, res) {
     let profile = fs.readFileSync("./app/updateProfile.html", "utf8");
@@ -539,7 +588,11 @@ app.get('/profile', function (req, res) {
     profileDOM.window.document.getElementById("userCity").defaultValue = req.session.city;
     profileDOM.window.document.getElementById("userEmail").defaultValue = req.session.email;
     profileDOM.window.document.getElementById("userPassword").defaultValue = req.session.password;
-    let profileP = "<img src=\"imgs/userPic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+    if (req.session.profile_pic === "user-pic-none.jpg" ){
+        var profileP = "<img src=\"imgs/userPic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+    } else {
+        var profileP = "<img src=\"imgs/uploads/userPic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+    }
     profileDOM.window.document.getElementById("postimage").innerHTML = profileP
 
     res.set("Server", "MACT Engine");
@@ -607,6 +660,8 @@ app.get("/viewPost", function (req, res) {
                         viewPostDOM.window.document.querySelector("#post-description").innerHTML = `${post.description}`;
                         viewPostDOM.window.document.querySelector("#post-location").innerHTML = `${post.city}`;
                         viewPostDOM.window.document.querySelector("#postdate").innerHTML = `${post.timestamp}`;
+                        let profileP = "<img src=\"imgs/uploads/userPic-" + post.item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        viewPostDOM.window.document.getElementById("postimage").innerHTML = profileP
 
                         req.session.postOwnerID = post.user_id;
 
