@@ -60,6 +60,7 @@ setInterval(function () {
         submit.setAttribute("type", "submit");
         submit.setAttribute("ID", "submit");
         submit.setAttribute("value", "OK");
+        submit.setAttribute("onclick", "gameover()");
         msgBox.appendChild(submit);
 
         // alert("Game Over! Score: " + count);
@@ -67,6 +68,12 @@ setInterval(function () {
     }
 
 }, 1);
+
+//game over ok button
+function gameover() {
+    window.location.reload();
+}
+
 
 //Checks for the touch screen inputs and calls the functions to move left/right
 document.getElementById("left").addEventListener("touchstart", moveLeft);
