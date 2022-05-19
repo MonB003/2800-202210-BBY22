@@ -5,6 +5,27 @@ document.querySelector("#cancel").addEventListener("click", function (e) {
     window.location.replace("/mylistings");
 });
 
+
+// Get default status of the item to set default dropdown option
+// async function getDefaultStatus(postID) {
+//     const dataSent = {
+//         postID
+//     }
+
+//     const postDetails = {
+//         method: 'POST',
+//         headers: {
+//             "Content-Type": "application/json"
+//         },
+//         body: JSON.stringify(dataSent)
+//     }
+
+//     // Get response from server side post request
+//     const postResponse = await fetch('/', postDetails);
+//     const jsonData = await postResponse.json();
+// }
+
+
 // saves post information into database
 async function save_post(postID) {
     let title = document.querySelector("#title").value;
@@ -15,6 +36,12 @@ async function save_post(postID) {
     if (status == "available") {
         // If there's a user reserved and item status changes to available, set user reserved back to null
         removePotentialUserReserved(postID);
+    } else if (status == "collected") {
+        // let checkReserved = checkUserReservedBeforeCollected(postID);
+        // if (checkReserved == false) {
+        //     document.getElementById('reserveMsg').innerHTML = "Item must be reserved for a user before being collected.";
+        //     return;
+        // }
     }
 
     const dataSent = {
@@ -58,6 +85,39 @@ async function removePotentialUserReserved(postID) {
     // Get response from server side post request
     await fetch('/reserve-user-for-item', postDetailsUpdate);
 }
+
+
+
+async function checkUserReservedBeforeCollected(postID) {
+    const dataSent = {
+        postID
+    }
+
+    const postDetails = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(dataSent)
+    }
+
+    // Get response from server side post request
+    const postResponse = await fetch('/check-user-reserved-value', postDetails);
+    const jsonData = await postResponse.json();
+
+    let returnedUserReserved = jsonData.userReserved;
+    let userReserved = returnedUserReserved.user_reserved;
+    console.log("user: " + userReserved);
+
+    if (userReserved == null) {
+        // There is no user reserved
+        return false;
+    } else {
+        // There is a user reserved
+        return true;
+    }
+}
+
 
 
 // Deletes a post from the database
@@ -161,6 +221,8 @@ async function reserveUserForItem(postID) {
 
     // Enable save button
     document.getElementById("savepost").disabled = false;
+
+    document.getElementById("collectedOption").disabled = false;
 };
 
 
