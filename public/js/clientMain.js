@@ -129,6 +129,21 @@ async function displayposts() {
     let search = document.getElementById("search").value;
     let posttemplate = document.getElementById("posttemplate");
     let posts = document.getElementById("posts");
+    if (search.toLowerCase() == "game") {
+        let testpost = posttemplate.content.cloneNode(true);
+        testpost.querySelector(".post").id = `game`;
+        testpost.querySelector(".posttitle").innerHTML = "On The House Game";
+        testpost.querySelector(".poststatus").innerHTML = "Game";
+        testpost.querySelector(".postlocation").innerHTML = "Click Title to Play";
+        testpost.querySelector(".postdate").innerHTML = "Game";
+        testpost.querySelector(".savepost").innerHTML = "";
+        testpost.querySelector(".messagepost").innerHTML = "";
+        let postpic = `<img src="imgs/gamepic.png" alt="profile-pic" id="picID"`;
+        testpost.querySelector(".postimage").innerHTML = postpic;
+        testpost.querySelector(".posttitle").setAttribute("onclick", `window.location.replace("/game")`);
+        posts.appendChild(testpost);
+    }
+
     if (sort == "recent") {
         for (let i = postdata.length - 1; i > -1; i--) {
             if (document.querySelector("#filter").value == "title") {
