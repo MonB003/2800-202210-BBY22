@@ -7,24 +7,36 @@ document.querySelector("#cancel").addEventListener("click", function (e) {
 
 
 // Get default status of the item to set default dropdown option
-// async function getDefaultStatus(postID) {
-//     const dataSent = {
-//         postID
-//     }
+async function getDefaultStatus() {
+    const postDetails = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }
 
-//     const postDetails = {
-//         method: 'POST',
-//         headers: {
-//             "Content-Type": "application/json"
-//         },
-//         body: JSON.stringify(dataSent)
-//     }
+    // Get response from server side post request
+    const postResponse = await fetch('/get-current-item-status', postDetails);
+    const jsonData = await postResponse.json();
+    let currentStatus = jsonData.itemStatus;
 
-//     // Get response from server side post request
-//     const postResponse = await fetch('/', postDetails);
-//     const jsonData = await postResponse.json();
-// }
+    let statusOption = document.getElementById(currentStatus);
+    statusOption.setAttribute("selected", "selected");
 
+    // If status is reserved, display div with username text field
+    if (currentStatus == "reserved") {
+        // Make div to input username visible
+        document.getElementById("reserveStatusDiv").style.visibility = "visible";
+
+        let currentUserReserved = jsonData.userReserved;
+        document.getElementById("userReserved").value = currentUserReserved;
+        
+    } else if (currentStatus == "available") {
+        // If status is available, disable collected option until a user is reserved
+        document.getElementById("collected").disabled = true;
+    }
+}
+getDefaultStatus();
 
 // saves post information into database
 async function save_post(postID) {
@@ -36,13 +48,7 @@ async function save_post(postID) {
     if (status == "available") {
         // If there's a user reserved and item status changes to available, set user reserved back to null
         removePotentialUserReserved(postID);
-    } else if (status == "collected") {
-        // let checkReserved = checkUserReservedBeforeCollected(postID);
-        // if (checkReserved == false) {
-        //     document.getElementById('reserveMsg').innerHTML = "Item must be reserved for a user before being collected.";
-        //     return;
-        // }
-    }
+    } 
 
     const dataSent = {
         title,
@@ -88,35 +94,35 @@ async function removePotentialUserReserved(postID) {
 
 
 
-async function checkUserReservedBeforeCollected(postID) {
-    const dataSent = {
-        postID
-    }
+// async function checkUserReservedBeforeCollected(postID) {
+//     const dataSent = {
+//         postID
+//     }
 
-    const postDetails = {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(dataSent)
-    }
+//     const postDetails = {
+//         method: 'POST',
+//         headers: {
+//             "Content-Type": "application/json"
+//         },
+//         body: JSON.stringify(dataSent)
+//     }
 
-    // Get response from server side post request
-    const postResponse = await fetch('/check-user-reserved-value', postDetails);
-    const jsonData = await postResponse.json();
+//     // Get response from server side post request
+//     const postResponse = await fetch('/check-user-reserved-value', postDetails);
+//     const jsonData = await postResponse.json();
 
-    let returnedUserReserved = jsonData.userReserved;
-    let userReserved = returnedUserReserved.user_reserved;
-    console.log("user: " + userReserved);
+//     let returnedUserReserved = jsonData.userReserved;
+//     let userReserved = returnedUserReserved.user_reserved;
+//     console.log("user: " + userReserved);
 
-    if (userReserved == null) {
-        // There is no user reserved
-        return false;
-    } else {
-        // There is a user reserved
-        return true;
-    }
-}
+//     if (userReserved == null) {
+//         // There is no user reserved
+//         return false;
+//     } else {
+//         // There is a user reserved
+//         return true;
+//     }
+// }
 
 
 
@@ -141,7 +147,7 @@ async function delete_post(postID) {
 };
 
 
-// Gets the currently selected item status in the dropdown
+// Gets the currently selected item status in the dropdown every time a status is selected
 function getItemStatus() {
     // Get dropdown menu item selected
     let itemStatusDropdown = document.getElementById("itemStatus");
@@ -222,7 +228,7 @@ async function reserveUserForItem(postID) {
     // Enable save button
     document.getElementById("savepost").disabled = false;
 
-    document.getElementById("collectedOption").disabled = false;
+    document.getElementById("collected").disabled = false;
 };
 
 
@@ -235,6 +241,7 @@ document.getElementById("userReserved").addEventListener("input", function (e) {
     // If there's no input in the text field, disable the reserve button
     if (userReservedValue.trim() == "") {
         reserveUserBtn.disabled = true;
+        document.getElementById("savepost").disabled = true;
 
     } else {
         // If there's input, enable the button
