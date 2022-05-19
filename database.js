@@ -960,22 +960,7 @@ app.post('/reserve-user-for-item', (req, res) => {
 });
 
 
-// Checks if a username exists in the database
-// app.post('/check-user-reserved-value', (req, res) => {
-//     connection.query("SELECT * FROM BBY_22_item_posts WHERE id = ?",
-//         [req.body.postID],
-//         function (error, results) {
-//             if (error) {}
-//             // Get the user_reserved value
-//             res.send({
-//                 status: 'Success',
-//                 userReserved: results[0]
-//             });
-//         }
-//     );
-// });
-
-
+// Gets the current item post status and user reserved value
 app.post('/get-current-item-status', (req, res) => {
     connection.query("SELECT * FROM BBY_22_item_posts WHERE id = ? AND user_id = ?",
     [req.session.editpostID, req.session.userID],

@@ -20,6 +20,7 @@ async function getDefaultStatus() {
     const jsonData = await postResponse.json();
     let currentStatus = jsonData.itemStatus;
 
+    // Select the dropdown option of the current status
     let statusOption = document.getElementById(currentStatus);
     statusOption.setAttribute("selected", "selected");
 
@@ -91,39 +92,6 @@ async function removePotentialUserReserved(postID) {
     // Get response from server side post request
     await fetch('/reserve-user-for-item', postDetailsUpdate);
 }
-
-
-
-// async function checkUserReservedBeforeCollected(postID) {
-//     const dataSent = {
-//         postID
-//     }
-
-//     const postDetails = {
-//         method: 'POST',
-//         headers: {
-//             "Content-Type": "application/json"
-//         },
-//         body: JSON.stringify(dataSent)
-//     }
-
-//     // Get response from server side post request
-//     const postResponse = await fetch('/check-user-reserved-value', postDetails);
-//     const jsonData = await postResponse.json();
-
-//     let returnedUserReserved = jsonData.userReserved;
-//     let userReserved = returnedUserReserved.user_reserved;
-//     console.log("user: " + userReserved);
-
-//     if (userReserved == null) {
-//         // There is no user reserved
-//         return false;
-//     } else {
-//         // There is a user reserved
-//         return true;
-//     }
-// }
-
 
 
 // Deletes a post from the database
@@ -228,6 +196,7 @@ async function reserveUserForItem(postID) {
     // Enable save button
     document.getElementById("savepost").disabled = false;
 
+    // Enable collected option from dropdown
     document.getElementById("collected").disabled = false;
 };
 
