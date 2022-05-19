@@ -14,7 +14,7 @@
 
 <body>
     <!-- Nav bar -->
-    <header id="header"></header>
+    <header id="pagename">Edit Post</header>
 
     <!-- Sign up form -->
     <div id="content">
@@ -22,7 +22,6 @@
             <input id="image-upload" type="file" value="Upload Image" accept="image/png, image/gif, image/jpeg"/>
             <input id="submit" type="submit" value="Save Photo"/>
         </form>
-        <br>
         <p id="savedMsg"></p>
         <br>
         <form id="signUpForm">
@@ -39,11 +38,13 @@
             <br>
             <textarea name="description" id="description" maxlength="1000" minlength="20"></textarea>
             <br><br>
-            <button id="savepost">Save</button>
-            <button id="deletepost">Delete</button>
+            <button id="savepost">Save Details</button>
+            <button id="deletepost">Delete Post</button>
             <br><br>
         </form>
-        <button id="cancel">Done</button>
+        <div id="cancelDiv">
+            <button id="cancel">Done</button>
+        </div>
     </div>
 
     <!-- Footer -->

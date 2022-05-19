@@ -101,7 +101,7 @@ async function displayposts() {
                         testpost.querySelector(".poststatus").setAttribute("onclick", `changePostStatus(${postdata[i].postid})`);
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
-                        let postpic = "<img src=\"imgs/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
                         testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
@@ -118,7 +118,7 @@ async function displayposts() {
                         testpost.querySelector(".poststatus").setAttribute("onclick", `changePostStatus(${postdata[i].postid})`);
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
-                        let postpic = "<img src=\"imgs/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
                         testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
@@ -139,7 +139,7 @@ async function displayposts() {
                         testpost.querySelector(".poststatus").setAttribute("onclick", `changePostStatus(${postdata[i].postid})`);
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
-                        let postpic = "<img src=\"imgs/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
                         testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
@@ -156,7 +156,7 @@ async function displayposts() {
                         testpost.querySelector(".poststatus").setAttribute("onclick", `changePostStatus(${postdata[i].postid})`);
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
-                        let postpic = "<img src=\"imgs/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
                         testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
@@ -181,7 +181,7 @@ async function displayposts() {
                         testpost.querySelector(".poststatus").setAttribute("onclick", `changePostStatus(${postdata[i].postid})`);
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
-                        let postpic = "<img src=\"imgs/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
                         testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
@@ -198,7 +198,7 @@ async function displayposts() {
                         testpost.querySelector(".poststatus").setAttribute("onclick", `changePostStatus(${postdata[i].postid})`);
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
-                        let postpic = "<img src=\"imgs/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
                         testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
@@ -219,7 +219,7 @@ async function displayposts() {
                         testpost.querySelector(".poststatus").setAttribute("onclick", `changePostStatus(${postdata[i].postid})`);
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
-                        let postpic = "<img src=\"imgs/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
                         testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
@@ -236,7 +236,7 @@ async function displayposts() {
                         testpost.querySelector(".poststatus").setAttribute("onclick", `changePostStatus(${postdata[i].postid})`);
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
-                        let postpic = "<img src=\"imgs/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
                         testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)

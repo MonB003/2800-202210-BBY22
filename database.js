@@ -46,10 +46,10 @@ const connection = mysql.createPool(database);
 
 const storage = multer.diskStorage({
     destination: function (req, file, callback) {
-        callback(null, "./public/imgs/")
+        callback(null, "./public/imgs/uploads/")
     },
     filename: function (req, file, callback) {
-        callback(null, "userPic-" + file.originalname.split('/').pop().trim());
+        callback(null, "userPic-" + req.session.userID + file.originalname.split('/').pop().trim());
     }
 });
 const upload = multer({
@@ -440,14 +440,13 @@ app.post('/newPost', function (req, res) {
         });
 });
 
-
 // Stores image in database
 app.post('/upload-images', upload.array("files"), function (req, res) {
     for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
     }
 
-    let newPic = req.files[0].filename;
+    let newPic = req.session.userID + req.files[0].filename;
 
     let profile = fs.readFileSync("./app/updateProfile.html", "utf8");
     let profileDOM = new JSDOM(profile);
@@ -478,7 +477,7 @@ app.post('/upload-images2', upload.array("files"), function (req, res) {
         req.files[i].filename = req.files[i].originalname;
     }
 
-    let newPic = req.files[0].filename;
+    let newPic = req.session.userID + req.files[0].filename;
     let main = fs.readFileSync("./app/main.html", "utf8");
     let mainDOM = new JSDOM(main);
 
@@ -505,8 +504,7 @@ app.post('/upload-images3', upload.array("files"), function (req, res) {
         req.files[i].filename = req.files[i].originalname;
     }
 
-    let newPic = req.files[0].filename;
-    // console.log("newPic in upload-iamges2: " + newPic + "     req.session.userID: " + req.session.userID + "   postID: " + currentPostID);
+    let newPic = req.session.userID + req.files[0].filename;
     let main = fs.readFileSync("./app/main.html", "utf8");
     let mainDOM = new JSDOM(main);
 
@@ -588,7 +586,11 @@ app.get('/profile', function (req, res) {
     profileDOM.window.document.getElementById("userCity").defaultValue = req.session.city;
     profileDOM.window.document.getElementById("userEmail").defaultValue = req.session.email;
     profileDOM.window.document.getElementById("userPassword").defaultValue = req.session.password;
-    let profileP = "<img src=\"imgs/userPic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+    if (req.session.profile_pic === "user-pic-none.jpg" ){
+        var profileP = "<img src=\"imgs/userPic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+    } else {
+        var profileP = "<img src=\"imgs/uploads/userPic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+    }
     profileDOM.window.document.getElementById("postimage").innerHTML = profileP
 
     res.set("Server", "MACT Engine");
@@ -625,7 +627,7 @@ app.get("/viewPost", function (req, res) {
                         viewPostDOM.window.document.querySelector("#post-description").innerHTML = `${post.description}`;
                         viewPostDOM.window.document.querySelector("#post-location").innerHTML = `${post.city}`;
                         viewPostDOM.window.document.querySelector("#postdate").innerHTML = `${post.timestamp}`;
-                        let profileP = "<img src=\"imgs/userPic-" + post.item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let profileP = "<img src=\"imgs/uploads/userPic-" + post.item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         viewPostDOM.window.document.getElementById("postimage").innerHTML = profileP
 
                         req.session.postOwnerID = post.user_id;
