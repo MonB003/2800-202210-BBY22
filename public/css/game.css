@@ -102,8 +102,8 @@
 
 /* Aligns the pop up box to the middle */
 #msg-box{
-    top: 30%;
-    left: 40%;
+    top: 30vh;
+    left: 18vw;
     padding: 50px;
     position: absolute;
     border: 3px solid black;

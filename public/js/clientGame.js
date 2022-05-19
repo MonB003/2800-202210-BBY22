@@ -63,7 +63,7 @@ setInterval(function () {
         msgBox.appendChild(submit);
 
         // alert("Game Over! Score: " + count);
-        location.reload();
+        // location.reload();
     }
 
 }, 1);
