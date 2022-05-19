@@ -546,6 +546,14 @@ app.get("/newPost", function (req, res) {
     res.send(newPostDOM.serialize());
 });
 
+//Load myBookmarks page
+app.get("/myBookmarks", function (req, res) {
+    let myBookmarks = fs.readFileSync("./app/myBookmarks.html", "utf8");
+    let myBookmarksDOM = new JSDOM(myBookmarks);
+
+    res.send(myBookmarksDOM.serialize());
+});
+
 //Load newPostPhoto page
 app.get("/newPostPhoto", function (req, res) {
     let newPost = fs.readFileSync("./app/newPostPhoto.html", "utf8");
@@ -588,7 +596,7 @@ app.get('/profile', function (req, res) {
     profileDOM.window.document.getElementById("userCity").defaultValue = req.session.city;
     profileDOM.window.document.getElementById("userEmail").defaultValue = req.session.email;
     profileDOM.window.document.getElementById("userPassword").defaultValue = req.session.password;
-    if (req.session.profile_pic === "user-pic-none.jpg" ){
+    if (req.session.profile_pic === "user-pic-none.jpg") {
         var profileP = "<img src=\"imgs/userPic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
     } else {
         var profileP = "<img src=\"imgs/uploads/userPic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
@@ -610,7 +618,7 @@ app.get('/profile/:username', function (req, res) {
             "SELECT * FROM BBY_22_users WHERE userName = ?",
             [req.params.username],
             function (error, results, fields) {
-    
+
                 if (error) {} else if (results.length > 0) {
                     results.forEach(user => {
                         // Load current user's data into the text fields on the page
@@ -1098,7 +1106,7 @@ app.get("/postMessage", (req, res) => {
     clientScript.src = "js/clientPostMessage.js";
     messageDOM.window.document.body.appendChild(clientScript);
 
-    
+
     res.set("Server", "MACT Engine");
     res.set("X-Powered-By", "MACT");
     res.send(messageDOM.serialize());
