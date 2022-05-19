@@ -99,3 +99,17 @@
 #right {
     left: 50%;
 }
+
+/* Aligns the pop up box to the middle */
+#msg-box{
+    top: 30%;
+    left: 40%;
+    padding: 50px;
+    position: absolute;
+    border: 3px solid black;
+    background-color: beige;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

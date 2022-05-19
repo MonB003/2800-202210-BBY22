@@ -45,7 +45,24 @@ setInterval(function () {
     if (gamerLeft == obstacleLeft && obstacleTop < 500 && obstacleTop > 300) {
         obstacle.style.animation = "none";
 
-        alert("Game Over! Score: " + count);
+        // Creates the pop-up message to indicate game over
+        let body = document.body;
+        let msgBox = document.createElement("div");
+        msgBox.setAttribute("ID", "msg-box");
+        body.appendChild(msgBox);
+
+        let msg = document.createElement("h3");
+        msg.setAttribute("ID", "game-over");
+        msg.innerHTML = "Game Over! Score: " + count;
+        msgBox.appendChild(msg);
+
+        let submit = document.createElement("input");
+        submit.setAttribute("type", "submit");
+        submit.setAttribute("ID", "submit");
+        submit.setAttribute("value", "OK");
+        msgBox.appendChild(submit);
+
+        // alert("Game Over! Score: " + count);
         location.reload();
     }
 
