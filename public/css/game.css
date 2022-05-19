@@ -26,6 +26,7 @@
 
 }
 
+/* The Stickman figure as the game character */
 #gamer>#stickman {
     height: 100px;
     
@@ -35,9 +36,21 @@
 #obstacle {
     width: 100px;
     height: 100px;
-    background-color: black;
+    /* background-color: black; */
     position: relative;
     animation: slide 1s infinite;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+
+}
+
+/* the falling obstacles with a label */
+#obstacle>#crisis{
+    color: red;
+    text-align: center;
+
+
 }
 
 
@@ -61,7 +74,17 @@
     top: 580px;
     background-color: white;
     z-index: 100000;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
 
+}
+
+/* The Game title that appears in the white block */
+#white>#game-title {
+    padding-top: 20px;
+    color: black;
+    text-align: center;
 }
 
 /* Assigns the position of the left and right div for touch screen use */
