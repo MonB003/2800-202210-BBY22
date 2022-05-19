@@ -43,11 +43,38 @@ function uploadImages(e) {
 }
 
 
-//redirects to update photo page
-// document.querySelector("#updatePicBtn").addEventListener("click", function (e) {
-//     alert("clicked redirect to photo");
-//     window.location.replace("/editpostPhoto");
-// });
+// Get default status of the item to set default dropdown option
+async function getDefaultStatus() {
+    const postDetails = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }
+
+    // Get response from server side post request
+    const postResponse = await fetch('/get-current-item-status', postDetails);
+    const jsonData = await postResponse.json();
+    let currentStatus = jsonData.itemStatus;
+
+    // Select the dropdown option of the current status
+    let statusOption = document.getElementById(currentStatus);
+    statusOption.setAttribute("selected", "selected");
+
+    // If status is reserved, display div with username text field
+    if (currentStatus == "reserved") {
+        // Make div to input username visible
+        document.getElementById("reserveStatusDiv").style.visibility = "visible";
+
+        let currentUserReserved = jsonData.userReserved;
+        document.getElementById("userReserved").value = currentUserReserved;
+        
+    } else if (currentStatus == "available") {
+        // If status is available, disable collected option until a user is reserved
+        document.getElementById("collected").disabled = true;
+    }
+}
+getDefaultStatus();
 
 
 // saves post information into database
@@ -60,7 +87,7 @@ async function save_post(postID) {
     if (status == "available") {
         // If there's a user reserved and item status changes to available, set user reserved back to null
         removePotentialUserReserved(postID);
-    }
+    } 
 
     const dataSent = {
         title,
@@ -126,7 +153,7 @@ async function delete_post(postID) {
 };
 
 
-// Gets the currently selected item status in the dropdown
+// Gets the currently selected item status in the dropdown every time a status is selected
 function getItemStatus() {
     // Get dropdown menu item selected
     let itemStatusDropdown = document.getElementById("itemStatus");
@@ -206,6 +233,9 @@ async function reserveUserForItem(postID) {
 
     // Enable save button
     document.getElementById("savepost").disabled = false;
+
+    // Enable collected option from dropdown
+    document.getElementById("collected").disabled = false;
 };
 
 
@@ -218,6 +248,7 @@ document.getElementById("userReserved").addEventListener("input", function (e) {
     // If there's no input in the text field, disable the reserve button
     if (userReservedValue.trim() == "") {
         reserveUserBtn.disabled = true;
+        document.getElementById("savepost").disabled = true;
 
     } else {
         // If there's input, enable the button

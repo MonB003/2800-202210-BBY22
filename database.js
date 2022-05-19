@@ -1164,6 +1164,25 @@ app.post('/reserve-user-for-item', (req, res) => {
 });
 
 
+// Gets the current item post status and user reserved value
+app.post('/get-current-item-status', (req, res) => {
+    connection.query("SELECT * FROM BBY_22_item_posts WHERE id = ? AND user_id = ?",
+    [req.session.editpostID, req.session.userID],
+        function (error, results) {
+            if (error) {}
+            // Get the user_reserved value
+            res.send({
+                status: 'Success',
+                postID: req.session.editpostID, 
+                userID: req.session.userID,
+                itemStatus: results[0].status,
+                userReserved: results[0].user_reserved
+            });
+        }
+    );
+});
+
+
 
 // Loads all messages page
 app.get("/message", (req, res) => {
