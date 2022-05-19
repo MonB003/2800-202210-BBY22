@@ -588,7 +588,7 @@ app.get('/profile', function (req, res) {
     profileDOM.window.document.getElementById("userCity").defaultValue = req.session.city;
     profileDOM.window.document.getElementById("userEmail").defaultValue = req.session.email;
     profileDOM.window.document.getElementById("userPassword").defaultValue = req.session.password;
-    if (req.session.profile_pic === "user-pic-none.jpg" ){
+    if (req.session.profile_pic === "user-pic-none.jpg") {
         var profileP = "<img src=\"imgs/userPic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
     } else {
         var profileP = "<img src=\"imgs/uploads/userPic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
@@ -610,7 +610,7 @@ app.get('/profile/:username', function (req, res) {
             "SELECT * FROM BBY_22_users WHERE userName = ?",
             [req.params.username],
             function (error, results, fields) {
-    
+
                 if (error) {} else if (results.length > 0) {
                     results.forEach(user => {
                         // Load current user's data into the text fields on the page
@@ -787,25 +787,27 @@ app.post('/deletepost', (req, res) => {
     });
 });
 
+
 // When an admin updates a user's data
 app.post('/update-user-data', (req, res) => {
 
-    checkEmailAlreadyExists(req.body.email, req.session.email,
+    // Check if the updated email is valid (must be unique or the same as before)
+    checkEmailDashboard(req.body.email, req.body.userID,
         function (recordReturned) {
 
-            // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
+            // If validation method returns null, user's email is either the same user or they aren't currently in database, so their data can be updated
             if (recordReturned == null) {
-                //Checks if the new user's username is already in the database (username must be unique)
-                checkUsernameAlreadyExists(req.body.userName, req.session.userName,
+                // Checks if the updated username is valid (must be unique or the same as before)
+                checkUsernameDashboard(req.body.userName, req.body.userID,
                     function (recordReturned) {
 
-                        // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
+                        // If validation method returns null, user's username is either the same user or they aren't currently in database, so their data can be updated
                         if (recordReturned == null) {
 
-                            // Insert the new user into the database
+                            // Update the user into the database
                             connection.query(
-                                "UPDATE BBY_22_users SET firstName = ?, lastName = ?, userName = ?, city = ?, email = ?, password = ? WHERE email = ? AND password = ?",
-                                [req.body.firstName, req.body.lastName, req.body.userName, req.body.city, req.body.email, req.body.password, req.session.email, req.session.password],
+                                "UPDATE BBY_22_users SET firstName = ?, lastName = ?, userName = ?, city = ?, email = ?, password = ?, type = ? WHERE id = ?",
+                                [req.body.firstName, req.body.lastName, req.body.userName, req.body.city, req.body.email, req.body.password, req.body.type, req.body.userID],
                                 function (error, results) {
                                     if (error) {
                                         res.send({
@@ -813,20 +815,25 @@ app.post('/update-user-data', (req, res) => {
                                             msg: "Error updating data."
                                         });
                                     }
+                                    res.send({
+                                        status: 'Success',
+                                        msg: 'Updated ' + req.body.userName + '\'s data.'
+                                    });
                                 }
                             );
 
                         } else {
-
-                            // Send message saying email already exists
+                            // Validation username method returned a different user
+                            // Send message saying username already exists
                             res.send({
                                 status: "Fail",
                                 msg: "Username already exists."
                             });
                         }
                     });
-            } else {
 
+            } else {
+                // Validation email method returned a different user
                 // Send message saying email already exists
                 res.send({
                     status: "Fail",
@@ -834,17 +841,72 @@ app.post('/update-user-data', (req, res) => {
                 });
             }
         });
-
-    res.send({
-        status: 'Success',
-        msg: 'Data updated.'
-    });
-
-    res.send({
-        status: 'Success',
-        msg: 'Updated ' + req.body.userName + '\'s data.'
-    });
 });
+
+// Checks an email on the dashboard when being updated
+function checkEmailDashboard(email, userID, callback) {
+
+    connection.query(
+        "SELECT * FROM BBY_22_users WHERE email = ?", [email],
+        function (error, results) {
+            if (error) {
+                res.send({
+                    status: "Fail",
+                    msg: "Error finding the user."
+                });
+            }
+            if (results.length > 0) {
+                let resultID = results[0].id;
+
+                // If the user's ID matches the result ID, user edited is same as the user returned
+                if (userID == resultID) {
+                    // Email is same as before, so it can be updated
+                    return callback(null);
+                } else {
+                    // Email doesn't match, so it already exists as another user and cannot be edited
+                    return callback(results[0]);
+                }
+
+            } else {
+                // Email does not exist so it can be updated
+                return callback(null);
+            }
+        }
+    );
+}
+
+// Checks a username on the dashboard when being updated
+function checkUsernameDashboard(userName, userID, callback) {
+
+    connection.query(
+        "SELECT * FROM BBY_22_users WHERE userName = ?", [userName],
+        function (error, results) {
+
+            if (error) {
+                res.send({
+                    status: "Fail",
+                    msg: "Error finding the user."
+                });
+            }
+            if (results.length > 0) {
+                let resultID = results[0].id;
+
+                // If the user's ID matches the result ID, user edited is same as the user returned
+                if (userID == resultID) {
+                    // Username is same as before, so it can be updated
+                    return callback(null);
+                } else {
+                    // Username doesn't match, so it already exists as another user and cannot be edited
+                    return callback(results[0]);
+                }
+
+            } else {
+                // Username does not exist
+                return callback(null);
+            }
+        }
+    );
+}
 
 
 // When a user updates their own data
@@ -937,25 +999,25 @@ app.post('/delete-user', (req, res) => {
 // When an admin adds a new user to the database
 app.post('/add-new-user', (req, res) => {
 
-    checkEmailAlreadyExists(req.body.email, req.session.email,
+    checkEmailBeforeAdding(req.body.email,
         function (recordReturned) {
 
-            // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
+            // If check email method returns null, user isn't currently in database, so their data can be inserted/added
             if (recordReturned == null) {
                 //Checks if the new user's username is already in the database (username must be unique)
-                checkUsernameAlreadyExists(req.body.userName, req.session.userName,
+                checkUsernameBeforeAdding(req.body.userName,
                     function (recordReturned) {
 
-                        // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
+                        // If check username method returns null, user isn't currently in database, so their data can be inserted/added
                         if (recordReturned == null) {
 
                             // Insert the new user into the database
                             connection.query('INSERT INTO BBY_22_users (firstName, lastName, userName, city, email, password, type, profile_pic) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-                                [req.body.firstName, req.body.lastName, req.body.userName, req.body.city, req.body.email, req.body.password, "USER", "user-pic-none.jpg"],
+                                [req.body.firstName, req.body.lastName, req.body.userName, req.body.city, req.body.email, req.body.password, req.body.type, "user-pic-none.jpg"],
 
                                 function (error, results, fields) {
                                     if (error) {
-                                        // Send message saying there was an error when signing up.
+                                        // Send message saying there was an error
                                         res.send({
                                             status: "Fail",
                                             msg: "Error adding user."
@@ -989,9 +1051,57 @@ app.post('/add-new-user', (req, res) => {
         });
 });
 
+// Checks an email on the dashboard before being added
+function checkEmailBeforeAdding(email, callback) {
+
+    connection.query(
+        "SELECT * FROM BBY_22_users WHERE email = ?", [email],
+        function (error, results) {
+            if (error) {
+                res.send({
+                    status: "Fail",
+                    msg: "Error finding the user."
+                });
+            }
+            if (results.length > 0) {
+                // Email already exists so it cannot be added
+                return callback(results[0]);
+
+            } else {
+                // Email does not exist so it can be added
+                return callback(null);
+            }
+        }
+    );
+}
+
+// Checks a username on the dashboard before being added
+function checkUsernameBeforeAdding(userName, callback) {
+
+    connection.query(
+        "SELECT * FROM BBY_22_users WHERE userName = ?", [userName],
+        function (error, results) {
+
+            if (error) {
+                res.send({
+                    status: "Fail",
+                    msg: "Error finding the user."
+                });
+            }
+            if (results.length > 0) {
+                // Username already exists so it cannot be added
+                return callback(results[0]);
+
+            } else {
+                // Username does not exist so it can be added
+                return callback(null);
+            }
+        }
+    );
+}
 
 
-// Checks if a username exists in the database
+// Checks if a username exists in the database before reserving an item
 app.post('/check-username-exists', (req, res) => {
     connection.query("SELECT * FROM BBY_22_users WHERE username = ? AND type = 'USER'",
         [req.body.userReserved],
@@ -1098,7 +1208,7 @@ app.get("/postMessage", (req, res) => {
     clientScript.src = "js/clientPostMessage.js";
     messageDOM.window.document.body.appendChild(clientScript);
 
-    
+
     res.set("Server", "MACT Engine");
     res.set("X-Powered-By", "MACT");
     res.send(messageDOM.serialize());

@@ -25,12 +25,11 @@ async function updateAUsersData(userID) {
         }
     }
 
-    // If there's only 1 admin, and that user is the admin, they cannot be edited
+    // If there's only 1 admin, and that user is the admin, their type cannot be edited
     if (adminCount < 1) {
-        document.getElementById('message').innerHTML = "Admin user cannot be edited.";
         document.getElementById('userType' + userID).value = "ADMIN";    // Keep type as admin
-        return;
-    }
+        type = "ADMIN";
+    } 
 
 
     // Store user's data that was filled into the text fields on the page
@@ -57,7 +56,13 @@ async function updateAUsersData(userID) {
     // Get response from server side post request called update-user-data
     const postResponse = await fetch('/update-user-data', postDetails);
     const jsonData = await postResponse.json();
-    document.getElementById('message').innerHTML = jsonData.msg;
+
+    if (adminCount < 1) {
+        document.getElementById('message').innerHTML = "Admin type cannot be edited. There is only 1 admin. The rest of the data was updated";
+    } else {
+        document.getElementById('message').innerHTML = jsonData.msg;
+    }
+
 };
 
 
@@ -156,7 +161,7 @@ async function addAUser() {
 
     // If at least one of the inputs is empty
     if (checkEmptyInput) {
-        document.getElementById('addUserMessage').innerHTML = "Please fill out all fields.";
+        document.getElementById('message').innerHTML = "Please fill out all fields.";
 
     } else {
 
@@ -182,9 +187,12 @@ async function addAUser() {
         // Get response from server side post request called add-new-user
         const postResponse = await fetch('/add-new-user', postDetails);
         const jsonData = await postResponse.json();
-        document.getElementById('addUserMessage').innerHTML = jsonData.msg;
+        document.getElementById('message').innerHTML = jsonData.msg;
 
-        // Reload page to show updated dashboard with added user
-        window.location.reload();
+        if (jsonData.status == "Success") {
+            // Reload page to show updated dashboard with added user
+            window.location.reload();
+        }
+
     }
 };
