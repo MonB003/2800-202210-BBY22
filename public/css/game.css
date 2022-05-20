@@ -247,12 +247,12 @@ body {
 }
 
 /* Hides the block that slides out of the game space */
-/* Note: 545px from the top is where the game's field of play ends. */
+/* Note: 555px from the top is where the game's field of play ends. */
 #whitebox {
     width: 300px;
     height: 110px;
     position: absolute;
-    top: 545px;
+    top: 555px;
     background-color: white;
     display: flex;
     flex-direction: column;
