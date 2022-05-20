@@ -644,6 +644,7 @@ app.get("/viewPost", function (req, res) {
                         viewPostDOM.window.document.querySelector("#postdate").innerHTML = `${post.timestamp}`;
                         let profileP = "<img src=\"imgs/uploads/userPic-" + post.item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         viewPostDOM.window.document.getElementById("postimage").innerHTML = profileP
+                        viewPostDOM.window.document.getElementById("messagepost").setAttribute("onclick", `getMessagePage(${post.id})`);
 
                         req.session.postOwnerID = post.user_id;
 

@@ -283,6 +283,7 @@ body {
     text-overflow: ellipsis;
     padding-left: 10px;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .poststatus {

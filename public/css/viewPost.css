@@ -315,6 +315,7 @@ body {
   background-color: #4e5a55;
   color: white;
   box-shadow: 0 0 10px rgb(54, 52, 52);
+  cursor: pointer;
 }
 
 img {
@@ -458,6 +459,7 @@ img {
     background-color: #4e5a55;
     color: white;
     box-shadow: 0 0 10px rgb(54, 52, 52);
+    cursor: pointer;
   }
 
   img {
