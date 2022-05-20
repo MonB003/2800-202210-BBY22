@@ -41,7 +41,7 @@
         <button type="button" class="navbutton" id="newPostPageBtn">New Post</button>
         <button type="button" class="navbutton" id="togglefilter">Filter</button>
     </div>
-    
+
     <div id="filtermenu" style="display: none;">
         <div id="filtersearchcontainer">
             <div id="filtersearch">
@@ -68,7 +68,10 @@
             </div>
             <div class="postoptions">
                 <div class="savepost">
-                    S
+                    <select name="savepost" id="savePost" onchange="getBookmarkStatus()">
+                        <option value="0">not saved</option>
+                        <option value="1">saved</option>
+                    </select>
                 </div>
                 <div class="messagepost">
                     ✉

@@ -26,6 +26,7 @@ document.querySelector("#togglefilter").addEventListener("click", function (e) {
 });
 
 let postdata = [];
+let bookmarksdata = [];
 let sort = "recent";
 let filterstatus = "all";
 
@@ -60,11 +61,10 @@ document.querySelector("#filterstatus").addEventListener("click", function (e) {
     displayposts();
 });
 
-// retrieves posts from database
-async function loadposts() {
-    
-    const dataSent = {
-    }
+// retrieves bookmarks from database
+async function loadbookmarks() {
+
+    const dataSent = {}
 
     const getDetails = {
         method: 'POST',
@@ -74,20 +74,39 @@ async function loadposts() {
         body: JSON.stringify(dataSent)
     }
 
-    const getResponse = await fetch('/loadmyposts', getDetails);
+    const getResponse = await fetch('/loadmybookmarks', getDetails);
+    const jsonData = await getResponse.json();
+    bookmarksdata = jsonData;
+    loadposts();
+};
+
+// retrieves posts from database
+async function loadposts() {
+
+    const dataSent = bookmarksdata;
+
+    const getDetails = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(dataSent)
+    }
+
+    const getResponse = await fetch('/loadsavedposts', getDetails);
     const jsonData = await getResponse.json();
     postdata = jsonData;
     displayposts();
 };
 
-//displays posts
+//displays saved posts
 async function displayposts() {
     document.querySelector("#posts").innerHTML = "";
     let search = document.getElementById("search").value;
     let posttemplate = document.getElementById("posttemplate");
     let posts = document.getElementById("posts");
     if (sort == "recent") {
-        for (let i = postdata.length-1; i > -1; i--) {
+        for (let i = postdata.length - 1; i > -1; i--) {
             if (document.querySelector("#filter").value == "title") {
                 if (postdata[i].title.toLowerCase().includes(search.toLowerCase())) {
                     if (postdata[i].status == filterstatus) {
@@ -106,7 +125,7 @@ async function displayposts() {
                         testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
-                    } else if (filterstatus == "all"){
+                    } else if (filterstatus == "all") {
                         let testpost = posttemplate.content.cloneNode(true);
                         testpost.querySelector(".post").id = `post${postdata[i].postid}`;
                         testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
@@ -142,7 +161,7 @@ async function displayposts() {
                         testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
-                    } else if (filterstatus == "all"){
+                    } else if (filterstatus == "all") {
                         let testpost = posttemplate.content.cloneNode(true);
                         testpost.querySelector(".post").id = `post${postdata[i].postid}`;
                         testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
@@ -160,7 +179,7 @@ async function displayposts() {
                         posts.appendChild(testpost);
                     }
                 }
-            } 
+            }
         }
     } else {
         for (let i = 0; i < postdata.length; i++) {
@@ -182,7 +201,7 @@ async function displayposts() {
                         testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
-                    } else if (filterstatus == "all"){
+                    } else if (filterstatus == "all") {
                         let testpost = posttemplate.content.cloneNode(true);
                         testpost.querySelector(".post").id = `post${postdata[i].postid}`;
                         testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
@@ -218,7 +237,7 @@ async function displayposts() {
                         testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
-                    } else if (filterstatus == "all"){
+                    } else if (filterstatus == "all") {
                         let testpost = posttemplate.content.cloneNode(true);
                         testpost.querySelector(".post").id = `post${postdata[i].postid}`;
                         testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
@@ -236,7 +255,7 @@ async function displayposts() {
                         posts.appendChild(testpost);
                     }
                 }
-            } 
+            }
         }
     }
 
@@ -244,26 +263,6 @@ async function displayposts() {
 
 loadposts();
 
-//saves post id to session for editing post on editpost page
-async function editpost(postID) {
-    const dataSent = {
-        postID
-    }
-
-    const postDetails = {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(dataSent)
-    }
-
-    const postResponse = await fetch('/toeditpost', postDetails);
-    const jsonData = await postResponse.json();
-    if (jsonData.status == "Success") {
-        window.location.replace("/editpost");
-    }
-};
 
 // Saves the post ID to the session and redirects to the view post html if validated
 async function viewPost(postID) {

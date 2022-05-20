@@ -42,6 +42,9 @@ if (is_heroku) {
 }
 
 const mysql = require("mysql2");
+const {
+    request
+} = require("http");
 const connection = mysql.createPool(database);
 
 const storage = multer.diskStorage({
@@ -269,6 +272,57 @@ app.post("/loadmyposts", function (req, res) {
                 });
             }
             res.send(posts);
+        }
+    );
+})
+
+
+app.post("/loadmybookmarks", function (req, res) {
+    let myResults = null;
+    let bookmarks = [];
+
+    connection.query(
+        "SELECT * FROM BBY_22_bookmarks where user_id = ?",
+        [req.session.userID],
+        function (error, results, fields) {
+            myResults = results;
+            if (error) {} else if (results.length > 0) {
+                results.forEach(bookmark => {
+                    bookmarks.push({
+                        "saveid": bookmark.post_id
+                    });
+                });
+            }
+            res.send(bookmarks);
+        }
+    );
+})
+
+app.post("/loadsavedposts", function (req, res) {
+    let myResults = null;
+    let savedposts = [];
+
+    connection.query(
+        "SELECT * FROM BBY_22_item_posts",
+        function (error, results, fields) {
+            myResults = results;
+            if (error) {} else if (results.length > 0) {
+                let i = 0;
+                results.forEach(post => {
+
+                    if (post.id == req.body[i].saveid)
+                        savedposts.push({
+                            "postid": post.id,
+                            "title": post.title,
+                            "status": post.status,
+                            "city": post.city,
+                            "timestamp": post.timestamp,
+                            "item_pic": post.item_pic
+                        });
+                    i++;
+                });
+            }
+            res.send(savedposts);
         }
     );
 })

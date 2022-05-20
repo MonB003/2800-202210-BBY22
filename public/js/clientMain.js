@@ -63,6 +63,28 @@ async function checkPostOwnerAndSessionUser(postID) {
     }
 }
 
+// Gets the currently selected bookmark status in the dropdown
+function getBookmarkStatus() {
+    // Get dropdown menu item selected
+    let savePostDropdown = document.getElementById("savePost");
+    var bookmarkStatus = savePostDropdown.value;
+
+
+    if (bookmarkStatus == "1") {
+        // Record post_id and current user_id to bby_22_bookmarks table
+
+
+    } else {
+        // Remove post_id from bby_22_bookmarks table
+
+    }
+
+    // Get response from server side post request
+    const postResponseUpdate = await fetch('/addBookmark', bookmarkPostID);
+    const jsonDataUpdate = await postResponseUpdate.json();
+}
+
+
 //toggle filter menu
 document.querySelector("#togglefilter").addEventListener("click", function (e) {
     let filtermenu = document.querySelector("#filtermenu");
