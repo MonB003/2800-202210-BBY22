@@ -73,13 +73,22 @@ async function getSelectedUser(username) {
         if (currObj.userSending == thisUser) {
             // Message is from you
             currMessage.textContent = "You: " + currObj.message;
-            currMessage.style.backgroundColor = "rgb(130, 255, 173)";
+            currMessage.style.backgroundColor = "#91C7B1";
             currMessage.style.textAlign = "right";
+            currMessage.style.color = "white";
+            currMessage.style.padding = "20px";
+            currMessage.style.margin = "2px";  
+            currMessage.style.fontWeight = "bold";
+            // currMessage.style.
 
         } else {
             // Message is from other user
             currMessage.textContent = currObj.userSending + ": " + currObj.message;
-            currMessage.setAttribute("style", "background-color: rgb(226, 226, 226);");
+            currMessage.style.backgroundColor = "#9fa4a9";
+            currMessage.style.padding = "20px";
+            currMessage.style.margin = "2px";  
+            currMessage.style.color = "white";
+            currMessage.style.fontWeight = "bold";
         }
 
         document.getElementById("allMessages").appendChild(currMessage);

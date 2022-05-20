@@ -1,18 +1,49 @@
 @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Balsamiq+Sans:ital@1&family=Lato:wght@300&family=Nunito:wght@700&family=Orbitron:wght@500&family=Pacifico&family=Raleway:ital@1&family=Shadows+Into+Light&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Balsamiq+Sans:ital@1&family=Lato:wght@300&family=Nanum+Gothic:wght@700&family=Nunito:wght@500;700&family=Orbitron:wght@500&family=Pacifico&family=Raleway:ital@1&family=Shadows+Into+Light&display=swap');
 
+* {
+    padding: 0;
+    margin: 0;
+}
+
+html {
+    min-height: 100%;
+}
+
 body {
     font-family: 'Lato', sans-serif;
-    background: url("/imgs/background3.jpg") center/cover fixed;
     background-repeat: no-repeat;
     background-size: cover;
-    background-color: lightgray;
+    background-image: linear-gradient(to bottom right, #ffffff, #ffffff);
+    min-height: 100%;
+}
+
+#backToMain {
+    color: white;
+    font-size: 17px;
+    font-family: 'Lato';
+    border-radius: 5px;
+    background-color: #5b605e;
+    border-style: none;
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, .4);
+    padding: 5px;
+    margin: 5px;
+}
+
+#backToMain:hover { 
+    background-color: #6c706e;
+    -webkit-transition: all 300ms ease;
+    -moz-transition: all 300ms ease;
+    -ms-transition: all 300ms ease;
+    -o-transition: all 300ms ease;
+    transition: all 300ms ease;
 }
 
 #allMessages {
-    height: 35vh;
+    min-height: 100%;
     overflow-y: scroll;
     scroll-behavior: smooth;
+    font-family: 'Lato';
 }
 
 p, input, h3 {
@@ -25,35 +56,153 @@ button {
 }
 
 #messageDiv {
-    display: flex;
-    flex-direction: row;
-    row-gap: 1vh;
-    justify-content: center;
+    display: grid;
+    width: 100%;
+    grid-template-columns: 80% 20%;
+    bottom: 5px;
+    right: 5px
+}
+
+#msgInput {
+    grid-column: 1/2;
+    width: 100%;
+}
+
+#msgBtn {
+    grid-column: 2/3;
+    width: 100%;
 }
 
 #messageInput {
     border: 1px solid black;
+    width: 100%;
+    height: 100%;
 }
 
+#sendMessageBtn {
+    width: 100%;
+    height: 100%;
+}
+
+#thisUserName, #users {
+    display: none;
+}
+
+#grid {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    position:absolute;
+    top:0px;
+    right:0px;
+    bottom:0px;
+    left:0px;
+}
+
+#secondGrid {
+    grid-column: 1/2;
+    background-image: linear-gradient(to bottom right, #5f716b, #b1cfc5);
+}
+
+#thisUsersContacts {
+    font-family: 'Lato';
+    border-style: none;
+}
+
+#thisUsersContacts > h3 {
+    font-family: 'Lato';
+    margin: 5px;
+}
+
+#thisUsersContacts> button {
+    background-color: transparent;
+    margin: 5px;
+    border-style: none;
+    font-size: 18px;
+}
+
+#thisUsersContacts>button:hover {
+    color: white;
+    -webkit-transition: all 250ms ease;
+    -moz-transition: all 250ms ease;
+    -ms-transition: all 250ms ease;
+    -o-transition: all 250ms ease;
+    transition: all 250ms ease;
+}
+
+#thirdGrid {
+    border-left-style: solid;
+    border-color: #8a8f8a;
+    height: 100%;
+    grid-column: 2/3;
+    display: grid;
+    grid-template-rows: 90% 10%;
+    background-color: white;
+}
+
+#allMessages {
+    grid-row: 1/2;
+    margin-right: 10px;
+    margin-top: 3;
+}
+
+#messageDiv {
+    grid-row: 2/3;
+}
 
 @media only screen and (max-width : 425px) {
+
     p, input, h3 {
-        font-size: 34px;
+        font-size: 25px;
     }
 
     button {
-        font-size: 34px;
+        font-size: 25px;
     }
-}
 
+    #grid {
+        display: grid;
+        grid-template-columns: 100%;
+        grid-template-rows: 20% 80%;
+        height: 100%;
+    }
+
+    #secondGrid {
+        grid-area: 1/1/2/2;
+        display: grid;
+        grid-template-columns: 50% 50%;
+    }
+
+    #goBackDiv {
+        grid-column: 1/2;
+    }
+
+    #thisUsersContacts {
+        grid-column: 2/3;
+        overflow-y: scroll;
+    }
+
+    #thirdGrid {
+        border-left-style: solid;
+        border-color: #8a8f8a;
+        height: 100%;
+        grid-area: 2/1/3/2;
+        display: grid;
+        grid-template-rows: 90% 10%;
+    }
+
+    #users > p {
+        margin: 0;
+    }
+    
+}
 
 @media only screen and (min-width : 426px) and (max-width : 1000px) {
     p, input, h3 {
-        font-size: 34px;
+        font-size: 20px;
     }
 
     button {
-        font-size: 34px;
+        font-size: 20px;
     }
 }
 

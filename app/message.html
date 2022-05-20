@@ -5,43 +5,49 @@
     <title>Messages</title>
     <meta charset="utf-8" />
     <link href="/imgs/OTH-favicon.ico" rel="icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- CSS style -->
     <link rel="stylesheet" href="/css/message.css" />
 </head>
 
 <body>
-    <button id="backToMain">Back</button>
-    <br>
 
-    <!-- Current session username -->
-    <p id="thisUserName"></p>
-    <br>
+    <div id="grid">
 
+        <div id="secondGrid">
+            <div id="goBackDiv">
+                <button id="backToMain">&#8249; Go Back</button>
+            </div>
 
-    <!-- All users this user has messaged -->
-    <div id="thisUsersContacts">
-        <h3>Your Contacts</h3>
+            <!-- Current session username -->
+            <p id="thisUserName"></p>
+
+            <!-- All users this user has messaged -->
+            <div id="thisUsersContacts">
+                <h3>Contacts</h3>
+            </div>
+
+            <!-- List of users who are online -->
+            <div id="users"></div>
+        </div>
+
+        <div id="thirdGrid">
+            <!-- Message list (all past and current messages) -->
+            <div id="allMessages"></div>
+
+            <!-- Message form -->
+            <div id="messageDiv">
+                <div id="msgInput">
+                    <input id="messageInput" placeholder="Type message" disabled="true">
+                </div>
+                <div id="msgBtn">
+                    <button id="sendMessageBtn" type="submit" onclick="sendMessageToUser()" disabled="true">Send</button>
+                </div>
+            </div>
+        </div>
+
     </div>
-    <br>
-
-    <!-- List of users who are online -->
-    <div id="users"></div>
-
-    <br>
-
-    <!-- Message list (all past and current messages) -->
-    <div id="allMessages"></div>
-
-    <br>
-
-    <!-- Message form -->
-    <div id="messageDiv">
-        <input id="messageInput" placeholder="Type message" disabled="true">
-        <button id="sendMessageBtn" type="submit" onclick="sendMessageToUser()" disabled="true">Send</button>
-    </div>
-
-
 
     <!-- JavaScript is loaded on the server side -->
     

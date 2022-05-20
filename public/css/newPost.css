@@ -208,7 +208,7 @@ body {
 }
 
 #newPostHeading>h1 {
-  font-family: 'Pacifico';
+  font-family: 'Lato';
   padding-top: 5px;
   text-align: center;
 }
@@ -223,7 +223,6 @@ body {
   box-shadow: 0 0 10px rgb(40, 39, 39);
   padding: 20px;
   font-family: 'Lato', sans-serif;
-  font-weight: bold;
 }
 
 #signUpForm {
@@ -290,7 +289,7 @@ body {
 }
 
 #submit {
-  font-family: 'Pacifico';
+  font-family: 'Lato';
   max-width: 150px;
   background-color: rgb(187, 187, 187);
   text-align: left;
