@@ -1,9 +1,69 @@
-#sendMessageBtn {
-    cursor: pointer;
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Balsamiq+Sans:ital@1&family=Lato:wght@300&family=Nunito:wght@700&family=Orbitron:wght@500&family=Pacifico&family=Raleway:ital@1&family=Shadows+Into+Light&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Balsamiq+Sans:ital@1&family=Lato:wght@300&family=Nanum+Gothic:wght@700&family=Nunito:wght@500;700&family=Orbitron:wght@500&family=Pacifico&family=Raleway:ital@1&family=Shadows+Into+Light&display=swap');
+
+body {
+    font-family: 'Lato', sans-serif;
+    background: url("/imgs/background3.jpg") center/cover fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: lightgray;
 }
 
 #allMessages {
-    height: 400px;
+    height: 35vh;
     overflow-y: scroll;
     scroll-behavior: smooth;
+}
+
+p, input, h3 {
+    font-size: 18px;
+}
+
+button {
+    cursor: pointer;
+    font-size: 18px;
+}
+
+#messageDiv {
+    display: flex;
+    flex-direction: row;
+    row-gap: 1vh;
+    justify-content: center;
+}
+
+#messageInput {
+    border: 1px solid black;
+}
+
+
+@media only screen and (max-width : 425px) {
+    p, input, h3 {
+        font-size: 34px;
+    }
+
+    button {
+        font-size: 34px;
+    }
+}
+
+
+@media only screen and (min-width : 426px) and (max-width : 1000px) {
+    p, input, h3 {
+        font-size: 34px;
+    }
+
+    button {
+        font-size: 34px;
+    }
+}
+
+
+@media only screen and (min-width : 1201px) {
+    p, input, h3 {
+        font-size: 32px;
+    }
+
+    button {
+        font-size: 32px;
+    }
 }
