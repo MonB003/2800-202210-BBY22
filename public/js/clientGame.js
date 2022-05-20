@@ -33,6 +33,27 @@ document.querySelector("#profile2").addEventListener("click", function (e) {
     window.location.replace("/profile");
 });
 
+let menu = 0;
+
+document.querySelector(".menuBtn").addEventListener("click", function (e) {
+    if (menu == 0) {
+        document.getElementById("whitebox").style.zIndex = "-2";
+        document.getElementById("gamer").style.zIndex = "-5";
+        document.getElementById("obstacle").style.zIndex = "-4";
+        document.getElementById("left").style.zIndex = "-3";
+        document.getElementById("right").style.zIndex = "-3";
+        document.getElementById("msg-box").style.zIndex = "-1";
+        menu = 1;
+    } else {
+        document.getElementById("whitebox").style.zIndex = "";
+        document.getElementById("gamer").style.zIndex = "";
+        document.getElementById("obstacle").style.zIndex = "";
+        document.getElementById("left").style.zIndex = "1";
+        document.getElementById("right").style.zIndex = "1";
+        document.getElementById("msg-box").style.zIndex = "2";
+        menu = 0;
+    }
+});
 
 
 function start() {
@@ -83,23 +104,9 @@ function start() {
         if (gamerLeft == obstacleLeft && obstacleTop < 500 && obstacleTop > 300) {
             obstacle.style.animation = "none";
 
-            // Creates the pop-up message to indicate game over
-            let body = document.body;
-            let msgBox = document.createElement("div");
-            msgBox.setAttribute("ID", "msg-box");
-            body.appendChild(msgBox);
-
-            let msg = document.createElement("h3");
-            msg.setAttribute("ID", "game-over");
-            msg.innerHTML = "Game Over! Score: " + count;
-            msgBox.appendChild(msg);
-
-            let submit = document.createElement("input");
-            submit.setAttribute("type", "submit");
-            submit.setAttribute("ID", "submit");
-            submit.setAttribute("value", "OK");
-            submit.setAttribute("onclick", "gameover()");
-            msgBox.appendChild(submit);
+            // Creates the pop-up message to indicate game over            
+            document.querySelector("#game-over").innerHTML = "Game Over! Score: " + count;
+            document.querySelector("#msg-box").style.display = "flex";
         }
 
     }, 1);
