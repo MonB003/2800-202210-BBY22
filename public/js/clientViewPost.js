@@ -49,7 +49,7 @@ async function getPostOwner() {
         body: JSON.stringify(dataSent)
     }
 
-    // Get response from server side post request called update-user-data
+    // Get response from server side post request
     const postResponse = await fetch('/getPostOwner', postDetails);
     const jsonData = await postResponse.json();
 

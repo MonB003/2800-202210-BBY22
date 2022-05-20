@@ -304,7 +304,6 @@ app.post("/login", function (req, res) {
                 req.session.type = recordReturned.type;
                 req.session.userID = recordReturned.id;
                 req.session.profile_pic = recordReturned.profile_pic;
-                req.session.username = recordReturned.username;
 
                 req.session.save(function (err) {
                     // session saved

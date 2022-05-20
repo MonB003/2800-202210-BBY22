@@ -71,7 +71,6 @@ ready(function () {
         let title = document.getElementById("title");
         let description = document.getElementById("newPostDescription");
         let city = document.getElementById("city");
-        // let queryString = "title=" + title.value + "&description=" + description.value + "&city=" + city.value + "&item_pic=" + itemPostName;
 
         let queryString = "title=" + title.value + "&description=" + description.value + "&city=" + city.value;
 

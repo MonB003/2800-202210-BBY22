@@ -33,5 +33,5 @@ CREATE TABLE IF NOT EXISTS BBY_22_messages(
     time VARCHAR(50), 
     PRIMARY KEY (id));
 
-INSERT INTO BBY_22_users (username, firstName, lastName, city, email, password, type, profile_pic) 
+INSERT INTO BBY_22_users (userName, firstName, lastName, city, email, password, type, profile_pic) 
 VALUES ("Test", "Test", "Test", "Vancouver", "test@test.ca", "password", "ADMIN", "user-pic-none.jpg");
