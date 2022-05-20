@@ -76,7 +76,9 @@ async function loadbookmarks() {
 
     const getResponse = await fetch('/loadmybookmarks', getDetails);
     const jsonData = await getResponse.json();
-    bookmarksdata = jsonData;
+    console.log(jsonData);
+    bookmarksdata = jsonData[0];
+
     loadposts();
 };
 
@@ -261,7 +263,7 @@ async function displayposts() {
 
 }
 
-loadposts();
+loadbookmarks();
 
 
 // Saves the post ID to the session and redirects to the view post html if validated

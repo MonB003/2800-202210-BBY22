@@ -63,11 +63,14 @@
                 Post Location
             </div>
             <div class="postoptions">
-                <div class="messagepost">
-                    M
+                <div class="savepost">
+                    <select name="savepost" id="savePost" onchange="getBookmarkStatus()">
+                        <option value="0">not saved</option>
+                        <option value="1">saved</option>
+                    </select>
                 </div>
-                <div class="editpost">
-                    Edit
+                <div class="messagepost">
+                    ✉
                 </div>
             </div>
             <div class="postdate">Post date time</div>
