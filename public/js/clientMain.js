@@ -1,27 +1,40 @@
 "use strict";
 
-// When profile button is clicked, redirect to profile page
-document.querySelector("#profile").addEventListener("click", function (e) {
-    window.location.replace("/profile");
+// When new post button is clicked, redirect to newPost page
+document.querySelector("#newPostPageBtn").addEventListener("click", function (e) {
+    window.location.replace("/newPost");
 });
 
 // Redirects to main page
 document.querySelector("#home").addEventListener("click", function (e) {
     window.location.replace("/main");
 });
-
-// When new post button is clicked, redirect to newPost page
-document.querySelector("#newPostPageBtn").addEventListener("click", function (e) {
-    window.location.replace("/newPost");
+document.querySelector("#home2").addEventListener("click", function (e) {
+    window.location.replace("/main");
 });
 
-document.querySelector("#allMessagesBtn").addEventListener("click", function (e) {
+//redirects to message page
+document.querySelector("#messages").addEventListener("click", function (e) {
+    window.location.replace("/message");
+});
+document.querySelector("#messages2").addEventListener("click", function (e) {
     window.location.replace("/message");
 });
 
 // When my listings button is clicked, redirect to myListings page
-document.querySelector("#mylistings").addEventListener("click", function (e) {
+document.querySelector("#listings").addEventListener("click", function (e) {
     window.location.replace("/mylistings");
+});
+document.querySelector("#listings2").addEventListener("click", function (e) {
+    window.location.replace("/mylistings");
+});
+
+// When profile button is clicked, redirect to profile page
+document.querySelector("#profile").addEventListener("click", function (e) {
+    window.location.replace("/profile");
+});
+document.querySelector("#profile2").addEventListener("click", function (e) {
+    window.location.replace("/profile");
 });
 
 

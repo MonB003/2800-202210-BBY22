@@ -13,7 +13,43 @@
 </head>
 
 <body>
+    
     <!-- Nav bar -->
+    <nav>
+        <div class="container">
+            <ul class="navbar">
+                <li id="home"><a href="#">HOME</a></li>
+                <li id="bookmark"><a href="#">SAVED</a></li>
+                <li id="messages"><a href="#">MESSAGES</a></li>
+                <li id="listings"><a href="#">MY LISTINGS</a></li>
+                <li id="profile"><a href="#">PROFILE</a></li>
+                <li id ="fright">
+                    <form action="/logout" method="get" id="logoutForm">
+                        <input type="submit" id="logoutBtn" class="nav-button" value="LOGOUT" />
+                    </form>
+                </li>
+            </ul>
+        </div>
+        <div class="menu">
+            <input id="menuClicked" type="checkbox" />
+            <label class="menuBtn" for="menuClicked">
+            <span></span>
+            </label>
+            <ul class="menuInside">
+                <li><a class="links" id="home2" href="#">Home</a></li>
+                <li><a class="links bookmark" id="bookmark2" href="#">Saved</a></li>
+                <li><a class="links messages" id="messages2" href="#">Messages</a></li>
+                <li><a class="links listings" id="listings2" href="#">My Listings</a></li>
+                <li><a class="links profile" id="profile2" href="#">Profile</a></li>
+                <li class ="fright">
+                    <form action="/logout" method="get" id="logoutForms">
+                        <input type="submit" id="logoutBtns" class="links nav-button" value="Logout" />
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
     <header id="pagename">Edit Post</header>
 
     <!-- Edit post form -->
@@ -24,8 +60,9 @@
         </form>
         <p id="savedMsg"></p>
         <br>
-        <form id="signUpForm">
-            <br><br>
+        <form id="editForm">
+            <hr class="solid">
+            <br>
             <label>Title:</label>
             <br>
             <input type="text" id="title" name="title" pattern="[A-Za-z]{1,50}">
@@ -36,10 +73,7 @@
             <br><br>
             <label>Description:</label>
             <br>
-            <!-- <textarea name="description" id="description" maxlength="1000" minlength="20" cols="100"
-                rows="10"></textarea> -->
             <textarea name="description" id="description" maxlength="1000" minlength="20"></textarea>
-
             <br>
             <label>Status:</label>
             <br>
@@ -48,7 +82,6 @@
                 <option value="reserved" id="reserved">reserved</option>
                 <option value="collected" id="collected">collected</option>
             </select>
-
             <!-- This div only appears if status selected is reserved -->
             <div id="reserveStatusDiv" style="visibility:hidden;">
                 <input type="text" id="userReserved" name="userReserved" placeholder="Username" pattern="[A-Za-z]{1,20}">
@@ -56,15 +89,13 @@
                 <br>
                 <p id="reserveMsg"></p>
             </div>
-
-            <!-- <textarea name="description" id="description" maxlength="1000" minlength="20"></textarea> -->
-            <br><br>
+            <p id="savedDetail"></p>
             <button id="savepost">Save Details</button>
             <button id="deletepost">Delete Post</button>
             <br><br>
         </form>
         <div id="cancelDiv">
-            <button id="cancel">Done</button>
+            <button id="cancel">Go Back</button>
         </div>
     </div>
 

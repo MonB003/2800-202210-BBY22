@@ -5,51 +5,185 @@
   padding: 0;
 }
 
-.headerContainer {
-  display: grid;
-  grid-template-columns: 100%;
-  font-family: 'Nanum Gothic', sans-serif;
-  font-weight: bold;
-  border-bottom-style: solid;
-  border-color: #BCC1BA;
-  height: 42px;
-  background-color: #FCFFFD;
-  color: rgb(77, 82, 86);
-  display: flex;
+/* ****************************************************************************** */
+
+.container {
+  width: 100%;
+  position: relative;
+}
+
+.navbar {
+  font-family: 'Lato';
+  background: #5C6F68;
+  line-height: 1;
+  display: block;
+  width: 100%;
+}
+
+.navbar,
+.navbar ul {
+  list-style: none;
+  margin: 0;
+}
+
+.navbar>li {
+  float: left;
+}
+
+.navbar li a,
+.navbar>li>form {
+  padding: 19px 20px;
+  display: block;
+  text-decoration: none;
   align-items: center;
-  justify-content: center;
+  font-size: 17px;
+  color: #ffffff;
 }
 
-#navLogout {
-  position: fixed;
-  right: 0;
-  width: 8em;
-  margin-top: 0.8em;
-  margin-right: -2.5em;
+.navbar li a:hover,
+.navbar>li>form:hover {
+  color: rgb(154, 154, 154);
+  -webkit-transition: all 250ms ease;
+  -moz-transition: all 250ms ease;
+  -ms-transition: all 250ms ease;
+  -o-transition: all 250ms ease;
+  transition: all 250ms ease;
 }
 
-#logout {
+#fright {
+  float: right
+}
+
+#logoutBtn {
+  float: right;
+  background: none;
+  color: inherit;
   border: none;
-  outline: none;
-  background-color: transparent;
-  padding: 5pt;
-  padding-left: 8pt;
-  padding-right: 8pt;
-  font-family: 'Lato', sans-serif;
-  letter-spacing: 1px;
-  font-size: 15px;
-  color: #6B9080;
-  margin-bottom: 10pt;
-  font-weight: bold;
-  border: 10px;
-  border-color: aliceblue;
-  border-radius: 10px;
-  box-shadow: 0 0 2px rgb(243, 243, 243);
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
 }
 
-#logout:hover {
-  background-color: rgb(216, 215, 215);
-  box-shadow: 1px 1px 3px #CCE3DE;
+.navbar:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+.menu {
+  display: none;
+}
+
+@media only screen and (max-width: 750px) {
+  .container {
+    display: none;
+  }
+
+  .navbar {
+    display: none;
+  }
+
+  .menu {
+    z-index:1;
+    top: 0;
+    display: block;
+    background-color: #435a50;
+    margin: 0;
+    padding: 0;
+    height: 42px;
+    position: fixed;
+    width: 100%;
+  }
+
+  #menuClicked {
+    opacity: 0;
+  }
+
+  #menuClicked:checked~.menuInside {
+    left: 0;
+  }
+
+  .menuBtn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 26px;
+    height: 26px;
+    cursor: pointer;
+    z-index: 1;
+  }
+
+  .menuBtn>span::before {
+    content: '';
+    top: -8px;
+  }
+
+  .menuBtn>span,
+  .menuBtn>span::before,
+  .menuBtn>span::after {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: #848484;
+    transition-duration: .25s;
+  }
+
+  .menuBtn>span::after {
+    content: '';
+    top: 8px;
+  }
+
+  .menuInside {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 275px;
+    height: 100%;
+    padding-top: 60px;
+    list-style: none;
+    background-color: #999F99;
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, .3);
+    transition-duration: 300ms;
+  }
+
+  .links {
+    display: block;
+    padding: 12px 24px;
+    color: rgb(39, 39, 39);
+    font-family: 'Lato', sans-serif;
+    font-size: 22px;
+    text-decoration: none;
+    transition-duration: 250ms;
+    border: none;
+  }
+
+  .links:hover {
+    background-color: #8a8f8a;
+  }
+
+  #logoutBtns {
+    background-color: #999F99;
+  }
+}
+
+/* ****************************************************************************** */
+
+
+#pagename {
+  grid-area: 1/2/2/3;
+  font-family: 'Lato';
+  font-size: 3vw;
+  text-align: center;
+  text-transform: uppercase;
+  margin-top: 20px;
+  padding-top: 20px;
+}
+
+hr.solid {
+  border-top: 3px solid #bbb;
 }
 
 body {
@@ -57,6 +191,7 @@ body {
   background: url("/imgs/background3.jpg") center/cover fixed;
   background-repeat: no-repeat;
   overflow: hidden;
+  overflow-y: scroll;
   background-size: cover;
 }
 
@@ -66,43 +201,25 @@ body {
   grid-template-rows: 20% 70% 10%;
 }
 
-#newPostHeading {
-  grid-area: 2/2/3/3;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-  font-size: 17px;
-
-}
-
-#newPostHeading>h1 {
-  font-family: 'Pacifico';
-  padding-top: 5px;
-  text-align: center;
-}
-
 #content {
   grid-area: 2/2/3/3;
   background-color: rgba(0, 0, 0, 0.1);
   width: 500px;
   margin: 2% auto;
-  border-top-left-radius: 25px;
-  border-bottom-right-radius: 25px;
   box-shadow: 0 0 10px rgb(40, 39, 39);
   padding: 20px;
   font-family: 'Lato', sans-serif;
-  font-weight: bold;
   align-items: center;
   text-align: center;
 }
 
-#signUpForm {
+#editForm {
   text-align: center;
   align-items: center;
   margin-bottom: -20px;
 }
 
-#signUpForm input {
+#editForm input {
   width: 400px;
   height: 40px;
   border: none;
@@ -115,105 +232,49 @@ body {
   border-radius: 5px;
 }
 
-#newPostBtn {
-  width: 400px;
-  height: 40px;
-  border: none;
-  outline: none;
-  box-sizing: border-box;
-  font-size: 15px;
-  color: rgb(255, 255, 255);
-  background-color: #6B9080;
-  border-radius: 5px;
-  margin-bottom: 15px;
-}
-
-#newPostBtn:hover {
-  background-color: #526e62;
-  box-shadow: 1px 1px 3px rgb(73, 71, 71);
-}
-
-#backtoMain {
-  text-align: center;
-}
-
-#backToLogin {
-  width: 400px;
-  height: 40px;
-  border: none;
-  outline: none;
-  box-sizing: border-box;
-  font-size: 15px;
-  color: rgb(255, 255, 255);
-  background-color: rgb(121, 119, 119);
-  margin-bottom: 20px;
-  border-radius: 5px;
-}
-
-#newPostDescription, #description {
+#description {
   width: 400px;
   height: 150px;
 }
 
-#backToLogin:hover {
-  background-color: rgb(89, 88, 88);
-  box-shadow: 1px 1px 3px rgb(73, 71, 71);
-}
-
-#submit {
-  font-family: 'Pacifico';
-  max-width: 150px;
-  background-color: rgb(187, 187, 187);
-  text-align: left;
-  box-shadow: 1px 1px 3px rgb(73, 71, 71);
-}
-
-#submit:hover {
-  background-color: rgb(144, 143, 143);
-  box-shadow: 1px 1px 3px rgb(73, 71, 71);
-}
-
-#pagename {
-  grid-area: 1/2/2/3;
-  font-family: 'Pacifico';
-  font-size: 3vw;
-  text-align: center;
-}
-
 footer {
+  display: none;
   position: absolute;
   bottom: 20px;
   text-align: center;
   align-items: center;
 }
 
-#submit, #savepost, #deletepost {
+#submit,
+#savepost,
+#deletepost {
   border: none;
   outline: none;
-  background-color: #3b4f4c;
+  background-color: #8AA39B;
   padding: 5pt;
   padding-left: 8pt;
   padding-right: 8pt;
-  font-family: 'Lato',sans-serif;
+  font-family: 'Lato', sans-serif;
   letter-spacing: 1px;
   font-size: 15px;
   color: aliceblue;
-  border-radius: 5pt;
+  border-radius: 1px;
   margin-bottom: 10pt;
-  font-weight: bold;
+  text-transform: uppercase;
+  box-shadow: 1px 1px 1px rgb(73, 71, 71);
 }
 
 #deletepost {
-  background-color: rgb(91, 54, 54);
+  background-color: #714955;
 }
 
-#cancelDiv{
+#cancelDiv {
   align-items: center;
   text-align: center;
 }
 
 #cancel {
-  width: 80%;
+  width: 90%;
   height: 40px;
   border: none;
   outline: none;
@@ -222,33 +283,36 @@ footer {
   font-size: 15px;
   color: #333;
   margin-top: 10px;
-  border-radius: 5px;
+  border-radius: 1px;
 }
 
 #cancel {
   padding-left: 0;
   font-family: 'Lato', sans-serif;
-  background-color: #526e62;
+  background-color: #5C6F68;
   letter-spacing: 1px;
-  font-weight: bold;
+  text-transform: uppercase;
   margin-bottom: 25px;
   color: aliceblue;
+  box-shadow: 1px 1px 1px rgb(73, 71, 71);
 }
 
-#cancel:hover, #submit:hover, #savepost:hover {
-  background-color: #435a50;
+#cancel:hover,
+#submit:hover,
+#savepost:hover {
+  background-color: #587568;
   box-shadow: 1px 1px 3px rgb(73, 71, 71);
 }
 
 #deletepost:hover {
-  background-color: rgb(98, 62, 62);
+  background-color: rgb(81, 52, 52);
   box-shadow: 1px 1px 3px rgb(73, 71, 71);
 }
 
 
 @media only screen and (max-width : 600px) {
 
-.headerContainer {
+  .headerContainer {
     height: 40px;
   }
 
@@ -256,15 +320,16 @@ footer {
     margin-bottom: 5pt;
   }
 
-  #signUpForm {
+  #editForm {
     margin-top: -30px;
   }
 
   #pagename {
     grid-area: 1/2/2/3;
-    font-family: 'Pacifico', cursive;
+    font-family: 'Lato';
     font-size: 8vw;
     text-align: center;
+    margin-top: 40px;
   }
 
   #content {
@@ -272,13 +337,14 @@ footer {
     margin-top: 20px;
   }
 
-  #signUpForm input {
+  #editForm input {
     width: 280px;
     height: 35px;
     margin-bottom: 5px;
   }
 
-  #newPostDescription, #description {
+  #newPostDescription,
+  #description {
     width: 280px;
     height: 120px;
   }
@@ -286,8 +352,8 @@ footer {
   #uploadFile {
     padding-top: 5px;
   }
-  
-  footer{
+
+  footer {
     display: none;
   }
 }

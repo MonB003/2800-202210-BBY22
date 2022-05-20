@@ -1,10 +1,46 @@
 "use strict";
 
+// Redirects to main page
+document.querySelector("#home").addEventListener("click", function (e) {
+    window.location.replace("/main");
+});
+document.querySelector("#home2").addEventListener("click", function (e) {
+    window.location.replace("/main");
+});
+
+//redirects to message page
+document.querySelector("#messages").addEventListener("click", function (e) {
+    window.location.replace("/message");
+});
+document.querySelector("#messages2").addEventListener("click", function (e) {
+    window.location.replace("/message");
+});
+
+// When my listings button is clicked, redirect to myListings page
+document.querySelector("#listings").addEventListener("click", function (e) {
+    window.location.replace("/mylistings");
+});
+document.querySelector("#listings2").addEventListener("click", function (e) {
+    window.location.replace("/mylistings");
+});
+
+// When profile button is clicked, redirect to profile page
+document.querySelector("#profile").addEventListener("click", function (e) {
+    window.location.replace("/profile");
+});
+document.querySelector("#profile2").addEventListener("click", function (e) {
+    window.location.replace("/profile");
+});
+
+/*********************************************************************************** */
+
 //Returns user to listing page
 document.querySelector("#cancel").addEventListener("click", function (e) {
     window.location.replace("/mylistings");
 });
 
+
+//upload image
 const upLoadForm = document.getElementById("image-form");
 upLoadForm.addEventListener("submit", uploadImages);
 
@@ -158,7 +194,7 @@ function getItemStatus() {
     // Get dropdown menu item selected
     let itemStatusDropdown = document.getElementById("itemStatus");
     var statusSelected = itemStatusDropdown.value;
-    
+
     let reserveStatusDiv = document.getElementById("reserveStatusDiv");
     let savepostBtn = document.getElementById("savepost");
 
