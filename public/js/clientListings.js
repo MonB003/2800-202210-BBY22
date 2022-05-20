@@ -85,7 +85,10 @@ document.querySelector("#filterstatus").addEventListener("click", function (e) {
 // retrieves posts from database
 async function loadposts() {
     
+    let link = document.location.href.split('/');
+    let username = link[4];
     const dataSent = {
+        username
     }
 
     const getDetails = {
@@ -96,7 +99,7 @@ async function loadposts() {
         body: JSON.stringify(dataSent)
     }
 
-    const getResponse = await fetch('/loadmyposts', getDetails);
+    const getResponse = await fetch('/loaduserposts', getDetails);
     const jsonData = await getResponse.json();
     postdata = jsonData;
     displayposts();

@@ -599,6 +599,7 @@ app.get('/profile/:username', function (req, res) {
                         profileDOM.window.document.querySelector("#username").innerHTML = user.userName;
                         let profileP = "<img src=\"/imgs/uploads/userPic-" + user.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         profileDOM.window.document.getElementById("postimage").innerHTML = profileP
+                        profileDOM.window.document.querySelector("#itemlistings").setAttribute("onclick", `window.location.replace("/itemlistings/${user.userName}")`);
                     });
                 } else {}
 
@@ -612,6 +613,58 @@ app.get('/profile/:username', function (req, res) {
         res.redirect("/");
     }
 });
+
+app.get("/itemlistings/:username", function (req, res) {
+    // Check if user is logged in
+    if (req.session.loggedIn) {
+        let listings = fs.readFileSync("./app/listings.html", "utf8");
+        let listingsDOM = new JSDOM(listings);
+        listingsDOM.window.document.querySelector("#pagename").innerHTML = `${req.params.username}'s Listings`
+        res.set("Server", "MACT Engine");
+        res.set("X-Powered-By", "MACT");
+        res.send(listingsDOM.serialize());
+    } else {
+        // User is not logged in, so direct to login page
+        res.redirect("/");
+    }
+});
+
+app.post("/loaduserposts", function (req, res) {
+    let myResults = null;
+    let posts = [];
+
+    connection.query(
+        "SELECT * FROM BBY_22_users where userName = ?",
+        [req.body.username],
+        function (error, results, fields) {
+            myResults = results;
+            if (error) {} else if (results.length > 0) {
+                results.forEach(user => {
+                    connection.query(
+                        "SELECT * FROM BBY_22_item_posts where user_id = ?",
+                        [user.id],
+                        function (error, results, fields) {
+                            myResults = results;
+                            if (error) {} else if (results.length > 0) {
+                                results.forEach(post => {
+                                    posts.push({
+                                        "postid": post.id,
+                                        "title": post.title,
+                                        "status": post.status,
+                                        "city": post.city,
+                                        "timestamp": post.timestamp,
+                                        "item_pic": post.item_pic
+                                    });
+                                });
+                            }
+                            res.send(posts);
+                        }
+                    );
+                });
+            }
+        }
+    );
+})
 
 //saves the postid so that the post can be viewed on the viewPost page
 app.post('/toviewpost', (req, res) => {
