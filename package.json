@@ -6,6 +6,7 @@
     "jsdom": "^19.0.0",
     "multer": "^1.4.4",
     "mysql2": "^2.3.3",
+    "sanitize-html": "^2.7.0",
     "socket.io": "^4.5.0"
   },
   "name": "2800-202210-bby22",

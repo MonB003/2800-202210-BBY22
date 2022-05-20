@@ -39,6 +39,11 @@ document.querySelector("#cancel").addEventListener("click", function (e) {
     window.location.replace("/mylistings");
 });
 
+// Tiny editor for textarea
+tinymce.init({
+    selector: '#description'
+});
+
 
 //upload image
 const upLoadForm = document.getElementById("image-form");
@@ -117,7 +122,7 @@ getDefaultStatus();
 async function save_post(postID) {
     let title = document.querySelector("#title").value;
     let city = document.querySelector("#city").value;
-    let description = document.querySelector("#description").value;
+    let description = tinymce.get("description").getContent();   // Gets the text value in the tiny editor
     let status = document.querySelector("#itemStatus").value;
 
     if (status == "available") {
