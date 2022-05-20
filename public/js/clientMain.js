@@ -106,9 +106,6 @@ document.querySelector("#filterstatus").addEventListener("click", function (e) {
         filterstatus = "available";
         document.querySelector("#filterstatus").innerHTML = "Available"
     } else if (filterstatus == "available") {
-        filterstatus = "pending";
-        document.querySelector("#filterstatus").innerHTML = "Pending"
-    } else if (filterstatus == "pending") {
         filterstatus = "reserved";
         document.querySelector("#filterstatus").innerHTML = "Reserved"
     } else {
