@@ -276,6 +276,7 @@ body {
 /* Assigns the position of the left and right div for touch screen use */
 #left,
 #right {
+    z-index: 1;
     width: 50%;
     position: absolute;
     height: 500px;
@@ -288,6 +289,7 @@ body {
 
 /* Aligns the pop up box to the middle */
 #msg-box{
+    z-index: 2;
     top: 30vh;
     padding: 50px;
     position: absolute;
