@@ -33,9 +33,46 @@ document.querySelector("#profile2").addEventListener("click", function (e) {
 });
 
 // When new post button is clicked, direct to newPost page
-document.querySelector("#newPostPageBtn").addEventListener("click", function (e) {
-    window.location.replace("/newPost");
+document.querySelector("#messageuser").addEventListener("click", function (e) {
+    window.location.replace("/message");
 });
+
+// Redirects to message page if both users are different
+function getMessagePage(postID) {
+    // Store this post ID for message JS file
+    localStorage.setItem("currentPostID", postID);
+
+    // Check for same user
+    checkPostOwnerAndSessionUser(postID);
+}
+
+// Checks if post owner and current session user are the same
+// If they are the same, the user cannot message themself
+async function checkPostOwnerAndSessionUser(postID) {
+    const idDataSent = {
+        postID
+    }
+    const idPostDetails = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(idDataSent)
+    }
+
+    // Get post owner's ID
+    const postResponseID = await fetch('/get-other-user-by-post', idPostDetails);
+    const jsonDataID = await postResponseID.json();
+    let returnedUserID = jsonDataID.otherUserID;
+    let postOwnerID = returnedUserID.user_id; // Post owner userID
+    let returnedSessionID = jsonDataID.sessionUserID; // Current session userID
+
+    // Compare post owner and session user IDs
+    if (postOwnerID != returnedSessionID) {
+        // If they are different, redirect to private message page
+        window.location.replace("/postMessage");
+    }
+}
 
 //toggle filter menu
 document.querySelector("#togglefilter").addEventListener("click", function (e) {
@@ -259,27 +296,6 @@ async function displayposts() {
 }
 
 loadposts();
-
-//saves post id to session for editing post on editpost page
-async function editpost(postID) {
-    const dataSent = {
-        postID
-    }
-
-    const postDetails = {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(dataSent)
-    }
-
-    const postResponse = await fetch('/toeditpost', postDetails);
-    const jsonData = await postResponse.json();
-    if (jsonData.status == "Success") {
-        window.location.replace("/editpost");
-    }
-};
 
 // Saves the post ID to the session and redirects to the view post html if validated
 async function viewPost(postID) {
