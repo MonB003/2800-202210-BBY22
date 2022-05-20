@@ -1,19 +1,80 @@
 "use strict";
 
-// When profile button is clicked, direct to profile page
-document.querySelector("#profile").addEventListener("click", function (e) {
-    window.location.replace("/profile");
+// When new post button is clicked, redirect to newPost page
+document.querySelector("#newPostPageBtn").addEventListener("click", function (e) {
+    window.location.replace("/newPost");
 });
 
 // Redirects to main page
 document.querySelector("#home").addEventListener("click", function (e) {
     window.location.replace("/main");
 });
-
-// When new post button is clicked, direct to newPost page
-document.querySelector("#newPostPageBtn").addEventListener("click", function (e) {
-    window.location.replace("/newPost");
+document.querySelector("#home2").addEventListener("click", function (e) {
+    window.location.replace("/main");
 });
+
+//redirects to message page
+document.querySelector("#messages").addEventListener("click", function (e) {
+    window.location.replace("/message");
+});
+document.querySelector("#messages2").addEventListener("click", function (e) {
+    window.location.replace("/message");
+});
+
+// When my listings button is clicked, redirect to myListings page
+document.querySelector("#listings").addEventListener("click", function (e) {
+    window.location.replace("/mylistings");
+});
+document.querySelector("#listings2").addEventListener("click", function (e) {
+    window.location.replace("/mylistings");
+});
+
+// When profile button is clicked, redirect to profile page
+document.querySelector("#profile").addEventListener("click", function (e) {
+    window.location.replace("/profile");
+});
+document.querySelector("#profile2").addEventListener("click", function (e) {
+    window.location.replace("/profile");
+});
+
+
+// Redirects to message page if both users are different
+function getMessagePage(postID) {
+    // Store this post ID for message JS file
+    localStorage.setItem("currentPostID", postID);
+
+    // Check for same user
+    checkPostOwnerAndSessionUser(postID);
+}
+
+
+// Checks if post owner and current session user are the same
+// If they are the same, the user cannot message themself
+async function checkPostOwnerAndSessionUser(postID) {
+    const idDataSent = {
+        postID
+    }
+    const idPostDetails = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(idDataSent)
+    }
+
+    // Get post owner's ID
+    const postResponseID = await fetch('/get-other-user-by-post', idPostDetails);
+    const jsonDataID = await postResponseID.json();
+    let returnedUserID = jsonDataID.otherUserID;
+    let postOwnerID = returnedUserID.user_id; // Post owner userID
+    let returnedSessionID = jsonDataID.sessionUserID; // Current session userID
+
+    // Compare post owner and session user IDs
+    if (postOwnerID != returnedSessionID) {
+        // If they are different, redirect to private message page
+        window.location.replace("/postMessage");
+    }
+}
 
 //toggle filter menu
 document.querySelector("#togglefilter").addEventListener("click", function (e) {
@@ -45,9 +106,6 @@ document.querySelector("#filterstatus").addEventListener("click", function (e) {
         filterstatus = "available";
         document.querySelector("#filterstatus").innerHTML = "Available"
     } else if (filterstatus == "available") {
-        filterstatus = "pending";
-        document.querySelector("#filterstatus").innerHTML = "Pending"
-    } else if (filterstatus == "pending") {
         filterstatus = "reserved";
         document.querySelector("#filterstatus").innerHTML = "Reserved"
     } else {
@@ -59,8 +117,7 @@ document.querySelector("#filterstatus").addEventListener("click", function (e) {
 
 // retrieves posts from database
 async function loadposts() {
-    const dataSent = {
-    }
+    const dataSent = {}
 
     const getDetails = {
         method: 'POST',
@@ -82,8 +139,25 @@ async function displayposts() {
     let search = document.getElementById("search").value;
     let posttemplate = document.getElementById("posttemplate");
     let posts = document.getElementById("posts");
+    if (search.toLowerCase() == "game") {
+        let testpost = posttemplate.content.cloneNode(true);
+        testpost.querySelector(".post").id = `game`;
+        testpost.querySelector(".posttitle").innerHTML = "On The House Surprise";
+        testpost.querySelector(".posttitle").style.color = "lightgreen";
+        testpost.querySelector(".poststatus").innerHTML = "Available";
+        testpost.querySelector(".postlocation").innerHTML = "Click Title to Find Out";
+        testpost.querySelector(".postdate").innerHTML = "";
+        testpost.querySelector(".savepost").innerHTML = "";
+        testpost.querySelector(".messagepost").innerHTML = "";
+        let postpic = `<img src="imgs/stickmangame.png" alt="game-pic" id="gamepic">`;
+        console.log(postpic);
+        testpost.querySelector(".postimage").innerHTML = postpic;
+        testpost.querySelector(".posttitle").setAttribute("onclick", `window.location.replace("/game")`);
+        posts.appendChild(testpost);
+    }
+
     if (sort == "recent") {
-        for (let i = postdata.length-1; i > -1; i--) {
+        for (let i = postdata.length - 1; i > -1; i--) {
             if (document.querySelector("#filter").value == "title") {
                 if (postdata[i].title.toLowerCase().includes(search.toLowerCase())) {
                     if (postdata[i].status == filterstatus) {
@@ -92,24 +166,28 @@ async function displayposts() {
                         testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
                         testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
                         testpost.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
-                        testpost.querySelector(".poststatus").setAttribute("onclick", `changePostStatus(${postdata[i].postid})`);
                         testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
-                    } else if (filterstatus == "all"){
+                    } else if (filterstatus == "all") {
                         let testpost = posttemplate.content.cloneNode(true);
                         testpost.querySelector(".post").id = `post${postdata[i].postid}`;
                         testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
                         testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
                         testpost.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
-                        testpost.querySelector(".poststatus").setAttribute("onclick", `changePostStatus(${postdata[i].postid})`);
                         testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     }
@@ -122,29 +200,33 @@ async function displayposts() {
                         testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
                         testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
                         testpost.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
-                        testpost.querySelector(".poststatus").setAttribute("onclick", `changePostStatus(${postdata[i].postid})`);
                         testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
-                    } else if (filterstatus == "all"){
+                    } else if (filterstatus == "all") {
                         let testpost = posttemplate.content.cloneNode(true);
                         testpost.querySelector(".post").id = `post${postdata[i].postid}`;
                         testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
                         testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
                         testpost.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
-                        testpost.querySelector(".poststatus").setAttribute("onclick", `changePostStatus(${postdata[i].postid})`);
                         testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     }
                 }
-            } 
+            }
         }
     } else {
         for (let i = 0; i < postdata.length; i++) {
@@ -156,24 +238,28 @@ async function displayposts() {
                         testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
                         testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
                         testpost.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
-                        testpost.querySelector(".poststatus").setAttribute("onclick", `changePostStatus(${postdata[i].postid})`);
                         testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
-                    } else if (filterstatus == "all"){
+                    } else if (filterstatus == "all") {
                         let testpost = posttemplate.content.cloneNode(true);
                         testpost.querySelector(".post").id = `post${postdata[i].postid}`;
                         testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
                         testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
                         testpost.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
-                        testpost.querySelector(".poststatus").setAttribute("onclick", `changePostStatus(${postdata[i].postid})`);
                         testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     }
@@ -186,29 +272,33 @@ async function displayposts() {
                         testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
                         testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
                         testpost.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
-                        testpost.querySelector(".poststatus").setAttribute("onclick", `changePostStatus(${postdata[i].postid})`);
                         testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
-                    } else if (filterstatus == "all"){
+                    } else if (filterstatus == "all") {
                         let testpost = posttemplate.content.cloneNode(true);
                         testpost.querySelector(".post").id = `post${postdata[i].postid}`;
                         testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
                         testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
                         testpost.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
-                        testpost.querySelector(".poststatus").setAttribute("onclick", `changePostStatus(${postdata[i].postid})`);
                         testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     }
                 }
-            } 
+            }
         }
     }
 
@@ -241,188 +331,3 @@ async function viewPost(postID) {
         window.location.replace("/viewPost");
     }
 };
-
-// Calls appropriate method to update a post's status in the database and on the page. This is based on what the post's current status is
-async function changePostStatus(postID) {
-    let postStatusDiv = document.getElementById('postStatus' + postID);
-    let currentPostStatus = postStatusDiv.textContent;
-
-    // Status: available --> pending --> reserved --> collected
-
-    if (currentPostStatus == "available") {
-        changeAvailableStatus(postID);
-
-    } else if (currentPostStatus == "pending") {
-        changePendingStatus(postID);
-
-    } else if (currentPostStatus == "reserved") {
-        changeReservedStatus(postID);
-    }
-}
-
-
-// Updates available status to pending
-async function changeAvailableStatus(postID) {
-    // Data passed to post request
-    const dataSent = {
-        postID
-    }
-
-    // Other details passed to post request
-    const postDetails = {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(dataSent)
-    }
-
-    // Get response from server side post request
-    const postResponse = await fetch('/get-post-and-session-ids', postDetails);
-    const jsonData = await postResponse.json();
-
-    let currentIDReturned = jsonData.currentUserID;
-    let postIDReturned = jsonData.postUserID;
-    let postUserID = postIDReturned.user_id;
-
-
-    // If post user_id matches current session user id, they are the same user. A user cannot request their own post
-    if (currentIDReturned == postUserID) {
-        return;
-    } 
-
-    let postStatusDiv = document.getElementById('postStatus' + postID);
-    let newStatus = "pending";
-
-    const pendingDataSent = {
-        postID,
-        newStatus
-    }
-
-    const postPendingDetails = {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(pendingDataSent)
-    }
-
-    // Get response from server side post request to update status to pending
-    const pendingPostResponse = await fetch('/update-post-status', postPendingDetails);
-    const jsonPendingData = await pendingPostResponse.json();
-
-    // Saves the current user as the reserved user for that post in the database
-    const saveUserPostRequest = await fetch('/save-user-pending-status', postDetails);
-    const jsonSaveUser = await saveUserPostRequest.json();
-
-    // If both post requests are a success, the status button on the post can be updated
-    if (jsonPendingData.status == "Success" && jsonSaveUser.status == "Success") {
-        postStatusDiv.innerHTML = newStatus;
-    }
-}
-
-
-// Updates pending status to reserved
-async function changePendingStatus(postID) {
-    const dataSent = {
-        postID
-    }
-
-    const postDetails = {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(dataSent)
-    }
-
-    // Get response from server side post request
-    const postResponse = await fetch('/get-post-and-session-ids', postDetails);
-    const jsonData = await postResponse.json();
-
-    let currentIDReturned = jsonData.currentUserID;
-    let postIDReturned = jsonData.postUserID;
-    let postUserID = postIDReturned.user_id;
-
-
-    // If post user_id matches current session user id, they are allowed to reserve their item
-    if (currentIDReturned == postUserID) {
-        let newStatus = "reserved";
-
-        const reserveDataSent = {
-            postID,
-            newStatus
-        }
-
-        const postReserveDetails = {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(reserveDataSent)
-        }
-
-        // Get response from server side post request to update status to reserved
-        const postResponseFromReserved = await fetch('/update-post-status', postReserveDetails);
-        const jsonDataReserved = await postResponseFromReserved.json();
-
-        if (jsonDataReserved.status == "Success") {
-            let postStatusDiv = document.getElementById('postStatus' + postID);
-            postStatusDiv.innerHTML = newStatus;
-        }
-
-    }
-}
-
-
-// Updates reserved status to collected
-async function changeReservedStatus(postID) {
-    const dataSent = {
-        postID
-    }
-
-    const postDetails = {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(dataSent)
-    }
-
-    // Get response from server side post request
-    const postResponse = await fetch('/get-post-and-session-ids', postDetails);
-    const jsonData = await postResponse.json();
-
-    let currentIDReturned = jsonData.currentUserID;
-    let postIDReturned = jsonData.postUserID;
-    let postUserID = postIDReturned.user_id;
-
-
-    // If the post user_id matches current session user id, they are allowed to update the status to collected
-    if (currentIDReturned == postUserID) {
-        let newStatus = "collected";
-
-        const collectedDataSent = {
-            postID,
-            newStatus
-        }
-
-        const collectedPostDetails = {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(collectedDataSent)
-        }
-
-        // Get response from server side post request to update status to collected
-        const postCollectedResponse = await fetch('/update-post-status', collectedPostDetails);
-        const jsonCollectedData = await postCollectedResponse.json();
-
-        // If both post requests are a success, that HTML post element can be removed from the page
-        if (jsonCollectedData.status == "Success") {
-            let postStatusDiv = document.getElementById('post' + postID);
-            postStatusDiv.remove();
-        }
-    }
-}

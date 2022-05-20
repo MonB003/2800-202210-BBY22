@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>On The House</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/imgs/OTH-favicon.ico" rel="icon" type="image/x-icon" />
+
+    <!-- CSS style -->
+    <link rel="stylesheet" href="/css/game.css" />
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header id="header">
+        <nav>
+            <div class="container">
+                <ul class="navbar">
+                    <li id="home"><a href="#">HOME</a></li>
+                    <li id="bookmark"><a href="#">SAVED</a></li>
+                    <li id="messages"><a href="#">MESSAGES</a></li>
+                    <li id="listings"><a href="#">MY LISTINGS</a></li>
+                    <li id="profile"><a href="#">PROFILE</a></li>
+                    <li id ="fright">
+                        <form action="/logout" method="get" id="logoutForm">
+                            <input type="submit" id="logoutBtn" class="nav-button" value="LOGOUT" />
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            <div class="menu">
+                <input id="menuClicked" type="checkbox" />
+                <label class="menuBtn" for="menuClicked">
+                <span></span>
+                </label>
+                <ul class="menuInside">
+                    <li><a class="links" id="home2" href="#">Home</a></li>
+                    <li><a class="links bookmark" id="bookmark2" href="#">Saved</a></li>
+                    <li><a class="links messages" id="messages2" href="#">Messages</a></li>
+                    <li><a class="links listings" id="listings2" href="#">My Listings</a></li>
+                    <li><a class="links profile" id="profile2" href="#">Profile</a></li>
+                    <li class ="fright">
+                        <form action="/logout" method="get" id="logoutForms">
+                            <input type="submit" id="logoutBtns" class="links nav-button" value="Logout" />
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+
+    <!-- The Game -->
+
+    <div id="falling-blocks">
+        <div id="left"></div>
+        <div id="right"></div>
+        <div id="obstacle">
+            <h3 id="crisis">FINANCIAL CRISIS</h3>
+        </div>
+        <div id="gamer"><img id="stickman" src="/imgs/stickman1.png" alt=""></div>
+        <div id="whitebox">
+
+            <h3 id="game-title">DODGE THE CRISIS!</h3>
+            <input id="start" type="button" value="Click to Start" onclick="start()">
+            <div id="rules">
+                <p>Move your game character left and right to avoid the falling obstacle. <br> Tap on your mobile screen
+                    to
+                    move
+                    the game character.</p>
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <div id="msg-box">
+        <h3 id="game-over">Game Over! Score: 0</h3>
+        <input type="submit" id="submit" value="OK" onclick="gameover()">
+    </div>
+
+
+    <!-- JavaScript -->
+    <script src="js/clientGame.js"></script>
+
+</body>
+
+</html>

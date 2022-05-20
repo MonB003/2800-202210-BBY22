@@ -13,23 +13,42 @@
 </head>
 
 <body>
-
+    <!-- Nav bar -->
     <header id="header">
-        <div class="headerContainer">
-            <nav id="navbar">
-                <div id="homeContainer">
-                    <button id="home" class="nav-button">Home</button>
-                </div>
-                <div id="listingContainer">
-                    <button id="mylistings" class="nav-button">My Listings</button>
-                </div>
-                <div id="logoutContainer">
-                    <form action="/logout" method="get" id="logout-form">
-                        <input id="logout" class="nav-items nav-button" type="submit" value="Logout" />
-                    </form>
-                </div>
-            </nav>
-        </div>
+        <nav>
+            <div class="container">
+                <ul class="navbar">
+                    <li id="home"><a href="#">HOME</a></li>
+                    <li id="bookmark"><a href="#">SAVED</a></li>
+                    <li id="messages"><a href="#">MESSAGES</a></li>
+                    <li id="listings"><a href="#">MY LISTINGS</a></li>
+                    <li id="profile"><a href="#">PROFILE</a></li>
+                    <li id="fright">
+                        <form action="/logout" method="get" id="logoutForm">
+                            <input type="submit" id="logoutBtn" class="nav-button" value="LOGOUT" />
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            <div class="menu">
+                <input id="menuClicked" type="checkbox" />
+                <label class="menuBtn" for="menuClicked">
+                    <span></span>
+                </label>
+                <ul class="menuInside">
+                    <li><a class="links" id="home2" href="#">Home</a></li>
+                    <li><a class="links bookmark" id="bookmark2" href="#">Saved</a></li>
+                    <li><a class="links messages" id="messages2" href="#">Messages</a></li>
+                    <li><a class="links listings" id="listings2" href="#">My Listings</a></li>
+                    <li><a class="links profile" id="profile2" href="#">Profile</a></li>
+                    <li class="fright">
+                        <form action="/logout" method="get" id="logoutForms">
+                            <input type="submit" id="logoutBtns" class="links nav-button" value="Logout" />
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </nav>
     </header>
 
     <section>
@@ -37,7 +56,7 @@
             <div id="posttemplate">
                 <div class="post">
                     <div id="postimage">
-                        Picture
+                        <img src="imgs/userPic-user-pic-none.jpg" alt="profile-pic" id="picID">
                     </div>
                 </div>
             </div>
@@ -46,9 +65,8 @@
                 <br>
                 <div id="container">
                     <form id="upload-images-form">
-                        <input id="image-upload" type="file"  
-                            accept="image/png, image/gif, image/jpg, image/jpeg" />
-                        <input id="submit" type="submit" value="Submit"/>
+                        <input id="image-upload" type="file" accept="image/png, image/gif, image/jpg, image/jpeg" />
+                        <input id="submit" type="submit" value="Submit" />
                     </form>
                 </div>
             </div>
@@ -57,6 +75,8 @@
                 <input type="text" id="userFirstName" name="firstName">
                 <br>
                 <input type="text" id="userLastName" name="lastName">
+                <br>
+                <input type="text" id="userName" name="userName">
                 <br>
                 <input type="text" id="userCity" name="city">
                 <br>
@@ -73,7 +93,7 @@
 
 
     <!-- JavaScript -->
-    <script src="js/clientProfile.js"></script>
+    <script src="js/clientUpdateProfile.js"></script>
 
 
 

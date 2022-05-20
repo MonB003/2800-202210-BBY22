@@ -4,15 +4,39 @@
 async function updateAUsersData(userID) {
     let firstName = document.getElementById('userFirstName' + userID).value;
     let lastName = document.getElementById('userLastName' + userID).value;
+    let userName = document.getElementById('userName' + userID).value;
     let city = document.getElementById('userCity' + userID).value;
     let email = document.getElementById('userEmail' + userID).value;
     let password = document.getElementById('userPassword' + userID).value;
     let type = document.getElementById('userType' + userID).value;
 
+
+    // Get all user's input values for their type
+    var formInputFields = document.querySelectorAll('.user-type-input');
+    var adminCount = 0;
+
+    // Check for input fields of type admin
+    for (let i = 0; i < formInputFields.length; i++) {
+        var currentInput = formInputFields[i];
+
+        // If a value is admin, increment count
+        if (currentInput.value == "ADMIN") {
+            adminCount++;
+        }
+    }
+
+    // If there's only 1 admin, and that user is the admin, their type cannot be edited
+    if (adminCount < 1) {
+        document.getElementById('userType' + userID).value = "ADMIN";    // Keep type as admin
+        type = "ADMIN";
+    } 
+
+
     // Store user's data that was filled into the text fields on the page
     const dataSent = {
         firstName,
         lastName,
+        userName,
         city,
         email,
         password,
@@ -32,7 +56,13 @@ async function updateAUsersData(userID) {
     // Get response from server side post request called update-user-data
     const postResponse = await fetch('/update-user-data', postDetails);
     const jsonData = await postResponse.json();
-    document.getElementById('message').innerHTML = jsonData.msg;
+
+    if (adminCount < 1) {
+        document.getElementById('message').innerHTML = "Admin type cannot be edited. There is only 1 admin. The rest of the data was updated";
+    } else {
+        document.getElementById('message').innerHTML = jsonData.msg;
+    }
+
 };
 
 
@@ -40,6 +70,7 @@ async function updateAUsersData(userID) {
 async function deleteAUser(userID) {
     let firstName = document.getElementById('userFirstName' + userID).value;
     let lastName = document.getElementById('userLastName' + userID).value;
+    let userName = document.getElementById('userName' + userID).value;
     let city = document.getElementById('userCity' + userID).value;
     let email = document.getElementById('userEmail' + userID).value;
     let password = document.getElementById('userPassword' + userID).value;
@@ -59,8 +90,8 @@ async function deleteAUser(userID) {
         }
     }
 
-    // If there's only 1 admin, they cannot be deleted
-    if (adminCount < 2) {
+    // If there's only 1 admin, and they are the admin, they cannot be deleted
+    if (adminCount < 2  && type == "ADMIN") {
         document.getElementById('message').innerHTML = "Admin user cannot be deleted.";
 
     } else {
@@ -68,6 +99,7 @@ async function deleteAUser(userID) {
         const dataSent = {
             firstName,
             lastName,
+            userName,
             city,
             email,
             password,
@@ -91,6 +123,7 @@ async function deleteAUser(userID) {
         // Remove that user's text fields from the page
         document.getElementById('userFirstName' + userID).remove();
         document.getElementById('userLastName' + userID).remove();
+        document.getElementById('userName' + userID).remove();
         document.getElementById('userCity' + userID).remove();
         document.getElementById('userEmail' + userID).remove();
         document.getElementById('userPassword' + userID).remove();
@@ -105,6 +138,7 @@ async function deleteAUser(userID) {
 async function addAUser() {
     let firstName = document.getElementById('newUserFirstName').value;
     let lastName = document.getElementById('newUserLastName').value;
+    let userName = document.getElementById('newUserName').value;
     let city = document.getElementById('newUserCity').value;
     let email = document.getElementById('newUserEmail').value;
     let password = document.getElementById('newUserPassword').value;
@@ -127,7 +161,7 @@ async function addAUser() {
 
     // If at least one of the inputs is empty
     if (checkEmptyInput) {
-        document.getElementById('addUserMessage').innerHTML = "Please fill out all fields.";
+        document.getElementById('message').innerHTML = "Please fill out all fields.";
 
     } else {
 
@@ -135,6 +169,7 @@ async function addAUser() {
         const dataSent = {
             firstName,
             lastName,
+            userName,
             city,
             email,
             password,
@@ -152,9 +187,12 @@ async function addAUser() {
         // Get response from server side post request called add-new-user
         const postResponse = await fetch('/add-new-user', postDetails);
         const jsonData = await postResponse.json();
-        document.getElementById('addUserMessage').innerHTML = jsonData.msg;
+        document.getElementById('message').innerHTML = jsonData.msg;
 
-        // Reload page to show updated dashboard with added user
-        window.location.reload();
+        if (jsonData.status == "Success") {
+            // Reload page to show updated dashboard with added user
+            window.location.reload();
+        }
+
     }
 };

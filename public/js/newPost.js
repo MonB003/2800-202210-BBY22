@@ -1,4 +1,35 @@
 "use strict";
+// Redirects to main page
+document.querySelector("#home").addEventListener("click", function (e) {
+    window.location.replace("/main");
+});
+document.querySelector("#home2").addEventListener("click", function (e) {
+    window.location.replace("/main");
+});
+
+//redirects to message page
+document.querySelector("#messages").addEventListener("click", function (e) {
+    window.location.replace("/message");
+});
+document.querySelector("#messages2").addEventListener("click", function (e) {
+    window.location.replace("/message");
+});
+
+// When my listings button is clicked, redirect to myListings page
+document.querySelector("#listings").addEventListener("click", function (e) {
+    window.location.replace("/mylistings");
+});
+document.querySelector("#listings2").addEventListener("click", function (e) {
+    window.location.replace("/mylistings");
+});
+
+// When profile button is clicked, redirect to profile page
+document.querySelector("#profile").addEventListener("click", function (e) {
+    window.location.replace("/profile");
+});
+document.querySelector("#profile2").addEventListener("click", function (e) {
+    window.location.replace("/profile");
+});
 
 ready(function () {
     function ajaxGET(url, callback) {
@@ -40,13 +71,14 @@ ready(function () {
         let title = document.getElementById("title");
         let description = document.getElementById("newPostDescription");
         let city = document.getElementById("city");
+
         let queryString = "title=" + title.value + "&description=" + description.value + "&city=" + city.value;
 
         ajaxPOST("/newPost", function (data) {
             if (data) {
                 let dataParsed = JSON.parse(data);
                 if (dataParsed.status == "Fail") {} else {
-                    window.location.replace("/main");
+                    window.location.replace("/newPostPhoto");
                 }
             }
         }, queryString);

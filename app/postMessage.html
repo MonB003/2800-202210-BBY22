@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Message Post Owner</title>
+    <meta charset="utf-8" />
+    <link href="/imgs/OTH-favicon.ico" rel="icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS style -->
+    <link rel="stylesheet" href="/css/postMessage.css" />
+</head>
+
+<body>
+
+    <div id="grid">
+        <div id="secondGrid">
+            <button id="backToMain">Back</button>
+            <!-- Current session username -->
+            <p id="thisUserName"></p>
+            <!-- Post owner's username -->
+            <div id="ownerName">
+                <p>You are messaging: <span id="postOwnerUserName"></span></p>
+            </div>
+        </div>
+
+        <div id="thirdGrid">
+            <!-- Message list (all past and current messages) -->
+            <div id="allMessages"></div>
+
+            <div id="messageDiv">
+                <div id="msgInput">
+                    <input id="messageInput" placeholder="Type message">
+                </div>
+                <div id="msgBtn">
+                    <button id="sendMessageBtn" type="submit" onclick="sendMessageToUser()" disabled="true">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript is loaded on the server side -->
+
+</body>
+
+</html>

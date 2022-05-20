@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Balsamiq+Sans:ital@1&family=Lato:wght@300&family=Nanum+Gothic:wght@700&family=Nunito:wght@500;700&family=Orbitron:wght@500&family=Pacifico&family=Raleway:ital@1&family=Shadows+Into+Light&display=swap');
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: 'Lato', sans-serif;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: linear-gradient(to bottom right, #ffffff, #ffffff);
+  min-height: 100%;
+}
+
+#backToMain {
+  color: white;
+  font-size: 17px;
+  font-family: 'Lato';
+  border-radius: 5px;
+  background-color: #5b605e;
+  border-style: none;
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, .4);
+  padding: 5px;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+
+#backToMain:hover {
+  background-color: #6c706e;
+  -webkit-transition: all 300ms ease;
+  -moz-transition: all 300ms ease;
+  -ms-transition: all 300ms ease;
+  -o-transition: all 300ms ease;
+  transition: all 300ms ease;
+}
+
+#grid {
+  display: grid;
+  grid-template-rows: 15% 85%;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+}
+
+#thisUserName, #users {
+  display: none;
+}
+
+#ownerName {
+  text-align: center;
+  align-items: center;
+  padding-top: 25px;
+}
+
+#ownerName > p{
+  font-family: 'Lato';
+  font-size: 20px;
+}
+
+#thirdGrid {
+  border-top-style: solid;
+  border-color: #8a8f8a;
+  height: 100%;
+  grid-row: 2/3;
+  display: grid;
+  grid-template-rows: 90% 10%;
+  background-color: white;
+}
+
+#allMessages {
+  overflow-y: scroll;
+}
+
+#messageDiv {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 80% 20%;
+  bottom: 5px;
+  right: 5px
+}
+
+#msgInput {
+  grid-column: 1/2;
+  width: 100%;
+}
+
+#msgBtn {
+  grid-column: 2/3;
+  width: 100%;
+}
+
+#messageInput {
+  border: 1px solid black;
+  width: 100%;
+  height: 100%;
+}
+
+#sendMessageBtn {
+  width: 100%;
+  height: 100%;
+}
