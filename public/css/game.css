@@ -36,9 +36,8 @@
 #obstacle {
     width: 100px;
     height: 100px;
-    /* background-color: black; */
     position: relative;
-    animation: slide 1s infinite;
+    animation: slide 1.5s infinite;
     display: flex;
     justify-content: center;
     align-items: baseline;
@@ -49,8 +48,6 @@
 #obstacle>#crisis{
     color: red;
     text-align: center;
-
-
 }
 
 
@@ -81,8 +78,6 @@
 }
 
 #start{
-    /* position:relative;
-    left: 35vw; */
     margin: auto;
     height: 3vh;
 }
