@@ -111,13 +111,21 @@ async function getSelectedUser(username) {
         if (currObj.userSending == thisUser) {
             // Message is from you
             currMessage.textContent = "You: " + currObj.message;
-            currMessage.style.backgroundColor = "rgb(130, 255, 173)";
+            currMessage.style.backgroundColor = "#91C7B1";
             currMessage.style.textAlign = "right";
+            currMessage.style.color = "white";
+            currMessage.style.padding = "20px";
+            currMessage.style.margin = "2px";
+            currMessage.style.fontWeight = "bold";
 
         } else {
             // Message is from other user
             currMessage.textContent = currObj.userSending + ": " + currObj.message;
-            currMessage.setAttribute("style", "background-color: rgb(226, 226, 226);");
+            currMessage.style.backgroundColor = "#9fa4a9";
+            currMessage.style.padding = "20px";
+            currMessage.style.margin = "2px";
+            currMessage.style.color = "white";
+            currMessage.style.fontWeight = "bold";
         }
 
         document.getElementById("allMessages").appendChild(currMessage);
@@ -150,8 +158,12 @@ function sendMessageToUser() {
     // Create HTML element for new message
     let newMessage = document.createElement("p");
     newMessage.textContent = "You: " + messageInput;
-    newMessage.style.backgroundColor = "rgb(130, 255, 173)";
+    newMessage.style.backgroundColor = "#91C7B1";
     newMessage.style.textAlign = "right";
+    newMessage.style.color = "white";
+    newMessage.style.padding = "20px";
+    newMessage.style.margin = "2px";
+    newMessage.style.fontWeight = "bold";
 
     document.getElementById("allMessages").appendChild(newMessage);
 
@@ -175,7 +187,11 @@ privateSocket.on("new-message-from-other-user", function (data) {
     // Create HTML element to display the other user's messsage
     let newMessage = document.createElement("p");
     newMessage.textContent = data.userSending + ": " + data.message;
-    newMessage.style.backgroundColor = "rgb(226, 226, 226)";
+    newMessage.style.backgroundColor = "#9fa4a9";
+    newMessage.style.padding = "20px";
+    newMessage.style.margin = "2px";
+    newMessage.style.color = "white";
+    newMessage.style.fontWeight = "bold";
 
     document.getElementById("allMessages").appendChild(newMessage);
 
