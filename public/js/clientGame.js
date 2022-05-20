@@ -1,4 +1,4 @@
-// "use strict";
+"use strict";
 
 
 // Redirects to main page
@@ -70,7 +70,7 @@ function start() {
     var count = 0;
     obstacle.addEventListener('animationiteration', () => {
         var random = Math.floor(Math.random() * 3);
-        move = random * 100;
+        let move = random * 100;
         obstacle.style.left = move + "px";
         count++;
     });
