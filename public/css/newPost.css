@@ -83,13 +83,13 @@
   }
 
   .menu {
+    z-index: 1;
     top: 0;
     display: block;
     background-color: #435a50;
     margin: 0;
     padding: 0;
     height: 42px;
-    position: fixed;
     width: 100%;
   }
 
@@ -141,7 +141,7 @@
     height: 100%;
     padding-top: 60px;
     list-style: none;
-    background-color: #999F99;
+    background-color: #435a50;
     box-shadow: 3px 3px 6px rgba(0, 0, 0, .3);
     transition-duration: 300ms;
   }
@@ -149,7 +149,7 @@
   .links {
     display: block;
     padding: 12px 24px;
-    color: rgb(39, 39, 39);
+    color: white;
     font-family: 'Lato', sans-serif;
     font-size: 22px;
     text-decoration: none;
@@ -162,11 +162,10 @@
   }
 
   #logoutBtns {
-    background-color: #999F99;
+    color: white;
+    background-color: #435a50;
   }
 }
-
-/* ****************************************************************************** */
 
 .headerContainer {
   display: grid;

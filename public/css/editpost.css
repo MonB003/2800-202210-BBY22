@@ -144,7 +144,7 @@
     height: 100%;
     padding-top: 60px;
     list-style: none;
-    background-color: #999F99;
+    background-color: #435a50;
     box-shadow: 3px 3px 6px rgba(0, 0, 0, .3);
     transition-duration: 300ms;
   }
@@ -152,7 +152,7 @@
   .links {
     display: block;
     padding: 12px 24px;
-    color: rgb(39, 39, 39);
+    color: white;
     font-family: 'Lato', sans-serif;
     font-size: 22px;
     text-decoration: none;
@@ -165,12 +165,10 @@
   }
 
   #logoutBtns {
-    background-color: #999F99;
+    background-color: #435a50;
   }
+
 }
-
-/* ****************************************************************************** */
-
 
 #pagename {
   grid-area: 1/2/2/3;
@@ -310,50 +308,33 @@ footer {
 }
 
 
-@media only screen and (max-width : 600px) {
 
-  .headerContainer {
-    height: 40px;
+@media only screen and (max-width: 750px) {
+  #pagename {
+    font-size: 10vw;
   }
+  #content {
+    grid-area: 2/2/3/3;
+    background-color: rgba(0, 0, 0, 0.1);
+    width: 90%;
 
-  #logout {
-    margin-bottom: 5pt;
   }
 
   #editForm {
-    margin-top: -30px;
-  }
-
-  #pagename {
-    grid-area: 1/2/2/3;
-    font-family: 'Lato';
-    font-size: 8vw;
     text-align: center;
-    margin-top: 40px;
-  }
-
-  #content {
-    width: 300px;
-    margin-top: 20px;
+    align-items: center;
+    margin-bottom: -20px;
   }
 
   #editForm input {
-    width: 280px;
-    height: 35px;
-    margin-bottom: 5px;
+    width: 90%;
+ 
   }
 
-  #newPostDescription,
   #description {
-    width: 280px;
-    height: 120px;
+    width: 90%;
+    height: 150px;
   }
 
-  #uploadFile {
-    padding-top: 5px;
-  }
-
-  footer {
-    display: none;
-  }
 }
+

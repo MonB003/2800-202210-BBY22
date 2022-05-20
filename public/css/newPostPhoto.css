@@ -284,37 +284,96 @@ body {
   box-shadow: 1px 1px 3px rgb(73, 71, 71);
 }
 
-@media only screen and (max-width : 1000px) {
-
-.headerContainer {
-    height: 40px;
+@media only screen and (max-width: 750px) {
+  .container {
+    display: none;
   }
 
-  #logout {
-    margin-bottom: 5pt;
+  .navbar {
+    display: none;
   }
 
-  #content {
-    width: 300px;
-    margin-top: 80px;
+  .menu {
+    z-index: 1;
+    top: 0;
+    display: block;
+    background-color: #435a50;
+    margin: 0;
+    padding: 0;
+    height: 42px;
+    width: 100%;
   }
 
-  #signUpForm input {
-    width: 280px;
-    height: 35px;
-    margin-bottom: 5px;
+  #menuClicked {
+    opacity: 0;
   }
 
-  #submit {
-    width: 280px;
-    height: 35px;
-    margin-left: 0%;
-    margin-bottom: 8px;
-    margin-top: 20px;
-    margin-bottom: -15px;
+  #menuClicked:checked~.menuInside {
+    left: 0;
   }
 
-  #uploadFile {
-    padding-top: 5px;
+  .menuBtn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 26px;
+    height: 26px;
+    cursor: pointer;
+    z-index: 1;
+  }
+
+  .menuBtn>span::before {
+    content: '';
+    top: -8px;
+  }
+
+  .menuBtn>span,
+  .menuBtn>span::before,
+  .menuBtn>span::after {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: #848484;
+    transition-duration: .25s;
+  }
+
+  .menuBtn>span::after {
+    content: '';
+    top: 8px;
+  }
+
+  .menuInside {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 275px;
+    height: 100%;
+    padding-top: 60px;
+    list-style: none;
+    background-color: #435a50;
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, .3);
+    transition-duration: 300ms;
+  }
+
+  .links {
+    display: block;
+    padding: 12px 24px;
+    color: white;
+    font-family: 'Lato', sans-serif;
+    font-size: 22px;
+    text-decoration: none;
+    transition-duration: 250ms;
+    border: none;
+  }
+
+  .links:hover {
+    background-color: #8a8f8a;
+  }
+
+  #logoutBtns {
+    color: white;
+    background-color: #435a50;
   }
 }

@@ -8,33 +8,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- CSS style -->
-    <link rel="stylesheet" href="/css/message.css" />
+    <link rel="stylesheet" href="/css/postMessage.css" />
 </head>
 
 <body>
-    <button id="backToMain">Back</button>
-    <br>
 
-    <!-- Current session username -->
-    <p id="thisUserName"></p>
-    <br>
+    <div id="grid">
+        <div id="secondGrid">
+            <button id="backToMain">Back</button>
+            <!-- Current session username -->
+            <p id="thisUserName"></p>
+            <!-- Post owner's username -->
+            <div id="ownerName">
+                <p>You are messaging: <span id="postOwnerUserName"></span></p>
+            </div>
+        </div>
 
-    <!-- Post owner's username -->
-    <p>You are messaging: <span id="postOwnerUserName"></span></p>
-    <br>
+        <div id="thirdGrid">
+            <!-- Message list (all past and current messages) -->
+            <div id="allMessages"></div>
 
-    <!-- Message list (all past and current messages) -->
-    <div id="allMessages"></div>
-
-    <br>
-
-    <!-- Message form -->
-    <div id="messageDiv">
-        <input id="messageInput" placeholder="Type message">
-        <button id="sendMessageBtn" type="submit" onclick="sendMessageToUser()" disabled="true">Send</button>
+            <div id="messageDiv">
+                <div id="msgInput">
+                    <input id="messageInput" placeholder="Type message">
+                </div>
+                <div id="msgBtn">
+                    <button id="sendMessageBtn" type="submit" onclick="sendMessageToUser()" disabled="true">Send</button>
+                </div>
+            </div>
+        </div>
     </div>
-
-
 
     <!-- JavaScript is loaded on the server side -->
 

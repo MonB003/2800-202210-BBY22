@@ -79,7 +79,6 @@ async function getSelectedUser(username) {
             currMessage.style.padding = "20px";
             currMessage.style.margin = "2px";  
             currMessage.style.fontWeight = "bold";
-            // currMessage.style.
 
         } else {
             // Message is from other user
@@ -124,8 +123,12 @@ function sendMessageToUser() {
     // Create HTML element for new message
     let newMessage = document.createElement("p");
     newMessage.textContent = "You: " + messageInput;
-    newMessage.style.backgroundColor = "rgb(130, 255, 173)";
+    newMessage.style.backgroundColor = "#91C7B1";
     newMessage.style.textAlign = "right";
+    newMessage.style.color = "white";
+    newMessage.style.padding = "20px";
+    newMessage.style.margin = "2px";
+    newMessage.style.fontWeight = "bold";
 
     document.getElementById("allMessages").appendChild(newMessage);
 
@@ -149,7 +152,11 @@ socket.on("new-message-from-other-user", function (data) {
     // Create HTML element to display the other user's messsage
     let newMessage = document.createElement("p");
     newMessage.textContent = data.userSending + ": " + data.message;
-    newMessage.style.backgroundColor = "rgb(226, 226, 226)";
+    newMessage.style.backgroundColor = "#9fa4a9";
+    newMessage.style.padding = "20px";
+    newMessage.style.margin = "2px";
+    newMessage.style.color = "white";
+    newMessage.style.fontWeight = "bold";
 
     document.getElementById("allMessages").appendChild(newMessage);
 
