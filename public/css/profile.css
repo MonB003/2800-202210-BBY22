@@ -199,7 +199,7 @@ body {
 .grid {
   display: grid;
   grid-template-columns: 25% 50% 25%;
-  grid-template-rows: 30% 10% 60%;
+  grid-template-rows: 30% 15% 60%;
   margin: 3% auto;
   min-height: 500px;
   height: auto;
@@ -326,11 +326,16 @@ body {
   font-size: 18px;
 }
 
-#itemlistings {
+#usermenu {
+  grid-column: 2;
+  width: 100%;
+}
+
+.usermenubtn {
   font-family: 'Lato', sans-serif;
   font-weight: bold;
   font-size: 20px;
-  width: 75%;
+  width: 100%;
   height: 26px;
   margin: auto;
   margin-top: 10px;
@@ -340,7 +345,6 @@ body {
   box-sizing: border-box;
   background-color: #526E62;
   color: aliceblue;
-  grid-column: 2;
 }
 
 

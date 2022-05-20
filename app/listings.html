@@ -2,18 +2,19 @@
 <html lang="en">
 
 <head>
-    <title>Profile</title>
+    <title>On The House</title>
     <meta charset="utf-8" />
-    <link href="/imgs/OTH-favicon.ico" rel="icon" type="image/x-icon" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/imgs/OTH-favicon.ico" rel="icon" type="image/x-icon" />
 
     <!-- CSS style -->
-    <link rel="stylesheet" href="/css/profile.css" />
+    <link rel="stylesheet" href="/css/main.css" />
 </head>
 
 <body>
 
+    <!-- Nav bar -->
     <header id="header">
         <nav>
             <div class="container">
@@ -51,33 +52,53 @@
         </nav>
     </header>
 
-    <section>
-        <div class="grid">
-            <div id="posttemplate">
-                <div class="post">
-                    <div id="postimage">
-                        Picture
-                    </div>
-                </div>
+    <div id="pagename">user's listings</div>
+    <div id="topnav">
+        <button type="button" class="navbutton" id="messageuser">Message</button>
+        <button type="button" class="navbutton" id="togglefilter">Filter</button>
+    </div>
+
+    <div id="filtermenu" style="display: none;">
+        <div id="filtersearchcontainer">
+            <div id="filtersearch">
+                <input type="text" id="search" onkeyup="displayposts()" placeholder="Search" title="Filter Search">
+                <select name="filter" id="filter">
+                    <option value="title">Title</option>
+                    <option value="city">City</option>
+                </select>
             </div>
-            <div id="userinfo">
-                <div id="username">
-                    Username
-                </div>
-                <div id="userrating">Rating</div>
-            </div>
-            <div id="usermenu">
-                <button class="usermenubtn" id="itemlistings">View Listings</button>
-                <button class="usermenubtn" id="messageuser">Message User</button>
-            </div>
-            
         </div>
-    </section>
+        <button type="button" class="filtermenubtn" id="filterstatus">All</button>
+        <button type="button" class="filtermenubtn" id="sortbutton">Sort</button>
+    </div>
+    <template id="posttemplate">
+        <div class="post">
+            <div class="postimage">
+            </div>
+            <div class="posttitle">Post Title</div>
+            <div class="poststatus">Status</div>
+            <div class="postlocation">
+                Post Location
+            </div>
+            <div class="postoptions">
+                <div class="savepost">
+                    S
+                </div>
+                <div class="messagepost">
+                    ✉
+                </div>
+            </div>
+            <div class="postdate">Post date time</div>
+        </div>
+    </template>
+    <div id="posts">
+    </div>
 
 
 
     <!-- JavaScript -->
-    <script src="/js/clientProfile.js"></script>
+    <script src="/js/clientListings.js"></script>
+
 </body>
 
 </html>
