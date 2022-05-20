@@ -5,72 +5,53 @@
   padding: 0;
 }
 
+/* ****************************************************************************** */
+
 .container {
   width: 100%;
-  margin: auto;
   position: relative;
 }
 
-.navbar, .navbar ul {
+.navbar {
+  font-family: 'Lato';
+  background: #5C6F68;
+  line-height: 1;
+  display: block;
+  width: 100%;
+}
+
+.navbar,
+.navbar ul {
   list-style: none;
   margin: 0;
 }
 
-.navbar {
-  font-family: 'Lato', Helvetica, sans-serif;
-  line-height: 1;
-  background: #5C6F68;
-}
-
-.navbar {
-  padding: 0;
-  display: block;
-  overflow: visible;
-  width: 100%;
-}
-
-.navbar > li > a, .navbar > li > form{
-  padding: 18px 22px;
-  font-size: 18px;
-}
-
-.navbar:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-.navbar > li {
+.navbar>li {
   float: left;
-  display: block;
-  position: relative;
 }
 
-.navbar li a, .navbar>li>form {
-  color: #ffffff;
-  -webkit-transition: color .2s ease-out;
-  -moz-transition: color .2s ease-out;
-  -ms-transition: color .2s ease-out;
-  -o-transition: color .2s ease-out;
-  transition: color .2s ease-out;
-}
-
-.navbar>li>a, .navbar>li>form {
+.navbar li a,
+.navbar>li>form {
+  padding: 19px 20px;
   display: block;
-  font-weight: 300;
   text-decoration: none;
+  align-items: center;
+  font-size: 17px;
+  color: #ffffff;
 }
 
-.navbar li a:hover, .navbar>li>form:hover {
-  color: rgb(163, 163, 163);
+.navbar li a:hover,
+.navbar>li>form:hover {
+  color: rgb(154, 154, 154);
+  -webkit-transition: all 250ms ease;
+  -moz-transition: all 250ms ease;
+  -ms-transition: all 250ms ease;
+  -o-transition: all 250ms ease;
+  transition: all 250ms ease;
 }
 
 #fright {
-  float:right
-}
-
-.navbar>li>form {
-  float: right;
+  float: right
 }
 
 #logoutBtn {
@@ -84,7 +65,113 @@
   outline: inherit;
 }
 
+.navbar:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+.menu {
+  display: none;
+}
+
+@media only screen and (max-width: 750px) {
+  .container {
+    display: none;
+  }
+
+  .navbar {
+    display: none;
+  }
+
+  .menu {
+    z-index:1;
+    top: 0;
+    display: block;
+    background-color: #435a50;
+    margin: 0;
+    padding: 0;
+    height: 42px;
+    position: fixed;
+    width: 100%;
+  }
+
+  #menuClicked {
+    opacity: 0;
+  }
+
+  #menuClicked:checked~.menuInside {
+    left: 0;
+  }
+
+  .menuBtn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 26px;
+    height: 26px;
+    cursor: pointer;
+    z-index: 1;
+  }
+
+  .menuBtn>span::before {
+    content: '';
+    top: -8px;
+  }
+
+  .menuBtn>span,
+  .menuBtn>span::before,
+  .menuBtn>span::after {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: #848484;
+    transition-duration: .25s;
+  }
+
+  .menuBtn>span::after {
+    content: '';
+    top: 8px;
+  }
+
+  .menuInside {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 275px;
+    height: 100%;
+    padding-top: 60px;
+    list-style: none;
+    background-color: #999F99;
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, .3);
+    transition-duration: 300ms;
+  }
+
+  .links {
+    display: block;
+    padding: 12px 24px;
+    color: rgb(39, 39, 39);
+    font-family: 'Lato', sans-serif;
+    font-size: 22px;
+    text-decoration: none;
+    transition-duration: 250ms;
+    border: none;
+  }
+
+  .links:hover {
+    background-color: #8a8f8a;
+  }
+
+  #logoutBtns {
+    background-color: #999F99;
+  }
+}
+
 /* ****************************************************************************** */
+
+
 #pagename {
   grid-area: 1/2/2/3;
   font-family: 'Lato';
@@ -92,6 +179,7 @@
   text-align: center;
   text-transform: uppercase;
   margin-top: 20px;
+  padding-top: 20px;
 }
 
 hr.solid {
@@ -121,7 +209,6 @@ body {
   box-shadow: 0 0 10px rgb(40, 39, 39);
   padding: 20px;
   font-family: 'Lato', sans-serif;
-  font-weight: bold;
   align-items: center;
   text-align: center;
 }
@@ -158,7 +245,9 @@ footer {
   align-items: center;
 }
 
-#submit, #savepost, #deletepost {
+#submit,
+#savepost,
+#deletepost {
   border: none;
   outline: none;
   background-color: #8AA39B;
@@ -169,9 +258,10 @@ footer {
   letter-spacing: 1px;
   font-size: 15px;
   color: aliceblue;
-  border-radius: 5px;
+  border-radius: 1px;
   margin-bottom: 10pt;
   text-transform: uppercase;
+  box-shadow: 1px 1px 1px rgb(73, 71, 71);
 }
 
 #deletepost {
@@ -184,7 +274,7 @@ footer {
 }
 
 #cancel {
-  width: 80%;
+  width: 90%;
   height: 40px;
   border: none;
   outline: none;
@@ -193,7 +283,7 @@ footer {
   font-size: 15px;
   color: #333;
   margin-top: 10px;
-  border-radius: 5px;
+  border-radius: 1px;
 }
 
 #cancel {
@@ -204,15 +294,18 @@ footer {
   text-transform: uppercase;
   margin-bottom: 25px;
   color: aliceblue;
+  box-shadow: 1px 1px 1px rgb(73, 71, 71);
 }
 
-#cancel:hover, #submit:hover, #savepost:hover {
-  background-color: #435a50;
+#cancel:hover,
+#submit:hover,
+#savepost:hover {
+  background-color: #587568;
   box-shadow: 1px 1px 3px rgb(73, 71, 71);
 }
 
 #deletepost:hover {
-  background-color: rgb(98, 62, 62);
+  background-color: rgb(81, 52, 52);
   box-shadow: 1px 1px 3px rgb(73, 71, 71);
 }
 
@@ -233,9 +326,10 @@ footer {
 
   #pagename {
     grid-area: 1/2/2/3;
-    font-family: 'Pacifico', cursive;
+    font-family: 'Lato';
     font-size: 8vw;
     text-align: center;
+    margin-top: 40px;
   }
 
   #content {
@@ -249,7 +343,8 @@ footer {
     margin-bottom: 5px;
   }
 
-  #newPostDescription, #description {
+  #newPostDescription,
+  #description {
     width: 280px;
     height: 120px;
   }
