@@ -10,6 +10,7 @@ const fs = require("fs");
 const {
     JSDOM
 } = require('jsdom');
+const sanitizeHtml = require('sanitize-html');
 
 
 var http = require("http").createServer(app);
@@ -414,6 +415,11 @@ var timeStampPhoto = ""
 app.post('/newPost', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
+    // Sanitize text from tiny editor
+    let sanitizeDescription = sanitizeHtml(req.body.description, 
+        {allowedTags: []},
+        {allowedAttributes: {}});
+
     // Get the current date and time 
     var today = new Date();
     var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
@@ -424,7 +430,7 @@ app.post('/newPost', function (req, res) {
     // This is where the user input is passed into the database. 
     // User_ID is saved from the current user of the session. The details of the post are sent from the client side.
     connection.query('INSERT INTO BBY_22_item_posts (user_id, title, city, description, status, timestamp) VALUES (?, ?, ?, ?, ?, ?)',
-        [req.session.userID, req.body.title, req.body.city, req.body.description, "available", dateAndTime],
+        [req.session.userID, req.body.title, req.body.city, sanitizeDescription, "available", dateAndTime],
         function (error, results, fields) {
             if (error) {
 
@@ -440,6 +446,21 @@ app.post('/newPost', function (req, res) {
             }
         });
 });
+
+
+// app.post("/sanitize-text", function (req, res) {
+//     let inputValue = req.body.description;
+
+//     let sanitizeValue = sanitizeHtml(inputValue);
+//     console.log(sanitizeValue);
+    
+//     res.send({
+//         status: "Success",
+//         sanitizeText: sanitizeValue
+//     });
+// });
+
+
 
 // Stores image in database
 app.post('/upload-images', upload.array("files"), function (req, res) {
@@ -781,9 +802,14 @@ app.post('/toeditpost', (req, res) => {
 //save edits to post
 app.post('/savepostinfo', (req, res) => {
 
+    // Sanitize text from tiny editor
+    let sanitizeDescription = sanitizeHtml(req.body.description, 
+        {allowedTags: []},
+        {allowedAttributes: {}});
+
     connection.query(
         "UPDATE BBY_22_item_posts SET title = ?, city = ?, description = ?, status = ? WHERE id = ? AND user_id = ?",
-        [req.body.title, req.body.city, req.body.description, req.body.status, req.body.postID, req.session.userID],
+        [req.body.title, req.body.city, sanitizeDescription, req.body.status, req.body.postID, req.session.userID],
         function (error, results) {
             if (error) {
                 res.send({

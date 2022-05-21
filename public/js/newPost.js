@@ -1,4 +1,5 @@
 "use strict";
+
 // Redirects to main page
 document.querySelector("#home").addEventListener("click", function (e) {
     window.location.replace("/main");
@@ -30,6 +31,12 @@ document.querySelector("#profile").addEventListener("click", function (e) {
 document.querySelector("#profile2").addEventListener("click", function (e) {
     window.location.replace("/profile");
 });
+
+// Tiny editor for textarea
+tinymce.init({
+    selector: '#newPostDescription'
+});
+
 
 ready(function () {
     function ajaxGET(url, callback) {
@@ -69,10 +76,10 @@ ready(function () {
     document.querySelector("#newPostBtn").addEventListener("click", function (e) {
         e.preventDefault();
         let title = document.getElementById("title");
-        let description = document.getElementById("newPostDescription");
+        let description = tinymce.get("newPostDescription").getContent();   // Gets the text value in the tiny editor
         let city = document.getElementById("city");
 
-        let queryString = "title=" + title.value + "&description=" + description.value + "&city=" + city.value;
+        let queryString = "title=" + title.value + "&description=" + description + "&city=" + city.value;
 
         ajaxPOST("/newPost", function (data) {
             if (data) {
