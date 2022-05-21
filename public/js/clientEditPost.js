@@ -76,7 +76,6 @@ function uploadImages(e) {
     }
     fetch("/upload-images3", options, postDetails
     ).then(function (res) {
-        console.log(res);
         window.location.replace("/editpost")
     }).catch(function (err) { ("Error:", err) }
     );

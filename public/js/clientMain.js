@@ -150,7 +150,6 @@ async function displayposts() {
         testpost.querySelector(".savepost").innerHTML = "";
         testpost.querySelector(".messagepost").innerHTML = "";
         let postpic = `<img src="imgs/stickmangame.png" alt="game-pic" id="gamepic">`;
-        console.log(postpic);
         testpost.querySelector(".postimage").innerHTML = postpic;
         testpost.querySelector(".posttitle").setAttribute("onclick", `window.location.replace("/game")`);
         posts.appendChild(testpost);

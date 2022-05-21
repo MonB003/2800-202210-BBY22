@@ -52,7 +52,6 @@ function uploadImages(e) {
   };
   fetch("/upload-images2", options
   ).then(function (res) {
-    console.log(res);
     window.location.replace("/main")
   }).catch(function (err) { ("Error:", err) }
   );
