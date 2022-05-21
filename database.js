@@ -448,20 +448,6 @@ app.post('/newPost', function (req, res) {
 });
 
 
-// app.post("/sanitize-text", function (req, res) {
-//     let inputValue = req.body.description;
-
-//     let sanitizeValue = sanitizeHtml(inputValue);
-//     console.log(sanitizeValue);
-    
-//     res.send({
-//         status: "Success",
-//         sanitizeText: sanitizeValue
-//     });
-// });
-
-
-
 // Stores image in database
 app.post('/upload-images', upload.array("files"), function (req, res) {
     for (let i = 0; i < req.files.length; i++) {
