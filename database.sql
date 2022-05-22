@@ -27,8 +27,8 @@ CREATE TABLE IF NOT EXISTS BBY_22_item_posts(
     
 CREATE TABLE IF NOT EXISTS BBY_22_messages(
     id int NOT NULL AUTO_INCREMENT, 
-    userSending VARCHAR(30) NOT NULL,                
-    userReceiving VARCHAR(30) NOT NULL, 
+    userSending int NOT NULL,                
+    userReceiving int NOT NULL, 
     message VARCHAR(300), 
     time VARCHAR(50), 
     PRIMARY KEY (id));

@@ -5,21 +5,15 @@
  * This is the source that was referenced and modified: https://www.youtube.com/watch?v=Ozrm_xftcjQ
  */
 
-let privateSocket = io.connect('/');
+let socket = io.connect('/');
 
 // Stores the users sending and receiving the messages
 var userReceiving = "";
 var userSending = "";
 
 
-// Saves a user's username as the userSending when they connect to the message page
+// Saves a user's ID as the userSending when they connect to the message page
 function saveConnectedUserInfo() {
-    // Get username
-    var currUsername = document.getElementById("thisUserName").textContent;
-
-    // Save the username into a global variable
-    userSending = currUsername;
-
     // Get stored post ID from clientMain.js
     let postIDFromMain = localStorage.getItem("currentPostID");
 
@@ -49,11 +43,16 @@ async function getPostOwnersUsername(postID) {
     const postResponseID = await fetch('/get-other-user-by-post', idPostDetails);
     const jsonDataID = await postResponseID.json();
     let returnedUserID = jsonDataID.otherUserID;
-    let postOwnerID = returnedUserID.user_id;   // Post owner
+    let otherUserID = returnedUserID.user_id; // Post owner
+    let thisUserID = jsonDataID.sessionUserID; // Current user
+
+    // Store both user's IDs to determine the users sending and receiving the messages
+    userReceiving = otherUserID;
+    userSending = thisUserID;
 
 
     const dataSentUsername = {
-        postOwnerID
+        otherUserID
     }
     const postDetailsUsername = {
         method: 'POST',
@@ -63,23 +62,21 @@ async function getPostOwnersUsername(postID) {
         body: JSON.stringify(dataSentUsername)
     }
 
-    // Get post owner's username from their ID
+    // Get post owner's username from their ID, this will get displayed
     const postResponseUsername = await fetch('/get-owner-username-with-id', postDetailsUsername);
     const jsonDataUsername = await postResponseUsername.json();
     let returnedUsername = jsonDataUsername.otherUsername;
-    let postOwnerUsername = returnedUsername.username;   // Post owner's username
+    let postOwnerName = returnedUsername.userName; // Post owner's username
 
-    document.getElementById("postOwnerUserName").textContent = postOwnerUsername;
+    document.getElementById("postOwnerUserName").textContent = postOwnerName;
 
-    getSelectedUser(postOwnerUsername);
+    // Get messages from this user
+    getMessagesWithUser();
 }
 
 
 // Gets past messages between this user and the user selected, then displays them on the page
-async function getSelectedUser(username) {
-    userReceiving = username;
-    userSending = document.getElementById("thisUserName").textContent;
-
+async function getMessagesWithUser() {
     document.getElementById("allMessages").innerHTML = "";
 
     const dataSent = {
@@ -94,6 +91,7 @@ async function getSelectedUser(username) {
         body: JSON.stringify(dataSent)
     }
 
+    // Get all messages from the database between the sender and receiver users
     const postResponse = await fetch('/all-messages-between-two-users', postDetails);
     const jsonData = await postResponse.json();
     let dbMessageObjs = jsonData.dbResult;
@@ -149,7 +147,7 @@ function sendMessageToUser() {
     var messageInput = document.getElementById("messageInput").value;
 
     // Send message to server
-    privateSocket.emit("send-message-to-other-user", {
+    socket.emit("send-message-to-other-user", {
         userSending: userSending,
         userReceiving: userReceiving,
         message: messageInput
@@ -183,10 +181,39 @@ function sendMessageToUser() {
 
 
 // Listens from the server when the other user sends a message to this user
-privateSocket.on("new-message-from-other-user", function (data) {
-    // Create HTML element to display the other user's messsage
+socket.on("new-message-from-other-user", function (data) {
+    newMessage(data.userSending);
+});
+
+
+// Get the username of the user who sent the new message
+async function newMessage(otherUserID) {
+    const dataSentUsername = {
+        otherUserID
+    }
+    const postDetailsUsername = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(dataSentUsername)
+    }
+
+    // Gets username from their ID, this will get displayed
+    const postResponseUsername = await fetch('/get-owner-username-with-id', postDetailsUsername);
+    const jsonDataUsername = await postResponseUsername.json();
+    let returnedUsername = jsonDataUsername.otherUsername;
+
+    // Display new message on the page
+    createMessageElement(returnedUsername);
+}
+
+
+// Create HTML element to display the message
+function createMessageElement(returnedUsername) {
+    // HTML element to display the other user's message
     let newMessage = document.createElement("p");
-    newMessage.textContent = data.userSending + ": " + data.message;
+    newMessage.textContent = returnedUsername + ": " + data.message;
     newMessage.style.backgroundColor = "#9fa4a9";
     newMessage.style.padding = "20px";
     newMessage.style.margin = "2px";
@@ -198,7 +225,7 @@ privateSocket.on("new-message-from-other-user", function (data) {
     // Automatically scroll down
     var allMessages = document.getElementById("allMessages");
     allMessages.scrollTop = allMessages.scrollHeight;
-});
+}
 
 
 // Redirects to main page

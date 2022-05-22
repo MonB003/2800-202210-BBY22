@@ -1289,14 +1289,15 @@ app.post("/all-messages-between-two-users", function (req, res) {
         function (error, messages) {
             res.send({
                 status: "Success",
-                dbResult: messages
+                dbResult: messages,
+                sessionUserID: req.session.userID
             })
         }
     );
 });
 
 
-// Gets a post owner's user ID from the post ID
+// Gets a post owner's user ID and the current user's ID, from the post ID
 app.post("/get-other-user-by-post", function (req, res) {
 
     connection.query("SELECT user_id FROM BBY_22_item_posts WHERE id = ?",
@@ -1316,8 +1317,8 @@ app.post("/get-other-user-by-post", function (req, res) {
 app.post("/get-owner-username-with-id", function (req, res) {
 
     // Gets the email of the user with this user ID
-    connection.query("SELECT username FROM BBY_22_users WHERE id = ?",
-        [req.body.postOwnerID],
+    connection.query("SELECT userName FROM BBY_22_users WHERE id = ?",
+        [req.body.otherUserID],
         function (error, username) {
             res.send({
                 status: "Success",
@@ -1332,12 +1333,29 @@ app.post("/get-owner-username-with-id", function (req, res) {
 app.post("/people-who-messaged-this-user", function (req, res) {
 
     // Gets all usernames who have sent this user a message or received one from them
-    let sqlStatement = "SELECT DISTINCT userSending, userReceiving FROM bby_22_messages WHERE userReceiving = '" + req.body.username + "'" + " OR userSending = '" + req.body.username + "'";
+    let sqlStatement = "SELECT DISTINCT userSending, userReceiving FROM bby_22_messages WHERE userReceiving = '" + req.session.userID + "'" + " OR userSending = '" + req.session.userID + "'";
     connection.query(sqlStatement,
         function (error, contacts) {
             res.send({
                 status: "Success",
-                thisUsersContacts: contacts
+                thisUsersContacts: contacts,
+                sessionUserID: req.session.userID
+            })
+        }
+    );
+});
+
+
+// Get user's user ID based on their username
+app.post("/get-user-id-from-username", function (req, res) {
+
+    connection.query("SELECT id FROM bby_22_users WHERE userName = ?",
+        [req.body.userName],
+        function (error, otherID) {
+            res.send({
+                status: "Success",
+                otherUserID: otherID[0],
+                sessionUserID: req.session.userID
             })
         }
     );
@@ -1513,8 +1531,8 @@ async function initializeDatabase() {
             
         CREATE TABLE IF NOT EXISTS BBY_22_messages(
             id int NOT NULL AUTO_INCREMENT, 
-            userSending VARCHAR(30) NOT NULL,                
-            userReceiving VARCHAR(30) NOT NULL, 
+            userSending int NOT NULL,                
+            userReceiving int NOT NULL, 
             message VARCHAR(300), 
             time VARCHAR(50), 
             PRIMARY KEY (id));`;
@@ -1554,8 +1572,8 @@ async function initializeDatabase() {
             
         CREATE TABLE IF NOT EXISTS BBY_22_messages(
             id int NOT NULL AUTO_INCREMENT, 
-            userSending VARCHAR(30) NOT NULL,                
-            userReceiving VARCHAR(30) NOT NULL, 
+            userSending int NOT NULL,                
+            userReceiving int NOT NULL, 
             message VARCHAR(300), 
             time VARCHAR(50), 
             PRIMARY KEY (id));`;
