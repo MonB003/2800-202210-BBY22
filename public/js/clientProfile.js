@@ -31,3 +31,31 @@ document.querySelector("#profile").addEventListener("click", function (e) {
 document.querySelector("#profile2").addEventListener("click", function (e) {
     window.location.replace("/profile");
 });
+
+
+// Redirects to private message page if post owner and session user are different
+async function getMessagePage(userName) {
+    const userDataSent = {
+        userName
+    }
+    const userPostDetails = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(userDataSent)
+    }
+
+    // Get profile user and session user's IDs
+    const postResponseID = await fetch('/get-user-id-from-username', userPostDetails);
+    const jsonDataID = await postResponseID.json();
+    let returnedUserID = jsonDataID.otherUserID;
+    let profileUserID = returnedUserID.id;   // User ID
+    let sessionUserID = jsonDataID.sessionUserID;   // Session ID
+
+    // Compare profile user and session user IDs
+    if (profileUserID != sessionUserID) {
+        // If they are different, redirect to private message page
+        window.location.replace("/postMessage");
+    }
+}

@@ -606,6 +606,8 @@ app.get('/profile/:username', function (req, res) {
                         let profileP = "<img src=\"/imgs/uploads/userPic-" + user.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         profileDOM.window.document.getElementById("postimage").innerHTML = profileP
                         profileDOM.window.document.querySelector("#itemlistings").setAttribute("onclick", `window.location.replace("/itemlistings/${user.userName}")`);
+
+                        profileDOM.window.document.getElementById("messageuser").setAttribute("onclick", `getMessagePage("${user.userName}")`);
                     });
                 } else {}
 
