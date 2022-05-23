@@ -64,6 +64,27 @@ async function updateData() {
     let email = document.getElementById('userEmail').value;
     let password = document.getElementById('userPassword').value;
 
+
+    // Get all user's input values
+    let formInputFields = document.getElementById("text-input").querySelectorAll('input[type="text"]');
+    let checkEmptyInput = false;
+
+    // Check for empty input fields 
+    for (let i = 0; i < formInputFields.length; i++) {
+        let currentInput = formInputFields[i];
+
+        // If a value is empty, set boolean to false
+        if (currentInput.value == "" || currentInput.value == null) {
+            checkEmptyInput = true;
+        }
+    }
+
+    // If one or more fields are empty
+    if (checkEmptyInput) {
+        document.getElementById('message').textContent = "All fields must be filled out.";
+        return;
+    }
+
     // Store user's data that was filled into the text fields on the page
     const dataSent = {
         firstName,
@@ -87,15 +108,7 @@ async function updateData() {
     const postResponse = await fetch('/update-data', postDetails);
     const jsonData = await postResponse.json();
     document.getElementById('message').innerHTML = jsonData.msg;
-};
 
-
-// Directs to main page when home button is clicked
-document.querySelector("#home").addEventListener("click", function (e) {
+    // Direct back to main page
     window.location.replace("/main");
-});
-
-// Directs to client listing page
-document.querySelector("#mylistings").addEventListener("click", function (e) {
-    window.location.replace("/mylistings");
-});
+};

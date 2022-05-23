@@ -73,6 +73,12 @@
   display: none;
 }
 
+.asterisk {
+  color: red;
+  font-weight: bold;
+  text-decoration: none;
+}
+
 @media only screen and (max-width: 750px) {
   .container {
     display: none;

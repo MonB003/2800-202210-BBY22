@@ -65,22 +65,23 @@
 
         <div class="newPostdiv">
             <form id="signUpForm">
-                <label>Title:</label>
+                <label>Title: <abbr title="Required" class="asterisk">*</abbr></label>
                 <br>
                 <input type="text" id="title" name="title" placeholder="Title" pattern="[A-Za-z]{1,50}"
                     required="required">
                 <br>
-                <label>City:</label>
+                <label>City: <abbr title="Required" class="asterisk">*</abbr></label>
                 <br>
                 <input type="text" id="city" name="city" placeholder="City" pattern="[A-Za-z]{1,30}"
                     required="required">
                 <br>
-                <label>Description:</label>
+                <label>Description: <abbr title="Required" class="asterisk">*</abbr></label>
                 <br>
                 <textarea name="description" id="newPostDescription" maxlength="1000" minlength="20" ></textarea>
                 <br><br>
                 <button id="newPostBtn">Next: Add Photo</button>
                 <br>
+                <p id="errorMessage"></p>
             </form>
             <form id="backtoMain" action="/main" method="get">
                 <input type="submit" id="backToLogin" value="Go Back" />

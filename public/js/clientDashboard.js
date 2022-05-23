@@ -27,9 +27,40 @@ async function updateAUsersData(userID) {
 
     // If there's only 1 admin, and that user is the admin, their type cannot be edited
     if (adminCount < 1) {
-        document.getElementById('userType' + userID).value = "ADMIN";    // Keep type as admin
+        document.getElementById('userType' + userID).value = "ADMIN"; // Keep type as admin
         type = "ADMIN";
-    } 
+    }
+
+
+    // Get all user's input values and input field elements
+    let inputsArray = [document.getElementById('userFirstName' + userID).value, document.getElementById('userLastName' + userID).value,
+        document.getElementById('userName' + userID).value, document.getElementById('userCity' + userID).value, document.getElementById('userEmail' + userID).value,
+        document.getElementById('userPassword' + userID).value, document.getElementById('userType' + userID).value
+    ];
+    let inputFields = [document.getElementById('userFirstName' + userID), document.getElementById('userLastName' + userID),
+        document.getElementById('userName' + userID), document.getElementById('userCity' + userID), document.getElementById('userEmail' + userID),
+        document.getElementById('userPassword' + userID), document.getElementById('userType' + userID)
+    ];
+    let checkEmptyInput = false;
+
+    // Check for empty input fields 
+    for (let i = 0; i < inputsArray.length; i++) {
+        let currInput = inputsArray[i];
+
+        // If a value is empty, set boolean to false
+        if (currInput == "" || currInput == null) {
+            checkEmptyInput = true;
+            inputFields[i].style.border = "1px solid red";
+        } else {
+            inputFields[i].style.border = "none";
+        }
+    }
+
+    // If one or more fields are empty
+    if (checkEmptyInput) {
+        document.getElementById('message').textContent = "All fields must be filled out.";
+        return;
+    }
 
 
     // Store user's data that was filled into the text fields on the page
@@ -91,7 +122,7 @@ async function deleteAUser(userID) {
     }
 
     // If there's only 1 admin, and they are the admin, they cannot be deleted
-    if (adminCount < 2  && type == "ADMIN") {
+    if (adminCount < 2 && type == "ADMIN") {
         document.getElementById('message').innerHTML = "Admin user cannot be deleted.";
 
     } else {
@@ -156,6 +187,9 @@ async function addAUser() {
         // If a value is empty
         if (currentInput.value == "") {
             checkEmptyInput = true;
+            currentInput.style.border = "1px solid red";
+        } else {
+            currentInput.style.border = "none";
         }
     }
 

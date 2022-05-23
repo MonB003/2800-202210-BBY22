@@ -282,7 +282,7 @@ body {
 #message {
   font-family: 'Lato', sans-serif;
   font-weight: bold;
-  color: rgb(255, 255, 255);
+  color: #333;
   padding-top: 20px;
 }
 

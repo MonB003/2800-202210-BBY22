@@ -74,11 +74,11 @@ function uploadImages(e) {
         },
         body: JSON.stringify(dataSent)
     }
-    fetch("/upload-images3", options, postDetails
-    ).then(function (res) {
+    fetch("/upload-images3", options, postDetails).then(function (res) {
         window.location.replace("/editpost")
-    }).catch(function (err) { ("Error:", err) }
-    );
+    }).catch(function (err) {
+        ("Error:", err)
+    });
     document.getElementById("savedMsg").innerHTML = "Photo Saved";
 }
 
@@ -108,7 +108,7 @@ async function getDefaultStatus() {
 
         let currentUserReserved = jsonData.userReserved;
         document.getElementById("userReserved").value = currentUserReserved;
-        
+
     } else if (currentStatus == "available") {
         // If status is available, disable collected option until a user is reserved
         document.getElementById("collected").disabled = true;
@@ -121,32 +121,63 @@ getDefaultStatus();
 async function save_post(postID) {
     let title = document.querySelector("#title").value;
     let city = document.querySelector("#city").value;
-    let description = tinymce.get("description").getContent();   // Gets the text value in the tiny editor
+    let description = tinymce.get("description").getContent(); // Gets the text value in the tiny editor
     let status = document.querySelector("#itemStatus").value;
 
-    if (status == "available") {
-        // If there's a user reserved and item status changes to available, set user reserved back to null
-        removePotentialUserReserved(postID);
-    } 
+    let descriptionValue = tinymce.get("description").getContent({
+        format: 'text'
+    });
+    let descriptionContainer = document.querySelector(".tox-editor-container");  // Gets the tiny editor HTML element
 
-    const dataSent = {
-        title,
-        city,
-        description,
-        status,
-        postID
+    // Get all user's input values and input field elements
+    let inputsArray = [title, city, descriptionValue];
+    let inputFields = [document.getElementById("title"), document.getElementById("city"), descriptionContainer];
+
+    let checkEmptyInput = false;
+
+    // Check for empty input fields 
+    for (let i = 0; i < inputsArray.length; i++) {
+        let currentInput = inputsArray[i];
+
+        // If a value is empty, set boolean to false
+        if (currentInput == "" || currentInput == null) {
+            checkEmptyInput = true;
+            inputFields[i].style.border = "1px solid red";
+        } else {
+            inputFields[i].style.border = "none";
+        }
     }
 
-    const postDetails = {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(dataSent)
-    }
+    // If one or more fields are empty
+    if (checkEmptyInput) {
+        document.getElementById('savedDetail').textContent = "All fields must be filled out.";
 
-    await fetch('/savepostinfo', postDetails);
-    window.location.replace("/mylistings");
+    } else {
+
+        if (status == "available") {
+            // If there's a user reserved and item status changes to available, set user reserved back to null
+            removePotentialUserReserved(postID);
+        }
+
+        const dataSent = {
+            title,
+            city,
+            description,
+            status,
+            postID
+        }
+
+        const postDetails = {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(dataSent)
+        }
+
+        await fetch('/savepostinfo', postDetails);
+        window.location.replace("/mylistings");
+    }
 };
 
 
@@ -208,11 +239,13 @@ function getItemStatus() {
 
         // Disable save button until user is reserved
         savepostBtn.disabled = true;
+        savepostBtn.style.cursor = "not-allowed";
 
     } else {
         // Hide reserve elements
         reserveStatusDiv.style.visibility = "hidden";
         savepostBtn.disabled = false;
+        savepostBtn.style.cursor = "pointer";
     }
 }
 
@@ -273,6 +306,7 @@ async function reserveUserForItem(postID) {
 
     // Enable save button
     document.getElementById("savepost").disabled = false;
+    document.getElementById("savepost").style.cursor = "pointer";
 
     // Enable collected option from dropdown
     document.getElementById("collected").disabled = false;

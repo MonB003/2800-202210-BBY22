@@ -170,6 +170,7 @@ async function displayposts() {
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+                        testpost.querySelector(".messagepost").setAttribute("onmouseover", `setCursorHover(${postdata[i].postid}, "message${postdata[i].postid}")`);
                         let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
@@ -185,6 +186,7 @@ async function displayposts() {
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+                        testpost.querySelector(".messagepost").setAttribute("onmouseover", `setCursorHover(${postdata[i].postid}, "message${postdata[i].postid}")`);
                         let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
@@ -204,6 +206,7 @@ async function displayposts() {
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+                        testpost.querySelector(".messagepost").setAttribute("onmouseover", `setCursorHover(${postdata[i].postid}, "message${postdata[i].postid}")`);
                         let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
@@ -219,6 +222,7 @@ async function displayposts() {
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+                        testpost.querySelector(".messagepost").setAttribute("onmouseover", `setCursorHover(${postdata[i].postid}, "message${postdata[i].postid}")`);
                         let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
@@ -242,6 +246,7 @@ async function displayposts() {
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+                        testpost.querySelector(".messagepost").setAttribute("onmouseover", `setCursorHover(${postdata[i].postid}, "message${postdata[i].postid}")`);
                         let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
@@ -257,6 +262,7 @@ async function displayposts() {
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+                        testpost.querySelector(".messagepost").setAttribute("onmouseover", `setCursorHover(${postdata[i].postid}, "message${postdata[i].postid}")`);
                         let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
@@ -276,6 +282,7 @@ async function displayposts() {
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+                        testpost.querySelector(".messagepost").setAttribute("onmouseover", `setCursorHover(${postdata[i].postid}, "message${postdata[i].postid}")`);
                         let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
@@ -291,6 +298,7 @@ async function displayposts() {
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+                        testpost.querySelector(".messagepost").setAttribute("onmouseover", `setCursorHover(${postdata[i].postid}, "message${postdata[i].postid}")`);
                         let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
@@ -330,3 +338,32 @@ async function viewPost(postID) {
         window.location.replace("/viewPost");
     }
 };
+
+
+// Changes the cursor when hovering over the message button, depending on if the user can message the post owner
+async function setCursorHover(postID, messagePostID) {
+    const idDataSent = {
+        postID
+    }
+    const idPostDetails = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(idDataSent)
+    }
+
+    // Get post owner's ID
+    const postResponseID = await fetch('/get-other-user-by-post', idPostDetails);
+    const jsonDataID = await postResponseID.json();
+    let returnedUserID = jsonDataID.otherUserID;
+    let postOwnerID = returnedUserID.user_id; // Post owner userID
+    let returnedSessionID = jsonDataID.sessionUserID; // Current session userID
+
+    // If post owner is current session user, they cannot message themself
+    if (postOwnerID == returnedSessionID) {
+        document.getElementById(messagePostID).style.cursor = "not-allowed";
+    } else {
+        document.getElementById(messagePostID).style.cursor = "pointer";
+    }
+}

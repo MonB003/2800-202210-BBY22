@@ -122,7 +122,9 @@ async function displayposts() {
                         let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
-                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
+                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`);
+                        testpost.querySelector(".editpost").style.cursor = "pointer";
+
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     } else if (filterstatus == "all"){
@@ -138,7 +140,9 @@ async function displayposts() {
                         let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
-                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
+                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`);
+                        testpost.querySelector(".editpost").style.cursor = "pointer";
+
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     }
@@ -158,7 +162,9 @@ async function displayposts() {
                         let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
-                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
+                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`);
+                        testpost.querySelector(".editpost").style.cursor = "pointer";
+
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     } else if (filterstatus == "all"){
@@ -174,7 +180,9 @@ async function displayposts() {
                         let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
-                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
+                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`);
+                        testpost.querySelector(".editpost").style.cursor = "pointer";
+
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     }
@@ -198,7 +206,9 @@ async function displayposts() {
                         let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
-                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
+                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`);
+                        testpost.querySelector(".editpost").style.cursor = "pointer";
+
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     } else if (filterstatus == "all"){
@@ -214,7 +224,9 @@ async function displayposts() {
                         let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
-                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
+                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`);
+                        testpost.querySelector(".editpost").style.cursor = "pointer";
+
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     }
@@ -234,7 +246,9 @@ async function displayposts() {
                         let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
-                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
+                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`);
+                        testpost.querySelector(".editpost").style.cursor = "pointer";
+
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     } else if (filterstatus == "all"){
@@ -250,7 +264,9 @@ async function displayposts() {
                         let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
-                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
+                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`);
+                        testpost.querySelector(".editpost").style.cursor = "pointer";
+
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     }

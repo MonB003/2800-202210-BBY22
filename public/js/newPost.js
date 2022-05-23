@@ -76,20 +76,52 @@ ready(function () {
     document.querySelector("#newPostBtn").addEventListener("click", function (e) {
         e.preventDefault();
         let title = document.getElementById("title");
-        let description = tinymce.get("newPostDescription").getContent();   // Gets the text value in the tiny editor
+        let description = tinymce.get("newPostDescription").getContent(); // Gets the text value in the tiny editor
         let city = document.getElementById("city");
 
-        let queryString = "title=" + title.value + "&description=" + description + "&city=" + city.value;
+        let titleValue = title.value;
+        let descriptionValue = tinymce.get("newPostDescription").getContent({
+            format: 'text'
+        });
+        let cityValue = city.value;
 
-        ajaxPOST("/newPost", function (data) {
-            if (data) {
-                let dataParsed = JSON.parse(data);
-                if (dataParsed.status == "Fail") {} else {
-                    window.location.replace("/newPostPhoto");
-                }
+        let descriptionContainer = document.querySelector(".tox-editor-container");  // Gets the tiny editor HTML element
+
+        // Get all user's input values and input field elements
+        let inputsArray = [titleValue, descriptionValue, cityValue];
+        let inputFields = [title, descriptionContainer, city];
+        let checkEmptyInput = false;
+
+        // Check for empty input fields 
+        for (let i = 0; i < inputsArray.length; i++) {
+            let currentInput = inputsArray[i];
+
+            // If a value is empty, set boolean to false
+            if (currentInput == "" || currentInput == null) {
+                checkEmptyInput = true;
+                inputFields[i].style.border = "1px solid red";
+            } else {
+                inputFields[i].style.border = "none";
             }
-        }, queryString);
+        }
 
+        // If one or more fields are empty
+        if (checkEmptyInput) {
+            document.getElementById('errorMessage').textContent = "All fields must be filled out.";
+
+        } else {
+            // Store values to send to the server
+            let queryString = "title=" + title.value + "&description=" + description + "&city=" + city.value;
+
+            ajaxPOST("/newPost", function (data) {
+                if (data) {
+                    let dataParsed = JSON.parse(data);
+                    if (dataParsed.status == "Fail") {} else {
+                        window.location.replace("/newPostPhoto");
+                    }
+                }
+            }, queryString);
+        }
 
     });
 });
