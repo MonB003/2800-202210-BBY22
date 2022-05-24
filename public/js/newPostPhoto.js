@@ -39,6 +39,13 @@ function uploadImages(e) {
   e.preventDefault();
 
   const imageUpload = document.querySelector('#image-upload');
+
+  // If user doesn't upload a photo
+  if (imageUpload.value == "") {
+    return;
+  }
+
+
   const formData = new FormData();
 
   for (let i = 0; i < imageUpload.files.length; i++) {

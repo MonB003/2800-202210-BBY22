@@ -47,16 +47,20 @@ ready(function () {
         let password = document.getElementById("userPassword");
 
         // Get all the text fields in the form to check the values entered in them
-        var formInputFields = document.querySelectorAll('input');
-        var checkEmptyInput = false;
+        let formInputFields = document.querySelectorAll('input');
+        let checkEmptyInput = false;
 
         // Check for input fields with empty values
         for (let i = 0; i < formInputFields.length; i++) {
-            var currentInput = formInputFields[i];
+            let currentInput = formInputFields[i];
 
             // If value is empty
-            if (currentInput.value == "") {
+            if (currentInput.value.trim() == "") {
                 checkEmptyInput = true;
+                currentInput.style.border = "1px solid red";
+
+            } else {
+                currentInput.style.border = "none";
             }
         }
 

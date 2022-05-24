@@ -33,10 +33,7 @@ async function updateAUsersData(userID) {
 
 
     // Get all user's input values and input field elements
-    let inputsArray = [document.getElementById('userFirstName' + userID).value, document.getElementById('userLastName' + userID).value,
-        document.getElementById('userName' + userID).value, document.getElementById('userCity' + userID).value, document.getElementById('userEmail' + userID).value,
-        document.getElementById('userPassword' + userID).value, document.getElementById('userType' + userID).value
-    ];
+    let inputsArray = [firstName, lastName, userName, city, email, password, type];
     let inputFields = [document.getElementById('userFirstName' + userID), document.getElementById('userLastName' + userID),
         document.getElementById('userName' + userID), document.getElementById('userCity' + userID), document.getElementById('userEmail' + userID),
         document.getElementById('userPassword' + userID), document.getElementById('userType' + userID)
@@ -48,7 +45,7 @@ async function updateAUsersData(userID) {
         let currInput = inputsArray[i];
 
         // If a value is empty, set boolean to false
-        if (currInput == "" || currInput == null) {
+        if (currInput.trim() == "" || currInput.trim() == null) {
             checkEmptyInput = true;
             inputFields[i].style.border = "1px solid red";
         } else {

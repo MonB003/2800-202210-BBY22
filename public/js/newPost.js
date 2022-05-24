@@ -97,7 +97,7 @@ ready(function () {
             let currentInput = inputsArray[i];
 
             // If a value is empty, set boolean to false
-            if (currentInput == "" || currentInput == null) {
+            if (currentInput.trim() == "" || currentInput.trim() == null) {
                 checkEmptyInput = true;
                 inputFields[i].style.border = "1px solid red";
             } else {

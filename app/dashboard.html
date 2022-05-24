@@ -57,20 +57,20 @@
                 <div id="userDiv">
                     <h3>Add New User</h3>
                     <input type="text" id="newUserFirstName" name="firstName" placeholder="First Name"
-                        pattern="[A-Za-z]{1,20}" required="required">
+                        pattern="[A-Za-z]{1,20}" maxlength="20" required="required">
                     <br>
                     <input type="text" id="newUserLastName" name="lastName" placeholder="Last Name"
-                        pattern="[A-Za-z]{1,20}" required="required">
+                        pattern="[A-Za-z]{1,20}" maxlength="20" required="required">
                     <br>
                     <input type="text" id="newUserName" name="userName" placeholder="User Name"
-                        pattern="[A-Za-z]{1,20}" required="required">
+                        pattern="[A-Za-z]{1,20}" maxlength="20" required="required">
                     <br>
                     <input type="text" id="newUserCity" name="city" placeholder="City" pattern="[A-Za-z]{1,30}"
-                        required="required">
+                        maxlength="30" required="required">
                     <br>
-                    <input type="text" id="newUserEmail" name="email" placeholder="Email@email.ca" required="required">
+                    <input type="text" id="newUserEmail" name="email" placeholder="Email@email.ca" maxlength="30" required="required">
                     <br>
-                    <input type="password" id="newUserPassword" name="password" placeholder="Password"
+                    <input type="password" id="newUserPassword" name="password" placeholder="Password" maxlength="30"
                         required="required">
                     <br>
                     <select name="user-type" id="newUserType">

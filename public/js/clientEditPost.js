@@ -132,7 +132,6 @@ async function save_post(postID) {
     // Get all user's input values and input field elements
     let inputsArray = [title, city, descriptionValue];
     let inputFields = [document.getElementById("title"), document.getElementById("city"), descriptionContainer];
-
     let checkEmptyInput = false;
 
     // Check for empty input fields 
@@ -140,7 +139,7 @@ async function save_post(postID) {
         let currentInput = inputsArray[i];
 
         // If a value is empty, set boolean to false
-        if (currentInput == "" || currentInput == null) {
+        if (currentInput.trim() == "" || currentInput.trim() == null) {
             checkEmptyInput = true;
             inputFields[i].style.border = "1px solid red";
         } else {

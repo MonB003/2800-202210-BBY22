@@ -67,17 +67,17 @@
             <form id="signUpForm">
                 <label>Title: <abbr title="Required" class="asterisk">*</abbr></label>
                 <br>
-                <input type="text" id="title" name="title" placeholder="Title" pattern="[A-Za-z]{1,50}"
+                <input type="text" id="title" name="title" placeholder="Title" pattern="[A-Za-z]{1,50}" maxlength="50"
                     required="required">
                 <br>
                 <label>City: <abbr title="Required" class="asterisk">*</abbr></label>
                 <br>
-                <input type="text" id="city" name="city" placeholder="City" pattern="[A-Za-z]{1,30}"
+                <input type="text" id="city" name="city" placeholder="City" pattern="[A-Za-z]{1,30}" maxlength="30"
                     required="required">
                 <br>
                 <label>Description: <abbr title="Required" class="asterisk">*</abbr></label>
                 <br>
-                <textarea name="description" id="newPostDescription" maxlength="1000" minlength="20" ></textarea>
+                <textarea name="description" id="newPostDescription" maxlength="1000" minlength="20"></textarea>
                 <br><br>
                 <button id="newPostBtn">Next: Add Photo</button>
                 <br>
