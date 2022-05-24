@@ -1152,7 +1152,8 @@ function checkUsernameBeforeAdding(userName, callback) {
 
 // Checks if a username exists in the database before reserving an item
 app.post('/check-username-exists', (req, res) => {
-    connection.query("SELECT * FROM BBY_22_users WHERE username = ? AND type = 'USER'",
+    // connection.query("SELECT * FROM BBY_22_users WHERE username = ? AND type = 'USER'",
+    connection.query("SELECT * FROM BBY_22_users WHERE userName = ? AND type = 'USER'",
         [req.body.userReserved],
         function (error, results) {
             if (error) {}
@@ -1525,7 +1526,7 @@ async function initializeDatabase() {
             description VARCHAR(1000), 
             city VARCHAR(30), 
             status VARCHAR(30), 
-            user_reserved VARCHAR(20),
+            user_reserved int,
             timestamp VARCHAR(50),
             item_pic TEXT (999),
             PRIMARY KEY (id),
@@ -1566,7 +1567,7 @@ async function initializeDatabase() {
             description VARCHAR(1000), 
             city VARCHAR(30), 
             status VARCHAR(30), 
-            user_reserved VARCHAR(20), 
+            user_reserved int, 
             timestamp VARCHAR(50),
             item_pic TEXT (999),
             PRIMARY KEY (id),
@@ -1587,11 +1588,12 @@ async function initializeDatabase() {
     // Await allows for us to wait for this line to execute synchronously
     const [rows, fields] = await connection.query("SELECT * FROM BBY_22_users");
 
-    // Adds a default user account in case there is no data in the table.
+    // Adds default admin and user accounts in case there is no data in the table.
     if (rows.length == 0) {
-        let recordReturneds = "INSERT INTO BBY_22_users (firstName, lastName, userName, city, email, password, type) VALUES ?";
+        let recordReturneds = "INSERT INTO BBY_22_users (firstName, lastName, userName, city, email, password, type, profile_pic) VALUES ?";
         let recordValues = [
-            ["Test", "Test", "Test", "Vancouver", "test@test.ca", "password", "ADMIN"]
+            ["Admin", "Test", "Admin", "Vancouver", "admin@test.ca", "password", "ADMIN", "user-pic-none.jpg"],
+            ["User", "Test", "User", "Vancouver", "user@test.ca", "password", "USER", "user-pic-none.jpg"]
         ];
         await connection.query(recordReturneds, [recordValues]);
     }

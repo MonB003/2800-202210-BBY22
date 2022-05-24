@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS BBY_22_item_posts(
     description VARCHAR(1000),
     city VARCHAR(30),
     status VARCHAR(30),
-    user_reserved VARCHAR(20),
+    user_reserved int,
     timestamp VARCHAR(50),
     item_pic TEXT (999),
     PRIMARY KEY (id),
@@ -34,4 +34,5 @@ CREATE TABLE IF NOT EXISTS BBY_22_messages(
     PRIMARY KEY (id));
 
 INSERT INTO BBY_22_users (userName, firstName, lastName, city, email, password, type, profile_pic) 
-VALUES ("Test", "Test", "Test", "Vancouver", "test@test.ca", "password", "ADMIN", "user-pic-none.jpg");
+VALUES ("Admin", "Test", "Admin", "Vancouver", "admin@test.ca", "password", "ADMIN", "user-pic-none.jpg"),
+("User", "Test", "User", "Vancouver", "user@test.ca", "password", "USER", "user-pic-none.jpg");

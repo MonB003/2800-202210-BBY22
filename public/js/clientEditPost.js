@@ -103,11 +103,8 @@ async function getDefaultStatus() {
 
     // If status is reserved, display div with username text field
     if (currentStatus == "reserved") {
-        // Make div to input username visible
-        document.getElementById("reserveStatusDiv").style.visibility = "visible";
-
         let currentUserReserved = jsonData.userReserved;
-        document.getElementById("userReserved").value = currentUserReserved;
+        displayReservedDetails(currentUserReserved);
 
     } else if (currentStatus == "available") {
         // If status is available, disable collected option until a user is reserved
@@ -115,6 +112,33 @@ async function getDefaultStatus() {
     }
 }
 getDefaultStatus();
+
+
+// Displays reserve details div and fills in the text field with the current user reserved
+async function displayReservedDetails(otherUserID) {
+    // Make div to input username visible
+    document.getElementById("reserveStatusDiv").style.visibility = "visible";
+
+    const dataSent = {
+        otherUserID
+    }
+
+    const postDetails = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(dataSent)
+    }
+
+    // Get response from server side post request for the user's username
+    const postResponse = await fetch('/get-owner-username-with-id', postDetails);
+    const jsonData = await postResponse.json();
+    let returnedUsername = jsonData.otherUsername;
+    let username = returnedUsername.userName;   // Gets the username of the user reserved
+
+    document.getElementById("userReserved").value = username;
+}
 
 
 // saves post information into database
@@ -127,7 +151,7 @@ async function save_post(postID) {
     let descriptionValue = tinymce.get("description").getContent({
         format: 'text'
     });
-    let descriptionContainer = document.querySelector(".tox-editor-container");  // Gets the tiny editor HTML element
+    let descriptionContainer = document.querySelector(".tox-editor-container"); // Gets the tiny editor HTML element
 
     // Get all user's input values and input field elements
     let inputsArray = [title, city, descriptionValue];
@@ -281,6 +305,9 @@ async function reserveUserForItem(postID) {
         return;
     }
 
+    // Get the user returned and their ID, which will be stored in the database
+    let userReturned = jsonDataCheck.username;
+    userReserved = userReturned.id;
 
     // If username exists, update user_reserved in database
     const dataSentUpdate = {
@@ -306,6 +333,8 @@ async function reserveUserForItem(postID) {
     // Enable save button
     document.getElementById("savepost").disabled = false;
     document.getElementById("savepost").style.cursor = "pointer";
+
+    document.getElementById("reserveUserBtn").disabled = true;
 
     // Enable collected option from dropdown
     document.getElementById("collected").disabled = false;

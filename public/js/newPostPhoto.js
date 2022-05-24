@@ -42,6 +42,7 @@ function uploadImages(e) {
 
   // If user doesn't upload a photo
   if (imageUpload.value == "") {
+    document.getElementById("errorMessage").textContent = "Please upload a photo.";
     return;
   }
 
