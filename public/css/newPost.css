@@ -259,6 +259,7 @@ body {
   background-color: #6B9080;
   border-radius: 5px;
   margin-bottom: 15px;
+  cursor: pointer;
 }
 
 #newPostBtn:hover {
@@ -266,11 +267,11 @@ body {
   box-shadow: 1px 1px 3px rgb(73, 71, 71);
 }
 
-#backtoMain {
+#backtoMain, #resetDiv {
   text-align: center;
 }
 
-#backToLogin {
+#backToLogin, #resetBtn {
   width: 400px;
   height: 40px;
   border: none;
@@ -281,6 +282,11 @@ body {
   background-color: rgb(121, 119, 119);
   margin-bottom: 20px;
   border-radius: 5px;
+  cursor: pointer;
+}
+
+#resetBtn {
+  background-color: #714955;
 }
 
 #newPostDescription, #description {
@@ -290,6 +296,11 @@ body {
 
 #backToLogin:hover {
   background-color: rgb(89, 88, 88);
+  box-shadow: 1px 1px 3px rgb(73, 71, 71);
+}
+
+#resetBtn:hover {
+  background-color: rgb(144, 65, 65);
   box-shadow: 1px 1px 3px rgb(73, 71, 71);
 }
 
@@ -342,7 +353,7 @@ footer {
     margin-top: 8px;
   }
 
-  #backToLogin {
+  #backToLogin, #resetBtn {
     width: 280px;
     height: 35px;
     margin-bottom: 10px;

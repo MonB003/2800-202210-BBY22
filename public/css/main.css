@@ -212,6 +212,7 @@ body {
     -ms-transition: all 300ms ease;
     -o-transition: all 300ms ease;
     transition: all 300ms ease;
+    cursor: pointer;
 }
 
 .navbutton:hover {
@@ -247,6 +248,7 @@ body {
     text-decoration: none;
     border-radius: 10px;
     box-shadow: 0 0 5px rgb(40, 39, 39);
+    cursor: pointer;
 }
 
 #pagename {

@@ -272,6 +272,7 @@ body {
   border-radius: 5px;
   margin-left : 10%;
   margin-top: 5%;
+  cursor: pointer;
 }
 
 #image-upload {

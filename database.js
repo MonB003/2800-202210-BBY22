@@ -126,9 +126,15 @@ app.get("/main", function (req, res) {
                         strRowData += "<tr><td><input type=\"text\" id=\"userLastName" + userIdNum + "\"" + " value=\"" + userResults[row].lastName + "\"" + " placeholder=\"Last Name\"" + " maxlength=\"20\"" + ">" + "</td></tr>";
                         strRowData += "<tr><td><input type=\"text\" id=\"userName" + userIdNum + "\"" + " value=\"" + userResults[row].userName + "\"" + " placeholder=\"User Name\"" + " maxlength=\"20\"" + ">" + "</td></tr>";
                         strRowData += "<tr><td><input type=\"text\" id=\"userCity" + userIdNum + "\"" + " value=\"" + userResults[row].city + "\"" + " placeholder=\"City\"" + " maxlength=\"30\"" + ">" + "</td></tr>";
-                        strRowData += "<tr><td><input type=\"text\" id=\"userEmail" + userIdNum + "\"" + " value=\"" + userResults[row].email + "\"" + " placeholder=\"Email@email.ca\"" + " maxlength=\"30\"" + ">" + "</td></tr>";
+                        strRowData += "<tr><td><input type=\"email\" id=\"userEmail" + userIdNum + "\"" + " value=\"" + userResults[row].email + "\"" + " placeholder=\"Email@email.ca\"" + " maxlength=\"30\"" + ">" + "</td></tr>";
                         strRowData += "<tr><td><input type=\"text\" id=\"userPassword" + userIdNum + "\"" + " value=\"" + userResults[row].password + "\"" + " placeholder=\"Password\"" + " maxlength=\"30\"" + ">" + "</td></tr>";
-                        strRowData += "<tr><td><input type=\"text\" id=\"userType" + userIdNum + "\"" + " class=\"user-type-input\"" + " value=\"" + userResults[row].type + "\"" + " placeholder=\"Type\"" + " maxlength=\"5\"" + ">" + "</td></tr>";
+                        
+                        // Dropdown of user types
+                        strRowData += "<tr><td><select name=\"user-type\" id=\"userType" + userIdNum + "\" class=\"user-type-input\">";
+                        strRowData += "<option id=\"ADMIN" + userIdNum + "\" value=\"ADMIN\">Admin</option>";
+                        strRowData += "<option id=\"USER" + userIdNum + "\" value=\"USER\">User</option>";
+                        strRowData += "</select></td></tr>";
+                        
                         strRowData += "<tr><td>" + "<button id=\"editButton" + userIdNum + "\"" + "</td><tr>";
                         strRowData += "<tr><td>" + "<button id=\"deleteButton" + userIdNum + "\"" + "</td></tr>";
 
@@ -144,11 +150,17 @@ app.get("/main", function (req, res) {
                     for (let row = 0; row < userResults.length; row++) {
                         let userIdNum = userResults[row].id;
 
-                        // Set button name and its method when clicked
+                        // Select the current user's type as the default dropdown value
+                        let currUserType = userResults[row].type;
+                        mainDOM.window.document.getElementById(currUserType + userIdNum).setAttribute("selected", "selected");
+
+                        // Set the button name and its method when clicked
                         mainDOM.window.document.getElementById("editButton" + userIdNum).textContent = "Edit User";
                         mainDOM.window.document.getElementById("editButton" + userIdNum).setAttribute("onclick", "updateAUsersData(" + userIdNum + ")");
+
                         mainDOM.window.document.getElementById("deleteButton" + userIdNum).textContent = "Delete User";
-                        mainDOM.window.document.getElementById("deleteButton" + userIdNum).setAttribute("onclick", "deleteAUser(" + userIdNum + ")");
+                        mainDOM.window.document.getElementById("deleteButton" + userIdNum).setAttribute("onclick", "showConfirmDeletePopup()");
+                        mainDOM.window.document.getElementById("deleteMsgBtn").setAttribute("onclick", "deleteAUser(" + userIdNum + ")");
                     }
 
                     res.set("Server", "MACT Engine");
@@ -211,7 +223,7 @@ app.get("/editpost", function (req, res) {
                         editpostDOM.window.document.querySelector("#reserveUserBtn").setAttribute("onclick", `reserveUserForItem(${post.id})`);
 
                         editpostDOM.window.document.querySelector("#savepost").setAttribute("onclick", `save_post(${post.id})`);
-                        editpostDOM.window.document.querySelector("#deletepost").setAttribute("onclick", `delete_post(${post.id})`);
+                        editpostDOM.window.document.querySelector("#deleteMsgBtn").setAttribute("onclick", `delete_post(${post.id})`);
                     });
                 } else {}
 
@@ -1100,13 +1112,13 @@ app.post('/update-data', (req, res) => {
     checkEmailAlreadyExists(req.body.email, req.session.email,
         function (recordReturned) {
 
-            // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
+            // If validation returns null, user isn't currently in database, so their data can be updated
             if (recordReturned == null) {
                 //Checks if the new user's username is already in the database (username must be unique)
                 checkUsernameAlreadyExists(req.body.userName, req.session.userName,
                     function (recordReturned) {
 
-                        // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
+                        // If validation returns null, user isn't currently in database, so their data can be updated
                         if (recordReturned == null) {
 
                             // Insert the new user into the database
@@ -1117,6 +1129,7 @@ app.post('/update-data', (req, res) => {
                                     if (error) {
                                         res.send({
                                             status: "Fail",
+                                            field: "none",
                                             msg: "Error updating data."
                                         });
                                     } else {
@@ -1137,9 +1150,10 @@ app.post('/update-data', (req, res) => {
 
                         } else {
 
-                            // Send message saying email already exists
+                            // Send message saying username already exists
                             res.send({
                                 status: "Fail",
+                                field: "userName",
                                 msg: "Username already exists."
                             });
                         }
@@ -1149,6 +1163,7 @@ app.post('/update-data', (req, res) => {
                 // Send message saying email already exists
                 res.send({
                     status: "Fail",
+                    field: "userEmail",
                     msg: "Email already exists."
                 });
             }
@@ -1288,7 +1303,6 @@ function checkUsernameBeforeAdding(userName, callback) {
 
 // Checks if a username exists in the database before reserving an item
 app.post('/check-username-exists', (req, res) => {
-    // connection.query("SELECT * FROM BBY_22_users WHERE username = ? AND type = 'USER'",
     connection.query("SELECT * FROM BBY_22_users WHERE userName = ? AND type = 'USER'",
         [req.body.userReserved],
         function (error, results) {

@@ -56,15 +56,25 @@ async function uploadImages(e) {
     window.location.reload();
 }
 
-async function updateData() {
-    let firstName = document.getElementById('userFirstName').value;
-    let lastName = document.getElementById('userLastName').value;
-    let userName = document.getElementById('userName').value;
-    let city = document.getElementById('userCity').value;
-    let email = document.getElementById('userEmail').value;
-    let password = document.getElementById('userPassword').value;
 
+// When the cancel button is clicked in confirm update user popup
+function cancelConfirmUpdate() {
+    let confirmUpdateDiv = document.getElementById('confirmUpdate');
+    confirmUpdateDiv.style.display = "none";
+}
 
+// Makes the confirm update user popup div visible
+function showConfirmUpdatePopup() {
+    if (checkEmptyInputFields()) {
+        document.getElementById('message').textContent = "All fields must be filled out.";
+    } else {
+        let confirmUpdateDiv = document.getElementById('confirmUpdate');
+        confirmUpdateDiv.style.display = "block";
+    }
+}
+
+// Checks if any of the text fields are empty
+function checkEmptyInputFields() {
     // Get all user's input values
     let formInputFields = document.getElementById("text-input").querySelectorAll('input[type="text"]');
     let checkEmptyInput = false;
@@ -76,14 +86,29 @@ async function updateData() {
         // If a value is empty, set boolean to false
         if (currentInput.value == "" || currentInput.value == null) {
             checkEmptyInput = true;
+            currentInput.style.border = "1px solid red";
+        } else {
+            currentInput.style.border = "none";
         }
     }
 
     // If one or more fields are empty
     if (checkEmptyInput) {
-        document.getElementById('message').textContent = "All fields must be filled out.";
-        return;
+        return true;
+    } else {
+        return false;
     }
+}
+
+
+// Perform update query in database for user profile
+async function updateData() {
+    let firstName = document.getElementById('userFirstName').value;
+    let lastName = document.getElementById('userLastName').value;
+    let userName = document.getElementById('userName').value;
+    let city = document.getElementById('userCity').value;
+    let email = document.getElementById('userEmail').value;
+    let password = document.getElementById('userPassword').value;
 
     // Store user's data that was filled into the text fields on the page
     const dataSent = {
@@ -93,7 +118,7 @@ async function updateData() {
         city,
         email,
         password
-    }
+    };
 
     // Additional details needed when sending data to server side
     const postDetails = {
@@ -102,13 +127,23 @@ async function updateData() {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSent)
-    }
+    };
 
     // Get response from server side
     const postResponse = await fetch('/update-data', postDetails);
     const jsonData = await postResponse.json();
-    document.getElementById('message').innerHTML = jsonData.msg;
 
-    // Direct back to main page
-    window.location.replace("/main");
+    if (jsonData.status == "Fail") {
+        // Close popup
+        cancelConfirmUpdate();
+
+        // Display error message, indicate the field with the problem by putting a border around it
+        document.getElementById(jsonData.field).style.border = "1px solid red";
+        document.getElementById('message').innerHTML = jsonData.msg;
+
+    } else {
+        // Updated successfully
+        // Direct back to main page
+        window.location.replace("/main");
+    }
 };

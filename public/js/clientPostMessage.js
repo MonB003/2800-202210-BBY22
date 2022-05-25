@@ -30,14 +30,14 @@ saveConnectedUserInfo();
 async function getPostOwnersUsername(postID) {
     const idDataSent = {
         postID
-    }
+    };
     const idPostDetails = {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(idDataSent)
-    }
+    };
 
     // Get post owner's ID
     const postResponseID = await fetch('/get-other-user-by-post', idPostDetails);
@@ -53,14 +53,14 @@ async function getPostOwnersUsername(postID) {
 
     const dataSentUsername = {
         otherUserID
-    }
+    };
     const postDetailsUsername = {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSentUsername)
-    }
+    };
 
     // Get post owner's username from their ID, this will get displayed
     const postResponseUsername = await fetch('/get-owner-username-with-id', postDetailsUsername);
@@ -71,25 +71,25 @@ async function getPostOwnersUsername(postID) {
     document.getElementById("postOwnerUserName").textContent = postOwnerName;
 
     // Get messages from this user
-    getMessagesWithUser();
+    getMessagesWithUser(postOwnerName);
 }
 
 
 // Gets past messages between this user and the user selected, then displays them on the page
-async function getMessagesWithUser() {
+async function getMessagesWithUser(otherUser) {
     document.getElementById("allMessages").innerHTML = "";
 
     const dataSent = {
         userSending,
         userReceiving
-    }
+    };
     const postDetails = {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSent)
-    }
+    };
 
     // Get all messages from the database between the sender and receiver users
     const postResponse = await fetch('/all-messages-between-two-users', postDetails);
@@ -106,31 +106,35 @@ async function getMessagesWithUser() {
         let currMessage = document.createElement("p");
         let thisUser = document.getElementById("thisUserName").textContent;
 
+        let innerSpan = "<span ";
+
         if (currObj.userSending == thisUser) {
             // Message is from you
-            currMessage.textContent = "You: " + currObj.message;
-            currMessage.style.backgroundColor = "#91C7B1";
-            currMessage.style.textAlign = "right";
-            currMessage.style.color = "white";
+            innerSpan += "class=\"your-messages\">";
+            innerSpan += " You: " + currObj.message + " ";
+
             currMessage.style.padding = "20px";
             currMessage.style.margin = "2px";
-            currMessage.style.fontWeight = "bold";
 
         } else {
             // Message is from other user
-            currMessage.textContent = currObj.userSending + ": " + currObj.message;
-            currMessage.style.backgroundColor = "#9fa4a9";
+            innerSpan += "class=\"other-user-messages\">";
+            innerSpan += otherUser + ": " + currObj.message;
             currMessage.style.padding = "20px";
             currMessage.style.margin = "2px";
-            currMessage.style.color = "white";
-            currMessage.style.fontWeight = "bold";
         }
+
+        innerSpan += "</span>";
+
+        // Put span element content inside p tag
+        currMessage.innerHTML = innerSpan;
 
         document.getElementById("allMessages").appendChild(currMessage);
     }
 
     let todayPar = document.createElement("h3");
-    todayPar.setAttribute("style", "font-style: italic;");
+    todayPar.style.fontStyle = "italic";
+    todayPar.style.textAlign = "center";
     todayPar.textContent = "TODAY";
 
     document.getElementById("allMessages").appendChild(todayPar);
@@ -155,13 +159,18 @@ function sendMessageToUser() {
 
     // Create HTML element for new message
     let newMessage = document.createElement("p");
-    newMessage.textContent = "You: " + messageInput;
-    newMessage.style.backgroundColor = "#91C7B1";
-    newMessage.style.textAlign = "right";
-    newMessage.style.color = "white";
+
+    let innerSpan = "<span ";
+    innerSpan += "class=\"your-messages\">";
+    innerSpan += " You: " + messageInput;
+
     newMessage.style.padding = "20px";
     newMessage.style.margin = "2px";
-    newMessage.style.fontWeight = "bold";
+
+    innerSpan += "</span>";
+
+    // Put span element content inside p tag
+    newMessage.innerHTML = innerSpan;
 
     document.getElementById("allMessages").appendChild(newMessage);
 
@@ -190,14 +199,14 @@ socket.on("new-message-from-other-user", function (data) {
 async function newMessage(otherUserID) {
     const dataSentUsername = {
         otherUserID
-    }
+    };
     const postDetailsUsername = {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSentUsername)
-    }
+    };
 
     // Gets username from their ID, this will get displayed
     const postResponseUsername = await fetch('/get-owner-username-with-id', postDetailsUsername);
@@ -213,12 +222,18 @@ async function newMessage(otherUserID) {
 function createMessageElement(returnedUsername) {
     // HTML element to display the other user's message
     let newMessage = document.createElement("p");
-    newMessage.textContent = returnedUsername + ": " + data.message;
-    newMessage.style.backgroundColor = "#9fa4a9";
+
+    let innerSpan = "<span ";
+    innerSpan += "class=\"other-user-messages\">";
+    innerSpan += returnedUsername + ": " + data.message;
+
     newMessage.style.padding = "20px";
     newMessage.style.margin = "2px";
-    newMessage.style.color = "white";
-    newMessage.style.fontWeight = "bold";
+
+    innerSpan += "</span>";
+
+    // Put span element content inside p tag
+    newMessage.innerHTML = innerSpan;
 
     document.getElementById("allMessages").appendChild(newMessage);
 

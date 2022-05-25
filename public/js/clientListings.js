@@ -51,14 +51,14 @@ function getMessagePage(postID) {
 async function checkPostOwnerAndSessionUser(postID) {
     const idDataSent = {
         postID
-    }
+    };
     const idPostDetails = {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(idDataSent)
-    }
+    };
 
     // Get post owner's ID
     const postResponseID = await fetch('/get-other-user-by-post', idPostDetails);
@@ -102,16 +102,16 @@ document.querySelector("#sortbutton").addEventListener("click", function (e) {
 document.querySelector("#filterstatus").addEventListener("click", function (e) {
     if (filterstatus == "all") {
         filterstatus = "available";
-        document.querySelector("#filterstatus").innerHTML = "Available"
+        document.querySelector("#filterstatus").innerHTML = "Available";
     } else if (filterstatus == "available") {
         filterstatus = "reserved";
-        document.querySelector("#filterstatus").innerHTML = "Reserved"
+        document.querySelector("#filterstatus").innerHTML = "Reserved";
     } else if (filterstatus == "reserved") {
         filterstatus = "collected";
-        document.querySelector("#filterstatus").innerHTML = "Collected"
+        document.querySelector("#filterstatus").innerHTML = "Collected";
     } else {
         filterstatus = "all"
-        document.querySelector("#filterstatus").innerHTML = "All"
+        document.querySelector("#filterstatus").innerHTML = "All";
     }
     displayposts();
 });
@@ -123,7 +123,7 @@ async function loadposts() {
     let username = link[4];
     const dataSent = {
         username
-    }
+    };
 
     const getDetails = {
         method: 'POST',
@@ -131,7 +131,7 @@ async function loadposts() {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSent)
-    }
+    };
 
     const getResponse = await fetch('/loaduserposts', getDetails);
     const jsonData = await getResponse.json();
@@ -160,7 +160,7 @@ async function displayposts() {
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
-                        let postpic = "<img src=\"/imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"/imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
@@ -175,7 +175,7 @@ async function displayposts() {
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
-                        let postpic = "<img src=\"/imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"/imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
@@ -194,7 +194,7 @@ async function displayposts() {
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
-                        let postpic = "<img src=\"/imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"/imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
@@ -209,7 +209,7 @@ async function displayposts() {
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
-                        let postpic = "<img src=\"/imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"/imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
@@ -232,7 +232,7 @@ async function displayposts() {
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
-                        let postpic = "<img src=\"/imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"/imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
@@ -247,7 +247,7 @@ async function displayposts() {
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
-                        let postpic = "<img src=\"/imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"/imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
@@ -266,7 +266,7 @@ async function displayposts() {
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
-                        let postpic = "<img src=\"/imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"/imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
@@ -281,7 +281,7 @@ async function displayposts() {
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
-                        let postpic = "<img src=\"/imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"/imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         posts.appendChild(testpost);
@@ -301,7 +301,7 @@ async function viewPost(postID) {
     // Sends data in an array to the server and saves it to a session
     const dataSent = {
         postID
-    }
+    };
 
     // Looks for only an app.post function
     // Sends the JSON data (postID) to the server
@@ -311,7 +311,7 @@ async function viewPost(postID) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSent)
-    }
+    };
 
     const postResponse = await fetch('/toviewpost', postDetails);
     const jsonData = await postResponse.json();

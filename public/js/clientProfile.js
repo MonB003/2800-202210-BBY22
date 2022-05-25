@@ -37,14 +37,14 @@ document.querySelector("#profile2").addEventListener("click", function (e) {
 async function getMessagePage(userName) {
     const userDataSent = {
         userName
-    }
+    };
     const userPostDetails = {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(userDataSent)
-    }
+    };
 
     // Get profile user and session user's IDs
     const postResponseID = await fetch('/get-user-id-from-username', userPostDetails);
@@ -57,5 +57,7 @@ async function getMessagePage(userName) {
     if (profileUserID != sessionUserID) {
         // If they are different, redirect to private message page
         window.location.replace("/postMessage");
+    } else {
+        document.getElementById("messageuser").style.cursor = "not-allowed";
     }
 }

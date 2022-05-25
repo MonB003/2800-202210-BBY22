@@ -84,8 +84,19 @@
                 <br>
                 <input type="text" id="userPassword" name="password" placeholder="Password">
                 <br>
-                <button id="saveBtn" onclick="updateData()">Save</button>
+                <button id="saveBtn" onclick="showConfirmUpdatePopup()">Save</button>
                 <p id="message"></p>
+            </div>
+
+
+            <!-- Popup that appears when user wants to confirm updating their data -->
+            <div id="confirmUpdate" class="popup" style="display:none;">
+                <div class="updateMsgContent">
+                    <p id="confirmationMsg">Do you want to update your data?</p>
+                    <br>
+                    <button type="button" id="cancelMsgBtn" onclick="cancelConfirmUpdate()">Cancel</button>
+                    <button type="button" id="updateMsgBtn" onclick="updateData()">Update</button>
+                </div>
             </div>
         </div>
     </section>
@@ -94,8 +105,6 @@
 
     <!-- JavaScript -->
     <script src="js/clientUpdateProfile.js"></script>
-
-
 
 </body>
 

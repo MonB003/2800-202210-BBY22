@@ -97,3 +97,15 @@ function ready(callback) {
         document.addEventListener("DOMContentLoaded", callback);
     }
 }
+
+
+// Resets all text fields
+function resetFields() {
+    let formInputFields = document.querySelectorAll('input');
+
+    // Clear each text field value
+    for (let i = 0; i < formInputFields.length; i++) {
+        let currentInput = formInputFields[i];
+        currentInput.value = "";
+    }
+}

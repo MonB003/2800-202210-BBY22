@@ -96,6 +96,8 @@ button {
     right:0px;
     bottom:0px;
     left:0px;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
 }
 
 #secondGrid {
@@ -215,4 +217,25 @@ button {
     button {
         font-size: 32px;
     }
+}
+
+
+.your-messages {
+    background-color: #91C7B1;
+    text-align: right;
+    color: white;
+    padding: 3px;
+    font-weight: bold;
+    float: right;
+    border-radius: 9px;
+}
+
+.other-user-messages {
+    background-color: #9fa4a9;
+    text-align: right;
+    color: white;
+    padding: 3px;
+    font-weight: bold;
+    float: left;
+    border-radius: 9px;
 }
