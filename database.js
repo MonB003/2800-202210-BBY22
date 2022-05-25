@@ -976,13 +976,13 @@ app.post('/update-data', (req, res) => {
     checkEmailAlreadyExists(req.body.email, req.session.email,
         function (recordReturned) {
 
-            // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
+            // If validation returns null, user isn't currently in database, so their data can be updated
             if (recordReturned == null) {
                 //Checks if the new user's username is already in the database (username must be unique)
                 checkUsernameAlreadyExists(req.body.userName, req.session.userName,
                     function (recordReturned) {
 
-                        // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
+                        // If validation returns null, user isn't currently in database, so their data can be updated
                         if (recordReturned == null) {
 
                             // Insert the new user into the database
@@ -993,6 +993,7 @@ app.post('/update-data', (req, res) => {
                                     if (error) {
                                         res.send({
                                             status: "Fail",
+                                            field: "none",
                                             msg: "Error updating data."
                                         });
                                     } else {
@@ -1013,9 +1014,10 @@ app.post('/update-data', (req, res) => {
 
                         } else {
 
-                            // Send message saying email already exists
+                            // Send message saying username already exists
                             res.send({
                                 status: "Fail",
+                                field: "userName",
                                 msg: "Username already exists."
                             });
                         }
@@ -1025,6 +1027,7 @@ app.post('/update-data', (req, res) => {
                 // Send message saying email already exists
                 res.send({
                     status: "Fail",
+                    field: "userEmail",
                     msg: "Email already exists."
                 });
             }

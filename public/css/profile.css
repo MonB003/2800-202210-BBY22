@@ -298,6 +298,7 @@ body {
   margin-top: 10px;
   border-radius: 5px;
   margin-bottom: 10px;
+  cursor: pointer;
 }
 
 #saveBtn {
@@ -441,4 +442,72 @@ body {
     margin-top: 5px;
     margin-bottom: 5px;
   }
+}
+
+
+/* Confirm update popup elements */
+#updateMsgBtn,
+#cancelMsgBtn {
+  border: none;
+  outline: none;
+  background-color: #8AA39B;
+  padding: 5pt;
+  padding-left: 8pt;
+  padding-right: 8pt;
+  font-family: 'Lato', sans-serif;
+  letter-spacing: 1px;
+  font-size: 15px;
+  color: aliceblue;
+  border-radius: 1px;
+  margin-bottom: 10pt;
+  text-transform: uppercase;
+  box-shadow: 1px 1px 1px rgb(73, 71, 71);
+}
+
+#updateMsgBtn {
+  background-color: #507967;
+}
+
+#cancelMsgBtn:hover {
+  background-color:  #b1b3b2;
+  box-shadow: 1px 1px 3px rgb(73, 71, 71);
+}
+
+#updateMsgBtn:hover {
+  background-color: #40906d;
+  box-shadow: 1px 1px 3px rgb(73, 71, 71);
+}
+
+#confirmationMsg {
+  text-align: center;
+}
+
+#cancelMsgBtn, #updateMsgBtn {
+  width: 50%;
+  align-self: center;
+  cursor: pointer;
+}
+
+/* Popup confirmation div */
+.popup {
+  position: fixed; 
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%;
+  background-color: #c5c5c5;
+  padding-top: 50px;
+}
+
+/* Popup confirmation details */
+.updateMsgContent {
+  background-color: #fefefe;
+  margin: 10% auto 15% auto; 
+  width: 50%;
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
