@@ -53,14 +53,14 @@ async function getPostOwnersUsername(postID) {
 
     const dataSentUsername = {
         otherUserID
-    }
+    };
     const postDetailsUsername = {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSentUsername)
-    }
+    };
 
     // Get post owner's username from their ID, this will get displayed
     const postResponseUsername = await fetch('/get-owner-username-with-id', postDetailsUsername);

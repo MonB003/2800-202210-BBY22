@@ -117,14 +117,11 @@ document.querySelector("#filterstatus").addEventListener("click", function (e) {
 
 // retrieves posts from database
 async function loadposts() {
-    // const dataSent = {};
-
     const getDetails = {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         }
-        // body: JSON.stringify(dataSent)
     };
 
     const getResponse = await fetch('/loadposts', getDetails);

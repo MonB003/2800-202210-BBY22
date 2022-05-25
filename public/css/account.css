@@ -63,6 +63,7 @@ body {
   color: #333;
   margin-top: 10px;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 #signUpBtn {
@@ -103,7 +104,7 @@ body {
   font-weight: bold;
 }
 
-#backToLogin {
+#backToLogin, #resetBtn {
   border: none;
   outline: none;
   background-color: #3b4f4c;
@@ -117,10 +118,20 @@ body {
   border-radius: 5pt;
   margin-bottom: 10pt;
   font-weight: bold;
+  cursor: pointer;
+}
+
+#resetBtn {
+  background-color: #714955;
 }
 
 #backToLogin:hover {
   background-color: #2e3d3b;
+  box-shadow: 1px 1px 3px rgb(73, 71, 71);
+}
+
+#resetBtn:hover {
+  background-color: rgb(144, 65, 65);
   box-shadow: 1px 1px 3px rgb(73, 71, 71);
 }
 

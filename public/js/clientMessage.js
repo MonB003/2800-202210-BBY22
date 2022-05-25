@@ -145,6 +145,8 @@ async function getMessagesWithUser(userSending, userReceiving, userName) {
     document.getElementById("allMessages").appendChild(todayPar);
 
     // Automatically scroll down
+    var gridDiv = document.getElementById("grid");
+    gridDiv.scrollTop = gridDiv.scrollHeight;
     var messages = document.getElementById("allMessages");
     messages.scrollTop = messages.scrollHeight;
 

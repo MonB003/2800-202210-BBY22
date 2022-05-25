@@ -34,7 +34,8 @@ document.querySelector("#profile2").addEventListener("click", function (e) {
 
 // Tiny editor for textarea
 tinymce.init({
-    selector: '#newPostDescription'
+    selector: '#newPostDescription',
+    placeholder: "Description"
 });
 
 
@@ -133,4 +134,12 @@ function ready(callback) {
     } else {
         document.addEventListener("DOMContentLoaded", callback);
     }
+}
+
+
+// Clears all inputs in the text fields
+function resetFields() {
+    document.getElementById("title").value = "";
+    document.getElementById("city").value = "";
+    tinymce.get("newPostDescription").setContent("");
 }

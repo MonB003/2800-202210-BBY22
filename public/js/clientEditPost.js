@@ -41,7 +41,8 @@ document.querySelector("#cancel").addEventListener("click", function (e) {
 
 // Tiny editor for textarea
 tinymce.init({
-    selector: '#description'
+    selector: '#description',
+    placeholder: "Description"
 });
 
 
