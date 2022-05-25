@@ -79,6 +79,9 @@ document.querySelector("#filterstatus").addEventListener("click", function (e) {
     } else if (filterstatus == "available") {
         filterstatus = "reserved";
         document.querySelector("#filterstatus").innerHTML = "Reserved"
+    } else if (filterstatus == "reserved") {
+        filterstatus = "collected";
+        document.querySelector("#filterstatus").innerHTML = "Collected";
     } else {
         filterstatus = "all"
         document.querySelector("#filterstatus").innerHTML = "All"
