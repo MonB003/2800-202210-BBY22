@@ -4,7 +4,8 @@ body {
   font-family: sans-serif;
   background: url("/imgs/background4.jpg") center/cover fixed;
   background-repeat: no-repeat;
-  overflow: hidden;
+  /* overflow: hidden; */
+  overflow-y: scroll;
   background-size: cover;
 }
 
