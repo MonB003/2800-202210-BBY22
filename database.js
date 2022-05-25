@@ -43,6 +43,9 @@ if (is_heroku) {
 }
 
 const mysql = require("mysql2");
+const {
+    request
+} = require("http");
 const connection = mysql.createPool(database);
 
 const storage = multer.diskStorage({
@@ -248,6 +251,71 @@ app.post("/loadposts", function (req, res) {
     );
 })
 
+//checks for duplicate and adds a bookmark to the database
+app.post("/addBookmark", function (req, res) {
+    console.log("userID: " + req.session.userID);
+    console.log("postID: " + req.body.postID);
+
+    connection.query("SELECT * FROM BBY_22_bookmarks WHERE user_id = ? AND post_id = ?",
+        [req.session.userID, req.body.postID],
+        function (error, results) {
+            if (error) {
+
+            } else if (results.length > 0) {
+                //detects an existing bookmark
+                console.log("Exisiting Bookmark Detected!");
+
+            } else {
+                connection.query('INSERT INTO BBY_22_bookmarks (user_id, post_id) VALUES (?, ?)',
+                    [req.session.userID, req.body.postID],
+                    function (error, results, fields) {
+                        if (error) {
+
+                        } else {
+                            req.session.save(function (err) {
+                                // Session saved
+                                console.log("new bookmark created.");
+                            });
+
+                            res.send({
+                                status: "Success",
+                                msg: "New bookmark created."
+                            });
+                        }
+                    });
+
+            }
+
+
+        });
+})
+
+//checks for exisiting record and removes a bookmark from the database
+app.post("/removeBookmark", function (req, res) {
+    console.log("userID: " + req.session.userID);
+    console.log("postID: " + req.body.postID);
+    console.log("app.post removeBookmark is called.");
+
+    //removes a bookmark
+    connection.query("DELETE FROM BBY_22_bookmarks WHERE user_id = ? AND post_id = ?",
+        [req.session.userID, req.body.postID],
+        function (error, results, fields) {
+            if (error) {
+
+            } else {
+                // Session saved
+                console.log("Bookmark removed.");
+
+            }
+        }
+    );
+
+    res.send({
+        status: "Success",
+        msg: "Bookmark removed."
+    });
+})
+
 app.post("/loadmyposts", function (req, res) {
     let myResults = null;
     let posts = [];
@@ -270,6 +338,62 @@ app.post("/loadmyposts", function (req, res) {
                 });
             }
             res.send(posts);
+        }
+    );
+})
+
+
+app.post("/loadmybookmarks", function (req, res) {
+    let myResults = null;
+    let bookmarks = [];
+
+    connection.query(
+        "SELECT * FROM BBY_22_bookmarks where user_id = ?",
+        [req.session.userID],
+        function (error, results, fields) {
+            myResults = results;
+            if (error) {} else if (results.length > 0) {
+                results.forEach(bookmark => {
+                    bookmarks.push({
+                        "saveid": bookmark.post_id
+                    });
+                });
+            }
+            res.send(bookmarks);
+        }
+    );
+})
+
+app.post("/loadsavedposts", function (req, res) {
+    let myResults = null;
+    let savedposts = [];
+    // console.log(req.body[0]);
+    connection.query(
+        "SELECT * FROM BBY_22_item_posts",
+        function (error, results, fields) {
+            myResults = results;
+            if (error) {} else if (results.length > 0) {
+                results.forEach(post => {
+
+                    for (let i = 0; i < req.body.length; i++) {
+                        if (post.id == req.body[i].saveid) {
+                            console.log("saveid: " + req.body[i].saveid);
+                            savedposts.push({
+                                "postid": post.id,
+                                "title": post.title,
+                                "status": post.status,
+                                "city": post.city,
+                                "timestamp": post.timestamp,
+                                "item_pic": post.item_pic
+                            });
+                        }
+
+                    }
+
+
+                });
+            }
+            res.send(savedposts);
         }
     );
 })
@@ -416,9 +540,11 @@ app.post('/newPost', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
     // Sanitize text from tiny editor
-    let sanitizeDescription = sanitizeHtml(req.body.description, 
-        {allowedTags: []},
-        {allowedAttributes: {}});
+    let sanitizeDescription = sanitizeHtml(req.body.description, {
+        allowedTags: []
+    }, {
+        allowedAttributes: {}
+    });
 
     // Get the current date and time 
     var today = new Date();
@@ -550,6 +676,14 @@ app.get("/newPost", function (req, res) {
     let newPostDOM = new JSDOM(newPost);
 
     res.send(newPostDOM.serialize());
+});
+
+//Load myBookmarks page
+app.get("/myBookmarks", function (req, res) {
+    let myBookmarks = fs.readFileSync("./app/myBookmarks.html", "utf8");
+    let myBookmarksDOM = new JSDOM(myBookmarks);
+
+    res.send(myBookmarksDOM.serialize());
 });
 
 //Load game page
@@ -791,9 +925,11 @@ app.post('/toeditpost', (req, res) => {
 app.post('/savepostinfo', (req, res) => {
 
     // Sanitize text from tiny editor
-    let sanitizeDescription = sanitizeHtml(req.body.description, 
-        {allowedTags: []},
-        {allowedAttributes: {}});
+    let sanitizeDescription = sanitizeHtml(req.body.description, {
+        allowedTags: []
+    }, {
+        allowedAttributes: {}
+    });
 
     connection.query(
         "UPDATE BBY_22_item_posts SET title = ?, city = ?, description = ?, status = ? WHERE id = ? AND user_id = ?",
@@ -1209,13 +1345,13 @@ app.post('/reserve-user-for-item', (req, res) => {
 // Gets the current item post status and user reserved value
 app.post('/get-current-item-status', (req, res) => {
     connection.query("SELECT * FROM BBY_22_item_posts WHERE id = ? AND user_id = ?",
-    [req.session.editpostID, req.session.userID],
+        [req.session.editpostID, req.session.userID],
         function (error, results) {
             if (error) {}
             // Get the user_reserved value
             res.send({
                 status: 'Success',
-                postID: req.session.editpostID, 
+                postID: req.session.editpostID,
                 userID: req.session.userID,
                 itemStatus: results[0].status,
                 userReserved: results[0].user_reserved
@@ -1538,7 +1674,15 @@ async function initializeDatabase() {
             userReceiving int NOT NULL, 
             message VARCHAR(300), 
             time VARCHAR(50), 
-            PRIMARY KEY (id));`;
+            PRIMARY KEY (id));
+            
+            CREATE TABLE IF NOT EXISTS BBY_22_bookmarks(
+                id int NOT NULL AUTO_INCREMENT, 
+                user_id int NOT NULL,
+                post_id int NOT NULL,
+                PRIMARY KEY (id),
+                FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+                FOREIGN KEY (post_id) REFERENCES BBY_22_item_posts(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
     } else {
         connection = await mysql.createConnection({
             host: "localhost",
@@ -1579,7 +1723,15 @@ async function initializeDatabase() {
             userReceiving int NOT NULL, 
             message VARCHAR(300), 
             time VARCHAR(50), 
-            PRIMARY KEY (id));`;
+            PRIMARY KEY (id));
+            
+        CREATE TABLE IF NOT EXISTS BBY_22_bookmarks(
+            id int NOT NULL AUTO_INCREMENT, 
+            user_id int NOT NULL,
+            post_id int NOT NULL,
+            PRIMARY KEY (id),
+            FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+            FOREIGN KEY (post_id) REFERENCES BBY_22_item_posts(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
     }
 
     // Creates a table for user profiles and item posts
