@@ -1475,13 +1475,13 @@ async function initializeDatabase() {
             time VARCHAR(50), 
             PRIMARY KEY (id));
             
-        CREATE TABLE IF NOT EXISTS BBY_22_bookmarks(
-            id int NOT NULL AUTO_INCREMENT, 
-            user_id int NOT NULL,
-            post_id int NOT NULL,
-            PRIMARY KEY (id));
-            FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);
-            FOREIGN KEY (post_id) REFERENCES BBY_22_item_posts(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
+            CREATE TABLE IF NOT EXISTS BBY_22_bookmarks(
+                id int NOT NULL AUTO_INCREMENT, 
+                user_id int NOT NULL,
+                post_id int NOT NULL,
+                PRIMARY KEY (id),
+                FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+                FOREIGN KEY (post_id) REFERENCES BBY_22_item_posts(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
     } else {
         connection = await mysql.createConnection({
             host: "localhost",

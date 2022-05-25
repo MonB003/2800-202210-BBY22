@@ -67,7 +67,6 @@ function getBookmarkStatus(postID) {
     let savePostDropdown = document.getElementById(`savepost${postID}`);
     var bookmarkStatus = savePostDropdown.value;
 
-
     if (bookmarkStatus == "1") {
         // Record post_id to send to database for bby_22_bookmarks table
         const dataSent = {
@@ -146,11 +145,10 @@ async function loadbookmarks() {
 
     const getResponse = await fetch('/loadmybookmarks', getDetails);
     const jsonData = await getResponse.json();
-    console.log(jsonData);
     bookmarksdata = jsonData;
-    console.log(bookmarksdata);
 
     loadposts();
+
 };
 
 // retrieves posts from database
@@ -169,8 +167,7 @@ async function loadposts() {
     const getResponse = await fetch('/loadsavedposts', getDetails);
     const jsonData = await getResponse.json();
     postdata = jsonData;
-    console.log(postdata);
-    console.log(jsonData);
+
     displayposts();
 };
 
@@ -201,6 +198,7 @@ async function displayposts() {
                         testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
                         testpost.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
                         posts.appendChild(testpost);
+
                     } else if (filterstatus == "all") {
                         let testpost = posttemplate.content.cloneNode(true);
                         testpost.querySelector(".post").id = `post${postdata[i].postid}`;
