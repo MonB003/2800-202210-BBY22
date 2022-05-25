@@ -75,16 +75,16 @@ document.querySelector("#sortbutton").addEventListener("click", function (e) {
 document.querySelector("#filterstatus").addEventListener("click", function (e) {
     if (filterstatus == "all") {
         filterstatus = "available";
-        document.querySelector("#filterstatus").innerHTML = "Available"
+        document.querySelector("#filterstatus").innerHTML = "Available";
     } else if (filterstatus == "available") {
         filterstatus = "reserved";
-        document.querySelector("#filterstatus").innerHTML = "Reserved"
+        document.querySelector("#filterstatus").innerHTML = "Reserved";
     } else if (filterstatus == "reserved") {
         filterstatus = "collected";
         document.querySelector("#filterstatus").innerHTML = "Collected";
     } else {
-        filterstatus = "all"
-        document.querySelector("#filterstatus").innerHTML = "All"
+        filterstatus = "all";
+        document.querySelector("#filterstatus").innerHTML = "All";
     }
     displayposts();
 });
@@ -99,7 +99,7 @@ function getBookmarkStatus(postID) {
         // Record post_id to send to database for bby_22_bookmarks table
         const dataSent = {
             postID
-        }
+        };
 
         addBookmark(dataSent);
 
@@ -108,7 +108,7 @@ function getBookmarkStatus(postID) {
         // Remove post_id from bby_22_bookmarks table
         const dataSent = {
             postID
-        }
+        };
 
         removeBookmark(dataSent);
     }
@@ -128,7 +128,7 @@ async function removeBookmark(dataSent) {
         },
         body: JSON.stringify(dataSent)
 
-    }
+    };
     // Get response from server side post request
     const updateBookmark = await fetch('/removeBookmark', removeBookmark);
     const jsonData = await updateBookmark.json();
@@ -148,7 +148,7 @@ async function addBookmark(dataSent) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSent)
-    }
+    };
 
     // Get response from server side post request
     await fetch('/addBookmark', addBookmark);

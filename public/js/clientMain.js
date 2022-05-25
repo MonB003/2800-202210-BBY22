@@ -95,7 +95,7 @@ function getBookmarkStatus(postID) {
         // Record post_id to send to database for bby_22_bookmarks table
         const dataSent = {
             postID
-        }
+        };
         console.log(postID);
         console.log(dataSent);
 
@@ -115,7 +115,7 @@ async function addBookmark(dataSent) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSent)
-    }
+    };
 
     // Get response from server side post request
     await fetch('/addBookmark', bookmarkDetails);
@@ -150,13 +150,13 @@ document.querySelector("#sortbutton").addEventListener("click", function (e) {
 document.querySelector("#filterstatus").addEventListener("click", function (e) {
     if (filterstatus == "all") {
         filterstatus = "available";
-        document.querySelector("#filterstatus").innerHTML = "Available"
+        document.querySelector("#filterstatus").innerHTML = "Available";
     } else if (filterstatus == "available") {
         filterstatus = "reserved";
-        document.querySelector("#filterstatus").innerHTML = "Reserved"
+        document.querySelector("#filterstatus").innerHTML = "Reserved";
     } else {
-        filterstatus = "all"
-        document.querySelector("#filterstatus").innerHTML = "All"
+        filterstatus = "all";
+        document.querySelector("#filterstatus").innerHTML = "All";
     }
     displayposts();
 });

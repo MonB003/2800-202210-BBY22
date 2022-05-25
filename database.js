@@ -75,7 +75,7 @@ app.use(session({
     saveUninitialized: true
 }));
 
-// Go to: http://localhost:8000
+// Go to the landing page
 app.get('/', function (req, res) {
 
     // If there is a current session, go directly to the main page
@@ -111,7 +111,7 @@ app.get("/main", function (req, res) {
             connection.query(
 
                 'SELECT * FROM BBY_22_users',
-                function (error, userResults, fields2) {
+                function (error, userResults) {
 
                     // Create a table to display the users table
                     let allUsers = "<table>";
@@ -128,13 +128,13 @@ app.get("/main", function (req, res) {
                         strRowData += "<tr><td><input type=\"text\" id=\"userCity" + userIdNum + "\"" + " value=\"" + userResults[row].city + "\"" + " placeholder=\"City\"" + " maxlength=\"30\"" + ">" + "</td></tr>";
                         strRowData += "<tr><td><input type=\"email\" id=\"userEmail" + userIdNum + "\"" + " value=\"" + userResults[row].email + "\"" + " placeholder=\"Email@email.ca\"" + " maxlength=\"30\"" + ">" + "</td></tr>";
                         strRowData += "<tr><td><input type=\"text\" id=\"userPassword" + userIdNum + "\"" + " value=\"" + userResults[row].password + "\"" + " placeholder=\"Password\"" + " maxlength=\"30\"" + ">" + "</td></tr>";
-                        
+
                         // Dropdown of user types
                         strRowData += "<tr><td><select name=\"user-type\" id=\"userType" + userIdNum + "\" class=\"user-type-input\">";
                         strRowData += "<option id=\"ADMIN" + userIdNum + "\" value=\"ADMIN\">Admin</option>";
                         strRowData += "<option id=\"USER" + userIdNum + "\" value=\"USER\">User</option>";
                         strRowData += "</select></td></tr>";
-                        
+
                         strRowData += "<tr><td>" + "<button id=\"editButton" + userIdNum + "\"" + "</td><tr>";
                         strRowData += "<tr><td>" + "<button id=\"deleteButton" + userIdNum + "\"" + "</td></tr>";
 
@@ -176,6 +176,7 @@ app.get("/main", function (req, res) {
 
             mainDOM.window.document.getElementById("customerName").innerHTML = "Welcome, " + req.session.firstName +
                 " " + req.session.lastName + "!";
+
             res.set("Server", "MACT Engine");
             res.set("X-Powered-By", "MACT");
             res.send(mainDOM.serialize());
@@ -186,6 +187,7 @@ app.get("/main", function (req, res) {
     }
 });
 
+// My listings page of all this user's posts
 app.get("/mylistings", function (req, res) {
 
     // Check if user is logged in
@@ -277,7 +279,7 @@ app.post("/addBookmark", function (req, res) {
             } else {
                 connection.query('INSERT INTO BBY_22_bookmarks (user_id, post_id) VALUES (?, ?)',
                     [req.session.userID, req.body.postID],
-                    function (error, results, fields) {
+                    function (error, results) {
                         if (error) {
 
                         } else {
@@ -305,8 +307,7 @@ app.post("/removeBookmark", function (req, res) {
     connection.query("DELETE FROM BBY_22_bookmarks WHERE user_id = ? AND post_id = ?",
         [req.session.userID, req.body.postID],
         function (error, results, fields) {
-            if (error) {
-            } 
+            if (error) {}
         }
     );
 
@@ -316,6 +317,7 @@ app.post("/removeBookmark", function (req, res) {
     });
 });
 
+// Loads all this user's posts and sends them to the client side my listings file
 app.post("/loadmyposts", function (req, res) {
     let myResults = null;
     let posts = [];
@@ -343,6 +345,7 @@ app.post("/loadmyposts", function (req, res) {
 });
 
 
+// Loads all bookmarked posts for this user
 app.post("/loadmybookmarks", function (req, res) {
     let myResults = null;
     let bookmarks = [];
@@ -364,6 +367,7 @@ app.post("/loadmybookmarks", function (req, res) {
     );
 });
 
+// Gets all posts
 app.post("/loadsavedposts", function (req, res) {
     let myResults = null;
     let savedposts = [];
@@ -396,16 +400,12 @@ app.post("/loadsavedposts", function (req, res) {
     );
 });
 
-app.use(express.json());
-app.use(express.urlencoded({
-    extended: true
-}));
 
-
-// Login using an email and password
+// Login validation using an email and password
 app.post("/login", function (req, res) {
     res.setHeader("Content-Type", "application/json");
 
+    // Check that the email entered belongs to a user in the database
     authenticateUser(req.body.email, req.body.password,
         function (recordReturned) {
 
@@ -466,20 +466,20 @@ app.post('/signup', function (req, res) {
     checkEmailAlreadyExists(req.body.email, req.session.email,
         function (recordReturned) {
 
-            // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
+            // If email validation returns null, user isn't currently in database, so their data can be inserted/added
             if (recordReturned == null) {
-                //Checks if the new user's username is already in the database (username must be unique)
+                // Checks if the new user's username is already in the database (username must be unique)
                 checkUsernameAlreadyExists(req.body.userName, req.session.userName,
                     function (recordReturned) {
 
-                        // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
+                        // If username validation returns null, user isn't currently in database, so their data can be inserted/added
                         if (recordReturned == null) {
 
                             // Insert the new user into the database
                             connection.query('INSERT INTO BBY_22_users (firstName, lastName, userName, city, email, password, type, profile_pic) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
                                 [req.body.firstName, req.body.lastName, req.body.userName, req.body.city, req.body.email, req.body.password, "USER", "user-pic-none.jpg"],
 
-                                function (error, results, fields) {
+                                function (error, results) {
                                     if (error) {
                                         // Send message saying there was an error when signing up.
                                         res.send({
@@ -513,7 +513,7 @@ app.post('/signup', function (req, res) {
 
                         } else {
 
-                            // Send message saying email already exists
+                            // Send message saying username already exists
                             res.send({
                                 status: "Fail",
                                 msg: "Username already exists."
@@ -555,7 +555,7 @@ app.post('/newPost', function (req, res) {
     // User_ID is saved from the current user of the session. The details of the post are sent from the client side.
     connection.query('INSERT INTO BBY_22_item_posts (user_id, title, city, description, status, timestamp) VALUES (?, ?, ?, ?, ?, ?)',
         [req.session.userID, req.body.title, req.body.city, sanitizeDescription, "available", dateAndTime],
-        function (error, results, fields) {
+        function (error, results) {
             if (error) {
 
             } else {
@@ -660,64 +660,101 @@ app.post('/upload-images3', upload.array("files"), function (req, res) {
 
 // Load sign up page
 app.get("/signup", function (req, res) {
-    let signup = fs.readFileSync("./app/account.html", "utf8");
-    let signupDOM = new JSDOM(signup);
+    // If there is a current session, go directly to the main page
+    if (req.session.loggedIn) {
+        res.redirect("/main");
 
-    res.set("Server", "MACT Engine");
-    res.set("X-Powered-By", "MACT");
-    res.send(signupDOM.serialize());
+    } else {
+        // If there's no session, go to the signup page
+        let signup = fs.readFileSync("./app/account.html", "utf8");
+        let signupDOM = new JSDOM(signup);
+
+        res.set("Server", "MACT Engine");
+        res.set("X-Powered-By", "MACT");
+        res.send(signupDOM.serialize());
+    }
 });
 
 //Load newPost page
 app.get("/newPost", function (req, res) {
-    let newPost = fs.readFileSync("./app/newPost.html", "utf8");
-    let newPostDOM = new JSDOM(newPost);
+    if (req.session.loggedIn) {
+        let newPost = fs.readFileSync("./app/newPost.html", "utf8");
+        let newPostDOM = new JSDOM(newPost);
 
-    res.send(newPostDOM.serialize());
+        res.send(newPostDOM.serialize());
+
+    } else {
+        // User is not logged in, so return to landing page
+        res.redirect("/");
+    }
 });
 
 //Load myBookmarks page
 app.get("/myBookmarks", function (req, res) {
-    let myBookmarks = fs.readFileSync("./app/myBookmarks.html", "utf8");
-    let myBookmarksDOM = new JSDOM(myBookmarks);
+    if (req.session.loggedIn) {
+        let myBookmarks = fs.readFileSync("./app/myBookmarks.html", "utf8");
+        let myBookmarksDOM = new JSDOM(myBookmarks);
 
-    res.send(myBookmarksDOM.serialize());
+        res.send(myBookmarksDOM.serialize());
+
+    } else {
+        // User is not logged in, so return to landing page
+        res.redirect("/");
+    }
 });
 
 //Load game page
 app.get("/game", function (req, res) {
-    let game = fs.readFileSync("./app/game.html", "utf8");
-    let gameDOM = new JSDOM(game);
+    if (req.session.loggedIn) {
+        let game = fs.readFileSync("./app/game.html", "utf8");
+        let gameDOM = new JSDOM(game);
 
-    res.send(gameDOM.serialize());
+        res.send(gameDOM.serialize());
+
+    } else {
+        // User is not logged in, so return to landing page
+        res.redirect("/");
+    }
 });
 
 //Load newPostPhoto page
 app.get("/newPostPhoto", function (req, res) {
-    let newPost = fs.readFileSync("./app/newPostPhoto.html", "utf8");
-    let newPostDOM = new JSDOM(newPost);
+    if (req.session.loggedIn) {
+        let newPost = fs.readFileSync("./app/newPostPhoto.html", "utf8");
+        let newPostDOM = new JSDOM(newPost);
 
-    res.send(newPostDOM.serialize());
+        res.send(newPostDOM.serialize());
+
+    } else {
+        // User is not logged in, so return to landing page
+        res.redirect("/");
+    }
 });
 
 // Load profile page
 app.get('/profile', function (req, res) {
-    let profile = fs.readFileSync("./app/updateProfile.html", "utf8");
-    let profileDOM = new JSDOM(profile);
+    if (req.session.loggedIn) {
+        let profile = fs.readFileSync("./app/updateProfile.html", "utf8");
+        let profileDOM = new JSDOM(profile);
 
-    // Load current user's data into the text fields on the page
-    profileDOM.window.document.getElementById("userFirstName").defaultValue = req.session.firstName;
-    profileDOM.window.document.getElementById("userLastName").defaultValue = req.session.lastName;
-    profileDOM.window.document.getElementById("userName").defaultValue = req.session.userName;
-    profileDOM.window.document.getElementById("userCity").defaultValue = req.session.city;
-    profileDOM.window.document.getElementById("userEmail").defaultValue = req.session.email;
-    profileDOM.window.document.getElementById("userPassword").defaultValue = req.session.password;
-    var profileP = "<img src=\"imgs/uploads/userPic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">";
-    profileDOM.window.document.getElementById("postimage").innerHTML = profileP;
+        // Load current user's data into the text fields on the page
+        profileDOM.window.document.getElementById("userFirstName").defaultValue = req.session.firstName;
+        profileDOM.window.document.getElementById("userLastName").defaultValue = req.session.lastName;
+        profileDOM.window.document.getElementById("userName").defaultValue = req.session.userName;
+        profileDOM.window.document.getElementById("userCity").defaultValue = req.session.city;
+        profileDOM.window.document.getElementById("userEmail").defaultValue = req.session.email;
+        profileDOM.window.document.getElementById("userPassword").defaultValue = req.session.password;
+        var profileP = "<img src=\"imgs/uploads/userPic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">";
+        profileDOM.window.document.getElementById("postimage").innerHTML = profileP;
 
-    res.set("Server", "MACT Engine");
-    res.set("X-Powered-By", "MACT");
-    res.send(profileDOM.serialize());
+        res.set("Server", "MACT Engine");
+        res.set("X-Powered-By", "MACT");
+        res.send(profileDOM.serialize());
+
+    } else {
+        // User is not logged in, so return to landing page
+        res.redirect("/");
+    }
 });
 
 //view user profile
@@ -729,7 +766,7 @@ app.get('/profile/:username', function (req, res) {
         connection.query(
             "SELECT * FROM BBY_22_users WHERE userName = ?",
             [req.params.username],
-            function (error, results, fields) {
+            function (error, results) {
 
                 if (error) {} else if (results.length > 0) {
                     results.forEach(user => {
@@ -825,7 +862,7 @@ app.get("/viewPost", function (req, res) {
         connection.query(
             "SELECT * FROM BBY_22_item_posts WHERE id = ?",
             [req.session.postID],
-            function (error, results, fields) {
+            function (error, results) {
                 myResults = results;
                 if (error) {} else if (results.length > 0) {
                     results.forEach(post => {
@@ -843,7 +880,7 @@ app.get("/viewPost", function (req, res) {
                         connection.query(
                             "SELECT * FROM BBY_22_users WHERE id = ?",
                             [req.session.postOwnerID],
-                            function (error, results, fields) {
+                            function (error, results) {
                                 myResults = results;
                                 if (error) {} else if (results.length > 0) {
                                     results.forEach(user => {
@@ -875,7 +912,7 @@ app.post('/getPostOwner', (req, res) => {
     connection.query(
         "SELECT * FROM BBY_22_users WHERE id = ?",
         [req.session.postOwnerID],
-        function (error, results, fields) {
+        function (error, results) {
 
             if (error) {} else if (results.length > 0) {
                 results.forEach(user => {
@@ -1363,59 +1400,69 @@ app.post('/get-current-item-status', (req, res) => {
 
 // Loads all messages page
 app.get("/message", (req, res) => {
-    let message = fs.readFileSync("./app/message.html", "utf8");
-    let messageDOM = new JSDOM(message);
 
-    messageDOM.window.document.getElementById("thisUserName").textContent = req.session.userName;
+    if (req.session.loggedIn) {
+        let message = fs.readFileSync("./app/message.html", "utf8");
+        let messageDOM = new JSDOM(message);
 
+        messageDOM.window.document.getElementById("thisUserName").textContent = req.session.userName;
 
-    // Create the appropriate HTML script for socket.io
-    let socketScript = messageDOM.window.document.createElement("script");
-    if (is_heroku) {
-        socketScript.src = "https://on-the-house-bby-22.herokuapp.com/socket.io/socket.io.js";
+        // Create the appropriate HTML script for socket.io
+        let socketScript = messageDOM.window.document.createElement("script");
+        if (is_heroku) {
+            socketScript.src = "https://on-the-house-bby-22.herokuapp.com/socket.io/socket.io.js";
+
+        } else {
+            socketScript.src = "http://localhost:8000/socket.io/socket.io.js";
+        }
+        messageDOM.window.document.body.appendChild(socketScript);
+
+        let clientScript = messageDOM.window.document.createElement("script");
+        clientScript.src = "js/clientMessage.js";
+        messageDOM.window.document.body.appendChild(clientScript);
+
+        res.set("Server", "MACT Engine");
+        res.set("X-Powered-By", "MACT");
+        res.send(messageDOM.serialize());
 
     } else {
-        socketScript.src = "http://localhost:8000/socket.io/socket.io.js";
+        // User is not logged in, so direct to login page
+        res.redirect("/");
     }
-    messageDOM.window.document.body.appendChild(socketScript);
-
-    let clientScript = messageDOM.window.document.createElement("script");
-    clientScript.src = "js/clientMessage.js";
-    messageDOM.window.document.body.appendChild(clientScript);
-
-
-    res.set("Server", "MACT Engine");
-    res.set("X-Powered-By", "MACT");
-    res.send(messageDOM.serialize());
 });
 
 
 // Loads private message page after clicking a post
 app.get("/postMessage", (req, res) => {
-    let message = fs.readFileSync("./app/postMessage.html", "utf8");
-    let messageDOM = new JSDOM(message);
 
-    messageDOM.window.document.getElementById("thisUserName").textContent = req.session.userName;
+    if (req.session.loggedIn) {
+        let message = fs.readFileSync("./app/postMessage.html", "utf8");
+        let messageDOM = new JSDOM(message);
 
+        messageDOM.window.document.getElementById("thisUserName").textContent = req.session.userName;
 
-    // Create the appropriate HTML script for socket.io
-    let socketScript = messageDOM.window.document.createElement("script");
-    if (is_heroku) {
-        socketScript.src = "https://on-the-house-bby-22.herokuapp.com/socket.io/socket.io.js";
+        // Create the appropriate HTML script for socket.io
+        let socketScript = messageDOM.window.document.createElement("script");
+        if (is_heroku) {
+            socketScript.src = "https://on-the-house-bby-22.herokuapp.com/socket.io/socket.io.js";
+
+        } else {
+            socketScript.src = "http://localhost:8000/socket.io/socket.io.js";
+        }
+        messageDOM.window.document.body.appendChild(socketScript);
+
+        let clientScript = messageDOM.window.document.createElement("script");
+        clientScript.src = "js/clientPostMessage.js";
+        messageDOM.window.document.body.appendChild(clientScript);
+
+        res.set("Server", "MACT Engine");
+        res.set("X-Powered-By", "MACT");
+        res.send(messageDOM.serialize());
 
     } else {
-        socketScript.src = "http://localhost:8000/socket.io/socket.io.js";
+        // User is not logged in, so direct to login page
+        res.redirect("/");
     }
-    messageDOM.window.document.body.appendChild(socketScript);
-
-    let clientScript = messageDOM.window.document.createElement("script");
-    clientScript.src = "js/clientPostMessage.js";
-    messageDOM.window.document.body.appendChild(clientScript);
-
-
-    res.set("Server", "MACT Engine");
-    res.set("X-Powered-By", "MACT");
-    res.send(messageDOM.serialize());
 });
 
 
@@ -1557,7 +1604,7 @@ function authenticateUser(email, pwd, callback) {
 
     connection.query(
         "SELECT * FROM BBY_22_users WHERE email = ? AND password = ?", [email, pwd],
-        function (error, results, fields) {
+        function (error, results) {
 
             if (error) {
                 res.send({
@@ -1583,7 +1630,7 @@ function checkEmailAlreadyExists(email, sessionemail, callback) {
 
     connection.query(
         "SELECT * FROM BBY_22_users WHERE email = ?", [email],
-        function (error, results, fields) {
+        function (error, results) {
             if (error) {
                 res.send({
                     status: "Fail",
@@ -1606,7 +1653,7 @@ function checkUsernameAlreadyExists(username, sessionusername, callback) {
 
     connection.query(
         "SELECT * FROM BBY_22_users WHERE userName = ?", [username],
-        function (error, results, fields) {
+        function (error, results) {
             if (error) {
                 res.send({
                     status: "Fail",
