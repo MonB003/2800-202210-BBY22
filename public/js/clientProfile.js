@@ -59,3 +59,50 @@ async function getMessagePage(userName) {
         window.location.replace("/postMessage");
     }
 }
+
+async function saverating(userName) {
+    let rating;
+    for(var i = 0; i < document.getElementsByName('urating').length; i++){
+        if(document.getElementsByName('urating')[i].checked){
+            rating = document.getElementsByName('urating')[i].value;
+        }
+    }
+    console.log(rating);
+
+    const userDataSent = {
+        userName,
+        rating
+    }
+    const userPostDetails = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(userDataSent)
+    }
+
+    // Get profile user and session user's IDs
+    const postResponseID = await fetch('/saverating', userPostDetails);
+    const jsonDataID = await postResponseID.json();
+}
+
+async function loadrating(userName) {
+    const userDataSent = {
+        userName
+    }
+    const userPostDetails = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(userDataSent)
+    }
+
+    // Get profile user and session user's IDs
+    const postResponse = await fetch('/loadratings', userPostDetails);
+    const jsonData = await postResponse.json();
+    console.log(jsonData);
+    document.querySelector("#overallrating").innerHTML = jsonData;
+}
+
+loadrating()
