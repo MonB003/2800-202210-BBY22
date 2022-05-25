@@ -215,7 +215,7 @@ app.get("/editpost", function (req, res) {
         connection.query(
             "SELECT * FROM BBY_22_item_posts WHERE id = ? AND user_id = ?",
             [req.session.editpostID, req.session.userID],
-            function (error, results, fields) {
+            function (error, results) {
                 myResults = results;
                 if (error) {} else if (results.length > 0) {
                     results.forEach(post => {
@@ -246,7 +246,7 @@ app.post("/loadposts", function (req, res) {
 
     connection.query(
         "SELECT * FROM BBY_22_item_posts where status != 'collected'",
-        function (error, results, fields) {
+        function (error, results) {
             myResults = results;
             if (error) {} else if (results.length > 0) {
                 results.forEach(post => {
@@ -306,7 +306,7 @@ app.post("/removeBookmark", function (req, res) {
     //removes a bookmark
     connection.query("DELETE FROM BBY_22_bookmarks WHERE user_id = ? AND post_id = ?",
         [req.session.userID, req.body.postID],
-        function (error, results, fields) {
+        function (error, results) {
             if (error) {}
         }
     );
@@ -325,7 +325,7 @@ app.post("/loadmyposts", function (req, res) {
     connection.query(
         "SELECT * FROM BBY_22_item_posts where user_id = ?",
         [req.session.userID],
-        function (error, results, fields) {
+        function (error, results) {
             myResults = results;
             if (error) {} else if (results.length > 0) {
                 results.forEach(post => {
@@ -353,7 +353,7 @@ app.post("/loadmybookmarks", function (req, res) {
     connection.query(
         "SELECT * FROM BBY_22_bookmarks where user_id = ?",
         [req.session.userID],
-        function (error, results, fields) {
+        function (error, results) {
             myResults = results;
             if (error) {} else if (results.length > 0) {
                 results.forEach(bookmark => {
@@ -373,7 +373,7 @@ app.post("/loadsavedposts", function (req, res) {
     let savedposts = [];
     connection.query(
         "SELECT * FROM BBY_22_item_posts",
-        function (error, results, fields) {
+        function (error, results) {
             myResults = results;
             if (error) {} else if (results.length > 0) {
                 results.forEach(post => {
@@ -604,6 +604,7 @@ app.post('/upload-images', upload.array("files"), function (req, res) {
     );
 });
 
+// When user updates their item post photo
 app.post('/upload-images2', upload.array("files"), function (req, res) {
     for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
