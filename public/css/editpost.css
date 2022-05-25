@@ -269,6 +269,7 @@ footer {
   margin-bottom: 10pt;
   text-transform: uppercase;
   box-shadow: 1px 1px 1px rgb(73, 71, 71);
+  cursor: pointer;
 }
 
 #deletepost, #deleteMsgBtn {
@@ -291,6 +292,7 @@ footer {
   color: #333;
   margin-top: 10px;
   border-radius: 1px;
+  cursor: pointer;
 }
 
 #cancel {

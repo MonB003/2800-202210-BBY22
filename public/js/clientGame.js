@@ -9,6 +9,14 @@ document.querySelector("#home2").addEventListener("click", function (e) {
     window.location.replace("/main");
 });
 
+//redirects to bookmarks page
+document.querySelector("#bookmark").addEventListener("click", function (e) {
+    window.location.replace("/myBookmarks");
+});
+document.querySelector("#bookmark2").addEventListener("click", function (e) {
+    window.location.replace("/myBookmarks");
+});
+
 //redirects to message page
 document.querySelector("#messages").addEventListener("click", function (e) {
     window.location.replace("/message");

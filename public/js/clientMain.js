@@ -13,6 +13,14 @@ document.querySelector("#home2").addEventListener("click", function (e) {
     window.location.replace("/main");
 });
 
+//redirects to bookmarks page
+document.querySelector("#bookmark").addEventListener("click", function (e) {
+    window.location.replace("/myBookmarks");
+});
+document.querySelector("#bookmark2").addEventListener("click", function (e) {
+    window.location.replace("/myBookmarks");
+});
+
 //redirects to message page
 document.querySelector("#messages").addEventListener("click", function (e) {
     window.location.replace("/message");
@@ -92,11 +100,8 @@ function getBookmarkStatus(postID) {
         console.log(dataSent);
 
         addBookmark(dataSent);
-
-    } else {
-        //Do nothing because bookmarks can only deleted from my bookmarks page
-
-    }
+    } 
+    // If bookmark status is 0, do nothing because bookmarks can only deleted from my bookmarks page
 
 }
 
@@ -113,7 +118,7 @@ async function addBookmark(dataSent) {
     }
 
     // Get response from server side post request
-    const updateBookmark = await fetch('/addBookmark', bookmarkDetails);
+    await fetch('/addBookmark', bookmarkDetails);
 }
 
 

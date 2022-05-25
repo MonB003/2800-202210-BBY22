@@ -1,19 +1,50 @@
 "use strict";
 
-// When profile button is clicked, direct to profile page
-document.querySelector("#profile").addEventListener("click", function (e) {
-    window.location.replace("/profile");
+// When new post button is clicked, redirect to newPost page
+document.querySelector("#newPostPageBtn").addEventListener("click", function (e) {
+    window.location.replace("/newPost");
 });
 
 // Redirects to main page
 document.querySelector("#home").addEventListener("click", function (e) {
     window.location.replace("/main");
 });
-
-// When new post button is clicked, direct to newPost page
-document.querySelector("#newPostPageBtn").addEventListener("click", function (e) {
-    window.location.replace("/newPost");
+document.querySelector("#home2").addEventListener("click", function (e) {
+    window.location.replace("/main");
 });
+
+//redirects to bookmarks page
+document.querySelector("#bookmark").addEventListener("click", function (e) {
+    window.location.replace("/myBookmarks");
+});
+document.querySelector("#bookmark2").addEventListener("click", function (e) {
+    window.location.replace("/myBookmarks");
+});
+
+//redirects to message page
+document.querySelector("#messages").addEventListener("click", function (e) {
+    window.location.replace("/message");
+});
+document.querySelector("#messages2").addEventListener("click", function (e) {
+    window.location.replace("/message");
+});
+
+// When my listings button is clicked, redirect to myListings page
+document.querySelector("#listings").addEventListener("click", function (e) {
+    window.location.replace("/mylistings");
+});
+document.querySelector("#listings2").addEventListener("click", function (e) {
+    window.location.replace("/mylistings");
+});
+
+// When profile button is clicked, redirect to profile page
+document.querySelector("#profile").addEventListener("click", function (e) {
+    window.location.replace("/profile");
+});
+document.querySelector("#profile2").addEventListener("click", function (e) {
+    window.location.replace("/profile");
+});
+
 
 //toggle filter menu
 document.querySelector("#togglefilter").addEventListener("click", function (e) {
@@ -46,14 +77,8 @@ document.querySelector("#filterstatus").addEventListener("click", function (e) {
         filterstatus = "available";
         document.querySelector("#filterstatus").innerHTML = "Available"
     } else if (filterstatus == "available") {
-        filterstatus = "pending";
-        document.querySelector("#filterstatus").innerHTML = "Pending"
-    } else if (filterstatus == "pending") {
         filterstatus = "reserved";
         document.querySelector("#filterstatus").innerHTML = "Reserved"
-    } else if (filterstatus == "reserved") {
-        filterstatus = "collected";
-        document.querySelector("#filterstatus").innerHTML = "Collected"
     } else {
         filterstatus = "all"
         document.querySelector("#filterstatus").innerHTML = "All"
@@ -72,8 +97,6 @@ function getBookmarkStatus(postID) {
         const dataSent = {
             postID
         }
-        console.log("postID: " + postID);
-        console.log("dataSent: " + dataSent);
 
         addBookmark(dataSent);
 
@@ -83,7 +106,6 @@ function getBookmarkStatus(postID) {
         const dataSent = {
             postID
         }
-
 
         removeBookmark(dataSent);
     }
@@ -95,7 +117,6 @@ async function removeBookmark(dataSent) {
 
     // Looks for only an app.post function
     // Sends the JSON data (postID) to the server
-
 
     const removeBookmark = {
         method: 'POST',
@@ -127,21 +148,18 @@ async function addBookmark(dataSent) {
     }
 
     // Get response from server side post request
-    const updateBookmark = await fetch('/addBookmark', addBookmark);
+    await fetch('/addBookmark', addBookmark);
 }
 
 // retrieves bookmarks from database
 async function loadbookmarks() {
 
-    const dataSent = {}
-
     const getDetails = {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
-        },
-        body: JSON.stringify(dataSent)
-    }
+        }
+    };
 
     const getResponse = await fetch('/loadmybookmarks', getDetails);
     const jsonData = await getResponse.json();
@@ -162,7 +180,7 @@ async function loadposts() {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSent)
-    }
+    };
 
     const getResponse = await fetch('/loadsavedposts', getDetails);
     const jsonData = await getResponse.json();
@@ -192,7 +210,7 @@ async function displayposts() {
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
-                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
@@ -210,7 +228,7 @@ async function displayposts() {
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
-                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
@@ -231,7 +249,7 @@ async function displayposts() {
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
-                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
@@ -248,7 +266,7 @@ async function displayposts() {
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
-                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
@@ -273,7 +291,7 @@ async function displayposts() {
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
-                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
@@ -290,7 +308,7 @@ async function displayposts() {
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
-                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
@@ -311,7 +329,7 @@ async function displayposts() {
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
-                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
@@ -328,7 +346,7 @@ async function displayposts() {
                         testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
-                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
@@ -348,11 +366,10 @@ loadbookmarks();
 // Saves the post ID to the session and redirects to the view post html if validated
 async function viewPost(postID) {
 
-
     // Sends data in an array to the server and saves it to a session
     const dataSent = {
         postID
-    }
+    };
 
     // Looks for only an app.post function
     // Sends the JSON data (postID) to the server
@@ -362,7 +379,7 @@ async function viewPost(postID) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSent)
-    }
+    };
 
     const postResponse = await fetch('/toviewpost', postDetails);
     const jsonData = await postResponse.json();

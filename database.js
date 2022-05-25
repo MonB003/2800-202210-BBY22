@@ -261,12 +261,10 @@ app.post("/loadposts", function (req, res) {
             res.send(posts);
         }
     );
-})
+});
 
 //checks for duplicate and adds a bookmark to the database
 app.post("/addBookmark", function (req, res) {
-    console.log("userID: " + req.session.userID);
-    console.log("postID: " + req.body.postID);
 
     connection.query("SELECT * FROM BBY_22_bookmarks WHERE user_id = ? AND post_id = ?",
         [req.session.userID, req.body.postID],
@@ -275,7 +273,6 @@ app.post("/addBookmark", function (req, res) {
 
             } else if (results.length > 0) {
                 //detects an existing bookmark
-                console.log("Exisiting Bookmark Detected!");
 
             } else {
                 connection.query('INSERT INTO BBY_22_bookmarks (user_id, post_id) VALUES (?, ?)',
@@ -286,7 +283,6 @@ app.post("/addBookmark", function (req, res) {
                         } else {
                             req.session.save(function (err) {
                                 // Session saved
-                                console.log("new bookmark created.");
                             });
 
                             res.send({
@@ -300,25 +296,17 @@ app.post("/addBookmark", function (req, res) {
 
 
         });
-})
+});
 
 //checks for exisiting record and removes a bookmark from the database
 app.post("/removeBookmark", function (req, res) {
-    console.log("userID: " + req.session.userID);
-    console.log("postID: " + req.body.postID);
-    console.log("app.post removeBookmark is called.");
 
     //removes a bookmark
     connection.query("DELETE FROM BBY_22_bookmarks WHERE user_id = ? AND post_id = ?",
         [req.session.userID, req.body.postID],
         function (error, results, fields) {
             if (error) {
-
-            } else {
-                // Session saved
-                console.log("Bookmark removed.");
-
-            }
+            } 
         }
     );
 
@@ -326,7 +314,7 @@ app.post("/removeBookmark", function (req, res) {
         status: "Success",
         msg: "Bookmark removed."
     });
-})
+});
 
 app.post("/loadmyposts", function (req, res) {
     let myResults = null;
@@ -352,7 +340,7 @@ app.post("/loadmyposts", function (req, res) {
             res.send(posts);
         }
     );
-})
+});
 
 
 app.post("/loadmybookmarks", function (req, res) {
@@ -374,12 +362,11 @@ app.post("/loadmybookmarks", function (req, res) {
             res.send(bookmarks);
         }
     );
-})
+});
 
 app.post("/loadsavedposts", function (req, res) {
     let myResults = null;
     let savedposts = [];
-    // console.log(req.body[0]);
     connection.query(
         "SELECT * FROM BBY_22_item_posts",
         function (error, results, fields) {
@@ -389,7 +376,6 @@ app.post("/loadsavedposts", function (req, res) {
 
                     for (let i = 0; i < req.body.length; i++) {
                         if (post.id == req.body[i].saveid) {
-                            console.log("saveid: " + req.body[i].saveid);
                             savedposts.push({
                                 "postid": post.id,
                                 "title": post.title,
@@ -408,7 +394,7 @@ app.post("/loadsavedposts", function (req, res) {
             res.send(savedposts);
         }
     );
-})
+});
 
 app.use(express.json());
 app.use(express.urlencoded({
@@ -726,8 +712,8 @@ app.get('/profile', function (req, res) {
     profileDOM.window.document.getElementById("userCity").defaultValue = req.session.city;
     profileDOM.window.document.getElementById("userEmail").defaultValue = req.session.email;
     profileDOM.window.document.getElementById("userPassword").defaultValue = req.session.password;
-    var profileP = "<img src=\"imgs/uploads/userPic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
-    profileDOM.window.document.getElementById("postimage").innerHTML = profileP
+    var profileP = "<img src=\"imgs/uploads/userPic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">";
+    profileDOM.window.document.getElementById("postimage").innerHTML = profileP;
 
     res.set("Server", "MACT Engine");
     res.set("X-Powered-By", "MACT");
@@ -749,10 +735,9 @@ app.get('/profile/:username', function (req, res) {
                     results.forEach(user => {
                         // Load current user's data into the text fields on the page
                         profileDOM.window.document.querySelector("#username").innerHTML = user.userName;
-                        let profileP = "<img src=\"/imgs/uploads/userPic-" + user.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
-                        profileDOM.window.document.getElementById("postimage").innerHTML = profileP
+                        let profileP = "<img src=\"/imgs/uploads/userPic-" + user.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">";
+                        profileDOM.window.document.getElementById("postimage").innerHTML = profileP;
                         profileDOM.window.document.querySelector("#itemlistings").setAttribute("onclick", `window.location.replace("/itemlistings/${user.userName}")`);
-
                         profileDOM.window.document.getElementById("messageuser").setAttribute("onclick", `getMessagePage("${user.userName}")`);
                     });
                 } else {}
@@ -773,7 +758,7 @@ app.get("/itemlistings/:username", function (req, res) {
     if (req.session.loggedIn) {
         let listings = fs.readFileSync("./app/listings.html", "utf8");
         let listingsDOM = new JSDOM(listings);
-        listingsDOM.window.document.querySelector("#pagename").innerHTML = `${req.params.username}'s Listings`
+        listingsDOM.window.document.querySelector("#pagename").innerHTML = `${req.params.username}'s Listings`;
         res.set("Server", "MACT Engine");
         res.set("X-Powered-By", "MACT");
         res.send(listingsDOM.serialize());
@@ -849,8 +834,8 @@ app.get("/viewPost", function (req, res) {
                         viewPostDOM.window.document.querySelector("#post-description").innerHTML = `${post.description}`;
                         viewPostDOM.window.document.querySelector("#post-location").innerHTML = `${post.city}`;
                         viewPostDOM.window.document.querySelector("#postdate").innerHTML = `${post.timestamp}`;
-                        let profileP = "<img src=\"imgs/uploads/userPic-" + post.item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
-                        viewPostDOM.window.document.getElementById("postimage").innerHTML = profileP
+                        let profileP = "<img src=\"imgs/uploads/userPic-" + post.item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
+                        viewPostDOM.window.document.getElementById("postimage").innerHTML = profileP;
                         viewPostDOM.window.document.getElementById("messagepost").setAttribute("onclick", `getMessagePage(${post.id})`);
 
                         req.session.postOwnerID = post.user_id;
