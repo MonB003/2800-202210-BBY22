@@ -71,7 +71,7 @@ function getBookmarkStatus(postID) {
 
 
     if (bookmarkStatus == "1") {
-        // Record post_id and current user_id to bby_22_bookmarks table
+        // Record post_id to send to database for bby_22_bookmarks table
         const dataSent = {
             postID
         }
@@ -81,25 +81,9 @@ function getBookmarkStatus(postID) {
         addBookmark(dataSent);
 
     } else {
-        // Remove post_id from bby_22_bookmarks table
-        const dataSent = {
-            postID
-        }
+        //Do nothing because bookmarks can only deleted from my bookmarks page
 
-        // Looks for only an app.post function
-        // Sends the JSON data (postID) to the server
-        const bookmarkDetails = {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dataSent)
-        }
-
-        // Get response from server side post request
-        // const updateBookmark = await fetch('/deleteBookmark', bookmarkDetails);
     }
-
 
 }
 

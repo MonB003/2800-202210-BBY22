@@ -250,6 +250,7 @@ app.post("/loadposts", function (req, res) {
     );
 })
 
+//checks for duplicate and adds a bookmark to the database
 app.post("/addBookmark", function (req, res) {
     console.log("userID: " + req.session.userID);
     console.log("postID: " + req.body.postID);
@@ -286,11 +287,32 @@ app.post("/addBookmark", function (req, res) {
 
 
         });
+})
 
+//checks for exisiting record and removes a bookmark from the database
+app.post("/removeBookmark", function (req, res) {
+    console.log("userID: " + req.session.userID);
+    console.log("postID: " + req.body.postID);
+    console.log("app.post removeBookmark is called.");
 
+    //removes a bookmark
+    connection.query("DELETE FROM BBY_22_bookmarks WHERE user_id = ? AND post_id = ?",
+        [req.session.userID, req.body.postID],
+        function (error, results, fields) {
+            if (error) {
 
+            } else {
+                // Session saved
+                console.log("Bookmark removed.");
 
+            }
+        }
+    );
 
+    res.send({
+        status: "Success",
+        msg: "Bookmark removed."
+    });
 })
 
 app.post("/loadmyposts", function (req, res) {

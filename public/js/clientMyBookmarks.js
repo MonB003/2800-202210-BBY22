@@ -69,35 +69,49 @@ function getBookmarkStatus(postID) {
 
 
     if (bookmarkStatus == "1") {
-        // Record post_id and current user_id to bby_22_bookmarks table
+        // Record post_id to send to database for bby_22_bookmarks table
         const dataSent = {
             postID
         }
-        console.log(postID);
-        console.log(dataSent);
+        console.log("postID: " + postID);
+        console.log("dataSent: " + dataSent);
 
         addBookmark(dataSent);
 
-    } else {
+    } else if (bookmarkStatus == "0") {
+
         // Remove post_id from bby_22_bookmarks table
         const dataSent = {
             postID
         }
 
-        // Looks for only an app.post function
-        // Sends the JSON data (postID) to the server
-        const bookmarkDetails = {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dataSent)
-        }
 
-        // Get response from server side post request
-        // const updateBookmark = await fetch('/deleteBookmark', bookmarkDetails);
+        removeBookmark(dataSent);
     }
 
+}
+
+//Removes a bookmark from the mybookmarks page
+async function removeBookmark(dataSent) {
+
+    // Looks for only an app.post function
+    // Sends the JSON data (postID) to the server
+
+
+    const removeBookmark = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(dataSent)
+
+    }
+    // Get response from server side post request
+    const updateBookmark = await fetch('/removeBookmark', removeBookmark);
+    const jsonData = await updateBookmark.json();
+    if (jsonData.status == "Success") {
+        window.location.reload();
+    }
 
 }
 
@@ -105,7 +119,7 @@ async function addBookmark(dataSent) {
 
     // Looks for only an app.post function
     // Sends the JSON data (postID) to the server
-    const bookmarkDetails = {
+    const addBookmark = {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
@@ -114,7 +128,7 @@ async function addBookmark(dataSent) {
     }
 
     // Get response from server side post request
-    const updateBookmark = await fetch('/addBookmark', bookmarkDetails);
+    const updateBookmark = await fetch('/addBookmark', addBookmark);
 }
 
 // retrieves bookmarks from database
