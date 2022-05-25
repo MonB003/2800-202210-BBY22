@@ -19,14 +19,14 @@ async function saveConnectedUserInfo() {
 
     const userDataSent = {
         userName
-    }
+    };
     const userPostDetails = {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(userDataSent)
-    }
+    };
 
     // Get post owner and session user's IDs
     const postResponseID = await fetch('/get-user-id-from-username', userPostDetails);
@@ -55,14 +55,14 @@ socket.on("a-user-connects", function (username) {
 async function getBothUserIDsFromUsername(userName) {
     const userDataSent = {
         userName
-    }
+    };
     const userPostDetails = {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(userDataSent)
-    }
+    };
 
     // Get post owner and session user's IDs
     const postResponseID = await fetch('/get-user-id-from-username', userPostDetails);
@@ -88,7 +88,7 @@ async function getMessagesWithUser(userSending, userReceiving, userName) {
     const dataSent = {
         userSending,
         userReceiving
-    }
+    };
 
     const postDetails = {
         method: 'POST',
@@ -96,12 +96,12 @@ async function getMessagesWithUser(userSending, userReceiving, userName) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSent)
-    }
+    };
     const postResponse = await fetch('/all-messages-between-two-users', postDetails);
     const jsonData = await postResponse.json();
     let dbMessageObjs = jsonData.dbResult;
 
-    let thisUser = jsonData.sessionUserID;  // Current user
+    let thisUser = jsonData.sessionUserID; // Current user
 
     // Gets each of the past messages saved in the database and styles them based on 
     // if the message was from this user or the other
@@ -110,32 +110,36 @@ async function getMessagesWithUser(userSending, userReceiving, userName) {
 
         // Create HTML p tag element to store the current message
         let currMessage = document.createElement("p");
-        
+
+        let innerSpan = "<span ";
+
         if (currObj.userSending == thisUser) {
             // Message is from you
-            currMessage.textContent = "You: " + currObj.message;
-            currMessage.style.backgroundColor = "#91C7B1";
-            currMessage.style.textAlign = "right";
-            currMessage.style.color = "white";
+            innerSpan += "class=\"your-messages\">";
+            innerSpan += " You: " + currObj.message + " ";
+
             currMessage.style.padding = "20px";
             currMessage.style.margin = "2px";
-            currMessage.style.fontWeight = "bold";
 
         } else {
             // Message is from other user
-            currMessage.textContent = userName + ": " + currObj.message;
-            currMessage.style.backgroundColor = "#9fa4a9";
+            innerSpan += "class=\"other-user-messages\">";
+            innerSpan += userName + ": " + currObj.message;
             currMessage.style.padding = "20px";
             currMessage.style.margin = "2px";
-            currMessage.style.color = "white";
-            currMessage.style.fontWeight = "bold";
         }
+
+        innerSpan += "</span>";
+
+        // Put span element content inside p tag
+        currMessage.innerHTML = innerSpan;
 
         document.getElementById("allMessages").appendChild(currMessage);
     }
 
     let todayPar = document.createElement("h3");
-    todayPar.setAttribute("style", "font-style: italic;");
+    todayPar.style.fontStyle = "italic";
+    todayPar.style.textAlign = "center";
     todayPar.textContent = "TODAY";
 
     document.getElementById("allMessages").appendChild(todayPar);
@@ -163,13 +167,17 @@ function sendMessageToUser() {
 
     // Create HTML element for new message
     let newMessage = document.createElement("p");
-    newMessage.textContent = "You: " + messageInput;
-    newMessage.style.backgroundColor = "#91C7B1";
-    newMessage.style.textAlign = "right";
-    newMessage.style.color = "white";
+    let innerSpan = "<span ";
+    innerSpan += "class=\"your-messages\">";
+    innerSpan += " You: " + messageInput;
+
     newMessage.style.padding = "20px";
     newMessage.style.margin = "2px";
-    newMessage.style.fontWeight = "bold";
+
+    innerSpan += "</span>";
+
+    // Put span element content inside p tag
+    newMessage.innerHTML = innerSpan;
 
     document.getElementById("allMessages").appendChild(newMessage);
 
@@ -198,14 +206,14 @@ socket.on("new-message-from-other-user", function (data) {
 async function newMessage(otherUserID, message) {
     const dataSentUsername = {
         otherUserID
-    }
+    };
     const postDetailsUsername = {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSentUsername)
-    }
+    };
 
     // Gets username from their ID, this will get displayed
     const postResponseUsername = await fetch('/get-owner-username-with-id', postDetailsUsername);
@@ -221,12 +229,18 @@ async function newMessage(otherUserID, message) {
 function createMessageElement(returnedUsername, message) {
     // Create HTML element to display the other user's message
     let newMessage = document.createElement("p");
-    newMessage.textContent = returnedUsername + ": " + message;
-    newMessage.style.backgroundColor = "#9fa4a9";
+
+    let innerSpan = "<span ";
+    innerSpan += "class=\"other-user-messages\">";
+    innerSpan += returnedUsername + ": " + message;
+
     newMessage.style.padding = "20px";
     newMessage.style.margin = "2px";
-    newMessage.style.color = "white";
-    newMessage.style.fontWeight = "bold";
+
+    innerSpan += "</span>";
+
+    // Put span element content inside p tag
+    newMessage.innerHTML = innerSpan;
 
     document.getElementById("allMessages").appendChild(newMessage);
 
@@ -243,7 +257,7 @@ async function getUsersThisUserMessaged() {
         headers: {
             "Content-Type": "application/json"
         }
-    }
+    };
 
     // Get response from server side post request
     const postResponse = await fetch('/people-who-messaged-this-user', postDetails);
@@ -287,15 +301,15 @@ async function getUsersThisUserMessaged() {
 
         const userDataSent = {
             otherUserID
-        }
+        };
         const userPostDetails = {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(userDataSent)
-        }
-    
+        };
+
         // Get post owner's IDs
         const postResponseName = await fetch('/get-owner-username-with-id', userPostDetails);
         const jsonDataName = await postResponseName.json();

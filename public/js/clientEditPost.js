@@ -66,18 +66,18 @@ function uploadImages(e) {
     };
     const dataSent = {
         description
-    }
+    };
     const postDetails = {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSent)
-    }
+    };
     fetch("/upload-images3", options, postDetails).then(function (res) {
-        window.location.replace("/editpost")
+        window.location.replace("/editpost");
     }).catch(function (err) {
-        ("Error:", err)
+        ("Error:", err);
     });
     document.getElementById("savedMsg").innerHTML = "Photo Saved";
 }
@@ -90,7 +90,7 @@ async function getDefaultStatus() {
         headers: {
             "Content-Type": "application/json"
         }
-    }
+    };
 
     // Get response from server side post request
     const postResponse = await fetch('/get-current-item-status', postDetails);
@@ -121,7 +121,7 @@ async function displayReservedDetails(otherUserID) {
 
     const dataSent = {
         otherUserID
-    }
+    };
 
     const postDetails = {
         method: 'POST',
@@ -129,7 +129,7 @@ async function displayReservedDetails(otherUserID) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSent)
-    }
+    };
 
     // Get response from server side post request for the user's username
     const postResponse = await fetch('/get-owner-username-with-id', postDetails);
@@ -188,7 +188,7 @@ async function save_post(postID) {
             description,
             status,
             postID
-        }
+        };
 
         const postDetails = {
             method: 'POST',
@@ -196,7 +196,7 @@ async function save_post(postID) {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(dataSent)
-        }
+        };
 
         await fetch('/savepostinfo', postDetails);
         window.location.replace("/mylistings");
@@ -211,7 +211,7 @@ async function removePotentialUserReserved(postID) {
     const dataSentUpdate = {
         userReserved,
         postID
-    }
+    };
 
     const postDetailsUpdate = {
         method: 'POST',
@@ -219,7 +219,7 @@ async function removePotentialUserReserved(postID) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSentUpdate)
-    }
+    };
 
     // Get response from server side post request
     await fetch('/reserve-user-for-item', postDetailsUpdate);
@@ -231,7 +231,7 @@ async function delete_post(postID) {
 
     const dataSent = {
         postID
-    }
+    };
 
     const postDetails = {
         method: 'POST',
@@ -239,7 +239,7 @@ async function delete_post(postID) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSent)
-    }
+    };
 
     // Get response from server side post request called delete-post
     await fetch('/deletepost', postDetails);
@@ -279,7 +279,7 @@ async function reserveUserForItem(postID) {
 
     const dataSentCheck = {
         userReserved
-    }
+    };
 
     const postDetailsCheck = {
         method: 'POST',
@@ -287,7 +287,7 @@ async function reserveUserForItem(postID) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSentCheck)
-    }
+    };
 
     // Get response from server side post request
     const postResponseCheck = await fetch('/check-username-exists', postDetailsCheck);
@@ -302,6 +302,7 @@ async function reserveUserForItem(postID) {
 
         // Disable save button
         document.getElementById("savepost").disabled = true;
+        document.getElementById("savepost").style.cursor = "not-allowed";
         return;
     }
 
@@ -313,7 +314,7 @@ async function reserveUserForItem(postID) {
     const dataSentUpdate = {
         userReserved,
         postID
-    }
+    };
 
     const postDetailsUpdate = {
         method: 'POST',
@@ -321,7 +322,7 @@ async function reserveUserForItem(postID) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSentUpdate)
-    }
+    };
 
     // Get response from server side post request
     const postResponseUpdate = await fetch('/reserve-user-for-item', postDetailsUpdate);
@@ -335,6 +336,7 @@ async function reserveUserForItem(postID) {
     document.getElementById("savepost").style.cursor = "pointer";
 
     document.getElementById("reserveUserBtn").disabled = true;
+    document.getElementById("reserveUserBtn").style.cursor = "not-allowed";
 
     // Enable collected option from dropdown
     document.getElementById("collected").disabled = false;
@@ -351,10 +353,12 @@ document.getElementById("userReserved").addEventListener("input", function (e) {
     if (userReservedValue.trim() == "") {
         reserveUserBtn.disabled = true;
         document.getElementById("savepost").disabled = true;
+        document.getElementById("savepost").style.cursor = "not-allowed";
 
     } else {
         // If there's input, enable the button
         reserveUserBtn.disabled = false;
+        reserveUserBtn.style.cursor = "pointer";
     }
 });
 

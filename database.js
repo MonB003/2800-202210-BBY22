@@ -125,7 +125,13 @@ app.get("/main", function (req, res) {
                         strRowData += "<tr><td><input type=\"text\" id=\"userCity" + userIdNum + "\"" + " value=\"" + userResults[row].city + "\"" + " placeholder=\"City\"" + " maxlength=\"30\"" + ">" + "</td></tr>";
                         strRowData += "<tr><td><input type=\"email\" id=\"userEmail" + userIdNum + "\"" + " value=\"" + userResults[row].email + "\"" + " placeholder=\"Email@email.ca\"" + " maxlength=\"30\"" + ">" + "</td></tr>";
                         strRowData += "<tr><td><input type=\"text\" id=\"userPassword" + userIdNum + "\"" + " value=\"" + userResults[row].password + "\"" + " placeholder=\"Password\"" + " maxlength=\"30\"" + ">" + "</td></tr>";
-                        strRowData += "<tr><td><input type=\"text\" id=\"userType" + userIdNum + "\"" + " class=\"user-type-input\"" + " value=\"" + userResults[row].type + "\"" + " placeholder=\"Type\"" + " maxlength=\"5\"" + ">" + "</td></tr>";
+                        
+                        // Dropdown of user types
+                        strRowData += "<tr><td><select name=\"user-type\" id=\"userType" + userIdNum + "\" class=\"user-type-input\">";
+                        strRowData += "<option id=\"ADMIN" + userIdNum + "\" value=\"ADMIN\">Admin</option>";
+                        strRowData += "<option id=\"USER" + userIdNum + "\" value=\"USER\">User</option>";
+                        strRowData += "</select></td></tr>";
+                        
                         strRowData += "<tr><td>" + "<button id=\"editButton" + userIdNum + "\"" + "</td><tr>";
                         strRowData += "<tr><td>" + "<button id=\"deleteButton" + userIdNum + "\"" + "</td></tr>";
 
@@ -141,7 +147,11 @@ app.get("/main", function (req, res) {
                     for (let row = 0; row < userResults.length; row++) {
                         let userIdNum = userResults[row].id;
 
-                        // Set button name and its method when clicked
+                        // Select the current user's type as the default dropdown value
+                        let currUserType = userResults[row].type;
+                        mainDOM.window.document.getElementById(currUserType + userIdNum).setAttribute("selected", "selected");
+
+                        // Set the button name and its method when clicked
                         mainDOM.window.document.getElementById("editButton" + userIdNum).textContent = "Edit User";
                         mainDOM.window.document.getElementById("editButton" + userIdNum).setAttribute("onclick", "updateAUsersData(" + userIdNum + ")");
 
@@ -1154,7 +1164,6 @@ function checkUsernameBeforeAdding(userName, callback) {
 
 // Checks if a username exists in the database before reserving an item
 app.post('/check-username-exists', (req, res) => {
-    // connection.query("SELECT * FROM BBY_22_users WHERE username = ? AND type = 'USER'",
     connection.query("SELECT * FROM BBY_22_users WHERE userName = ? AND type = 'USER'",
         [req.body.userReserved],
         function (error, results) {

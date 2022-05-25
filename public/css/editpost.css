@@ -75,6 +75,13 @@
   display: none;
 }
 
+#itemStatus {
+  font-family: 'Lato';
+  font-size: medium;
+  width: 25%;
+}
+
+
 @media only screen and (max-width: 750px) {
   .container {
     display: none;

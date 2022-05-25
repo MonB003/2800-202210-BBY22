@@ -70,7 +70,7 @@ async function updateAUsersData(userID) {
         password,
         type,
         userID
-    }
+    };
 
     // Additional details needed when sending data to server side
     const postDetails = {
@@ -79,7 +79,7 @@ async function updateAUsersData(userID) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSent)
-    }
+    };
 
     // Get response from server side post request called update-user-data
     const postResponse = await fetch('/update-user-data', postDetails);
@@ -137,7 +137,7 @@ async function deleteAUser(userID) {
             password,
             type,
             userID
-        }
+        };
 
         const postDetails = {
             method: 'POST',
@@ -145,7 +145,7 @@ async function deleteAUser(userID) {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(dataSent)
-        }
+        };
 
         // Get response from server side post request called delete-user
         const postResponse = await fetch('/delete-user', postDetails);
@@ -222,7 +222,7 @@ async function addAUser() {
             email,
             password,
             type
-        }
+        };
 
         const postDetails = {
             method: 'POST',
@@ -230,7 +230,7 @@ async function addAUser() {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(dataSent)
-        }
+        };
 
         // Get response from server side post request called add-new-user
         const postResponse = await fetch('/add-new-user', postDetails);
