@@ -254,24 +254,40 @@ app.post("/addBookmark", function (req, res) {
     console.log("userID: " + req.session.userID);
     console.log("postID: " + req.body.postID);
 
-    // connection.query()
-
-    connection.query('INSERT INTO BBY_22_bookmarks (user_id, post_id) VALUES (?, ?)',
+    connection.query("SELECT * FROM BBY_22_bookmarks WHERE user_id = ? AND post_id = ?",
         [req.session.userID, req.body.postID],
-        function (error, results, fields) {
+        function (error, results) {
             if (error) {
 
-            } else {
-                req.session.save(function (err) {
-                    // Session saved
-                });
+            } else if (results.length > 0) {
+                //detects an existing bookmark
+                console.log("Exisiting Bookmark Detected!");
 
-                res.send({
-                    status: "Success",
-                    msg: "New bookmark created."
-                });
+            } else {
+                connection.query('INSERT INTO BBY_22_bookmarks (user_id, post_id) VALUES (?, ?)',
+                    [req.session.userID, req.body.postID],
+                    function (error, results, fields) {
+                        if (error) {
+
+                        } else {
+                            req.session.save(function (err) {
+                                // Session saved
+                                console.log("new bookmark created.");
+                            });
+
+                            res.send({
+                                status: "Success",
+                                msg: "New bookmark created."
+                            });
+                        }
+                    });
+
             }
+
+
         });
+
+
 
 
 
