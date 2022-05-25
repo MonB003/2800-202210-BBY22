@@ -77,7 +77,8 @@ async function loadbookmarks() {
     const getResponse = await fetch('/loadmybookmarks', getDetails);
     const jsonData = await getResponse.json();
     console.log(jsonData);
-    bookmarksdata = jsonData[0];
+    bookmarksdata = jsonData;
+    console.log(bookmarksdata);
 
     loadposts();
 };
@@ -98,6 +99,8 @@ async function loadposts() {
     const getResponse = await fetch('/loadsavedposts', getDetails);
     const jsonData = await getResponse.json();
     postdata = jsonData;
+    console.log(postdata);
+    console.log(jsonData);
     displayposts();
 };
 
@@ -116,32 +119,34 @@ async function displayposts() {
                         testpost.querySelector(".post").id = `post${postdata[i].postid}`;
                         testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
                         testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
-                        testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
-                        testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
                         testpost.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
+                        testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
+                        testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
                         let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
-                        testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
-                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
+                        testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
+                        testpost.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     } else if (filterstatus == "all") {
                         let testpost = posttemplate.content.cloneNode(true);
                         testpost.querySelector(".post").id = `post${postdata[i].postid}`;
                         testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
                         testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
-                        testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
-                        testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
                         testpost.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
+                        testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
+                        testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
                         let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
-                        testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
-                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
+                        testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
+                        testpost.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     }
                 }
@@ -152,32 +157,34 @@ async function displayposts() {
                         testpost.querySelector(".post").id = `post${postdata[i].postid}`;
                         testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
                         testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
-                        testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
-                        testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
                         testpost.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
+                        testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
+                        testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
                         let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
-                        testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
-                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
+                        testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
+                        testpost.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     } else if (filterstatus == "all") {
                         let testpost = posttemplate.content.cloneNode(true);
                         testpost.querySelector(".post").id = `post${postdata[i].postid}`;
                         testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
                         testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
-                        testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
-                        testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
                         testpost.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
+                        testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
+                        testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
                         let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
-                        testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
-                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
+                        testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
+                        testpost.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     }
                 }
@@ -192,32 +199,34 @@ async function displayposts() {
                         testpost.querySelector(".post").id = `post${postdata[i].postid}`;
                         testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
                         testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
-                        testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
-                        testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
                         testpost.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
+                        testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
+                        testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
                         let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
-                        testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
-                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
+                        testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
+                        testpost.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     } else if (filterstatus == "all") {
                         let testpost = posttemplate.content.cloneNode(true);
                         testpost.querySelector(".post").id = `post${postdata[i].postid}`;
                         testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
                         testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
-                        testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
-                        testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
                         testpost.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
+                        testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
+                        testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
                         let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
-                        testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
-                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
+                        testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
+                        testpost.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     }
                 }
@@ -228,32 +237,34 @@ async function displayposts() {
                         testpost.querySelector(".post").id = `post${postdata[i].postid}`;
                         testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
                         testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
-                        testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
-                        testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
                         testpost.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
+                        testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
+                        testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
                         let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
-                        testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
-                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
+                        testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
+                        testpost.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     } else if (filterstatus == "all") {
                         let testpost = posttemplate.content.cloneNode(true);
                         testpost.querySelector(".post").id = `post${postdata[i].postid}`;
                         testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
                         testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
-                        testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
-                        testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
                         testpost.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
+                        testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
                         testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
+                        testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
                         testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
                         let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
                         testpost.querySelector(".postimage").innerHTML = postpic;
-                        testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
-                        testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`)
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
+                        testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
+                        testpost.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     }
                 }

@@ -253,6 +253,9 @@ app.post("/loadposts", function (req, res) {
 app.post("/addBookmark", function (req, res) {
     console.log("userID: " + req.session.userID);
     console.log("postID: " + req.body.postID);
+
+    // connection.query()
+
     connection.query('INSERT INTO BBY_22_bookmarks (user_id, post_id) VALUES (?, ?)',
         [req.session.userID, req.body.postID],
         function (error, results, fields) {
@@ -325,25 +328,30 @@ app.post("/loadmybookmarks", function (req, res) {
 app.post("/loadsavedposts", function (req, res) {
     let myResults = null;
     let savedposts = [];
-    console.log(req.body);
+    // console.log(req.body[0]);
     connection.query(
         "SELECT * FROM BBY_22_item_posts",
         function (error, results, fields) {
             myResults = results;
             if (error) {} else if (results.length > 0) {
-                let i = 0;
                 results.forEach(post => {
 
-                    if (post.id == req.body.saveid[i])
-                        savedposts.push({
-                            "postid": post.id,
-                            "title": post.title,
-                            "status": post.status,
-                            "city": post.city,
-                            "timestamp": post.timestamp,
-                            "item_pic": post.item_pic
-                        });
-                    i++;
+                    for (let i = 0; i < req.body.length; i++) {
+                        if (post.id == req.body[i].saveid) {
+                            console.log("saveid: " + req.body[i].saveid);
+                            savedposts.push({
+                                "postid": post.id,
+                                "title": post.title,
+                                "status": post.status,
+                                "city": post.city,
+                                "timestamp": post.timestamp,
+                                "item_pic": post.item_pic
+                            });
+                        }
+
+                    }
+
+
                 });
             }
             res.send(savedposts);
