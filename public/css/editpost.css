@@ -380,3 +380,8 @@ footer {
   flex-direction: column;
   justify-content: center;
 }
+
+#confirmationMsg {
+  font-size: 18pt;
+  padding: 5px;
+}

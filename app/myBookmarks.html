@@ -97,6 +97,18 @@
     <div id="posts">
     </div>
 
+    <!-- Popup that appears when user wants to remove a bookmark -->
+    <div id="confirmBookmark" class="popup" style="display:none;">
+        <div class="confirmBookmarkContent">
+            <p id="confirmationMsg">Do you want to remove this item from your bookmarks?</p>
+            <br>
+            <button type="button" id="removeMsgBtn">Remove</button>
+            <button type="button" id="confirmMsgBtn" onclick="confirmBookmarkMsg()">Cancel</button>
+
+            <!-- <button type="button" id="cancelMsgBtn" onclick="cancelConfirmDelete()">Cancel</button> -->
+
+        </div>
+    </div>
 
 
     <!-- JavaScript -->
