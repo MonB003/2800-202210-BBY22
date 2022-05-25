@@ -101,11 +101,10 @@ function ready(callback) {
 
 // Resets all text fields
 function resetFields() {
-    let formInputFields = document.querySelectorAll('input');
-
-    // Clear each text field value
-    for (let i = 0; i < formInputFields.length; i++) {
-        let currentInput = formInputFields[i];
-        currentInput.value = "";
-    }
+    document.getElementById("firstName").value = "";
+    document.getElementById("lastName").value = "";
+    document.getElementById("userName").value = "";
+    document.getElementById("city").value = "";
+    document.getElementById("userEmail").value = "";
+    document.getElementById("userPassword").value = "";
 }
