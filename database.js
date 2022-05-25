@@ -123,7 +123,7 @@ app.get("/main", function (req, res) {
                         strRowData += "<tr><td><input type=\"text\" id=\"userLastName" + userIdNum + "\"" + " value=\"" + userResults[row].lastName + "\"" + " placeholder=\"Last Name\"" + " maxlength=\"20\"" + ">" + "</td></tr>";
                         strRowData += "<tr><td><input type=\"text\" id=\"userName" + userIdNum + "\"" + " value=\"" + userResults[row].userName + "\"" + " placeholder=\"User Name\"" + " maxlength=\"20\"" + ">" + "</td></tr>";
                         strRowData += "<tr><td><input type=\"text\" id=\"userCity" + userIdNum + "\"" + " value=\"" + userResults[row].city + "\"" + " placeholder=\"City\"" + " maxlength=\"30\"" + ">" + "</td></tr>";
-                        strRowData += "<tr><td><input type=\"text\" id=\"userEmail" + userIdNum + "\"" + " value=\"" + userResults[row].email + "\"" + " placeholder=\"Email@email.ca\"" + " maxlength=\"30\"" + ">" + "</td></tr>";
+                        strRowData += "<tr><td><input type=\"email\" id=\"userEmail" + userIdNum + "\"" + " value=\"" + userResults[row].email + "\"" + " placeholder=\"Email@email.ca\"" + " maxlength=\"30\"" + ">" + "</td></tr>";
                         strRowData += "<tr><td><input type=\"text\" id=\"userPassword" + userIdNum + "\"" + " value=\"" + userResults[row].password + "\"" + " placeholder=\"Password\"" + " maxlength=\"30\"" + ">" + "</td></tr>";
                         strRowData += "<tr><td><input type=\"text\" id=\"userType" + userIdNum + "\"" + " class=\"user-type-input\"" + " value=\"" + userResults[row].type + "\"" + " placeholder=\"Type\"" + " maxlength=\"5\"" + ">" + "</td></tr>";
                         strRowData += "<tr><td>" + "<button id=\"editButton" + userIdNum + "\"" + "</td><tr>";
@@ -144,8 +144,10 @@ app.get("/main", function (req, res) {
                         // Set button name and its method when clicked
                         mainDOM.window.document.getElementById("editButton" + userIdNum).textContent = "Edit User";
                         mainDOM.window.document.getElementById("editButton" + userIdNum).setAttribute("onclick", "updateAUsersData(" + userIdNum + ")");
+
                         mainDOM.window.document.getElementById("deleteButton" + userIdNum).textContent = "Delete User";
-                        mainDOM.window.document.getElementById("deleteButton" + userIdNum).setAttribute("onclick", "deleteAUser(" + userIdNum + ")");
+                        mainDOM.window.document.getElementById("deleteButton" + userIdNum).setAttribute("onclick", "showConfirmDeletePopup()");
+                        mainDOM.window.document.getElementById("deleteMsgBtn").setAttribute("onclick", "deleteAUser(" + userIdNum + ")");
                     }
 
                     res.set("Server", "MACT Engine");
@@ -208,7 +210,7 @@ app.get("/editpost", function (req, res) {
                         editpostDOM.window.document.querySelector("#reserveUserBtn").setAttribute("onclick", `reserveUserForItem(${post.id})`);
 
                         editpostDOM.window.document.querySelector("#savepost").setAttribute("onclick", `save_post(${post.id})`);
-                        editpostDOM.window.document.querySelector("#deletepost").setAttribute("onclick", `delete_post(${post.id})`);
+                        editpostDOM.window.document.querySelector("#deleteMsgBtn").setAttribute("onclick", `delete_post(${post.id})`);
                     });
                 } else {}
 

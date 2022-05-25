@@ -12,7 +12,8 @@
     <link rel="stylesheet" href="/css/editpost.css">
 
     <!-- Tiny editor -->
-    <script src="https://cdn.tiny.cloud/1/64lg7fzavr5yxtvjfnrl8fw8700yfi2f4m70sfctwdil72xb/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://cdn.tiny.cloud/1/64lg7fzavr5yxtvjfnrl8fw8700yfi2f4m70sfctwdil72xb/tinymce/5/tinymce.min.js"
+        referrerpolicy="origin"></script>
 </head>
 
 <body>
@@ -101,11 +102,22 @@
             </div>
             <p id="savedDetail"></p>
             <button type="button" id="savepost">Save Details</button>
-            <button id="deletepost">Delete Post</button>
+            <button type="button" id="deletepost" onclick="showConfirmDeletePopup()">Delete Post</button>
             <br><br>
         </form>
         <div id="cancelDiv">
             <button id="cancel">Go Back</button>
+        </div>
+
+
+        <!-- Popup that appears when user wants to delete a post -->
+        <div id="confirmDeletion" class="popup" style="display:none;">
+            <div class="deleteMsgContent">
+                <p id="confirmationMsg">Do you want to delete this post?</p>
+                <br>
+                <button type="button" id="cancelMsgBtn" onclick="cancelConfirmDelete()">Cancel</button>
+                <button type="button" id="deleteMsgBtn">Delete</button>
+            </div>
         </div>
     </div>
 

@@ -68,7 +68,7 @@
                     <input type="text" id="newUserCity" name="city" placeholder="City" pattern="[A-Za-z]{1,30}"
                         maxlength="30" required="required">
                     <br>
-                    <input type="text" id="newUserEmail" name="email" placeholder="Email@email.ca" maxlength="30" required="required">
+                    <input type="email" id="newUserEmail" name="email" placeholder="Email@email.ca" maxlength="30" required="required">
                     <br>
                     <input type="password" id="newUserPassword" name="password" placeholder="Password" maxlength="30"
                         required="required">
@@ -82,6 +82,17 @@
                     <p id="message"></p>
                 </div>
             </section>
+        </div>
+
+
+        <!-- Popup that appears when admin wants to delete a user -->
+        <div id="confirmDeletion" class="popup" style="display:none;">
+            <div class="deleteMsgContent">
+                <p id="confirmationMsg">Do you want to delete this user?</p>
+                <br>
+                <button type="button" id="cancelMsgBtn" onclick="cancelConfirmDelete()">Cancel</button>
+                <button type="button" id="deleteMsgBtn">Delete</button>
+            </div>
         </div>
     </div>
 

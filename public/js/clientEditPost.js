@@ -357,3 +357,17 @@ document.getElementById("userReserved").addEventListener("input", function (e) {
         reserveUserBtn.disabled = false;
     }
 });
+
+
+
+// When the cancel button is clicked in confirm delete post popup
+function cancelConfirmDelete() {
+    let confirmDeleteDiv = document.getElementById('confirmDeletion');
+    confirmDeleteDiv.style.display = "none";
+}
+
+// Makes the confirm delete post popup div visible
+function showConfirmDeletePopup() {
+    let confirmDeleteDiv = document.getElementById('confirmDeletion');
+    confirmDeleteDiv.style.display = "block";
+}
