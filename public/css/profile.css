@@ -12,7 +12,7 @@
 }
 
 .navbar {
-  z-index:1;
+  z-index: 1;
   font-family: 'Lato';
   background: #5C6F68;
   line-height: 1;
@@ -85,7 +85,7 @@
   }
 
   .menu {
-    z-index:1;
+    z-index: 1;
     top: 0;
     display: block;
     background-color: #435a50;
@@ -310,9 +310,9 @@ body {
 }
 
 #userinfo {
-   grid-column: 2;
-   padding-top: 70px;
-   z-index: 0;
+  grid-column: 2;
+  padding-top: 70px;
+  z-index: 0;
 }
 
 #username {
@@ -329,7 +329,7 @@ body {
 
 #usermenu {
   grid-column: 2;
-  padding-top: 80px;
+  padding-top: 90px;
   width: 100%;
 }
 
@@ -349,6 +349,33 @@ body {
   color: aliceblue;
 }
 
+#overallrating {
+  font-size: 24px;
+}
+
+#overallrating span {
+  font-size: 20px;
+}
+
+#overallrating input {
+  display: none;
+}
+
+#overallrating label {
+  color: gray;
+}
+
+#userrating {
+  font-size: 20px;
+}
+
+#userrating input {
+  display: none;
+}
+
+#userrating label {
+  color: gray;
+}
 
 @media only screen and (max-width : 1000px) {
   #navbar {

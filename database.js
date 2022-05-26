@@ -611,7 +611,7 @@ app.get('/profile/:username', function (req, res) {
                         profileDOM.window.document.querySelector("#itemlistings").setAttribute("onclick", `window.location.replace("/itemlistings/${user.userName}")`);
                         profileDOM.window.document.getElementById("messageuser").setAttribute("onclick", `getMessagePage("${user.userName}")`);
                         connection.query(
-                            "SELECT * FROM BBY_22_ratings WHERE user_rated = ?",
+                            "SELECT * FROM BBY_22_ratings WHERE user = ?",
                             [user.id],
                             function (error, results, fields) {
                                 let totalrating = 0;
@@ -622,13 +622,13 @@ app.get('/profile/:username', function (req, res) {
                                         totalrating = totalrating + rating.rating;
                                         i++;
                                     });
-                                    console.log(totalrating);
                                     let avgrating = totalrating / i;
-                                    profileDOM.window.document.querySelector("#overallrating").innerHTML = "Overall Rating: " +  avgrating + "/5";
-                                    console.log(avgrating);
+                                    if (Math.round(avgrating) != 0) {
+                                        profileDOM.window.document.querySelector(`#rating${Math.round(avgrating)}`).setAttribute("checked", "");
+                                    }
+                                    profileDOM.window.document.querySelector("#score").innerHTML = `${avgrating}/5`;
                                 } else {
-                                    let norating = "User not rated"
-                                    profileDOM.window.document.querySelector("#overallrating").innerHTML = norating;
+                                    profileDOM.window.document.querySelector("#score").innerHTML = `no rating`;
                                 }
                                 res.set("Server", "MACT Engine");
                                 res.set("X-Powered-By", "MACT");
@@ -643,38 +643,6 @@ app.get('/profile/:username', function (req, res) {
         // User is not logged in, so direct to login page
         res.redirect("/");
     }
-});
-
-app.post("/loadratings", (req, res) => {
-    connection.query(
-        "SELECT * FROM BBY_22_users where userName = ?",
-        [req.body.username],
-        function (error, results, fields) {
-            if (error) {} else if (results.length > 0) {
-                results.forEach(user => {
-                    connection.query(
-                        "SELECT * FROM BBY_22_ratings WHERE user_rated = ?",
-                        [user.id],
-                        function (error, results, fields) {
-                            let totalrating = 0;
-                            let i = 0;
-                            if (error) {} else if (results.length > 0) {
-                                results.forEach(rating => {
-                                    totalrating = totalrating + rating.rating;
-                                    i++;
-                                });
-                                let avgrating = totalrating / i;
-                                res.send(posts);
-                            } else {
-                                let norating = "User not rated"
-                                res.send(posts);
-                            }
-                        }
-                    );
-                });
-            }
-        }
-    );
 });
 
 app.get("/itemlistings/:username", function (req, res) {
@@ -703,10 +671,10 @@ app.post('/saverating', (req, res) => {
                     msg: 'Error finding user'
                 });
             } else if (results.length > 0) {
-                let user_rated_id = results[0].id;
+                let user_id = results[0].id;
                 connection.query(
-                    "SELECT * FROM BBY_22_ratings WHERE user_rated = ? AND user_rating = ?",
-                    [user_rated_id, req.session.userID],
+                    "SELECT * FROM BBY_22_ratings WHERE user = ? AND reviewer = ?",
+                    [user_id, req.session.userID],
                     function (error, results) {
                         if (error) {
                             res.send({
@@ -714,12 +682,9 @@ app.post('/saverating', (req, res) => {
                                 msg: "Error saving rating."
                             });
                         } else if (results.length > 0) {
-                            console.log(req.body.rating);
-                            console.log(user_rated_id);
-                            console.log(req.session.userID);
                             connection.query(
-                                "UPDATE BBY_22_ratings SET rating = ? WHERE user_rated = ? AND user_rating = ?",
-                                [req.body.rating, user_rated_id, req.session.userID],
+                                "UPDATE BBY_22_ratings SET rating = ? WHERE user = ? AND reviewer = ?",
+                                [req.body.rating, user_id, req.session.userID],
                                 function (error, results) {
                                     if (error) {
                                         res.send({
@@ -736,8 +701,8 @@ app.post('/saverating', (req, res) => {
                             );
                         } else {
                             connection.query(
-                                "INSERT INTO BBY_22_ratings (user_rated, user_rating, rating) VALUES (?, ?, ?)",
-                                [user_rated_id, req.session.userID, req.body.rating],
+                                "INSERT INTO BBY_22_ratings (user, reviewer, rating) VALUES (?, ?, ?)",
+                                [user_id, req.session.userID, req.body.rating],
                                 function (error, results) {
                                     if (error) {
                                         res.send({
@@ -758,11 +723,6 @@ app.post('/saverating', (req, res) => {
             }
         }
     );
-
-    // res.send({
-    //     status: 'Success',
-    //     msg: 'Rating saved'
-    // });
 });
 
 app.post("/loaduserposts", function (req, res) {
@@ -1672,12 +1632,12 @@ async function initializeDatabase() {
 
         CREATE TABLE IF NOT EXISTS BBY_22_ratings(
             id int NOT NULL AUTO_INCREMENT, 
-            user_rated int NOT NULL,                
-            user_rating int NOT NULL, 
+            user int NOT NULL,                
+            reviewer int NOT NULL, 
             rating int,
             PRIMARY KEY (id),
-            FOREIGN KEY (user_rated) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE,
-            FOREIGN KEY (user_rating) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
+            FOREIGN KEY (user) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+            FOREIGN KEY (reviewer) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
     } else {
         connection = await mysql.createConnection({
             host: "localhost",
@@ -1722,12 +1682,12 @@ async function initializeDatabase() {
             
         CREATE TABLE IF NOT EXISTS BBY_22_ratings(
             id int NOT NULL AUTO_INCREMENT, 
-            user_rated int NOT NULL,                
-            user_rating int NOT NULL, 
+            user int NOT NULL,                
+            reviewer int NOT NULL, 
             rating int,
             PRIMARY KEY (id),
-            FOREIGN KEY (user_rated) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE,
-            FOREIGN KEY (user_rating) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
+            FOREIGN KEY (user) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+            FOREIGN KEY (reviewer) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
     }
 
     // Creates a table for user profiles and item posts

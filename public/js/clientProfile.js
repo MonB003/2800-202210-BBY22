@@ -32,6 +32,174 @@ document.querySelector("#profile2").addEventListener("click", function (e) {
     window.location.replace("/profile");
 });
 
+// Star rating styling for user score
+document.querySelector("#urlabel1").addEventListener("mouseover", function (e) {
+    for (let i = 0; i < 5; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "gray";
+    }
+    for (let i = 0; i < document.querySelector("#userrating1").value; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "palegreen";
+    } 
+});
+document.querySelector("#urlabel2").addEventListener("mouseover", function (e) {
+    for (let i = 0; i < 5; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "gray";
+    }
+    for (let i = 0; i < document.querySelector("#userrating2").value; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "palegreen";
+    } 
+});
+document.querySelector("#urlabel3").addEventListener("mouseover", function (e) {
+    for (let i = 0; i < 5; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "gray";
+    }
+    for (let i = 0; i < document.querySelector("#userrating3").value; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "palegreen";
+    } 
+});
+document.querySelector("#urlabel4").addEventListener("mouseover", function (e) {
+    for (let i = 0; i < 5; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "gray";
+    }
+    for (let i = 0; i < document.querySelector("#userrating4").value; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "palegreen";
+    } 
+});
+document.querySelector("#urlabel5").addEventListener("mouseover", function (e) {
+    for (let i = 0; i < 5; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "gray";
+    }
+    for (let i = 0; i < document.querySelector("#userrating5").value; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "palegreen";
+    } 
+});
+
+document.querySelector("#urlabel1").addEventListener("mouseout", function (e) {
+    for (let i = 0; i < 5; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "gray";
+    }
+    let rating = 0;
+    for(var i = 0; i < document.getElementsByName('urating').length; i++){
+        if(document.getElementsByName('urating')[i].checked){
+            rating = document.getElementsByName('urating')[i].value;
+        }
+    }
+    for (let i = 0; i < rating; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "palegreen";
+    }
+});
+document.querySelector("#urlabel2").addEventListener("mouseout", function (e) {
+    for (let i = 0; i < 5; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "gray";
+    }
+    let rating = 0;
+    for(var i = 0; i < document.getElementsByName('urating').length; i++){
+        if(document.getElementsByName('urating')[i].checked){
+            rating = document.getElementsByName('urating')[i].value;
+        }
+    }
+    for (let i = 0; i < rating; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "palegreen";
+    }
+});
+document.querySelector("#urlabel3").addEventListener("mouseout", function (e) {
+    for (let i = 0; i < 5; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "gray";
+    }
+    let rating = 0;
+    for(var i = 0; i < document.getElementsByName('urating').length; i++){
+        if(document.getElementsByName('urating')[i].checked){
+            rating = document.getElementsByName('urating')[i].value;
+        }
+    }
+    for (let i = 0; i < rating; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "palegreen";
+    }
+});
+document.querySelector("#urlabel4").addEventListener("mouseout", function (e) {
+    for (let i = 0; i < 5; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "gray";
+    }
+    let rating = 0;
+    for(var i = 0; i < document.getElementsByName('urating').length; i++){
+        if(document.getElementsByName('urating')[i].checked){
+            rating = document.getElementsByName('urating')[i].value;
+        }
+    }
+    for (let i = 0; i < rating; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "palegreen";
+    }
+});
+document.querySelector("#urlabel5").addEventListener("mouseout", function (e) {
+    for (let i = 0; i < 5; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "gray";
+    }
+    let rating = 0;
+    for(var i = 0; i < document.getElementsByName('urating').length; i++){
+        if(document.getElementsByName('urating')[i].checked){
+            rating = document.getElementsByName('urating')[i].value;
+        }
+    }
+    for (let i = 0; i < rating; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "palegreen";
+    }
+});
+
+document.querySelector("#urlabel1").addEventListener("click", function (e) {
+    for (let i = 0; i < 5; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "gray";
+    }
+    for (let i = 0; i < document.querySelector("#userrating1").value; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "palegreen";
+    } 
+});
+document.querySelector("#urlabel2").addEventListener("click", function (e) {
+    for (let i = 0; i < 5; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "gray";
+    }
+    for (let i = 0; i < document.querySelector("#userrating2").value; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "palegreen";
+    } 
+});
+document.querySelector("#urlabel3").addEventListener("click", function (e) {
+    for (let i = 0; i < 5; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "gray";
+    }
+    for (let i = 0; i < document.querySelector("#userrating3").value; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "palegreen";
+    } 
+});
+document.querySelector("#urlabel4").addEventListener("click", function (e) {
+    for (let i = 0; i < 5; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "gray";
+    }
+    for (let i = 0; i < document.querySelector("#userrating4").value; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "palegreen";
+    } 
+});
+document.querySelector("#urlabel5").addEventListener("click", function (e) {
+    for (let i = 0; i < 5; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "gray";
+    }
+    for (let i = 0; i < document.querySelector("#userrating5").value; i++) {
+        document.querySelector(`#urlabel${i+1}`).style.color = "palegreen";
+    } 
+});
+
+//display star overall rating
+function displayrating() {
+    let rating = 0;
+    for(var i = 0; i < document.getElementsByName('rating').length; i++){
+        if(document.getElementsByName('rating')[i].checked){
+            rating = document.getElementsByName('rating')[i].value;
+        }
+    }
+    for (let i = 0; i < rating; i++) {
+        document.querySelector(`#rlabel${i+1}`).style.color = "palegreen";
+    }
+}
+
+displayrating();
 
 // Redirects to private message page if post owner and session user are different
 async function getMessagePage(userName) {
@@ -67,7 +235,6 @@ async function saverating(userName) {
             rating = document.getElementsByName('urating')[i].value;
         }
     }
-    console.log(rating);
 
     const userDataSent = {
         userName,
@@ -82,27 +249,9 @@ async function saverating(userName) {
     }
 
     // Get profile user and session user's IDs
-    const postResponseID = await fetch('/saverating', userPostDetails);
-    const jsonDataID = await postResponseID.json();
-}
-
-async function loadrating(userName) {
-    const userDataSent = {
-        userName
-    }
-    const userPostDetails = {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(userDataSent)
-    }
-
-    // Get profile user and session user's IDs
-    const postResponse = await fetch('/loadratings', userPostDetails);
+    const postResponse = await fetch('/saverating', userPostDetails);
     const jsonData = await postResponse.json();
-    console.log(jsonData);
-    document.querySelector("#overallrating").innerHTML = jsonData;
+    if (jsonData.status == "Success") {
+        window.location.reload();
+    }
 }
-
-loadrating()
