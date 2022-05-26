@@ -382,7 +382,8 @@ body {
   }
 
   #cancelMsgBtn,
-  #removeMsgBtn {
+  #removeMsgBtn,
+  #confirmMsgBtn {
     border: none;
     outline: none;
     background-color: #8AA39B;
@@ -403,7 +404,8 @@ body {
   }
 
   #cancelMsgBtn:hover,
-  #removeMsgBtn:hover {
+  #removeMsgBtn:hover,
+  #confirmMsgBtn:hover {
     background-color: #587568;
     box-shadow: 1px 1px 3px rgb(73, 71, 71);
   }
