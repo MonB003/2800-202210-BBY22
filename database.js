@@ -766,9 +766,31 @@ app.get('/profile', function (req, res) {
         var profileP = "<img src=\"imgs/uploads/userPic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">";
         profileDOM.window.document.getElementById("postimage").innerHTML = profileP;
 
-        res.set("Server", "MACT Engine");
-        res.set("X-Powered-By", "MACT");
-        res.send(profileDOM.serialize());
+        connection.query(
+            "SELECT * FROM BBY_22_ratings WHERE user = ?",
+            [req.session.userID],
+            function (error, results, fields) {
+                let totalrating = 0;
+                let i = 0;
+                if (error) {} else if (results.length > 0) {
+                    results.forEach(rating => {
+                        // Load current user's data into the text fields on the page
+                        totalrating = totalrating + rating.rating;
+                        i++;
+                    });
+                    let avgrating = totalrating / i;
+                    if (Math.round(avgrating) != 0) {
+                        profileDOM.window.document.querySelector(`#rating${Math.round(avgrating)}`).setAttribute("checked", "");
+                    }
+                    profileDOM.window.document.querySelector("#score").innerHTML = `${avgrating.toFixed(1)}/5.0`;
+                } else {
+                    profileDOM.window.document.querySelector("#score").innerHTML = `no rating`;
+                }
+                res.set("Server", "MACT Engine");
+                res.set("X-Powered-By", "MACT");
+                res.send(profileDOM.serialize());
+            }
+        );
 
     } else {
         // User is not logged in, so return to landing page

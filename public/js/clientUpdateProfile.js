@@ -155,3 +155,18 @@ async function updateData() {
         window.location.replace("/main");
     }
 };
+
+//display star overall rating
+function displayrating() {
+    let rating = 0;
+    for(var i = 0; i < document.getElementsByName('rating').length; i++){
+        if(document.getElementsByName('rating')[i].checked){
+            rating = document.getElementsByName('rating')[i].value;
+        }
+    }
+    for (let i = 0; i < rating; i++) {
+        document.querySelector(`#rlabel${i+1}`).style.color = "palegreen";
+    }
+}
+
+displayrating();
