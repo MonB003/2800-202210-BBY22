@@ -95,14 +95,21 @@ function getBookmarkStatus(postID) {
         // Record post_id to send to database for bby_22_bookmarks table
         const dataSent = {
             postID
-        };
-        console.log(postID);
-        console.log(dataSent);
+        }
 
+        //Displays a pop-up to inform the user that the item has been added to their bookmarks
         addBookmark(dataSent);
-    } 
+        let confirmBookmarkDiv = document.getElementById('confirmBookmark');
+        confirmBookmarkDiv.style.display = "block";
+    }
     // If bookmark status is 0, do nothing because bookmarks can only deleted from my bookmarks page
 
+}
+
+// When the user acknowledged the bookmark added confirmation by clicking on OK
+function confirmBookmarkMsg() {
+    let confirmBookmarkDiv = document.getElementById('confirmBookmark');
+    confirmBookmarkDiv.style.display = "none";
 }
 
 async function addBookmark(dataSent) {
