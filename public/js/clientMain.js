@@ -219,6 +219,16 @@ async function displayposts() {
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
                         testpost.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
+                        if (postdata[i].is_owner == true) {
+                            testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
+                            testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`);
+                            testpost.querySelector(".editpost").innerHTML= `Edit`;
+                            testpost.querySelector(".editpost").style.cursor = "pointer";
+                            testpost.querySelector(".messagepost").style.display = "none";
+                            testpost.querySelector(".savepostcontainer").style.display = "none";
+                        } else {
+                            testpost.querySelector(".editpost").style.display = "none";
+                        }
                         posts.appendChild(testpost);
                     } else if (filterstatus == "all") {
                         let testpost = posttemplate.content.cloneNode(true);
@@ -237,6 +247,16 @@ async function displayposts() {
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
                         testpost.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
+                        if (postdata[i].is_owner == true) {
+                            testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
+                            testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`);
+                            testpost.querySelector(".editpost").innerHTML= `Edit`;
+                            testpost.querySelector(".editpost").style.cursor = "pointer";
+                            testpost.querySelector(".messagepost").style.display = "none";
+                            testpost.querySelector(".savepostcontainer").style.display = "none";
+                        } else {
+                            testpost.querySelector(".editpost").style.display = "none";
+                        }
                         posts.appendChild(testpost);
                     }
                 }
@@ -259,6 +279,16 @@ async function displayposts() {
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
                         testpost.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
+                        if (postdata[i].is_owner == true) {
+                            testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
+                            testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`);
+                            testpost.querySelector(".editpost").innerHTML= `Edit`;
+                            testpost.querySelector(".editpost").style.cursor = "pointer";
+                            testpost.querySelector(".messagepost").style.display = "none";
+                            testpost.querySelector(".savepostcontainer").style.display = "none";
+                        } else {
+                            testpost.querySelector(".editpost").style.display = "none";
+                        }
                         posts.appendChild(testpost);
                     } else if (filterstatus == "all") {
                         let testpost = posttemplate.content.cloneNode(true);
@@ -277,6 +307,16 @@ async function displayposts() {
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
                         testpost.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
+                        if (postdata[i].is_owner == true) {
+                            testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
+                            testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`);
+                            testpost.querySelector(".editpost").innerHTML= `Edit`;
+                            testpost.querySelector(".editpost").style.cursor = "pointer";
+                            testpost.querySelector(".messagepost").style.display = "none";
+                            testpost.querySelector(".savepostcontainer").style.display = "none";
+                        } else {
+                            testpost.querySelector(".editpost").style.display = "none";
+                        }
                         posts.appendChild(testpost);
                     }
                 }
@@ -303,6 +343,16 @@ async function displayposts() {
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
                         testpost.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
+                        if (postdata[i].is_owner == true) {
+                            testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
+                            testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`);
+                            testpost.querySelector(".editpost").innerHTML= `Edit`;
+                            testpost.querySelector(".editpost").style.cursor = "pointer";
+                            testpost.querySelector(".messagepost").style.display = "none";
+                            testpost.querySelector(".savepostcontainer").style.display = "none";
+                        } else {
+                            testpost.querySelector(".editpost").style.display = "none";
+                        }
                         posts.appendChild(testpost);
                     } else if (filterstatus == "all") {
                         let testpost = posttemplate.content.cloneNode(true);
@@ -321,6 +371,16 @@ async function displayposts() {
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
                         testpost.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
+                        if (postdata[i].is_owner == true) {
+                            testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
+                            testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`);
+                            testpost.querySelector(".editpost").innerHTML= `Edit`;
+                            testpost.querySelector(".editpost").style.cursor = "pointer";
+                            testpost.querySelector(".messagepost").style.display = "none";
+                            testpost.querySelector(".savepostcontainer").style.display = "none";
+                        } else {
+                            testpost.querySelector(".editpost").style.display = "none";
+                        }
                         posts.appendChild(testpost);
                     }
                 }
@@ -343,6 +403,16 @@ async function displayposts() {
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
                         testpost.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
+                        if (postdata[i].is_owner == true) {
+                            testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
+                            testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`);
+                            testpost.querySelector(".editpost").innerHTML= `Edit`;
+                            testpost.querySelector(".editpost").style.cursor = "pointer";
+                            testpost.querySelector(".messagepost").style.display = "none";
+                            testpost.querySelector(".savepostcontainer").style.display = "none";
+                        } else {
+                            testpost.querySelector(".editpost").style.display = "none";
+                        }
                         posts.appendChild(testpost);
                     } else if (filterstatus == "all") {
                         let testpost = posttemplate.content.cloneNode(true);
@@ -361,6 +431,16 @@ async function displayposts() {
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
                         testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
                         testpost.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
+                        if (postdata[i].is_owner == true) {
+                            testpost.querySelector(".editpost").id = `edit${postdata[i].postid}`;
+                            testpost.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`);
+                            testpost.querySelector(".editpost").innerHTML= `Edit`;
+                            testpost.querySelector(".editpost").style.cursor = "pointer";
+                            testpost.querySelector(".messagepost").style.display = "none";
+                            testpost.querySelector(".savepostcontainer").style.display = "none";
+                        } else {
+                            testpost.querySelector(".editpost").style.display = "none";
+                        }
                         posts.appendChild(testpost);
                     }
                 }
@@ -426,3 +506,24 @@ async function setCursorHover(postID, messagePostID) {
         document.getElementById(messagePostID).style.cursor = "pointer";
     }
 }
+
+//saves post id to session for editing post on editpost page
+async function editpost(postID) {
+    const dataSent = {
+        postID
+    };
+
+    const postDetails = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(dataSent)
+    };
+
+    const postResponse = await fetch('/toeditpost', postDetails);
+    const jsonData = await postResponse.json();
+    if (jsonData.status == "Success") {
+        window.location.replace("/editpost");
+    }
+};

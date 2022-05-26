@@ -250,14 +250,28 @@ app.post("/loadposts", function (req, res) {
             myResults = results;
             if (error) {} else if (results.length > 0) {
                 results.forEach(post => {
-                    posts.push({
-                        "postid": post.id,
-                        "title": post.title,
-                        "status": post.status,
-                        "city": post.city,
-                        "timestamp": post.timestamp,
-                        "item_pic": post.item_pic
-                    });
+                    if (req.session.userID == post.user_id) {
+                        posts.push({
+                            "postid": post.id,
+                            "title": post.title,
+                            "status": post.status,
+                            "city": post.city,
+                            "timestamp": post.timestamp,
+                            "item_pic": post.item_pic,
+                            "is_owner": true
+                        });
+                    } else {
+                        posts.push({
+                            "postid": post.id,
+                            "title": post.title,
+                            "status": post.status,
+                            "city": post.city,
+                            "timestamp": post.timestamp,
+                            "item_pic": post.item_pic,
+                            "is_owner": false
+                        });
+                    }
+                    
                 });
             }
             res.send(posts);
