@@ -198,7 +198,7 @@ async function displayposts() {
         testpost.querySelector(".postlocation").innerHTML = "Click Title to Find Out";
         testpost.querySelector(".postdate").innerHTML = "";
         testpost.querySelector(".savepost").innerHTML = "";
-        testpost.querySelector(".messagepost").innerHTML = "";
+        testpost.querySelector(".postoptions").innerHTML = "";
         let postpic = `<img src="imgs/stickmangame.png" alt="game-pic" id="gamepic">`;
         testpost.querySelector(".postimage").innerHTML = postpic;
         testpost.querySelector(".posttitle").setAttribute("onclick", `window.location.replace("/game")`);
