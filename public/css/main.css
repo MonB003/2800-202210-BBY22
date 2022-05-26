@@ -124,7 +124,7 @@
         position: absolute;
         width: 100%;
         height: 2px;
-        background-color: #848484;
+        background-color: white;
         transition-duration: .25s;
     }
 
@@ -173,7 +173,7 @@
 }
 
 #customerName {
-    font-family: 'Lato', sans-serif;
+    font-family: 'Lato';
 }
 
 
@@ -200,8 +200,7 @@ body {
     background-color: #526e62;
     border: none;
     text-align: center;
-    text-decoration: none;
-    border-radius: 5px;
+    text-decoration: none;  
     font-size: 18px;
     height: 50px;
     margin-top: 10px;
@@ -217,6 +216,14 @@ body {
 .navbutton:hover {
     background-color: #435a50;
     box-shadow: 1px 1px 3px rgb(73, 71, 71);
+}
+
+#newPostPageBtn {
+    border-radius: 0px 5px 0px 5px;
+}
+
+#togglefilter {
+    border-radius: 5px 0px 5px 0px;
 }
 
 #filtersearch {
@@ -242,22 +249,23 @@ body {
     font-size: 16px;
     height: 24px;
     background-color: #526e62;
+    color:white;
     border: none;
     text-align: center;
     text-decoration: none;
-    border-radius: 10px;
+    border-radius: 5px;
     box-shadow: 0 0 5px rgb(40, 39, 39);
 }
 
-#pagename {
+#customerName, #pagename {
     font-size: 36px;
-    font-weight: bold;
     text-align: center;
     margin: auto;
+    padding-top: 10px;
 }
 
 .post {
-    border-radius: 15px;
+    border-radius: 25px;
     background-color: white;
     overflow: hidden;
     display: grid;
@@ -270,7 +278,7 @@ body {
 .postimage {
     grid-column: 1 / span 3;
     overflow: hidden;
-    border-radius: 15px 15px 0px 0px;
+    border-radius: 25px 25px 0px 0px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -296,8 +304,8 @@ body {
     font-weight: bold;
     text-align: center;
     margin: auto;
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
     background-color: #526e62;
     color: white;
     padding-bottom: 3px;
@@ -328,7 +336,8 @@ body {
     font-weight: bold;
     text-align: right;
     padding-right: 10px;
-    border-radius: 0px 0px 15px 15px;
+    border-radius: 0px 0px 25px 25px;
+    margin-right: 10px;
 }
 
 .messagepost {
@@ -337,6 +346,10 @@ body {
 
 /* mobile view */
 @media only screen and (max-width : 425px) {
+    header {
+        position: fixed;
+        width: 100%;
+    }
 
     #topnav {
         margin-top: 15px;
@@ -381,6 +394,10 @@ body {
 
     .postdate {
         font-size: 16px;
+    }
+
+    #pagename {
+        padding-top: 50px;
     }
 
 }
