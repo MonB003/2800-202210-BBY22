@@ -17,6 +17,8 @@
     line-height: 1;
     display: block;
     width: 100%;
+    position: fixed;
+    top: 0;
 }
 
 .navbar,
@@ -92,6 +94,8 @@
         padding: 0;
         height: 42px;
         width: 100%;
+        position: fixed;
+        top: 0px;
     }
 
     #menuClicked {
@@ -173,7 +177,8 @@
 }
 
 #customerName {
-    font-family: 'Lato';
+    font-family: 'Lato', sans-serif;
+    padding-top: 55px;
 }
 
 
@@ -263,7 +268,7 @@ body {
     font-size: 36px;
     text-align: center;
     margin: auto;
-    padding-top: 10px;
+    padding-top: 55px;
 }
 
 .post {

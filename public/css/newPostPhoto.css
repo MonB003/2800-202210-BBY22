@@ -16,6 +16,8 @@
   line-height: 1;
   display: block;
   width: 100%;
+  position: fixed;
+  top: 0;
 }
 
 .navbar,
@@ -91,6 +93,7 @@
     height: 42px;
     position: fixed;
     width: 100%;
+    position: fixed;
   }
 
   #menuClicked {
@@ -251,6 +254,7 @@ body {
   border-bottom-right-radius: 15px;
   box-shadow: 0 0 10px rgb(40, 39, 39);
   padding: 20px;
+  margin-top: 70px;
   font-family: 'Lato', sans-serif;
   font-weight: bold;
 }

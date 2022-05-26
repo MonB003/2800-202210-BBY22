@@ -18,6 +18,8 @@
   line-height: 1;
   display: block;
   width: 100%;
+  position: fixed;
+  top: 0;
 }
 
 .navbar,
@@ -94,6 +96,7 @@
     height: 42px;
     position: fixed;
     width: 100%;
+    position: fixed;
   }
 
   #menuClicked {
@@ -189,6 +192,7 @@ body {
   min-height: 500px;
   height: auto;
   position: relative;
+  padding-top: 20px;
 }
 
 #pagename {
@@ -349,7 +353,6 @@ img {
     font-family: 'Lato';
     font-size: 8vw;
     text-align: center;
-    margin-top: 50px;
   }
 
   #topnav {
@@ -362,7 +365,6 @@ img {
   }
 
   #backToLogin {
-    margin-top: 25px;
     padding: 5pt 30pt 5pt 30pt;
     font-family: 'Lato';
     font-weight: bold;

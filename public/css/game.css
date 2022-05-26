@@ -19,6 +19,9 @@
     line-height: 1;
     display: block;
     width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
 }
 
 .navbar,
@@ -94,6 +97,7 @@
         padding: 0;
         height: 42px;
         width: 100%;
+        position: fixed;
     }
 
     #menuClicked {
@@ -195,6 +199,7 @@ body {
     border: 1px solid black;
     margin: auto;
     box-sizing: border-box;
+    margin-top: 50px;
 
 }
 

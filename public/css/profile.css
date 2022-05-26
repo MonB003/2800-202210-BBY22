@@ -18,6 +18,8 @@
   line-height: 1;
   display: block;
   width: 100%;
+  position: fixed;
+  top: 0;
 }
 
 .navbar,
@@ -94,6 +96,7 @@
     height: 42px;
     position: fixed;
     width: 100%;
+    position: fixed;
   }
 
   #menuClicked {
@@ -203,6 +206,7 @@ body {
   margin: 3% auto;
   min-height: 500px;
   height: auto;
+  padding-top: 40px;
   position: relative;
 }
 
@@ -446,6 +450,7 @@ body {
     grid-template-columns: 5% 90% 5%;
     grid-template-rows: 30% 20% 50%;
     height: min-content;
+    padding-top: 0px;
   }
 
   .post {
