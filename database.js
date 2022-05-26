@@ -626,7 +626,7 @@ app.get('/profile/:username', function (req, res) {
                                     if (Math.round(avgrating) != 0) {
                                         profileDOM.window.document.querySelector(`#rating${Math.round(avgrating)}`).setAttribute("checked", "");
                                     }
-                                    profileDOM.window.document.querySelector("#score").innerHTML = `${avgrating}/5`;
+                                    profileDOM.window.document.querySelector("#score").innerHTML = `${avgrating.toFixed(1)}/5.0`;
                                 } else {
                                     profileDOM.window.document.querySelector("#score").innerHTML = `no rating`;
                                 }
@@ -672,54 +672,61 @@ app.post('/saverating', (req, res) => {
                 });
             } else if (results.length > 0) {
                 let user_id = results[0].id;
-                connection.query(
-                    "SELECT * FROM BBY_22_ratings WHERE user = ? AND reviewer = ?",
-                    [user_id, req.session.userID],
-                    function (error, results) {
-                        if (error) {
-                            res.send({
-                                status: "Fail",
-                                msg: "Error saving rating."
-                            });
-                        } else if (results.length > 0) {
-                            connection.query(
-                                "UPDATE BBY_22_ratings SET rating = ? WHERE user = ? AND reviewer = ?",
-                                [req.body.rating, user_id, req.session.userID],
-                                function (error, results) {
-                                    if (error) {
-                                        res.send({
-                                            status: "Fail",
-                                            msg: "Error saving rating."
-                                        });
-                                    } else {
-                                        res.send({
-                                            status: 'Success',
-                                            msg: 'Rating saved.'
-                                        });
+                if (user_id == req.session.userID) {
+                    res.send({
+                        status: "Fail",
+                        msg: "Can not rate yourself"
+                    });
+                } else {
+                    connection.query(
+                        "SELECT * FROM BBY_22_ratings WHERE user = ? AND reviewer = ?",
+                        [user_id, req.session.userID],
+                        function (error, results) {
+                            if (error) {
+                                res.send({
+                                    status: "Fail",
+                                    msg: "Error saving rating."
+                                });
+                            } else if (results.length > 0) {
+                                connection.query(
+                                    "UPDATE BBY_22_ratings SET rating = ? WHERE user = ? AND reviewer = ?",
+                                    [req.body.rating, user_id, req.session.userID],
+                                    function (error, results) {
+                                        if (error) {
+                                            res.send({
+                                                status: "Fail",
+                                                msg: "Error saving rating."
+                                            });
+                                        } else {
+                                            res.send({
+                                                status: 'Success',
+                                                msg: 'Rating saved.'
+                                            });
+                                        }
                                     }
-                                }
-                            );
-                        } else {
-                            connection.query(
-                                "INSERT INTO BBY_22_ratings (user, reviewer, rating) VALUES (?, ?, ?)",
-                                [user_id, req.session.userID, req.body.rating],
-                                function (error, results) {
-                                    if (error) {
-                                        res.send({
-                                            status: "Fail",
-                                            msg: "Error saving rating."
-                                        });
-                                    } else {
-                                        res.send({
-                                            status: 'Success',
-                                            msg: 'Rating saved.'
-                                        });
+                                );
+                            } else {
+                                connection.query(
+                                    "INSERT INTO BBY_22_ratings (user, reviewer, rating) VALUES (?, ?, ?)",
+                                    [user_id, req.session.userID, req.body.rating],
+                                    function (error, results) {
+                                        if (error) {
+                                            res.send({
+                                                status: "Fail",
+                                                msg: "Error saving rating."
+                                            });
+                                        } else {
+                                            res.send({
+                                                status: 'Success',
+                                                msg: 'Rating saved.'
+                                            });
+                                        }
                                     }
-                                }
-                            );
+                                );
+                            }
                         }
-                    }
-                );
+                    );
+                }
             }
         }
     );

@@ -377,6 +377,31 @@ body {
   color: gray;
 }
 
+#saverating {
+  font-family: 'Lato', sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  width: 100px;
+  height: 20px;
+  margin: auto;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  box-sizing: border-box;
+  background-color: #526E62;
+  color: aliceblue;
+}
+
+.usermenubtn:hover {
+  cursor: pointer;
+  background-color: #82ae9b;
+}
+
+#saverating:hover {
+  cursor: pointer;
+  background-color: #82ae9b;
+}
+
 @media only screen and (max-width : 1000px) {
   #navbar {
     height: 50px;
