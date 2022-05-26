@@ -95,6 +95,7 @@ async function getMessagesWithUser(otherUser) {
     const postResponse = await fetch('/all-messages-between-two-users', postDetails);
     const jsonData = await postResponse.json();
     let dbMessageObjs = jsonData.dbResult;
+    let thisUser = jsonData.sessionUserID; // Current user
 
 
     // Gets each of the past messages saved in the database and styles them based on 
@@ -104,8 +105,6 @@ async function getMessagesWithUser(otherUser) {
 
         // Create HTML p tag element to store the current message
         let currMessage = document.createElement("p");
-        
-        let thisUser = jsonData.sessionUserID; // Current user
 
         let innerSpan = "<span ";
 
