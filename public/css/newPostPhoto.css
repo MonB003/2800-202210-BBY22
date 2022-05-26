@@ -285,6 +285,10 @@ body {
   box-shadow: 1px 1px 3px rgb(73, 71, 71);
 }
 
+#errorMessage {
+  text-align: center;
+}
+
 @media only screen and (max-width: 750px) {
   .container {
     display: none;

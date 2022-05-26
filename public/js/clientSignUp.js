@@ -57,7 +57,7 @@ ready(function () {
             // If value is empty
             if (currentInput.value.trim() == "") {
                 checkEmptyInput = true;
-                currentInput.style.border = "1px solid red";
+                currentInput.style.border = "2px solid red";
 
             } else {
                 currentInput.style.border = "none";
@@ -79,6 +79,7 @@ ready(function () {
                     let dataParsed = JSON.parse(data);
                     if (dataParsed.status == "Fail") {
                         document.getElementById("accExistsMsg").innerHTML = dataParsed.msg;
+                        document.getElementById(dataParsed.field).style.border = "2px solid red";
                     } else {
                         window.location.replace("/main");
                     }
@@ -102,9 +103,16 @@ function ready(callback) {
 // Resets all text fields
 function resetFields() {
     document.getElementById("firstName").value = "";
+    document.getElementById("firstName").style.border = "none";
     document.getElementById("lastName").value = "";
+    document.getElementById("lastName").style.border = "none";
     document.getElementById("userName").value = "";
+    document.getElementById("userName").style.border = "none";
     document.getElementById("city").value = "";
+    document.getElementById("city").style.border = "none";
     document.getElementById("userEmail").value = "";
+    document.getElementById("userEmail").style.border = "none";
     document.getElementById("userPassword").value = "";
+    document.getElementById("userPassword").style.border = "none";
+    document.getElementById("accExistsMsg").textContent = "";
 }

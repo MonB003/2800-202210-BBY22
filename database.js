@@ -516,6 +516,7 @@ app.post('/signup', function (req, res) {
                             // Send message saying username already exists
                             res.send({
                                 status: "Fail",
+                                field: "userName",
                                 msg: "Username already exists."
                             });
                         }
@@ -525,6 +526,7 @@ app.post('/signup', function (req, res) {
                 // Send message saying email already exists
                 res.send({
                     status: "Fail",
+                    field: "userEmail",
                     msg: "Email already exists."
                 });
             }
