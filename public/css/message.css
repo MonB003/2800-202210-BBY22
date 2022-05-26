@@ -30,7 +30,7 @@ body {
     margin: 5px;
 }
 
-#backToMain:hover { 
+#backToMain:hover {
     background-color: #6c706e;
     -webkit-transition: all 300ms ease;
     -moz-transition: all 300ms ease;
@@ -46,7 +46,9 @@ body {
     font-family: 'Lato';
 }
 
-p, input, h3 {
+p,
+input,
+h3 {
     font-size: 18px;
 }
 
@@ -60,42 +62,71 @@ button {
     width: 100%;
     grid-template-columns: 80% 20%;
     bottom: 5px;
-    right: 5px
+    right: 5px;
+    border-top: 1px solid grey;
 }
 
 #msgInput {
     grid-column: 1/2;
     width: 100%;
+    height: 100%;
+    padding-left: 10px;
+    border-style: none;
 }
 
 #msgBtn {
     grid-column: 2/3;
-    width: 100%;
+    width: 60%;
+    height: 70%;
+    margin-left: 40px;
+    margin-top: 7.5%;
+    background-color: #b1cfc5;
+    border-radius: 25px;
+    color: white;
+    font-family: 'Lato';
+    font-weight: bold;
 }
 
 #messageInput {
-    border: 1px solid black;
+    border: 1px solid white;
     width: 100%;
     height: 100%;
+    border-style: none;
 }
 
 #sendMessageBtn {
     width: 100%;
     height: 100%;
+    border-radius: 25px;
+    color: white;
+    background-color: #b1cfc5;
+    font-family: 'Lato';
+    font-weight: bold;
+    border-style: none;
 }
 
-#thisUserName, #users {
+#sendMessageBtn:hover {
+    background-color:#96aea6;
+    -webkit-transition: all 250ms ease;
+    -moz-transition: all 250ms ease;
+    -ms-transition: all 250ms ease;
+    -o-transition: all 250ms ease;
+    transition: all 250ms ease;
+}
+
+#thisUserName,
+#users {
     display: none;
 }
 
 #grid {
     display: grid;
     grid-template-columns: 30% 70%;
-    position:absolute;
-    top:0px;
-    right:0px;
-    bottom:0px;
-    left:0px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
     overflow-y: scroll;
     scroll-behavior: smooth;
 }
@@ -110,12 +141,12 @@ button {
     border-style: none;
 }
 
-#thisUsersContacts > h3 {
+#thisUsersContacts>h3 {
     font-family: 'Lato';
     margin: 5px;
 }
 
-#thisUsersContacts> button {
+#thisUsersContacts>button {
     background-color: transparent;
     margin: 5px;
     border-style: none;
@@ -151,14 +182,16 @@ button {
     grid-row: 2/3;
 }
 
-@media only screen and (max-width : 425px) {
+@media only screen and (max-width : 545px) {
 
-    p, input, h3 {
-        font-size: 25px;
+    p,
+    input,
+    h3 {
+        font-size: 18px;
     }
 
     button {
-        font-size: 25px;
+        font-size: 18px;
     }
 
     #grid {
@@ -192,14 +225,25 @@ button {
         grid-template-rows: 90% 10%;
     }
 
-    #users > p {
+    #users>p {
         margin: 0;
     }
-    
+
+    #msgBtn {
+        grid-column: 2/3;
+        width: 70%;
+        height: 70%;
+        margin-left: 15px;
+        margin-top: 10%;
+    }
+
 }
 
-@media only screen and (min-width : 426px) and (max-width : 1000px) {
-    p, input, h3 {
+@media only screen and (min-width : 546px) and (max-width : 1000px) {
+
+    p,
+    input,
+    h3 {
         font-size: 20px;
     }
 
@@ -207,18 +251,6 @@ button {
         font-size: 20px;
     }
 }
-
-
-@media only screen and (min-width : 1201px) {
-    p, input, h3 {
-        font-size: 32px;
-    }
-
-    button {
-        font-size: 32px;
-    }
-}
-
 
 .your-messages {
     background-color: #91C7B1;
@@ -227,7 +259,8 @@ button {
     padding: 3px;
     font-weight: bold;
     float: right;
-    border-radius: 9px;
+    border-radius: 4px;
+    padding: 8px 15px 8px 15px;
 }
 
 .other-user-messages {
@@ -237,5 +270,6 @@ button {
     padding: 3px;
     font-weight: bold;
     float: left;
-    border-radius: 9px;
+    border-radius: 4px;
+    padding: 8px 15px 8px 15px;
 }

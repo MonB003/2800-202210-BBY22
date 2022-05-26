@@ -311,12 +311,13 @@ body {
     font-weight: bold;
     text-align: center;
     margin: auto;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
     background-color: #526e62;
     color: white;
     padding-bottom: 3px;
     margin-top: -1px;
+    margin-left: 60px;
 }
 
 .postlocation {
@@ -472,6 +473,7 @@ body {
         font-size: 18px;
         height: 20px;
         width: 100px;
+        margin-left: 40px;
     }
 
     .postlocation {
@@ -530,6 +532,7 @@ body {
         font-size: 18px;
         height: 20px;
         width: 100px;
+        margin-left: 40px;
     }
 
     .postlocation {
