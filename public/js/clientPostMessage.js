@@ -104,7 +104,8 @@ async function getMessagesWithUser(otherUser) {
 
         // Create HTML p tag element to store the current message
         let currMessage = document.createElement("p");
-        let thisUser = document.getElementById("thisUserName").textContent;
+        
+        let thisUser = jsonData.sessionUserID; // Current user
 
         let innerSpan = "<span ";
 
