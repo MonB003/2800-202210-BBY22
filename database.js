@@ -775,16 +775,38 @@ app.get('/profile/:username', function (req, res) {
                     results.forEach(user => {
                         // Load current user's data into the text fields on the page
                         profileDOM.window.document.querySelector("#username").innerHTML = user.userName;
-                        let profileP = "<img src=\"/imgs/uploads/userPic-" + user.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">";
-                        profileDOM.window.document.getElementById("postimage").innerHTML = profileP;
+                        let profileP = "<img src=\"/imgs/uploads/userPic-" + user.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
+                        profileDOM.window.document.getElementById("postimage").innerHTML = profileP
+                        profileDOM.window.document.querySelector("#saverating").setAttribute("onclick", `saverating("${user.userName}")`);
                         profileDOM.window.document.querySelector("#itemlistings").setAttribute("onclick", `window.location.replace("/itemlistings/${user.userName}")`);
                         profileDOM.window.document.getElementById("messageuser").setAttribute("onclick", `getMessagePage("${user.userName}")`);
+                        connection.query(
+                            "SELECT * FROM BBY_22_ratings WHERE user = ?",
+                            [user.id],
+                            function (error, results, fields) {
+                                let totalrating = 0;
+                                let i = 0;
+                                if (error) {} else if (results.length > 0) {
+                                    results.forEach(rating => {
+                                        // Load current user's data into the text fields on the page
+                                        totalrating = totalrating + rating.rating;
+                                        i++;
+                                    });
+                                    let avgrating = totalrating / i;
+                                    if (Math.round(avgrating) != 0) {
+                                        profileDOM.window.document.querySelector(`#rating${Math.round(avgrating)}`).setAttribute("checked", "");
+                                    }
+                                    profileDOM.window.document.querySelector("#score").innerHTML = `${avgrating.toFixed(1)}/5.0`;
+                                } else {
+                                    profileDOM.window.document.querySelector("#score").innerHTML = `no rating`;
+                                }
+                                res.set("Server", "MACT Engine");
+                                res.set("X-Powered-By", "MACT");
+                                res.send(profileDOM.serialize());
+                            }
+                        );
                     });
                 } else {}
-
-                res.set("Server", "MACT Engine");
-                res.set("X-Powered-By", "MACT");
-                res.send(profileDOM.serialize());
             }
         );
     } else {
@@ -806,6 +828,78 @@ app.get("/itemlistings/:username", function (req, res) {
         // User is not logged in, so direct to login page
         res.redirect("/");
     }
+});
+
+app.post('/saverating', (req, res) => {
+    connection.query(
+        "SELECT * FROM BBY_22_users WHERE userName = ?",
+        [req.body.userName],
+        function (error, results) {
+            if (error) {
+                res.send({
+                    status: 'Fail',
+                    msg: 'Error finding user'
+                });
+            } else if (results.length > 0) {
+                let user_id = results[0].id;
+                if (user_id == req.session.userID) {
+                    res.send({
+                        status: "Fail",
+                        msg: "Can not rate yourself"
+                    });
+                } else {
+                    connection.query(
+                        "SELECT * FROM BBY_22_ratings WHERE user = ? AND reviewer = ?",
+                        [user_id, req.session.userID],
+                        function (error, results) {
+                            if (error) {
+                                res.send({
+                                    status: "Fail",
+                                    msg: "Error saving rating."
+                                });
+                            } else if (results.length > 0) {
+                                connection.query(
+                                    "UPDATE BBY_22_ratings SET rating = ? WHERE user = ? AND reviewer = ?",
+                                    [req.body.rating, user_id, req.session.userID],
+                                    function (error, results) {
+                                        if (error) {
+                                            res.send({
+                                                status: "Fail",
+                                                msg: "Error saving rating."
+                                            });
+                                        } else {
+                                            res.send({
+                                                status: 'Success',
+                                                msg: 'Rating saved.'
+                                            });
+                                        }
+                                    }
+                                );
+                            } else {
+                                connection.query(
+                                    "INSERT INTO BBY_22_ratings (user, reviewer, rating) VALUES (?, ?, ?)",
+                                    [user_id, req.session.userID, req.body.rating],
+                                    function (error, results) {
+                                        if (error) {
+                                            res.send({
+                                                status: "Fail",
+                                                msg: "Error saving rating."
+                                            });
+                                        } else {
+                                            res.send({
+                                                status: 'Success',
+                                                msg: 'Rating saved.'
+                                            });
+                                        }
+                                    }
+                                );
+                            }
+                        }
+                    );
+                }
+            }
+        }
+    );
 });
 
 app.post("/loaduserposts", function (req, res) {
@@ -1725,13 +1819,22 @@ async function initializeDatabase() {
             time VARCHAR(50), 
             PRIMARY KEY (id));
             
-            CREATE TABLE IF NOT EXISTS BBY_22_bookmarks(
-                id int NOT NULL AUTO_INCREMENT, 
-                user_id int NOT NULL,
-                post_id int NOT NULL,
-                PRIMARY KEY (id),
-                FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE,
-                FOREIGN KEY (post_id) REFERENCES BBY_22_item_posts(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
+        CREATE TABLE IF NOT EXISTS BBY_22_bookmarks(
+            id int NOT NULL AUTO_INCREMENT, 
+            user_id int NOT NULL,
+            post_id int NOT NULL,
+            PRIMARY KEY (id),
+            FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+            FOREIGN KEY (post_id) REFERENCES BBY_22_item_posts(id) ON UPDATE CASCADE ON DELETE CASCADE);
+
+        CREATE TABLE IF NOT EXISTS BBY_22_ratings(
+            id int NOT NULL AUTO_INCREMENT, 
+            user int NOT NULL,                
+            reviewer int NOT NULL, 
+            rating int,
+            PRIMARY KEY (id),
+            FOREIGN KEY (user) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+            FOREIGN KEY (reviewer) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
     } else {
         connection = await mysql.createConnection({
             host: "localhost",
@@ -1780,7 +1883,16 @@ async function initializeDatabase() {
             post_id int NOT NULL,
             PRIMARY KEY (id),
             FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE,
-            FOREIGN KEY (post_id) REFERENCES BBY_22_item_posts(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
+            FOREIGN KEY (post_id) REFERENCES BBY_22_item_posts(id) ON UPDATE CASCADE ON DELETE CASCADE);
+       
+        CREATE TABLE IF NOT EXISTS BBY_22_ratings(
+            id int NOT NULL AUTO_INCREMENT, 
+            user int NOT NULL,                
+            reviewer int NOT NULL, 
+            rating int,
+            PRIMARY KEY (id),
+            FOREIGN KEY (user) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+            FOREIGN KEY (reviewer) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
     }
 
     // Creates a table for user profiles and item posts
