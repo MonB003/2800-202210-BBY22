@@ -348,6 +348,26 @@ body {
 }
 
 .messagepost {
+    color: green;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.messagepost:hover {
+    color: gray;
+    cursor: pointer;
+}
+
+.editpost {
+    color: green;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.editpost:hover {
+    color: gray;
     cursor: pointer;
 }
 
