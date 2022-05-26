@@ -240,6 +240,7 @@ app.get("/editpost", function (req, res) {
     }
 });
 
+//sends item post information to main page client
 app.post("/loadposts", function (req, res) {
     let myResults = null;
     let posts = [];
@@ -648,6 +649,7 @@ app.post('/upload-images2', upload.array("files"), function (req, res) {
     );
 });
 
+//image upload
 app.post('/upload-images3', upload.array("files"), function (req, res) {
     for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
@@ -829,6 +831,7 @@ app.get('/profile/:username', function (req, res) {
     }
 });
 
+//shows item listing of specified user
 app.get("/itemlistings/:username", function (req, res) {
     // Check if user is logged in
     if (req.session.loggedIn) {
@@ -844,6 +847,7 @@ app.get("/itemlistings/:username", function (req, res) {
     }
 });
 
+//save user rating to database
 app.post('/saverating', (req, res) => {
     connection.query(
         "SELECT * FROM BBY_22_users WHERE userName = ?",
@@ -916,6 +920,7 @@ app.post('/saverating', (req, res) => {
     );
 });
 
+//load user's posts on user listing page
 app.post("/loaduserposts", function (req, res) {
     let myResults = null;
     let posts = [];
