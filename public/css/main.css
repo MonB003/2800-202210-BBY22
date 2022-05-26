@@ -351,6 +351,65 @@ body {
     cursor: pointer;
 }
 
+
+/* Popup confirmation div */
+.popup {
+    position: fixed;
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    background-color: #c5c5c5;
+    padding-top: 50px;
+    text-align: center;
+  }
+  
+  /* Popup confirmation details */
+  .confirmBookmarkContent {
+    background-color: #fefefe;
+    margin: 10% auto 15% auto; 
+    width: 50%;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #confirmationMsg {
+    font-size: 18pt;
+    padding: 5px;
+  }
+
+  #cancelMsgBtn,
+  #removeMsgBtn,
+  #confirmMsgBtn {
+    border: none;
+    outline: none;
+    background-color: #8AA39B;
+    padding: 5pt;
+    padding-left: 8pt;
+    padding-right: 8pt;
+    font-family: 'Lato', sans-serif;
+    letter-spacing: 1px;
+    font-size: 15px;
+    color: aliceblue;
+    border-radius: 1px;
+    margin-bottom: 10pt;
+    text-transform: uppercase;
+    box-shadow: 1px 1px 1px rgb(73, 71, 71);
+    width: 50%;
+    align-self: center;
+    cursor: pointer;
+  }
+
+  #cancelMsgBtn:hover,
+  #removeMsgBtn:hover,
+  #confirmMsgBtn:hover {
+    background-color: #587568;
+    box-shadow: 1px 1px 3px rgb(73, 71, 71);
+  }
+
 /* mobile view */
 @media only screen and (max-width : 425px) {
     header {
