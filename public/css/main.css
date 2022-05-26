@@ -367,7 +367,8 @@ body {
     padding: 5px;
   }
 
-  #confirmMsgBtn {
+  #cancelMsgBtn,
+  #removeMsgBtn {
     border: none;
     outline: none;
     background-color: #8AA39B;
@@ -387,7 +388,8 @@ body {
     cursor: pointer;
   }
 
-  #confirmMsgBtn:hover {
+  #cancelMsgBtn:hover,
+  #removeMsgBtn:hover {
     background-color: #587568;
     box-shadow: 1px 1px 3px rgb(73, 71, 71);
   }

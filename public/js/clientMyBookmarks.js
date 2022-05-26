@@ -91,26 +91,40 @@ document.querySelector("#filterstatus").addEventListener("click", function (e) {
 
 // Gets the currently selected bookmark status in the dropdown
 function getBookmarkStatus(postID) {
+
     // Get dropdown menu item selected
     let savePostDropdown = document.getElementById(`savepost${postID}`);
     var bookmarkStatus = savePostDropdown.value;
 
-    if (bookmarkStatus == "1") {
-        // Record post_id to send to database for bby_22_bookmarks table
-        const dataSent = {
-            postID
-        }
 
-        addBookmark(dataSent);
+    if (bookmarkStatus == "0") {
 
-    } else if (bookmarkStatus == "0") {
+        //Make the confirmation pop-up visible when user wants to remove a bookmark 
+        let confirmBookmarkDiv = document.getElementById('confirmBookmark');
+        confirmBookmarkDiv.style.display = "block";
 
-        // Remove post_id from bby_22_bookmarks table
-        const dataSent = {
-            postID
-        }
+        //when user confirms removing the bookmark
+        document.querySelector("#removeMsgBtn").addEventListener("click", function (e) {
+            // Remove post_id from bby_22_bookmarks table
+            const dataSent = {
+                postID
+            }
 
-        removeBookmark(dataSent);
+            removeBookmark(dataSent);
+        });
+
+        // when the user decides to keep the bookmark when prompted for removal confirmation
+        // when the cancel button is clicked in confirm remove bookmark popup - removes the pop-up display
+        document.querySelector("#cancelMsgBtn").addEventListener("click", function (e) {
+            confirmBookmarkDiv.style.display = "none";
+            window.location.reload();
+        });
+
+
+
+    } else {
+        // Do nothing if save bookmark is selected
+
     }
 
 }
