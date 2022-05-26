@@ -971,8 +971,16 @@ app.get("/viewPost", function (req, res) {
                         let profileP = "<img src=\"imgs/uploads/userPic-" + post.item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
                         viewPostDOM.window.document.getElementById("postimage").innerHTML = profileP;
                         viewPostDOM.window.document.getElementById("messagepost").setAttribute("onclick", `getMessagePage(${post.id})`);
-
                         req.session.postOwnerID = post.user_id;
+
+                        if (req.session.userID == post.user_id) {
+                            viewPostDOM.window.document.querySelector("#initialP").innerHTML = ""
+                            viewPostDOM.window.document.querySelector("#finalP").innerHTML = "profile"
+                            viewPostDOM.window.document.querySelector("#postoptions").innerHTML = 
+                            `<div id="editpost" onclick="editpost(${post.id})">
+                                Edit Post
+                            </div>`;
+                        }
 
                         connection.query(
                             "SELECT * FROM BBY_22_users WHERE id = ?",

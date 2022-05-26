@@ -104,3 +104,24 @@ async function checkPostOwnerAndSessionUser(postID) {
         document.getElementById("messagepost").style.cursor = "not-allowed";
     }
 }
+
+//saves post id to session for editing post on editpost page
+async function editpost(postID) {
+    const dataSent = {
+        postID
+    };
+
+    const postDetails = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(dataSent)
+    };
+
+    const postResponse = await fetch('/toeditpost', postDetails);
+    const jsonData = await postResponse.json();
+    if (jsonData.status == "Success") {
+        window.location.replace("/editpost");
+    }
+};

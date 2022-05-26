@@ -272,6 +272,12 @@ body {
   padding-left: 20pt;
 }
 
+#post-owner {
+  color: green;
+  font-weight: bold !important;
+  cursor: pointer;
+}
+
 #post-owner:hover {
   color: grey;
   cursor: pointer;
@@ -319,6 +325,19 @@ body {
   background-color: #4e5a55;
   color: white;
   box-shadow: 0 0 10px rgb(54, 52, 52);
+  cursor: pointer;
+}
+
+#editpost {
+  color: green;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-left: 40px;
+}
+
+#editpost:hover {
+  color: grey;
   cursor: pointer;
 }
 
