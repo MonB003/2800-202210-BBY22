@@ -64,8 +64,8 @@ body {
 .grid {
     display: grid;
     grid-template-columns: 15% 26% 9% 35% 15%;
-    grid-template-rows: 10% 23% 7% 25% 35% 5%;
-    height: 800px;
+    grid-template-rows: 10% 20% 5% 30% 15% 25%;
+    height: 100vh;
 }
 
 #adminHeading {
@@ -95,11 +95,11 @@ body {
 }
 
 #tableContainer {
-    grid-area: 2/4/6/5;
+    grid-area: 1/4/6/5;
     background-color: rgba(0, 0, 0, 0.4);
     width: 75%;
     margin: auto;
-    margin-top: 10px;
+    margin-top: 30px;
     padding-top: 20px;
     padding-bottom: 20px;
     border-radius: 25px;
@@ -167,6 +167,10 @@ body {
     font-family: 'Lato', sans-serif;
 }
 
+#message {
+    margin-top: 20px;
+}
+
 @media only screen and (max-width : 1000px) {
 
     .headerContainer {
@@ -188,7 +192,7 @@ body {
     .grid {
         display: grid;
         grid-template-columns: 10% 80% 10%;
-        grid-template-rows: 10% 20% 70%;
+        grid-template-rows: 10% 30% 60%;
         height: auto;
     }
 
@@ -219,11 +223,11 @@ body {
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-bottom: 5px;
-        margin-top: 5px;
-        padding-top: 15px;
-        padding-bottom: 15px;
         height: 100%;
+    }
+
+    #message {
+        margin-top: 0;
     }
 
     #tableContainer {
@@ -231,7 +235,7 @@ body {
         margin-top: 10px;
         width: 75%;
         margin: auto;
-        margin-top: 50px;
+        margin-top: 10px;
         padding-top: 20px;
         padding-bottom: 20px;
         border-radius: 25px;
