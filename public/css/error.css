@@ -1,8 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Balsamiq+Sans:ital@1&family=Lato:wght@300&family=Nunito:wght@700&family=Orbitron:wght@500&family=Pacifico&family=Raleway:ital@1&family=Shadows+Into+Light&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&family=Lato:wght@300&family=Permanent+Marker&display=swap');
 
 * {
     margin: 0;
     padding: 0;
+}
+
+body {
+    background: url("/imgs/lostDog.jpg") center/cover fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+    width: 100%;
 }
 
 .container {
@@ -81,8 +89,146 @@
     width: 25%;
 }
 
+#grid {
+    height: 100vh;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 15% 20% 10% 10% 10% 10% 10% 15%;
+    justify-content: center;
+    text-align: center;
+}
+
+#firstText{
+    grid-area: 2/1/3/2;
+    font-family: 'Permanent Marker';
+    color: white;
+    font-size: 8vw;
+}
+
+#secondText {
+    grid-area: 3/1/4/2;
+    font-family: 'Indie Flower';
+    color: white;
+    font-size: 2.5vw;
+    font-weight: bold;
+}
+
+
+#thirdText {
+    grid-area: 4/1/5/2;
+    font-family: 'Indie Flower';
+    color: white;
+    font-size: 2vw;
+}
+
+
+#fourthText {
+    grid-area: 5/1/6/2;
+    font-family: 'Indie Flower';
+    color: white;
+    font-size: 2vw;
+}
+
+#fifthText {
+    grid-area: 6/1/7/2;
+    font-family: 'Indie Flower';
+    color: white;
+    font-size: 2vw;
+}
+
+#goBackBtn{
+    grid-area: 7/1/8/2;
+    font-family: 'Lato';
+    color: white;
+    font-size: 30px;
+}
+
+
+
+#backToMain {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    width: 30%;
+    height: 55px;
+    cursor: pointer;
+    border: none;
+    align-items: center;
+    justify-content: center;
+    background-color: #7f5a83;
+    background-image: linear-gradient(315deg, #5f716b 0%, #8a8f8a 74%);
+    background-size: 190% 100%;
+    transition: 550ms;
+    color: white;
+    font-size: 2vw;
+    font-family: 'Lato';
+}
+
+#backToMain:hover {
+    background-position: right;
+}
+
+#backToMain:hover:before {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+#copyright {
+    display: none;
+}
 
 @media only screen and (max-width: 750px) {
+    
+    #grid {
+        grid-template-columns: 100%;
+    }
+
+    #firstText {
+        grid-area: 2/1/3/2;
+        font-family: 'Permanent Marker';
+        color: #000000;
+        font-size: 18vw;
+    }
+
+    #secondText {
+        grid-area: 3/1/4/2;
+        font-family: 'Indie Flower';
+        color: #000000;
+        font-size: 10.5vw;
+        font-weight: bold;
+    }
+
+
+    #thirdText {
+        grid-area: 4/1/5/2;
+        font-family: 'Indie Flower';
+        color: #000000;
+        font-size: 7vw;
+    }
+
+
+    #fourthText {
+        grid-area: 5/1/6/2;
+        font-family: 'Indie Flower';
+        color: #000000;
+        font-size: 7vw;
+    }
+
+    #fifthText {
+        grid-area: 6/1/7/2;
+        font-family: 'Indie Flower';
+        color: #000000;
+        font-size: 7vw;
+    }
+
+    #backToMain {
+        font-size: 6vw;
+    }
+
     .container {
         display: none;
     }

@@ -216,6 +216,7 @@ npm install sanitize-html
 Images:
 - [Image - Default User Profile Picture](https://collegecore.com/testimonial/anadya-kukreja/facebook-no-profile-picture-icon-620x389)
 - [Image - Background Image](https://www.freevectors.net/abstract-white-background-40529)
+- [Image - 404 Lost Dog Image](https://www.google.com/url?sa=i&url=https%3A%2F%2Fanythingpawsable.com%2Fhow-to-find-a-lost-dog-beyond-flyers-and-posters%2F&psig=AOvVaw30ZkbawPns4HIJoXweoRUi&ust=1653772577531000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCICnsY3NgPgCFQAAAAAdAAAAABAP)
 - [Logo - House roof icon](https://thenounproject.com/icon/house-roof-945733/)
 - [Logo - Handshake icon](https://www.vecteezy.com/vector-art/4999401-handshake-icon-like-good-deal-simple-flat-style-trend-modern-logotype-graphic-design-isolated-on-white-background) 
 
