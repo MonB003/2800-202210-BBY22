@@ -81,11 +81,17 @@
                 Post Location
             </div>
             <div class="postoptions">
-                <div class="savepost">
-                    S
+                <div class="savepostcontainer">
+                    <select name="savepost" class="savepost">
+                        <option value="0">Not Saved</option>
+                        <option value="1">Add to Bookmarks</option>
+                    </select>
                 </div>
                 <div class="messagepost">
                     ✉
+                </div>
+                <div class="editpost">
+                    Edit
                 </div>
             </div>
             <div class="postdate">Post date time</div>
@@ -94,7 +100,15 @@
     <div id="posts">
     </div>
 
+    <!-- Popup that appears when user wants to bookmark a post -->
+    <div id="confirmBookmark" class="popup" style="display:none;">
+        <div class="confirmBookmarkContent">
+            <p id="confirmationMsg">Item is added to your bookmarks.</p>
+            <br>
+            <button type="button" id="confirmMsgBtn" onclick="confirmBookmarkMsg()">OK</button>
 
+        </div>
+    </div>
 
     <!-- JavaScript -->
     <script src="/js/clientListings.js"></script>
