@@ -82,6 +82,50 @@ async function checkPostOwnerAndSessionUser(postID) {
     }
 }
 
+// Gets the currently selected bookmark status in the dropdown
+function getBookmarkStatus(postID) {
+    // Get dropdown menu item selected
+    let savePostDropdown = document.getElementById(`savepost${postID}`);
+    var bookmarkStatus = savePostDropdown.value;
+
+
+    if (bookmarkStatus == "1") {
+        // Record post_id to send to database for bby_22_bookmarks table
+        const dataSent = {
+            postID
+        }
+
+        //Displays a pop-up to inform the user that the item has been added to their bookmarks
+        addBookmark(dataSent);
+        let confirmBookmarkDiv = document.getElementById('confirmBookmark');
+        confirmBookmarkDiv.style.display = "block";
+    }
+    // If bookmark status is 0, do nothing because bookmarks can only deleted from my bookmarks page
+
+}
+
+// When the user acknowledged the bookmark added confirmation by clicking on OK
+function confirmBookmarkMsg() {
+    let confirmBookmarkDiv = document.getElementById('confirmBookmark');
+    confirmBookmarkDiv.style.display = "none";
+}
+
+async function addBookmark(dataSent) {
+
+    // Looks for only an app.post function
+    // Sends the JSON data (postID) to the server
+    const bookmarkDetails = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(dataSent)
+    };
+
+    // Get response from server side post request
+    await fetch('/addBookmark', bookmarkDetails);
+}
+
 //toggle filter menu
 document.querySelector("#togglefilter").addEventListener("click", function (e) {
     let filtermenu = document.querySelector("#filtermenu");
@@ -126,7 +170,7 @@ document.querySelector("#filterstatus").addEventListener("click", function (e) {
 
 // retrieves posts from database
 async function loadposts() {
-    
+
     let link = document.location.href.split('/');
     let username = link[4];
     const dataSent = {
@@ -171,6 +215,8 @@ async function displayposts() {
                         let postpic = "<img src=\"/imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
+                        testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
+                        testpost.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     } else if (filterstatus == "all") {
                         let testpost = posttemplate.content.cloneNode(true);
@@ -186,6 +232,8 @@ async function displayposts() {
                         let postpic = "<img src=\"/imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
+                        testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
+                        testpost.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     }
                 }
@@ -205,6 +253,8 @@ async function displayposts() {
                         let postpic = "<img src=\"/imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
+                        testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
+                        testpost.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     } else if (filterstatus == "all") {
                         let testpost = posttemplate.content.cloneNode(true);
@@ -220,6 +270,8 @@ async function displayposts() {
                         let postpic = "<img src=\"/imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
+                        testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
+                        testpost.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     }
                 }
@@ -243,6 +295,8 @@ async function displayposts() {
                         let postpic = "<img src=\"/imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
+                        testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
+                        testpost.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     } else if (filterstatus == "all") {
                         let testpost = posttemplate.content.cloneNode(true);
@@ -258,6 +312,8 @@ async function displayposts() {
                         let postpic = "<img src=\"/imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
+                        testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
+                        testpost.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     }
                 }
@@ -277,6 +333,8 @@ async function displayposts() {
                         let postpic = "<img src=\"/imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
+                        testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
+                        testpost.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     } else if (filterstatus == "all") {
                         let testpost = posttemplate.content.cloneNode(true);
@@ -292,6 +350,8 @@ async function displayposts() {
                         let postpic = "<img src=\"/imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
                         testpost.querySelector(".postimage").innerHTML = postpic;
                         testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
+                        testpost.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
+                        testpost.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
                         posts.appendChild(testpost);
                     }
                 }
