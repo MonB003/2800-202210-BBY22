@@ -13,7 +13,9 @@
 
 
 # On The House
+[Hosted App Link](https://on-the-house-bby-22.herokuapp.com/)
 
+<br>
 
 ## <a id="project-description">Project Description (One Sentence Pitch)</a>
 > Our project, BBY 22 is developing an app that connects those in need of items to those who can give away items, to help reduce our carbon footprint one transaction at a time by reducing waste through reusing used items.
@@ -113,8 +115,10 @@
 
 
 ## <a id="how-to-run-project">How to install or run the project</a>
-Prerequisites:
+### Prerequisites:
 - Have a Git and GitHub account
+
+### Configuration instructions:
 
 You will need to install:
 - [Node package manager](https://nodejs.org/en/download/) (npm)
@@ -129,15 +133,17 @@ Cloning the repository:
 - Type:  `git clone https://github.com/MonB003/2800-202210-BBY22.git`
 
 In your folder, you will need to install the following node packages:
-- npm install express 
-- npm install express-session 
-- npm install jsdom 
-- npm install mysql2
-- npm install multer
-- npm install socket.io
-- npm install sanitize-html
+```
+npm install express 
+npm install express-session 
+npm install jsdom 
+npm install mysql2
+npm install multer
+npm install socket.io
+npm install sanitize-html
+```
 
-Running the project:
+### Running the project:
 1. Open the Xampp control panel and click ‘Run as administrator’.
 2. Click the ‘Start’ button to the right of MySQL. This will connect to the database.
 3. Open Command Prompt
