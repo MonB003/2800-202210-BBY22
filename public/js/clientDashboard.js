@@ -172,9 +172,10 @@ function cancelConfirmDelete() {
 }
 
 // Makes the confirm delete user popup div visible
-function showConfirmDeletePopup() {
+function showConfirmDeletePopup(userID) {
     let confirmDeleteDiv = document.getElementById('confirmDeletion');
     confirmDeleteDiv.style.display = "block";
+    document.getElementById("deleteMsgBtn").setAttribute("onclick", "deleteAUser(" + userID + ")");
 }
 
 

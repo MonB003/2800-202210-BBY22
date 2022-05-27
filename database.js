@@ -159,8 +159,7 @@ app.get("/main", function (req, res) {
                         mainDOM.window.document.getElementById("editButton" + userIdNum).setAttribute("onclick", "updateAUsersData(" + userIdNum + ")");
 
                         mainDOM.window.document.getElementById("deleteButton" + userIdNum).textContent = "Delete User";
-                        mainDOM.window.document.getElementById("deleteButton" + userIdNum).setAttribute("onclick", "showConfirmDeletePopup()");
-                        mainDOM.window.document.getElementById("deleteMsgBtn").setAttribute("onclick", "deleteAUser(" + userIdNum + ")");
+                        mainDOM.window.document.getElementById("deleteButton" + userIdNum).setAttribute("onclick", "showConfirmDeletePopup("+ userIdNum +")");
                     }
 
                     res.set("Server", "MACT Engine");
