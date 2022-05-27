@@ -1,7 +1,7 @@
 ## Table of Contents
 - [Project Title](#on-the-house)
 - [Project Description](#project-description)
-- [Technologies used](#technologies-used)
+- [Technologies Used](#technologies-used)
 - [Listing of File Contents of folder](#file-contents-of-folder)
 - [How to install or run the project](#how-to-run-project)
 - [How to use the product](#how-to-use-product)
@@ -9,7 +9,7 @@
 - [Contact Information](#contact-information)
 
 
-
+<br>
 
 
 # On The House
@@ -19,17 +19,17 @@
 > Our project, BBY 22 is developing an app that connects those in need of items to those who can give away items, to help reduce our carbon footprint one transaction at a time by reducing waste through reusing used items.
 
 
+<br>
 
 
-
-## Technologies used
+## Technologies Used
 * Frontend: HTML, CSS, JavaScript
 * Backend: Node.js, Express
 * Database: MySQL
 * Hosting: Heroku
 
 
-
+<br>
 
 
 ## File Contents of Folder
@@ -87,6 +87,7 @@
             / stickmangame.png 
            │
            └─── uploads         #Folder for images uploaded on the app
+                / userPic-user-pic-none.jpg
         │
         └─── js                 #JavaScript folder
             / clientDashboard.js 
@@ -108,12 +109,46 @@
 ```
 
 
+<br>
 
 
 ## <a id="how-to-run-project">How to install or run the project</a>
-Note: this section is not complete yet
+Prerequisites:
+- Have a Git and GitHub account
+
+You will need to install:
+- [Node package manager](https://nodejs.org/en/download/) (npm)
+- [Xampp](https://www.apachefriends.org/download.html) (comes with MySQL)
+- [Visual Studio Code](https://code.visualstudio.com/download)
+  - Good to have the following extensions: HTML CSS Support, HTML Hint, Beautify 
+- [Heroku](https://devcenter.heroku.com/articles/heroku-cli#install-the-heroku-cli)
+
+Cloning the repository:
+- Open Command Prompt 
+- `cd` into the folder you want the repository stored in
+- Type:  `git clone https://github.com/MonB003/2800-202210-BBY22.git`
+
+In your folder, you will need to install the following node packages:
+- npm install express 
+- npm install express-session 
+- npm install jsdom 
+- npm install mysql2
+- npm install multer
+- npm install socket.io
+- npm install sanitize-html
+
+Running the project:
+1. Open the Xampp control panel and click ‘Run as administrator’.
+2. Click the ‘Start’ button to the right of MySQL. This will connect to the database.
+3. Open Command Prompt
+4. `cd` into your project folder
+5. Type `node database`
+6. Go to localhost:8000 on any browser
+7. This will direct you to the login page, where you can either login or signup (if you don’t have an account).
+8. Once successfully logged in, you will be directed to the main page, where you can try out various features listed in the section below.
 
 
+<br>
 
 
 ## <a id="how-to-use-product">How to use the product (Features)</a>
@@ -134,7 +169,8 @@ Note: this section is not complete yet
 - To do this, they can click on the message icon on another person’s post. 
 - They will be directed to a private message page where they can send that user a message. If they’ve sent them a message before, all past messages will automatically be displayed on the page.
 - Once a user has sent or received a message from another user, that user will appear under their contacts. 
-- To view all contacts to message, click on the “Message” button on the main page navbar. This will redirect to a message page with a list of all the user’s contacts on the left side of the page. To message a user, select one of the users listed, and the message input field will be enabled.
+- To view all contacts to message, click on the “Message” button on the main page navbar. This will redirect to a message page with a list of all the user’s contacts on the left side of the page. 
+- To message a user, select one of the users listed, and the message input field will be enabled.
 
 ### Editing a post:
 - Post owners can make edits to their posts.
@@ -159,7 +195,7 @@ Note: this section is not complete yet
   - The rating you submitted will appear next to the first row of stars
 
 
-
+<br>
 
 
 ##  <a id="credits-and-references">Credits, References, and Licenses</a>
@@ -179,13 +215,14 @@ YouTube Tutorials:
 - [Messaging feature](https://www.youtube.com/watch?v=Ozrm_xftcjQ) 
 - [Fetch API tutorial (basic syntax for post requests)](https://www.youtube.com/watch?v=Kw5tC5nQMRY)
 - [Popup confirmation messages](https://www.w3schools.com/howto/howto_css_delete_modal.asp)
+- [Easter Egg game](https://www.youtube.com/watch?v=Sz7ugHHlvX4&list=PL1ATIExhr18A9eWbGdwOady_sfE5VkHur&index=4)
 
 
-
+<br>
 
 
 ## Contact Information
-- Monica Bacatan - 
-- Colleen Vu - 
-- Alan Fung - 
-- Taswinder Singh Dhaliwal - 
+- Monica Bacatan - mbacatan1@my.bcit.ca
+- Colleen Vu - colleen_vu97@hotmail.com
+- Alan Fung - afung63@my.bcit.ca
+- Taswinder Singh Dhaliwal - taswindersinghdhaliw@my.bcit.ca
