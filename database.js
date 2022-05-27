@@ -1858,6 +1858,15 @@ function checkUsernameAlreadyExists(username, sessionusername, callback) {
 }
 
 
+// Redirects to 404 page for any other path that does not exist
+app.get('*', function(req, res){
+    let newError = fs.readFileSync("./app/error.html", "utf8");
+    let newErrorDOM = new JSDOM(newError);
+
+    res.status(404).send(newErrorDOM.serialize());
+});
+
+
 // Function connects to a database, checks if database exists, if not it creates it
 async function initializeDatabase() {
     // Promise
