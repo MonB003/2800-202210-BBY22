@@ -214,6 +214,8 @@ npm install sanitize-html
 
 ### References:
 Images:
+- [Image - Default User Profile Picture](https://collegecore.com/testimonial/anadya-kukreja/facebook-no-profile-picture-icon-620x389)
+- [Image - Background Image](https://www.freevectors.net/abstract-white-background-40529)
 - [Logo - House roof icon](https://thenounproject.com/icon/house-roof-945733/)
 - [Logo - Handshake icon](https://www.vecteezy.com/vector-art/4999401-handshake-icon-like-good-deal-simple-flat-style-trend-modern-logotype-graphic-design-isolated-on-white-background) 
 
@@ -222,6 +224,7 @@ YouTube Tutorials:
 - [Fetch API tutorial (basic syntax for post requests)](https://www.youtube.com/watch?v=Kw5tC5nQMRY)
 - [Popup confirmation messages](https://www.w3schools.com/howto/howto_css_delete_modal.asp)
 - [Easter Egg game](https://www.youtube.com/watch?v=Sz7ugHHlvX4&list=PL1ATIExhr18A9eWbGdwOady_sfE5VkHur&index=4)
+- [Hamburger Menu](https://www.youtube.com/watch?v=OFKBep95lb4&ab_channel=TylerPotts) 
 
 
 <br>

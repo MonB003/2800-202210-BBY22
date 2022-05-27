@@ -138,7 +138,6 @@ async function getMessagesWithUser(userSending, userReceiving, userName) {
     }
 
     let todayPar = document.createElement("h3");
-    todayPar.style.fontStyle = "italic";
     todayPar.style.textAlign = "center";
     todayPar.textContent = "TODAY";
 
@@ -322,11 +321,15 @@ async function getUsersThisUserMessaged() {
         newBtn.innerHTML = contactUsername;
 
         // User's button displays their message history when clicked
+        let newDiv = document.createElement("div");
+        newDiv.setAttribute("id", "userDivs");
+        document.getElementById("thisUsersContacts").appendChild(newDiv);
+
         newBtn.setAttribute("onclick", "getBothUserIDsFromUsername(this.innerHTML);");
-        document.getElementById("thisUsersContacts").appendChild(newBtn);
+        document.getElementById("userDivs").appendChild(newBtn);
 
         let newLine = document.createElement("br");
-        document.getElementById("thisUsersContacts").appendChild(newLine);
+        document.getElementById("userDivs").appendChild(newLine);
     }
 }
 getUsersThisUserMessaged();
