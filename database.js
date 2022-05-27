@@ -239,6 +239,21 @@ app.get("/editpost", function (req, res) {
     }
 });
 
+// Error page upon app crash/broken link
+//Load newPostPhoto page
+app.get("/error", function (req, res) {
+    if (req.session.loggedIn) {
+        let newError = fs.readFileSync("./app/error.html", "utf8");
+        let newErrorDOM = new JSDOM(newError);
+
+        res.send(newErrorDOM.serialize());
+
+    } else {
+        // User is not logged in, so return to landing page
+        res.redirect("/");
+    }
+});
+
 //sends item post information to main page client
 app.post("/loadposts", function (req, res) {
     let myResults = null;

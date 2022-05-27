@@ -40,8 +40,6 @@ document.querySelector("#profile2").addEventListener("click", function (e) {
     window.location.replace("/profile");
 });
 
-/*********************************************************************************** */
-
 //Returns user to listing page
 document.querySelector("#cancel").addEventListener("click", function (e) {
     window.location.replace("/mylistings");
