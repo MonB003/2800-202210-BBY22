@@ -827,8 +827,8 @@ app.get('/profile/:username', function (req, res) {
                     results.forEach(user => {
                         // Load current user's data into the text fields on the page
                         profileDOM.window.document.querySelector("#username").innerHTML = user.userName;
-                        let profileP = "<img src=\"/imgs/uploads/userPic-" + user.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
-                        profileDOM.window.document.getElementById("postimage").innerHTML = profileP
+                        let profileP = "<img src=\"/imgs/uploads/userPic-" + user.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">";
+                        profileDOM.window.document.getElementById("postimage").innerHTML = profileP;
                         profileDOM.window.document.querySelector("#saverating").setAttribute("onclick", `saverating("${user.userName}")`);
                         profileDOM.window.document.querySelector("#itemlistings").setAttribute("onclick", `window.location.replace("/itemlistings/${user.userName}")`);
                         profileDOM.window.document.getElementById("messageuser").setAttribute("onclick", `getMessagePage("${user.userName}")`);
@@ -858,7 +858,14 @@ app.get('/profile/:username', function (req, res) {
                             }
                         );
                     });
-                } else {}
+                } else {
+                    profileDOM.window.document.querySelector("#username").innerHTML = "Invalid User";
+                    let profileP = "<img src=\"/imgs/uploads/userPic-user-pic-none.jpg\" alt=\"profile-pic\" id=\"picID\">";
+                    profileDOM.window.document.getElementById("postimage").innerHTML = profileP;
+                    res.set("Server", "MACT Engine");
+                    res.set("X-Powered-By", "MACT");
+                    res.send(profileDOM.serialize());
+                }
             }
         );
     } else {
@@ -873,10 +880,27 @@ app.get("/itemlistings/:username", function (req, res) {
     if (req.session.loggedIn) {
         let listings = fs.readFileSync("./app/listings.html", "utf8");
         let listingsDOM = new JSDOM(listings);
-        listingsDOM.window.document.querySelector("#pagename").innerHTML = `${req.params.username}'s Listings`;
-        res.set("Server", "MACT Engine");
-        res.set("X-Powered-By", "MACT");
-        res.send(listingsDOM.serialize());
+        connection.query(
+            "SELECT * FROM BBY_22_users WHERE userName = ?",
+            [req.params.username],
+            function (error, results) {
+
+                if (error) {} else if (results.length > 0) {
+                    results.forEach(user => {
+                        // Load current username as a title on the page
+                        listingsDOM.window.document.querySelector("#pagename").innerHTML = `${user.userName}'s Listings`;
+                        res.set("Server", "MACT Engine");
+                        res.set("X-Powered-By", "MACT");
+                        res.send(listingsDOM.serialize());
+                    });
+                } else {
+                    listingsDOM.window.document.querySelector("#pagename").innerHTML = `Invalid User`;
+                    res.set("Server", "MACT Engine");
+                    res.set("X-Powered-By", "MACT");
+                    res.send(listingsDOM.serialize());
+                }
+            }
+        );
     } else {
         // User is not logged in, so direct to login page
         res.redirect("/");
@@ -989,6 +1013,8 @@ app.post("/loaduserposts", function (req, res) {
                         }
                     );
                 });
+            } else {
+                res.send(posts);
             }
         }
     );
