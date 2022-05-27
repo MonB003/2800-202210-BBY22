@@ -39,3 +39,7 @@ document.querySelector("#profile").addEventListener("click", function (e) {
 document.querySelector("#profile2").addEventListener("click", function (e) {
     window.location.replace("/profile");
 });
+
+document.querySelector("#backToMain").addEventListener("click", function (e) {
+    window.location.replace("/main");
+});
