@@ -8,6 +8,14 @@ document.querySelector("#home2").addEventListener("click", function (e) {
     window.location.replace("/main");
 });
 
+//redirects to bookmarks page
+document.querySelector("#bookmark").addEventListener("click", function (e) {
+    window.location.replace("/myBookmarks");
+});
+document.querySelector("#bookmark2").addEventListener("click", function (e) {
+    window.location.replace("/myBookmarks");
+});
+
 //redirects to message page
 document.querySelector("#messages").addEventListener("click", function (e) {
     window.location.replace("/message");
@@ -35,19 +43,13 @@ document.querySelector("#profile2").addEventListener("click", function (e) {
 // Updates a user's data in the database
 async function getPostOwner() {
 
-    // Sends data to the server and saves it to a session
-    const dataSent = {
-
-    }
-
     // Additional details needed when sending data to server side
     const postDetails = {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
-        },
-        body: JSON.stringify(dataSent)
-    }
+        }
+    };
 
     // Get response from server side post request
     const postResponse = await fetch('/getPostOwner', postDetails);
@@ -78,14 +80,14 @@ function getMessagePage(postID) {
 async function checkPostOwnerAndSessionUser(postID) {
     const idDataSent = {
         postID
-    }
+    };
     const idPostDetails = {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(idDataSent)
-    }
+    };
 
     // Get post owner's ID
     const postResponseID = await fetch('/get-other-user-by-post', idPostDetails);
@@ -98,5 +100,28 @@ async function checkPostOwnerAndSessionUser(postID) {
     if (postOwnerID != returnedSessionID) {
         // If they are different, redirect to private message page
         window.location.replace("/postMessage");
+    } else {
+        document.getElementById("messagepost").style.cursor = "not-allowed";
     }
 }
+
+//saves post id to session for editing post on editpost page
+async function editpost(postID) {
+    const dataSent = {
+        postID
+    };
+
+    const postDetails = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(dataSent)
+    };
+
+    const postResponse = await fetch('/toeditpost', postDetails);
+    const jsonData = await postResponse.json();
+    if (jsonData.status == "Success") {
+        window.location.replace("/editpost");
+    }
+};

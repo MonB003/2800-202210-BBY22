@@ -19,7 +19,7 @@
             <div class="container">
                 <ul class="navbar">
                     <li id="home"><a href="#">HOME</a></li>
-                    <li id="bookmark"><a href="#">SAVED</a></li>
+                    <li id="bookmark"><a href="#">BOOKMARKS</a></li>
                     <li id="messages"><a href="#">MESSAGES</a></li>
                     <li id="listings"><a href="#">MY LISTINGS</a></li>
                     <li id="profile"><a href="#">PROFILE</a></li>
@@ -37,7 +37,7 @@
                 </label>
                 <ul class="menuInside">
                     <li><a class="links" id="home2" href="#">Home</a></li>
-                    <li><a class="links bookmark" id="bookmark2" href="#">Saved</a></li>
+                    <li><a class="links bookmark" id="bookmark2" href="#">Bookmarks</a></li>
                     <li><a class="links messages" id="messages2" href="#">Messages</a></li>
                     <li><a class="links listings" id="listings2" href="#">My Listings</a></li>
                     <li><a class="links profile" id="profile2" href="#">Profile</a></li>
@@ -58,6 +58,19 @@
                     <div id="postimage">
                         <img src="imgs/userPic-user-pic-none.jpg" alt="profile-pic" id="picID">
                     </div>
+                    <div id="overallrating">
+                        <input id="rating1" type="radio" name="rating" value="1">
+                        <label id="rlabel1" for="rating1">★</label>
+                        <input id="rating2" type="radio" name="rating" value="2">
+                        <label id="rlabel2" for="rating2">★</label>
+                        <input id="rating3" type="radio" name="rating" value="3">
+                        <label id="rlabel3" for="rating3">★</label>
+                        <input id="rating4" type="radio" name="rating" value="4">
+                        <label id="rlabel4" for="rating4">★</label>
+                        <input id="rating5" type="radio" name="rating" value="5">
+                        <label id="rlabel5" for="rating5">★</label>
+                        <span id="score">rating</span>
+                    </div>
                 </div>
             </div>
             <div id="change-input">
@@ -65,27 +78,38 @@
                 <br>
                 <div id="container">
                     <form id="upload-images-form">
-                        <input id="image-upload" type="file" accept="image/png, image/gif, image/jpg, image/jpeg" />
+                        <input id="image-upload" type="file" accept=".jpg,.jpeg,.png" />
                         <input id="submit" type="submit" value="Submit" />
                     </form>
                 </div>
             </div>
             <div id="text-input">
                 <h3>Edit Profile</h3>
-                <input type="text" id="userFirstName" name="firstName">
+                <input type="text" id="userFirstName" name="firstName" placeholder="First Name">
                 <br>
-                <input type="text" id="userLastName" name="lastName">
+                <input type="text" id="userLastName" name="lastName" placeholder="Last Name">
                 <br>
-                <input type="text" id="userName" name="userName">
+                <input type="text" id="userName" name="userName" placeholder="User Name">
                 <br>
-                <input type="text" id="userCity" name="city">
+                <input type="text" id="userCity" name="city" placeholder="City">
                 <br>
-                <input type="text" id="userEmail" name="email">
+                <input type="text" id="userEmail" name="email" placeholder="Email@email.ca">
                 <br>
-                <input type="text" id="userPassword" name="password">
+                <input type="text" id="userPassword" name="password" placeholder="Password">
                 <br>
-                <button id="saveBtn" onclick="updateData()">Save</button>
+                <button id="saveBtn" onclick="showConfirmUpdatePopup()">Save</button>
                 <p id="message"></p>
+            </div>
+
+
+            <!-- Popup that appears when user wants to confirm updating their data -->
+            <div id="confirmUpdate" class="popup" style="display:none;">
+                <div class="updateMsgContent">
+                    <p id="confirmationMsg">Do you want to update your data?</p>
+                    <br>
+                    <button type="button" id="cancelMsgBtn" onclick="cancelConfirmUpdate()">Cancel</button>
+                    <button type="button" id="updateMsgBtn" onclick="updateData()">Update</button>
+                </div>
             </div>
         </div>
     </section>
@@ -94,8 +118,6 @@
 
     <!-- JavaScript -->
     <script src="js/clientUpdateProfile.js"></script>
-
-
 
 </body>
 

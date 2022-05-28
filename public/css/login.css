@@ -65,6 +65,7 @@ body {
   color: #333;
   margin-bottom: 40px;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 #loginBtn {
@@ -160,6 +161,7 @@ footer > p{
   border-radius: 5pt;
   margin-bottom: 10pt;
   font-weight: bold;
+  cursor: pointer;
 }
 
 #errorMsg {

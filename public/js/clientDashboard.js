@@ -27,9 +27,37 @@ async function updateAUsersData(userID) {
 
     // If there's only 1 admin, and that user is the admin, their type cannot be edited
     if (adminCount < 1) {
-        document.getElementById('userType' + userID).value = "ADMIN";    // Keep type as admin
+        document.getElementById('userType' + userID).value = "ADMIN"; // Keep type as admin
         type = "ADMIN";
-    } 
+    }
+
+
+    // Get all user's input values and input field elements
+    let inputsArray = [firstName, lastName, userName, city, email, password, type];
+    let inputFields = [document.getElementById('userFirstName' + userID), document.getElementById('userLastName' + userID),
+        document.getElementById('userName' + userID), document.getElementById('userCity' + userID), document.getElementById('userEmail' + userID),
+        document.getElementById('userPassword' + userID), document.getElementById('userType' + userID)
+    ];
+    let checkEmptyInput = false;
+
+    // Check for empty input fields 
+    for (let i = 0; i < inputsArray.length; i++) {
+        let currInput = inputsArray[i];
+
+        // If a value is empty, set boolean to false
+        if (currInput.trim() == "" || currInput.trim() == null) {
+            checkEmptyInput = true;
+            inputFields[i].style.border = "1px solid red";
+        } else {
+            inputFields[i].style.border = "none";
+        }
+    }
+
+    // If one or more fields are empty
+    if (checkEmptyInput) {
+        document.getElementById('message').textContent = "All fields must be filled out.";
+        return;
+    }
 
 
     // Store user's data that was filled into the text fields on the page
@@ -42,7 +70,7 @@ async function updateAUsersData(userID) {
         password,
         type,
         userID
-    }
+    };
 
     // Additional details needed when sending data to server side
     const postDetails = {
@@ -51,7 +79,7 @@ async function updateAUsersData(userID) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSent)
-    }
+    };
 
     // Get response from server side post request called update-user-data
     const postResponse = await fetch('/update-user-data', postDetails);
@@ -66,8 +94,12 @@ async function updateAUsersData(userID) {
 };
 
 
+
 // Deletes a user from the database
 async function deleteAUser(userID) {
+    // Close confirmation popup div
+    document.getElementById('confirmDeletion').style.display = "none";
+
     let firstName = document.getElementById('userFirstName' + userID).value;
     let lastName = document.getElementById('userLastName' + userID).value;
     let userName = document.getElementById('userName' + userID).value;
@@ -91,7 +123,7 @@ async function deleteAUser(userID) {
     }
 
     // If there's only 1 admin, and they are the admin, they cannot be deleted
-    if (adminCount < 2  && type == "ADMIN") {
+    if (adminCount < 2 && type == "ADMIN") {
         document.getElementById('message').innerHTML = "Admin user cannot be deleted.";
 
     } else {
@@ -105,7 +137,7 @@ async function deleteAUser(userID) {
             password,
             type,
             userID
-        }
+        };
 
         const postDetails = {
             method: 'POST',
@@ -113,7 +145,7 @@ async function deleteAUser(userID) {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(dataSent)
-        }
+        };
 
         // Get response from server side post request called delete-user
         const postResponse = await fetch('/delete-user', postDetails);
@@ -132,6 +164,20 @@ async function deleteAUser(userID) {
         document.getElementById("deleteButton" + userID).remove();
     }
 };
+
+// When the cancel button is clicked in confirm delete user popup
+function cancelConfirmDelete() {
+    let confirmDeleteDiv = document.getElementById('confirmDeletion');
+    confirmDeleteDiv.style.display = "none";
+}
+
+// Makes the confirm delete user popup div visible
+function showConfirmDeletePopup(userID) {
+    let confirmDeleteDiv = document.getElementById('confirmDeletion');
+    confirmDeleteDiv.style.display = "block";
+    document.getElementById("deleteMsgBtn").setAttribute("onclick", "deleteAUser(" + userID + ")");
+}
+
 
 
 // Adds a new user to the database
@@ -156,6 +202,9 @@ async function addAUser() {
         // If a value is empty
         if (currentInput.value == "") {
             checkEmptyInput = true;
+            currentInput.style.border = "1px solid red";
+        } else {
+            currentInput.style.border = "none";
         }
     }
 
@@ -174,7 +223,7 @@ async function addAUser() {
             email,
             password,
             type
-        }
+        };
 
         const postDetails = {
             method: 'POST',
@@ -182,7 +231,7 @@ async function addAUser() {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(dataSent)
-        }
+        };
 
         // Get response from server side post request called add-new-user
         const postResponse = await fetch('/add-new-user', postDetails);

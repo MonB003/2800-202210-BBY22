@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>On The House</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/imgs/OTH-favicon.ico" rel="icon" type="image/x-icon" />
+
+    <!-- CSS style -->
+    <link rel="stylesheet" href="/css/main.css" />
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header id="header">
+        <nav>
+            <div class="container">
+                <ul class="navbar">
+                    <li id="home"><a href="#">HOME</a></li>
+                    <li id="bookmark"><a href="#">BOOKMARKS</a></li>
+                    <li id="messages"><a href="#">MESSAGES</a></li>
+                    <li id="listings"><a href="#">MY LISTINGS</a></li>
+                    <li id="profile"><a href="#">PROFILE</a></li>
+                    <li id="fright">
+                        <form action="/logout" method="get" id="logoutForm">
+                            <input type="submit" id="logoutBtn" class="nav-button" value="LOGOUT" />
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            <div class="menu">
+                <input id="menuClicked" type="checkbox" />
+                <label class="menuBtn" for="menuClicked">
+                    <span></span>
+                </label>
+                <ul class="menuInside">
+                    <li><a class="links" id="home2" href="#">Home</a></li>
+                    <li><a class="links bookmark" id="bookmark2" href="#">Bookmarks</a></li>
+                    <li><a class="links messages" id="messages2" href="#">Messages</a></li>
+                    <li><a class="links listings" id="listings2" href="#">My Listings</a></li>
+                    <li><a class="links profile" id="profile2" href="#">Profile</a></li>
+                    <li class="fright">
+                        <form action="/logout" method="get" id="logoutForms">
+                            <input type="submit" id="logoutBtns" class="links nav-button" value="Logout" />
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div id="pagename">My Saved Posts</div>
+    <div id="topnav">
+        <button type="button" class="navbutton" id="newPostPageBtn">New Post</button>
+        <button type="button" class="navbutton" id="togglefilter">Filter</button>
+    </div>
+
+    <div id="filtermenu" style="display: none;">
+        <div id="filtersearchcontainer">
+            <div id="filtersearch">
+                <input type="text" id="search" onkeyup="displayposts()" placeholder="Search" title="Filter Search">
+                <select name="filter" id="filter">
+                    <option value="title">Title</option>
+                    <option value="city">City</option>
+                </select>
+            </div>
+        </div>
+        <button type="button" class="filtermenubtn" id="filterstatus">All</button>
+        <button type="button" class="filtermenubtn" id="sortbutton">Sort</button>
+    </div>
+    <template id="posttemplate">
+        <div class="post">
+            <div class="postimage">
+            </div>
+            <div class="posttitle">Post Title</div>
+            <div class="poststatus">Status</div>
+            <div class="postlocation">
+                Post Location
+            </div>
+            <div class="postoptions">
+                <div class="savepostcontainer">
+                    <select name="savepost" class="savepost">
+                        <option class="1" value="1">Saved</option>
+                        <option class="0" value="0">Remove Bookmark</option>
+                    </select>
+                </div>
+                <div class="messagepost">
+                    ✉
+                </div>
+            </div>
+            <div class="postdate">Post date time</div>
+        </div>
+    </template>
+    <div id="posts">
+    </div>
+
+    <!-- Popup that appears when user wants to remove a bookmark -->
+    <div id="confirmBookmark" class="popup" style="display:none;">
+        <div class="confirmBookmarkContent">
+            <p id="confirmationMsg">Do you want to remove this item from your bookmarks?</p>
+            <br>
+            <button type="button" id="removeMsgBtn">Remove Bookmark</button>
+            <button type="button" id="cancelMsgBtn">Cancel</button>
+
+        </div>
+    </div>
+
+
+    <!-- JavaScript -->
+    <script src="js/clientMyBookmarks.js"></script>
+
+</body>
+
+</html>

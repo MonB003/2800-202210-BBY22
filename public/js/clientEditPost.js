@@ -8,6 +8,14 @@ document.querySelector("#home2").addEventListener("click", function (e) {
     window.location.replace("/main");
 });
 
+//redirects to bookmarks page
+document.querySelector("#bookmark").addEventListener("click", function (e) {
+    window.location.replace("/myBookmarks");
+});
+document.querySelector("#bookmark2").addEventListener("click", function (e) {
+    window.location.replace("/myBookmarks");
+});
+
 //redirects to message page
 document.querySelector("#messages").addEventListener("click", function (e) {
     window.location.replace("/message");
@@ -32,11 +40,15 @@ document.querySelector("#profile2").addEventListener("click", function (e) {
     window.location.replace("/profile");
 });
 
-/*********************************************************************************** */
-
 //Returns user to listing page
 document.querySelector("#cancel").addEventListener("click", function (e) {
     window.location.replace("/mylistings");
+});
+
+// Tiny editor for textarea
+tinymce.init({
+    selector: '#description',
+    placeholder: "Description"
 });
 
 
@@ -61,20 +73,19 @@ function uploadImages(e) {
     };
     const dataSent = {
         description
-    }
+    };
     const postDetails = {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSent)
-    }
-    fetch("/upload-images3", options, postDetails
-    ).then(function (res) {
-        console.log(res);
-        window.location.replace("/editpost")
-    }).catch(function (err) { ("Error:", err) }
-    );
+    };
+    fetch("/upload-images3", options, postDetails).then(function (res) {
+        window.location.replace("/editpost");
+    }).catch(function (err) {
+        ("Error:", err);
+    });
     document.getElementById("savedMsg").innerHTML = "Photo Saved";
 }
 
@@ -86,7 +97,7 @@ async function getDefaultStatus() {
         headers: {
             "Content-Type": "application/json"
         }
-    }
+    };
 
     // Get response from server side post request
     const postResponse = await fetch('/get-current-item-status', postDetails);
@@ -99,12 +110,9 @@ async function getDefaultStatus() {
 
     // If status is reserved, display div with username text field
     if (currentStatus == "reserved") {
-        // Make div to input username visible
-        document.getElementById("reserveStatusDiv").style.visibility = "visible";
-
         let currentUserReserved = jsonData.userReserved;
-        document.getElementById("userReserved").value = currentUserReserved;
-        
+        displayReservedDetails(currentUserReserved);
+
     } else if (currentStatus == "available") {
         // If status is available, disable collected option until a user is reserved
         document.getElementById("collected").disabled = true;
@@ -113,25 +121,14 @@ async function getDefaultStatus() {
 getDefaultStatus();
 
 
-// saves post information into database
-async function save_post(postID) {
-    let title = document.querySelector("#title").value;
-    let city = document.querySelector("#city").value;
-    let description = document.querySelector("#description").value;
-    let status = document.querySelector("#itemStatus").value;
-
-    if (status == "available") {
-        // If there's a user reserved and item status changes to available, set user reserved back to null
-        removePotentialUserReserved(postID);
-    } 
+// Displays reserve details div and fills in the text field with the current user reserved
+async function displayReservedDetails(otherUserID) {
+    // Make div to input username visible
+    document.getElementById("reserveStatusDiv").style.visibility = "visible";
 
     const dataSent = {
-        title,
-        city,
-        description,
-        status,
-        postID
-    }
+        otherUserID
+    };
 
     const postDetails = {
         method: 'POST',
@@ -139,10 +136,78 @@ async function save_post(postID) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSent)
+    };
+
+    // Get response from server side post request for the user's username
+    const postResponse = await fetch('/get-owner-username-with-id', postDetails);
+    const jsonData = await postResponse.json();
+    let returnedUsername = jsonData.otherUsername;
+    let username = returnedUsername.userName;   // Gets the username of the user reserved
+
+    document.getElementById("userReserved").value = username;
+}
+
+
+// saves post information into database
+async function save_post(postID) {
+    let title = document.querySelector("#title").value;
+    let city = document.querySelector("#city").value;
+    let description = tinymce.get("description").getContent(); // Gets the text value in the tiny editor
+    let status = document.querySelector("#itemStatus").value;
+
+    let descriptionValue = tinymce.get("description").getContent({
+        format: 'text'
+    });
+    let descriptionContainer = document.querySelector(".tox-editor-container"); // Gets the tiny editor HTML element
+
+    // Get all user's input values and input field elements
+    let inputsArray = [title, city, descriptionValue];
+    let inputFields = [document.getElementById("title"), document.getElementById("city"), descriptionContainer];
+    let checkEmptyInput = false;
+
+    // Check for empty input fields 
+    for (let i = 0; i < inputsArray.length; i++) {
+        let currentInput = inputsArray[i];
+
+        // If a value is empty, set boolean to false
+        if (currentInput.trim() == "" || currentInput.trim() == null) {
+            checkEmptyInput = true;
+            inputFields[i].style.border = "1px solid red";
+        } else {
+            inputFields[i].style.border = "none";
+        }
     }
 
-    await fetch('/savepostinfo', postDetails);
-    window.location.replace("/mylistings");
+    // If one or more fields are empty
+    if (checkEmptyInput) {
+        document.getElementById('savedDetail').textContent = "All fields must be filled out.";
+
+    } else {
+
+        if (status == "available") {
+            // If there's a user reserved and item status changes to available, set user reserved back to null
+            removePotentialUserReserved(postID);
+        }
+
+        const dataSent = {
+            title,
+            city,
+            description,
+            status,
+            postID
+        };
+
+        const postDetails = {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(dataSent)
+        };
+
+        await fetch('/savepostinfo', postDetails);
+        window.location.replace("/mylistings");
+    }
 };
 
 
@@ -153,7 +218,7 @@ async function removePotentialUserReserved(postID) {
     const dataSentUpdate = {
         userReserved,
         postID
-    }
+    };
 
     const postDetailsUpdate = {
         method: 'POST',
@@ -161,7 +226,7 @@ async function removePotentialUserReserved(postID) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSentUpdate)
-    }
+    };
 
     // Get response from server side post request
     await fetch('/reserve-user-for-item', postDetailsUpdate);
@@ -173,7 +238,7 @@ async function delete_post(postID) {
 
     const dataSent = {
         postID
-    }
+    };
 
     const postDetails = {
         method: 'POST',
@@ -181,7 +246,7 @@ async function delete_post(postID) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSent)
-    }
+    };
 
     // Get response from server side post request called delete-post
     await fetch('/deletepost', postDetails);
@@ -204,11 +269,13 @@ function getItemStatus() {
 
         // Disable save button until user is reserved
         savepostBtn.disabled = true;
+        savepostBtn.style.cursor = "not-allowed";
 
     } else {
         // Hide reserve elements
         reserveStatusDiv.style.visibility = "hidden";
         savepostBtn.disabled = false;
+        savepostBtn.style.cursor = "pointer";
     }
 }
 
@@ -219,7 +286,7 @@ async function reserveUserForItem(postID) {
 
     const dataSentCheck = {
         userReserved
-    }
+    };
 
     const postDetailsCheck = {
         method: 'POST',
@@ -227,7 +294,7 @@ async function reserveUserForItem(postID) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSentCheck)
-    }
+    };
 
     // Get response from server side post request
     const postResponseCheck = await fetch('/check-username-exists', postDetailsCheck);
@@ -242,15 +309,19 @@ async function reserveUserForItem(postID) {
 
         // Disable save button
         document.getElementById("savepost").disabled = true;
+        document.getElementById("savepost").style.cursor = "not-allowed";
         return;
     }
 
+    // Get the user returned and their ID, which will be stored in the database
+    let userReturned = jsonDataCheck.username;
+    userReserved = userReturned.id;
 
     // If username exists, update user_reserved in database
     const dataSentUpdate = {
         userReserved,
         postID
-    }
+    };
 
     const postDetailsUpdate = {
         method: 'POST',
@@ -258,7 +329,7 @@ async function reserveUserForItem(postID) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSentUpdate)
-    }
+    };
 
     // Get response from server side post request
     const postResponseUpdate = await fetch('/reserve-user-for-item', postDetailsUpdate);
@@ -269,6 +340,10 @@ async function reserveUserForItem(postID) {
 
     // Enable save button
     document.getElementById("savepost").disabled = false;
+    document.getElementById("savepost").style.cursor = "pointer";
+
+    document.getElementById("reserveUserBtn").disabled = true;
+    document.getElementById("reserveUserBtn").style.cursor = "not-allowed";
 
     // Enable collected option from dropdown
     document.getElementById("collected").disabled = false;
@@ -285,9 +360,25 @@ document.getElementById("userReserved").addEventListener("input", function (e) {
     if (userReservedValue.trim() == "") {
         reserveUserBtn.disabled = true;
         document.getElementById("savepost").disabled = true;
+        document.getElementById("savepost").style.cursor = "not-allowed";
 
     } else {
         // If there's input, enable the button
         reserveUserBtn.disabled = false;
+        reserveUserBtn.style.cursor = "pointer";
     }
 });
+
+
+
+// When the cancel button is clicked in confirm delete post popup
+function cancelConfirmDelete() {
+    let confirmDeleteDiv = document.getElementById('confirmDeletion');
+    confirmDeleteDiv.style.display = "none";
+}
+
+// Makes the confirm delete post popup div visible
+function showConfirmDeletePopup() {
+    let confirmDeleteDiv = document.getElementById('confirmDeletion');
+    confirmDeleteDiv.style.display = "block";
+}

@@ -14,26 +14,38 @@ body {
 }
 
 #backToMain {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  width: 80px;
+  height: 35px;
+  margin-left: 5px;
+  margin-top: 10px;
+  cursor: pointer;
+  border: none;
+  align-items: center;
+  justify-content: center;
+  background-color: #7f5a83;
+  background-image: linear-gradient(315deg, #5f716b 0%, #8a8f8a 74%);
+  background-size: 190% 100%;
+  transition: 550ms;
   color: white;
-  font-size: 17px;
-  font-family: 'Lato';
-  border-radius: 5px;
-  background-color: #5b605e;
-  border-style: none;
-  box-shadow: 3px 3px 6px rgba(0, 0, 0, .4);
-  padding: 5px;
-  position: absolute;
-  top: 5px;
-  left: 5px;
 }
 
 #backToMain:hover {
-  background-color: #6c706e;
-  -webkit-transition: all 300ms ease;
-  -moz-transition: all 300ms ease;
-  -ms-transition: all 300ms ease;
-  -o-transition: all 300ms ease;
-  transition: all 300ms ease;
+  background-position: right;
+}
+
+#backToMain:hover:before {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+#backToMain:focus {
+  outline: none;
 }
 
 #grid {
@@ -71,6 +83,10 @@ body {
   background-color: white;
 }
 
+#secondGrid {
+  background: url("/imgs/whiteBackground.jpg") center/cover fixed;
+}
+
 #allMessages {
   overflow-y: scroll;
 }
@@ -80,7 +96,8 @@ body {
   width: 100%;
   grid-template-columns: 80% 20%;
   bottom: 5px;
-  right: 5px
+  right: 5px;
+  border-top: 1px solid black;
 }
 
 #msgInput {
@@ -89,17 +106,83 @@ body {
 }
 
 #msgBtn {
-  grid-column: 2/3;
-  width: 100%;
+  width: 60%;
+  height: 70%;
+  margin-left: 40px;
+  margin-top: 3.5%;
+  background-color: #b1cfc5;
+  border-radius: 25px;
+  color: white;
+  font-family: 'Lato';
 }
 
 #messageInput {
-  border: 1px solid black;
+  border: 1px solid white;
   width: 100%;
   height: 100%;
+  padding-left: 10px;
 }
 
 #sendMessageBtn {
   width: 100%;
   height: 100%;
+  border-radius: 25px;
+  color: white;
+  background-color: #b1cfc5;
+  font-family: 'Lato';
+  border-style: none;
+}
+
+#sendMessageBtn:hover {
+  background-color: #96aea6;
+  -webkit-transition: all 250ms ease;
+  -moz-transition: all 250ms ease;
+  -ms-transition: all 250ms ease;
+  -o-transition: all 250ms ease;
+  transition: all 250ms ease;
+}
+
+.your-messages {
+  background-color: #91C7B1;
+  text-align: right;
+  color: white;
+  padding: 3px;
+  float: right;
+  border-radius: 9px;
+}
+
+.other-user-messages {
+  background-color: #9fa4a9;
+  text-align: right;
+  color: white;
+  padding: 3px;
+  float: left;
+  border-radius: 9px;
+}
+
+.your-messages {
+  background-color: #91C7B1;
+  text-align: right;
+  color: white;
+  padding: 3px;
+  float: right;
+  border-radius: 4px;
+  padding: 8px 15px 8px 15px;
+}
+
+.other-user-messages {
+  background-color: #9fa4a9;
+  text-align: right;
+  color: white;
+  padding: 3px;
+  float: left;
+  border-radius: 4px;
+  padding: 8px 15px 8px 15px;
+}
+
+@media only screen and (max-width : 545px) {
+  #msgBtn {
+    margin-left: 13px;
+    margin-top: 7px;
+  }
 }

@@ -19,7 +19,7 @@
             <div class="container">
                 <ul class="navbar">
                     <li id="home"><a href="#">HOME</a></li>
-                    <li id="bookmark"><a href="#">SAVED</a></li>
+                    <li id="bookmark"><a href="#">BOOKMARKS</a></li>
                     <li id="messages"><a href="#">MESSAGES</a></li>
                     <li id="listings"><a href="#">MY LISTINGS</a></li>
                     <li id="profile"><a href="#">PROFILE</a></li>
@@ -37,7 +37,7 @@
                 </label>
                 <ul class="menuInside">
                     <li><a class="links" id="home2" href="#">Home</a></li>
-                    <li><a class="links bookmark" id="bookmark2" href="#">Saved</a></li>
+                    <li><a class="links bookmark" id="bookmark2" href="#">Bookmarks</a></li>
                     <li><a class="links messages" id="messages2" href="#">Messages</a></li>
                     <li><a class="links listings" id="listings2" href="#">My Listings</a></li>
                     <li><a class="links profile" id="profile2" href="#">Profile</a></li>
@@ -51,7 +51,7 @@
         </nav>
     </header>
 
-    <section>
+    <div>
         <div class="grid">
             <div id="posttemplate">
                 <div class="post">
@@ -64,15 +64,43 @@
                 <div id="username">
                     Username
                 </div>
-                <div id="userrating">Rating</div>
+                <div id="ratings">
+                    <div id="overallrating">
+                        <input id="rating1" type="radio" name="rating" value="1">
+                        <label id="rlabel1" for="rating1">★</label>
+                        <input id="rating2" type="radio" name="rating" value="2">
+                        <label id="rlabel2" for="rating2">★</label>
+                        <input id="rating3" type="radio" name="rating" value="3">
+                        <label id="rlabel3" for="rating3">★</label>
+                        <input id="rating4" type="radio" name="rating" value="4">
+                        <label id="rlabel4" for="rating4">★</label>
+                        <input id="rating5" type="radio" name="rating" value="5">
+                        <label id="rlabel5" for="rating5">★</label>
+                        <span id="score"></span>
+                    </div>
+                    <div id="userrating">
+                        <input id="userrating1" type="radio" name="urating" value="1">
+                        <label id="urlabel1" for="userrating1">★</label>
+                        <input id="userrating2" type="radio" name="urating" value="2">
+                        <label id="urlabel2" for="userrating2">★</label>
+                        <input id="userrating3" type="radio" name="urating" value="3">
+                        <label id="urlabel3" for="userrating3">★</label>
+                        <input id="userrating4" type="radio" name="urating" value="4">
+                        <label id="urlabel4" for="userrating4">★</label>
+                        <input id="userrating5" type="radio" name="urating" value="5">
+                        <label id="urlabel5" for="userrating5">★</label>
+                    </div>
+                    <button id="saverating">Save</button>
+                </div>
+
             </div>
             <div id="usermenu">
                 <button class="usermenubtn" id="itemlistings">View Listings</button>
                 <button class="usermenubtn" id="messageuser">Message User</button>
             </div>
-            
+
         </div>
-    </section>
+    </div>
 
 
 

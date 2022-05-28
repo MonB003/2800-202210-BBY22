@@ -12,12 +12,14 @@
 }
 
 .navbar {
-  z-index:1;
+  z-index: 1;
   font-family: 'Lato';
   background: #5C6F68;
   line-height: 1;
   display: block;
   width: 100%;
+  position: fixed;
+  top: 0;
 }
 
 .navbar,
@@ -85,7 +87,7 @@
   }
 
   .menu {
-    z-index:1;
+    z-index: 1;
     top: 0;
     display: block;
     background-color: #435a50;
@@ -94,6 +96,7 @@
     height: 42px;
     position: fixed;
     width: 100%;
+    position: fixed;
   }
 
   #menuClicked {
@@ -126,7 +129,7 @@
     position: absolute;
     width: 100%;
     height: 2px;
-    background-color: #848484;
+    background-color: white;
     transition-duration: .25s;
   }
 
@@ -203,6 +206,7 @@ body {
   margin: 3% auto;
   min-height: 500px;
   height: auto;
+  padding-top: 40px;
   position: relative;
 }
 
@@ -220,7 +224,6 @@ body {
   border-radius: 50%;
   border: #435A50;
   border-style: solid;
-  border-radius: 50%;
   box-shadow: 0 0 6px rgb(20, 19, 19);
 }
 
@@ -233,8 +236,6 @@ body {
   height: auto;
   margin: 0 auto;
   background-color: rgba(0, 0, 0, 0.3);
-  border-top-left-radius: 25px;
-  border-bottom-right-radius: 25px;
   box-shadow: 0 0 10px rgb(20, 19, 19);
   padding: 10px;
   font-family: 'Lato';
@@ -250,7 +251,7 @@ body {
   position: relative;
   text-align: center;
   background-color: rgba(0, 0, 0, 0.3);
-  border-radius: 25px;
+  border-radius: 15px;
   box-shadow: 0 0 10px rgb(20, 19, 19);
   margin-top: 40px;
 }
@@ -282,7 +283,7 @@ body {
 #message {
   font-family: 'Lato', sans-serif;
   font-weight: bold;
-  color: rgb(255, 255, 255);
+  color: #333;
   padding-top: 20px;
 }
 
@@ -298,20 +299,22 @@ body {
   margin-top: 10px;
   border-radius: 5px;
   margin-bottom: 10px;
+  cursor: pointer;
 }
 
 #saveBtn {
   padding-left: 0;
   font-family: 'Lato', sans-serif;
-  background-color: #526E62;
+  background-color: #6B9080;
   letter-spacing: 1px;
   font-weight: bold;
   color: aliceblue;
 }
 
 #userinfo {
-   grid-column: 2;
-   padding-top: 75px;
+  grid-column: 2;
+  padding-top: 70px;
+  z-index: 0;
 }
 
 #username {
@@ -321,14 +324,14 @@ body {
   text-align: center;
 }
 
-#userrating {
+#ratings {
   text-align: center;
   font-size: 18px;
 }
 
 #usermenu {
   grid-column: 2;
-  padding-top: 50px;
+  padding-top: 90px;
   width: 100%;
 }
 
@@ -348,6 +351,82 @@ body {
   color: aliceblue;
 }
 
+#overallrating {
+  font-size: 24px;
+}
+
+#overallrating span {
+  font-size: 20px;
+}
+
+#overallrating input {
+  display: none;
+}
+
+#overallrating label {
+  color: gray;
+}
+
+#userrating {
+  font-size: 20px;
+}
+
+#userrating input {
+  display: none;
+}
+
+#userrating label {
+  color: gray;
+}
+
+#saverating {
+  font-family: 'Lato', sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  width: 100px;
+  height: 20px;
+  margin: auto;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  box-sizing: border-box;
+  background-color: #526E62;
+  color: aliceblue;
+}
+
+.usermenubtn:hover {
+  cursor: pointer;
+  background-color: #82ae9b;
+}
+
+#saverating:hover {
+  cursor: pointer;
+  background-color: #82ae9b;
+}
+
+#submit {
+  width: 80%;
+  height: 30px;
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+  font-size: 15px;
+  color: rgb(255, 255, 255);
+  background-color: #6B9080;
+  border-radius: 5px;
+  margin-top: 5%;
+  box-shadow: 0 0 3px #435a50;
+}
+
+#submit:hover,
+#saveBtn:hover {
+  background-color: #475f55;
+  -webkit-transition: all 250ms ease;
+  -moz-transition: all 250ms ease;
+  -ms-transition: all 250ms ease;
+  -o-transition: all 250ms ease;
+  transition: all 250ms ease;
+}
 
 @media only screen and (max-width : 1000px) {
   #navbar {
@@ -369,8 +448,9 @@ body {
   .grid {
     display: grid;
     grid-template-columns: 5% 90% 5%;
-    grid-template-rows: 30% 15% 55%;
+    grid-template-rows: 30% 20% 50%;
     height: min-content;
+    padding-top: 0px;
   }
 
   .post {
@@ -391,13 +471,13 @@ body {
     position: relative;
     align-items: center;
     text-align: center;
-    box-shadow: 0 0 12px rgb(20, 19, 19);
+    box-shadow: 0 0 8px rgb(20, 19, 19);
   }
 
   #change-input {
     grid-area: 2/2/3/3;
     width: 90%;
-    height: 80px;
+    height: 75%;
     margin: 0 auto;
     padding-top: 30px;
     font-size: 15px;
@@ -441,4 +521,72 @@ body {
     margin-top: 5px;
     margin-bottom: 5px;
   }
+}
+
+
+/* Confirm update popup elements */
+#updateMsgBtn,
+#cancelMsgBtn {
+  border: none;
+  outline: none;
+  background-color: #8AA39B;
+  padding: 5pt;
+  padding-left: 8pt;
+  padding-right: 8pt;
+  font-family: 'Lato', sans-serif;
+  letter-spacing: 1px;
+  font-size: 15px;
+  color: aliceblue;
+  border-radius: 1px;
+  margin-bottom: 10pt;
+  text-transform: uppercase;
+  box-shadow: 1px 1px 1px rgb(73, 71, 71);
+}
+
+#updateMsgBtn {
+  background-color: #507967;
+}
+
+#cancelMsgBtn:hover {
+  background-color:  #b1b3b2;
+  box-shadow: 1px 1px 3px rgb(73, 71, 71);
+}
+
+#updateMsgBtn:hover {
+  background-color: #40906d;
+  box-shadow: 1px 1px 3px rgb(73, 71, 71);
+}
+
+#confirmationMsg {
+  text-align: center;
+}
+
+#cancelMsgBtn, #updateMsgBtn {
+  width: 50%;
+  align-self: center;
+  cursor: pointer;
+}
+
+/* Popup confirmation div */
+.popup {
+  position: fixed; 
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%;
+  background-color: #c5c5c5;
+  padding-top: 50px;
+}
+
+/* Popup confirmation details */
+.updateMsgContent {
+  background-color: #fefefe;
+  margin: 10% auto 15% auto; 
+  width: 50%;
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

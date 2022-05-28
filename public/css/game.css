@@ -19,6 +19,9 @@
     line-height: 1;
     display: block;
     width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
 }
 
 .navbar,
@@ -94,6 +97,7 @@
         padding: 0;
         height: 42px;
         width: 100%;
+        position: fixed;
     }
 
     #menuClicked {
@@ -126,7 +130,7 @@
         position: absolute;
         width: 100%;
         height: 2px;
-        background-color: #848484;
+        background-color: white;
         transition-duration: .25s;
     }
 
@@ -144,7 +148,7 @@
         height: 100%;
         padding-top: 60px;
         list-style: none;
-        background-color: #999F99;
+        background-color: #435a50;
         box-shadow: 3px 3px 6px rgba(0, 0, 0, .3);
         transition-duration: 300ms;
     }
@@ -158,6 +162,7 @@
         text-decoration: none;
         transition-duration: 250ms;
         border: none;
+        color: white;
     }
 
     .links:hover {
@@ -165,7 +170,7 @@
     }
 
     #logoutBtns {
-        background-color: #999F99;
+        background-color: #435a50;
     }
 }
 
@@ -194,6 +199,7 @@ body {
     border: 1px solid black;
     margin: auto;
     box-sizing: border-box;
+    margin-top: 50px;
 
 }
 

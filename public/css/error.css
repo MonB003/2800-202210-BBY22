@@ -1,0 +1,336 @@
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&family=Lato:wght@300&family=Permanent+Marker&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: url("/imgs/lostDog.jpg") center/cover fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+}
+
+.container {
+    width: 100%;
+    position: relative;
+}
+
+.navbar {
+    font-family: 'Lato';
+    background: #5C6F68;
+    line-height: 1;
+    display: block;
+    width: 100%;
+    position: fixed;
+    top: 0;
+}
+
+.navbar,
+.navbar ul {
+    list-style: none;
+    margin: 0;
+}
+
+.navbar>li {
+    float: left;
+}
+
+.navbar li a,
+.navbar>li>form {
+    padding: 19px 20px;
+    display: block;
+    text-decoration: none;
+    align-items: center;
+    font-size: 17px;
+    color: #ffffff;
+}
+
+.navbar li a:hover,
+.navbar>li>form:hover {
+    color: rgb(154, 154, 154);
+    -webkit-transition: all 250ms ease;
+    -moz-transition: all 250ms ease;
+    -ms-transition: all 250ms ease;
+    -o-transition: all 250ms ease;
+    transition: all 250ms ease;
+}
+
+#fright {
+    float: right
+}
+
+#logoutBtn {
+    float: right;
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+}
+
+.navbar:after {
+    clear: both;
+    content: "";
+    display: table;
+}
+
+.menu {
+    display: none;
+}
+
+#itemStatus {
+    font-family: 'Lato';
+    font-size: medium;
+    width: 25%;
+}
+
+#grid {
+    height: 100vh;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 15% 20% 10% 10% 10% 10% 10% 15%;
+    justify-content: center;
+    text-align: center;
+}
+
+#firstText{
+    grid-area: 2/1/3/2;
+    font-family: 'Permanent Marker';
+    color: white;
+    font-size: 8vw;
+}
+
+#secondText {
+    grid-area: 3/1/4/2;
+    font-family: 'Indie Flower';
+    color: white;
+    font-size: 2.5vw;
+    font-weight: bold;
+}
+
+
+#thirdText {
+    grid-area: 4/1/5/2;
+    font-family: 'Indie Flower';
+    color: white;
+    font-size: 2vw;
+}
+
+
+#fourthText {
+    grid-area: 5/1/6/2;
+    font-family: 'Indie Flower';
+    color: white;
+    font-size: 2vw;
+}
+
+#fifthText {
+    grid-area: 6/1/7/2;
+    font-family: 'Indie Flower';
+    color: white;
+    font-size: 2vw;
+}
+
+#goBackBtn{
+    grid-area: 7/1/8/2;
+    font-family: 'Lato';
+    color: white;
+    font-size: 30px;
+}
+
+
+
+#backToMain {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    width: 30%;
+    height: 55px;
+    cursor: pointer;
+    border: none;
+    align-items: center;
+    justify-content: center;
+    background-color: #7f5a83;
+    background-image: linear-gradient(315deg, #5f716b 0%, #8a8f8a 74%);
+    background-size: 190% 100%;
+    transition: 550ms;
+    color: white;
+    font-size: 2vw;
+    font-family: 'Lato';
+}
+
+#backToMain:hover {
+    background-position: right;
+}
+
+#backToMain:hover:before {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+#copyright {
+    display: none;
+}
+
+@media only screen and (max-width: 750px) {
+    
+    #grid {
+        grid-template-columns: 100%;
+    }
+
+    #firstText {
+        grid-area: 2/1/3/2;
+        font-family: 'Permanent Marker';
+        color: #000000;
+        font-size: 18vw;
+    }
+
+    #secondText {
+        grid-area: 3/1/4/2;
+        font-family: 'Indie Flower';
+        color: #000000;
+        font-size: 10.5vw;
+        font-weight: bold;
+    }
+
+
+    #thirdText {
+        grid-area: 4/1/5/2;
+        font-family: 'Indie Flower';
+        color: #000000;
+        font-size: 7vw;
+    }
+
+
+    #fourthText {
+        grid-area: 5/1/6/2;
+        font-family: 'Indie Flower';
+        color: #000000;
+        font-size: 7vw;
+    }
+
+    #fifthText {
+        grid-area: 6/1/7/2;
+        font-family: 'Indie Flower';
+        color: #000000;
+        font-size: 7vw;
+    }
+
+    #backToMain {
+        font-size: 6vw;
+    }
+
+    .container {
+        display: none;
+    }
+
+    .navbar {
+        display: none;
+    }
+
+    .menu {
+        z-index: 1;
+        top: 0;
+        display: block;
+        background-color: #435a50;
+        margin: 0;
+        padding: 0;
+        height: 42px;
+        position: fixed;
+        width: 100%;
+    }
+
+    #menuClicked {
+        opacity: 0;
+    }
+
+    #menuClicked:checked~.menuInside {
+        left: 0;
+    }
+
+    .menuBtn {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        width: 26px;
+        height: 26px;
+        cursor: pointer;
+        z-index: 1;
+    }
+
+    .menuBtn>span::before {
+        content: '';
+        top: -8px;
+    }
+
+    .menuBtn>span,
+    .menuBtn>span::before,
+    .menuBtn>span::after {
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        background-color: white;
+        transition-duration: .25s;
+    }
+
+    .menuBtn>span::after {
+        content: '';
+        top: 8px;
+    }
+
+    .menuInside {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 275px;
+        height: 100%;
+        padding-top: 60px;
+        list-style: none;
+        background-color: #435a50;
+        box-shadow: 3px 3px 6px rgba(0, 0, 0, .3);
+        transition-duration: 300ms;
+    }
+
+    .links {
+        display: block;
+        padding: 12px 24px;
+        color: white;
+        font-family: 'Lato', sans-serif;
+        font-size: 22px;
+        text-decoration: none;
+        transition-duration: 250ms;
+        border: none;
+    }
+
+    .links:hover {
+        background-color: #8a8f8a;
+    }
+
+    #logoutBtns {
+        background-color: #435a50;
+    }
+
+    html,
+    head,
+    body {
+        z-index: -1;
+        position: relative;
+    }
+
+    #content {
+        z-index: -1;
+        position: relative;
+    }
+
+}

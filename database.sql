@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS BBY_22_item_posts(
     description VARCHAR(1000),
     city VARCHAR(30),
     status VARCHAR(30),
-    user_reserved VARCHAR(20),
+    user_reserved int,
     timestamp VARCHAR(50),
     item_pic TEXT (999),
     PRIMARY KEY (id),
@@ -27,11 +27,20 @@ CREATE TABLE IF NOT EXISTS BBY_22_item_posts(
     
 CREATE TABLE IF NOT EXISTS BBY_22_messages(
     id int NOT NULL AUTO_INCREMENT, 
-    userSending VARCHAR(30) NOT NULL,                
-    userReceiving VARCHAR(30) NOT NULL, 
+    userSending int NOT NULL,                
+    userReceiving int NOT NULL, 
     message VARCHAR(300), 
     time VARCHAR(50), 
     PRIMARY KEY (id));
 
+CREATE TABLE IF NOT EXISTS BBY_22_bookmarks(
+    id int NOT NULL AUTO_INCREMENT, 
+    user_id int NOT NULL,
+    post_id int NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (post_id) REFERENCES BBY_22_item_posts(id) ON UPDATE CASCADE ON DELETE CASCADE);
+
 INSERT INTO BBY_22_users (userName, firstName, lastName, city, email, password, type, profile_pic) 
-VALUES ("Test", "Test", "Test", "Vancouver", "test@test.ca", "password", "ADMIN", "user-pic-none.jpg");
+VALUES ("Admin", "Test", "Admin", "Vancouver", "admin@test.ca", "password", "ADMIN", "user-pic-none.jpg"),
+("User", "Test", "User", "Vancouver", "user@test.ca", "password", "USER", "user-pic-none.jpg");

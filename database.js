@@ -10,6 +10,7 @@ const fs = require("fs");
 const {
     JSDOM
 } = require('jsdom');
+const sanitizeHtml = require('sanitize-html');
 
 
 var http = require("http").createServer(app);
@@ -42,6 +43,9 @@ if (is_heroku) {
 }
 
 const mysql = require("mysql2");
+const {
+    request
+} = require("http");
 const connection = mysql.createPool(database);
 
 const storage = multer.diskStorage({
@@ -71,7 +75,7 @@ app.use(session({
     saveUninitialized: true
 }));
 
-// Go to: http://localhost:8000
+// Go to the landing page
 app.get('/', function (req, res) {
 
     // If there is a current session, go directly to the main page
@@ -107,7 +111,7 @@ app.get("/main", function (req, res) {
             connection.query(
 
                 'SELECT * FROM BBY_22_users',
-                function (error, userResults, fields2) {
+                function (error, userResults) {
 
                     // Create a table to display the users table
                     let allUsers = "<table>";
@@ -118,13 +122,19 @@ app.get("/main", function (req, res) {
 
                         // StrRowData creates a table that will be displayed on the HTML page
                         // Add each row of data and append each attribute to strRowData
-                        let strRowData = "<tr><td><input type=\"text\" id=\"userFirstName" + userIdNum + "\"" + " value=\"" + userResults[row].firstName + "\">" + "</td></tr>";
-                        strRowData += "<tr><td><input type=\"text\" id=\"userLastName" + userIdNum + "\"" + " value=\"" + userResults[row].lastName + "\">" + "</td></tr>";
-                        strRowData += "<tr><td><input type=\"text\" id=\"userName" + userIdNum + "\"" + " value=\"" + userResults[row].userName + "\">" + "</td></tr>";
-                        strRowData += "<tr><td><input type=\"text\" id=\"userCity" + userIdNum + "\"" + " value=\"" + userResults[row].city + "\">" + "</td></tr>";
-                        strRowData += "<tr><td><input type=\"text\" id=\"userEmail" + userIdNum + "\"" + " value=\"" + userResults[row].email + "\">" + "</td></tr>";
-                        strRowData += "<tr><td><input type=\"text\" id=\"userPassword" + userIdNum + "\"" + " value=\"" + userResults[row].password + "\">" + "</td></tr>";
-                        strRowData += "<tr><td><input type=\"text\" id=\"userType" + userIdNum + "\"" + " class=\"user-type-input\"" + " value=\"" + userResults[row].type + "\">" + "</td></tr>";
+                        let strRowData = "<tr><td><input type=\"text\" id=\"userFirstName" + userIdNum + "\"" + " value=\"" + userResults[row].firstName + "\"" + " placeholder=\"First Name\"" + " maxlength=\"20\"" + ">" + "</td></tr>";
+                        strRowData += "<tr><td><input type=\"text\" id=\"userLastName" + userIdNum + "\"" + " value=\"" + userResults[row].lastName + "\"" + " placeholder=\"Last Name\"" + " maxlength=\"20\"" + ">" + "</td></tr>";
+                        strRowData += "<tr><td><input type=\"text\" id=\"userName" + userIdNum + "\"" + " value=\"" + userResults[row].userName + "\"" + " placeholder=\"User Name\"" + " maxlength=\"20\"" + ">" + "</td></tr>";
+                        strRowData += "<tr><td><input type=\"text\" id=\"userCity" + userIdNum + "\"" + " value=\"" + userResults[row].city + "\"" + " placeholder=\"City\"" + " maxlength=\"30\"" + ">" + "</td></tr>";
+                        strRowData += "<tr><td><input type=\"email\" id=\"userEmail" + userIdNum + "\"" + " value=\"" + userResults[row].email + "\"" + " placeholder=\"Email@email.ca\"" + " maxlength=\"30\"" + ">" + "</td></tr>";
+                        strRowData += "<tr><td><input type=\"text\" id=\"userPassword" + userIdNum + "\"" + " value=\"" + userResults[row].password + "\"" + " placeholder=\"Password\"" + " maxlength=\"30\"" + ">" + "</td></tr>";
+
+                        // Dropdown of user types
+                        strRowData += "<tr><td><select name=\"user-type\" id=\"userType" + userIdNum + "\" class=\"user-type-input\">";
+                        strRowData += "<option id=\"ADMIN" + userIdNum + "\" value=\"ADMIN\">Admin</option>";
+                        strRowData += "<option id=\"USER" + userIdNum + "\" value=\"USER\">User</option>";
+                        strRowData += "</select></td></tr>";
+
                         strRowData += "<tr><td>" + "<button id=\"editButton" + userIdNum + "\"" + "</td><tr>";
                         strRowData += "<tr><td>" + "<button id=\"deleteButton" + userIdNum + "\"" + "</td></tr>";
 
@@ -140,11 +150,16 @@ app.get("/main", function (req, res) {
                     for (let row = 0; row < userResults.length; row++) {
                         let userIdNum = userResults[row].id;
 
-                        // Set button name and its method when clicked
+                        // Select the current user's type as the default dropdown value
+                        let currUserType = userResults[row].type;
+                        mainDOM.window.document.getElementById(currUserType + userIdNum).setAttribute("selected", "selected");
+
+                        // Set the button name and its method when clicked
                         mainDOM.window.document.getElementById("editButton" + userIdNum).textContent = "Edit User";
                         mainDOM.window.document.getElementById("editButton" + userIdNum).setAttribute("onclick", "updateAUsersData(" + userIdNum + ")");
+
                         mainDOM.window.document.getElementById("deleteButton" + userIdNum).textContent = "Delete User";
-                        mainDOM.window.document.getElementById("deleteButton" + userIdNum).setAttribute("onclick", "deleteAUser(" + userIdNum + ")");
+                        mainDOM.window.document.getElementById("deleteButton" + userIdNum).setAttribute("onclick", "showConfirmDeletePopup("+ userIdNum +")");
                     }
 
                     res.set("Server", "MACT Engine");
@@ -160,6 +175,7 @@ app.get("/main", function (req, res) {
 
             mainDOM.window.document.getElementById("customerName").innerHTML = "Welcome, " + req.session.firstName +
                 " " + req.session.lastName + "!";
+
             res.set("Server", "MACT Engine");
             res.set("X-Powered-By", "MACT");
             res.send(mainDOM.serialize());
@@ -170,6 +186,7 @@ app.get("/main", function (req, res) {
     }
 });
 
+// My listings page of all this user's posts
 app.get("/mylistings", function (req, res) {
 
     // Check if user is logged in
@@ -197,7 +214,7 @@ app.get("/editpost", function (req, res) {
         connection.query(
             "SELECT * FROM BBY_22_item_posts WHERE id = ? AND user_id = ?",
             [req.session.editpostID, req.session.userID],
-            function (error, results, fields) {
+            function (error, results) {
                 myResults = results;
                 if (error) {} else if (results.length > 0) {
                     results.forEach(post => {
@@ -207,7 +224,7 @@ app.get("/editpost", function (req, res) {
                         editpostDOM.window.document.querySelector("#reserveUserBtn").setAttribute("onclick", `reserveUserForItem(${post.id})`);
 
                         editpostDOM.window.document.querySelector("#savepost").setAttribute("onclick", `save_post(${post.id})`);
-                        editpostDOM.window.document.querySelector("#deletepost").setAttribute("onclick", `delete_post(${post.id})`);
+                        editpostDOM.window.document.querySelector("#deleteMsgBtn").setAttribute("onclick", `delete_post(${post.id})`);
                     });
                 } else {}
 
@@ -222,31 +239,114 @@ app.get("/editpost", function (req, res) {
     }
 });
 
+// Error page upon app crash/broken link
+//Load newPostPhoto page
+app.get("/error", function (req, res) {
+    if (req.session.loggedIn) {
+        let newError = fs.readFileSync("./app/error.html", "utf8");
+        let newErrorDOM = new JSDOM(newError);
+
+        res.send(newErrorDOM.serialize());
+
+    } else {
+        // User is not logged in, so return to landing page
+        res.redirect("/");
+    }
+});
+
+//sends item post information to main page client
 app.post("/loadposts", function (req, res) {
     let myResults = null;
     let posts = [];
 
     connection.query(
         "SELECT * FROM BBY_22_item_posts where status != 'collected'",
-        function (error, results, fields) {
+        function (error, results) {
             myResults = results;
             if (error) {} else if (results.length > 0) {
                 results.forEach(post => {
-                    posts.push({
-                        "postid": post.id,
-                        "title": post.title,
-                        "status": post.status,
-                        "city": post.city,
-                        "timestamp": post.timestamp,
-                        "item_pic": post.item_pic
-                    });
+                    if (req.session.userID == post.user_id) {
+                        posts.push({
+                            "postid": post.id,
+                            "title": post.title,
+                            "status": post.status,
+                            "city": post.city,
+                            "timestamp": post.timestamp,
+                            "item_pic": post.item_pic,
+                            "is_owner": true
+                        });
+                    } else {
+                        posts.push({
+                            "postid": post.id,
+                            "title": post.title,
+                            "status": post.status,
+                            "city": post.city,
+                            "timestamp": post.timestamp,
+                            "item_pic": post.item_pic,
+                            "is_owner": false
+                        });
+                    }
+                    
                 });
             }
             res.send(posts);
         }
     );
-})
+});
 
+//checks for duplicate and adds a bookmark to the database
+app.post("/addBookmark", function (req, res) {
+
+    connection.query("SELECT * FROM BBY_22_bookmarks WHERE user_id = ? AND post_id = ?",
+        [req.session.userID, req.body.postID],
+        function (error, results) {
+            if (error) {
+
+            } else if (results.length > 0) {
+                //detects an existing bookmark
+
+            } else {
+                connection.query('INSERT INTO BBY_22_bookmarks (user_id, post_id) VALUES (?, ?)',
+                    [req.session.userID, req.body.postID],
+                    function (error, results) {
+                        if (error) {
+
+                        } else {
+                            req.session.save(function (err) {
+                                // Session saved
+                            });
+
+                            res.send({
+                                status: "Success",
+                                msg: "New bookmark created."
+                            });
+                        }
+                    });
+
+            }
+
+
+        });
+});
+
+//checks for exisiting record and removes a bookmark from the database
+app.post("/removeBookmark", function (req, res) {
+
+    //removes a bookmark
+    connection.query("DELETE FROM BBY_22_bookmarks WHERE user_id = ? AND post_id = ?",
+        [req.session.userID, req.body.postID],
+        function (error, results) {
+            if (error) {}
+        }
+    );
+
+    res.send({
+        status: "Success",
+        msg: "Bookmark removed."
+    });
+});
+
+// Loads all this user's posts and sends them to the client side my listings file
 app.post("/loadmyposts", function (req, res) {
     let myResults = null;
     let posts = [];
@@ -254,7 +354,7 @@ app.post("/loadmyposts", function (req, res) {
     connection.query(
         "SELECT * FROM BBY_22_item_posts where user_id = ?",
         [req.session.userID],
-        function (error, results, fields) {
+        function (error, results) {
             myResults = results;
             if (error) {} else if (results.length > 0) {
                 results.forEach(post => {
@@ -271,18 +371,70 @@ app.post("/loadmyposts", function (req, res) {
             res.send(posts);
         }
     );
-})
-
-app.use(express.json());
-app.use(express.urlencoded({
-    extended: true
-}));
+});
 
 
-// Login using an email and password
+// Loads all bookmarked posts for this user
+app.post("/loadmybookmarks", function (req, res) {
+    let myResults = null;
+    let bookmarks = [];
+
+    connection.query(
+        "SELECT * FROM BBY_22_bookmarks where user_id = ?",
+        [req.session.userID],
+        function (error, results) {
+            myResults = results;
+            if (error) {} else if (results.length > 0) {
+                results.forEach(bookmark => {
+                    bookmarks.push({
+                        "saveid": bookmark.post_id
+                    });
+                });
+            }
+            res.send(bookmarks);
+        }
+    );
+});
+
+// Gets all posts
+app.post("/loadsavedposts", function (req, res) {
+    let myResults = null;
+    let savedposts = [];
+    connection.query(
+        "SELECT * FROM BBY_22_item_posts",
+        function (error, results) {
+            myResults = results;
+            if (error) {} else if (results.length > 0) {
+                results.forEach(post => {
+
+                    for (let i = 0; i < req.body.length; i++) {
+                        if (post.id == req.body[i].saveid) {
+                            savedposts.push({
+                                "postid": post.id,
+                                "title": post.title,
+                                "status": post.status,
+                                "city": post.city,
+                                "timestamp": post.timestamp,
+                                "item_pic": post.item_pic
+                            });
+                        }
+
+                    }
+
+
+                });
+            }
+            res.send(savedposts);
+        }
+    );
+});
+
+
+// Login validation using an email and password
 app.post("/login", function (req, res) {
     res.setHeader("Content-Type", "application/json");
 
+    // Check that the email entered belongs to a user in the database
     authenticateUser(req.body.email, req.body.password,
         function (recordReturned) {
 
@@ -343,20 +495,20 @@ app.post('/signup', function (req, res) {
     checkEmailAlreadyExists(req.body.email, req.session.email,
         function (recordReturned) {
 
-            // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
+            // If email validation returns null, user isn't currently in database, so their data can be inserted/added
             if (recordReturned == null) {
-                //Checks if the new user's username is already in the database (username must be unique)
+                // Checks if the new user's username is already in the database (username must be unique)
                 checkUsernameAlreadyExists(req.body.userName, req.session.userName,
                     function (recordReturned) {
 
-                        // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
+                        // If username validation returns null, user isn't currently in database, so their data can be inserted/added
                         if (recordReturned == null) {
 
                             // Insert the new user into the database
                             connection.query('INSERT INTO BBY_22_users (firstName, lastName, userName, city, email, password, type, profile_pic) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
                                 [req.body.firstName, req.body.lastName, req.body.userName, req.body.city, req.body.email, req.body.password, "USER", "user-pic-none.jpg"],
 
-                                function (error, results, fields) {
+                                function (error, results) {
                                     if (error) {
                                         // Send message saying there was an error when signing up.
                                         res.send({
@@ -390,9 +542,10 @@ app.post('/signup', function (req, res) {
 
                         } else {
 
-                            // Send message saying email already exists
+                            // Send message saying username already exists
                             res.send({
                                 status: "Fail",
+                                field: "userName",
                                 msg: "Username already exists."
                             });
                         }
@@ -402,6 +555,7 @@ app.post('/signup', function (req, res) {
                 // Send message saying email already exists
                 res.send({
                     status: "Fail",
+                    field: "userEmail",
                     msg: "Email already exists."
                 });
             }
@@ -414,6 +568,13 @@ var timeStampPhoto = ""
 app.post('/newPost', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
+    // Sanitize text from tiny editor
+    let sanitizeDescription = sanitizeHtml(req.body.description, {
+        allowedTags: []
+    }, {
+        allowedAttributes: {}
+    });
+
     // Get the current date and time 
     var today = new Date();
     var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
@@ -424,8 +585,8 @@ app.post('/newPost', function (req, res) {
     // This is where the user input is passed into the database. 
     // User_ID is saved from the current user of the session. The details of the post are sent from the client side.
     connection.query('INSERT INTO BBY_22_item_posts (user_id, title, city, description, status, timestamp) VALUES (?, ?, ?, ?, ?, ?)',
-        [req.session.userID, req.body.title, req.body.city, req.body.description, "available", dateAndTime],
-        function (error, results, fields) {
+        [req.session.userID, req.body.title, req.body.city, sanitizeDescription, "available", dateAndTime],
+        function (error, results) {
             if (error) {
 
             } else {
@@ -440,6 +601,7 @@ app.post('/newPost', function (req, res) {
             }
         });
 });
+
 
 // Stores image in database
 app.post('/upload-images', upload.array("files"), function (req, res) {
@@ -473,6 +635,7 @@ app.post('/upload-images', upload.array("files"), function (req, res) {
     );
 });
 
+// When user updates their item post photo
 app.post('/upload-images2', upload.array("files"), function (req, res) {
     for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
@@ -500,6 +663,7 @@ app.post('/upload-images2', upload.array("files"), function (req, res) {
     );
 });
 
+//image upload
 app.post('/upload-images3', upload.array("files"), function (req, res) {
     for (let i = 0; i < req.files.length; i++) {
         req.files[i].filename = req.files[i].originalname;
@@ -529,56 +693,123 @@ app.post('/upload-images3', upload.array("files"), function (req, res) {
 
 // Load sign up page
 app.get("/signup", function (req, res) {
-    let signup = fs.readFileSync("./app/account.html", "utf8");
-    let signupDOM = new JSDOM(signup);
+    // If there is a current session, go directly to the main page
+    if (req.session.loggedIn) {
+        res.redirect("/main");
 
-    res.set("Server", "MACT Engine");
-    res.set("X-Powered-By", "MACT");
-    res.send(signupDOM.serialize());
+    } else {
+        // If there's no session, go to the signup page
+        let signup = fs.readFileSync("./app/account.html", "utf8");
+        let signupDOM = new JSDOM(signup);
+
+        res.set("Server", "MACT Engine");
+        res.set("X-Powered-By", "MACT");
+        res.send(signupDOM.serialize());
+    }
 });
 
 //Load newPost page
 app.get("/newPost", function (req, res) {
-    let newPost = fs.readFileSync("./app/newPost.html", "utf8");
-    let newPostDOM = new JSDOM(newPost);
+    if (req.session.loggedIn) {
+        let newPost = fs.readFileSync("./app/newPost.html", "utf8");
+        let newPostDOM = new JSDOM(newPost);
 
-    res.send(newPostDOM.serialize());
+        res.send(newPostDOM.serialize());
+
+    } else {
+        // User is not logged in, so return to landing page
+        res.redirect("/");
+    }
+});
+
+//Load myBookmarks page
+app.get("/myBookmarks", function (req, res) {
+    if (req.session.loggedIn) {
+        let myBookmarks = fs.readFileSync("./app/myBookmarks.html", "utf8");
+        let myBookmarksDOM = new JSDOM(myBookmarks);
+
+        res.send(myBookmarksDOM.serialize());
+
+    } else {
+        // User is not logged in, so return to landing page
+        res.redirect("/");
+    }
 });
 
 //Load game page
 app.get("/game", function (req, res) {
-    let game = fs.readFileSync("./app/game.html", "utf8");
-    let gameDOM = new JSDOM(game);
+    if (req.session.loggedIn) {
+        let game = fs.readFileSync("./app/game.html", "utf8");
+        let gameDOM = new JSDOM(game);
 
-    res.send(gameDOM.serialize());
+        res.send(gameDOM.serialize());
+
+    } else {
+        // User is not logged in, so return to landing page
+        res.redirect("/");
+    }
 });
 
 //Load newPostPhoto page
 app.get("/newPostPhoto", function (req, res) {
-    let newPost = fs.readFileSync("./app/newPostPhoto.html", "utf8");
-    let newPostDOM = new JSDOM(newPost);
+    if (req.session.loggedIn) {
+        let newPost = fs.readFileSync("./app/newPostPhoto.html", "utf8");
+        let newPostDOM = new JSDOM(newPost);
 
-    res.send(newPostDOM.serialize());
+        res.send(newPostDOM.serialize());
+
+    } else {
+        // User is not logged in, so return to landing page
+        res.redirect("/");
+    }
 });
 
 // Load profile page
 app.get('/profile', function (req, res) {
-    let profile = fs.readFileSync("./app/updateProfile.html", "utf8");
-    let profileDOM = new JSDOM(profile);
+    if (req.session.loggedIn) {
+        let profile = fs.readFileSync("./app/updateProfile.html", "utf8");
+        let profileDOM = new JSDOM(profile);
 
-    // Load current user's data into the text fields on the page
-    profileDOM.window.document.getElementById("userFirstName").defaultValue = req.session.firstName;
-    profileDOM.window.document.getElementById("userLastName").defaultValue = req.session.lastName;
-    profileDOM.window.document.getElementById("userName").defaultValue = req.session.userName;
-    profileDOM.window.document.getElementById("userCity").defaultValue = req.session.city;
-    profileDOM.window.document.getElementById("userEmail").defaultValue = req.session.email;
-    profileDOM.window.document.getElementById("userPassword").defaultValue = req.session.password;
-    var profileP = "<img src=\"imgs/uploads/userPic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
-    profileDOM.window.document.getElementById("postimage").innerHTML = profileP
+        // Load current user's data into the text fields on the page
+        profileDOM.window.document.getElementById("userFirstName").defaultValue = req.session.firstName;
+        profileDOM.window.document.getElementById("userLastName").defaultValue = req.session.lastName;
+        profileDOM.window.document.getElementById("userName").defaultValue = req.session.userName;
+        profileDOM.window.document.getElementById("userCity").defaultValue = req.session.city;
+        profileDOM.window.document.getElementById("userEmail").defaultValue = req.session.email;
+        profileDOM.window.document.getElementById("userPassword").defaultValue = req.session.password;
+        var profileP = "<img src=\"imgs/uploads/userPic-" + req.session.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">";
+        profileDOM.window.document.getElementById("postimage").innerHTML = profileP;
 
-    res.set("Server", "MACT Engine");
-    res.set("X-Powered-By", "MACT");
-    res.send(profileDOM.serialize());
+        connection.query(
+            "SELECT * FROM BBY_22_ratings WHERE user = ?",
+            [req.session.userID],
+            function (error, results, fields) {
+                let totalrating = 0;
+                let i = 0;
+                if (error) {} else if (results.length > 0) {
+                    results.forEach(rating => {
+                        // Load current user's data into the text fields on the page
+                        totalrating = totalrating + rating.rating;
+                        i++;
+                    });
+                    let avgrating = totalrating / i;
+                    if (Math.round(avgrating) != 0) {
+                        profileDOM.window.document.querySelector(`#rating${Math.round(avgrating)}`).setAttribute("checked", "");
+                    }
+                    profileDOM.window.document.querySelector("#score").innerHTML = `${avgrating.toFixed(1)}/5.0`;
+                } else {
+                    profileDOM.window.document.querySelector("#score").innerHTML = `no rating`;
+                }
+                res.set("Server", "MACT Engine");
+                res.set("X-Powered-By", "MACT");
+                res.send(profileDOM.serialize());
+            }
+        );
+
+    } else {
+        // User is not logged in, so return to landing page
+        res.redirect("/");
+    }
 });
 
 //view user profile
@@ -590,21 +821,51 @@ app.get('/profile/:username', function (req, res) {
         connection.query(
             "SELECT * FROM BBY_22_users WHERE userName = ?",
             [req.params.username],
-            function (error, results, fields) {
+            function (error, results) {
 
                 if (error) {} else if (results.length > 0) {
                     results.forEach(user => {
                         // Load current user's data into the text fields on the page
                         profileDOM.window.document.querySelector("#username").innerHTML = user.userName;
-                        let profileP = "<img src=\"/imgs/uploads/userPic-" + user.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">"
-                        profileDOM.window.document.getElementById("postimage").innerHTML = profileP
+                        let profileP = "<img src=\"/imgs/uploads/userPic-" + user.profile_pic + "\" alt=\"profile-pic\" id=\"picID\">";
+                        profileDOM.window.document.getElementById("postimage").innerHTML = profileP;
+                        profileDOM.window.document.querySelector("#saverating").setAttribute("onclick", `saverating("${user.userName}")`);
                         profileDOM.window.document.querySelector("#itemlistings").setAttribute("onclick", `window.location.replace("/itemlistings/${user.userName}")`);
+                        profileDOM.window.document.getElementById("messageuser").setAttribute("onclick", `getMessagePage("${user.userName}")`);
+                        connection.query(
+                            "SELECT * FROM BBY_22_ratings WHERE user = ?",
+                            [user.id],
+                            function (error, results, fields) {
+                                let totalrating = 0;
+                                let i = 0;
+                                if (error) {} else if (results.length > 0) {
+                                    results.forEach(rating => {
+                                        // Load current user's data into the text fields on the page
+                                        totalrating = totalrating + rating.rating;
+                                        i++;
+                                    });
+                                    let avgrating = totalrating / i;
+                                    if (Math.round(avgrating) != 0) {
+                                        profileDOM.window.document.querySelector(`#rating${Math.round(avgrating)}`).setAttribute("checked", "");
+                                    }
+                                    profileDOM.window.document.querySelector("#score").innerHTML = `${avgrating.toFixed(1)}/5.0`;
+                                } else {
+                                    profileDOM.window.document.querySelector("#score").innerHTML = `no rating`;
+                                }
+                                res.set("Server", "MACT Engine");
+                                res.set("X-Powered-By", "MACT");
+                                res.send(profileDOM.serialize());
+                            }
+                        );
                     });
-                } else {}
-
-                res.set("Server", "MACT Engine");
-                res.set("X-Powered-By", "MACT");
-                res.send(profileDOM.serialize());
+                } else {
+                    profileDOM.window.document.querySelector("#username").innerHTML = "Invalid User";
+                    let profileP = "<img src=\"/imgs/uploads/userPic-user-pic-none.jpg\" alt=\"profile-pic\" id=\"picID\">";
+                    profileDOM.window.document.getElementById("postimage").innerHTML = profileP;
+                    res.set("Server", "MACT Engine");
+                    res.set("X-Powered-By", "MACT");
+                    res.send(profileDOM.serialize());
+                }
             }
         );
     } else {
@@ -613,21 +874,113 @@ app.get('/profile/:username', function (req, res) {
     }
 });
 
+//shows item listing of specified user
 app.get("/itemlistings/:username", function (req, res) {
     // Check if user is logged in
     if (req.session.loggedIn) {
         let listings = fs.readFileSync("./app/listings.html", "utf8");
         let listingsDOM = new JSDOM(listings);
-        listingsDOM.window.document.querySelector("#pagename").innerHTML = `${req.params.username}'s Listings`
-        res.set("Server", "MACT Engine");
-        res.set("X-Powered-By", "MACT");
-        res.send(listingsDOM.serialize());
+        connection.query(
+            "SELECT * FROM BBY_22_users WHERE userName = ?",
+            [req.params.username],
+            function (error, results) {
+
+                if (error) {} else if (results.length > 0) {
+                    results.forEach(user => {
+                        // Load current username as a title on the page
+                        listingsDOM.window.document.querySelector("#pagename").innerHTML = `${user.userName}'s Listings`;
+                        res.set("Server", "MACT Engine");
+                        res.set("X-Powered-By", "MACT");
+                        res.send(listingsDOM.serialize());
+                    });
+                } else {
+                    listingsDOM.window.document.querySelector("#pagename").innerHTML = `Invalid User`;
+                    res.set("Server", "MACT Engine");
+                    res.set("X-Powered-By", "MACT");
+                    res.send(listingsDOM.serialize());
+                }
+            }
+        );
     } else {
         // User is not logged in, so direct to login page
         res.redirect("/");
     }
 });
 
+//save user rating to database
+app.post('/saverating', (req, res) => {
+    connection.query(
+        "SELECT * FROM BBY_22_users WHERE userName = ?",
+        [req.body.userName],
+        function (error, results) {
+            if (error) {
+                res.send({
+                    status: 'Fail',
+                    msg: 'Error finding user'
+                });
+            } else if (results.length > 0) {
+                let user_id = results[0].id;
+                if (user_id == req.session.userID) {
+                    res.send({
+                        status: "Fail",
+                        msg: "Can not rate yourself"
+                    });
+                } else {
+                    connection.query(
+                        "SELECT * FROM BBY_22_ratings WHERE user = ? AND reviewer = ?",
+                        [user_id, req.session.userID],
+                        function (error, results) {
+                            if (error) {
+                                res.send({
+                                    status: "Fail",
+                                    msg: "Error saving rating."
+                                });
+                            } else if (results.length > 0) {
+                                connection.query(
+                                    "UPDATE BBY_22_ratings SET rating = ? WHERE user = ? AND reviewer = ?",
+                                    [req.body.rating, user_id, req.session.userID],
+                                    function (error, results) {
+                                        if (error) {
+                                            res.send({
+                                                status: "Fail",
+                                                msg: "Error saving rating."
+                                            });
+                                        } else {
+                                            res.send({
+                                                status: 'Success',
+                                                msg: 'Rating saved.'
+                                            });
+                                        }
+                                    }
+                                );
+                            } else {
+                                connection.query(
+                                    "INSERT INTO BBY_22_ratings (user, reviewer, rating) VALUES (?, ?, ?)",
+                                    [user_id, req.session.userID, req.body.rating],
+                                    function (error, results) {
+                                        if (error) {
+                                            res.send({
+                                                status: "Fail",
+                                                msg: "Error saving rating."
+                                            });
+                                        } else {
+                                            res.send({
+                                                status: 'Success',
+                                                msg: 'Rating saved.'
+                                            });
+                                        }
+                                    }
+                                );
+                            }
+                        }
+                    );
+                }
+            }
+        }
+    );
+});
+
+//load user's posts on user listing page
 app.post("/loaduserposts", function (req, res) {
     let myResults = null;
     let posts = [];
@@ -660,6 +1013,8 @@ app.post("/loaduserposts", function (req, res) {
                         }
                     );
                 });
+            } else {
+                res.send(posts);
             }
         }
     );
@@ -685,7 +1040,7 @@ app.get("/viewPost", function (req, res) {
         connection.query(
             "SELECT * FROM BBY_22_item_posts WHERE id = ?",
             [req.session.postID],
-            function (error, results, fields) {
+            function (error, results) {
                 myResults = results;
                 if (error) {} else if (results.length > 0) {
                     results.forEach(post => {
@@ -694,16 +1049,24 @@ app.get("/viewPost", function (req, res) {
                         viewPostDOM.window.document.querySelector("#post-description").innerHTML = `${post.description}`;
                         viewPostDOM.window.document.querySelector("#post-location").innerHTML = `${post.city}`;
                         viewPostDOM.window.document.querySelector("#postdate").innerHTML = `${post.timestamp}`;
-                        let profileP = "<img src=\"imgs/uploads/userPic-" + post.item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
-                        viewPostDOM.window.document.getElementById("postimage").innerHTML = profileP
+                        let profileP = "<img src=\"imgs/uploads/userPic-" + post.item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
+                        viewPostDOM.window.document.getElementById("postimage").innerHTML = profileP;
                         viewPostDOM.window.document.getElementById("messagepost").setAttribute("onclick", `getMessagePage(${post.id})`);
-
                         req.session.postOwnerID = post.user_id;
+
+                        if (req.session.userID == post.user_id) {
+                            viewPostDOM.window.document.querySelector("#initialP").innerHTML = ""
+                            viewPostDOM.window.document.querySelector("#finalP").innerHTML = "profile"
+                            viewPostDOM.window.document.querySelector("#postoptions").innerHTML = 
+                            `<div id="editpost" onclick="editpost(${post.id})">
+                                Edit Post
+                            </div>`;
+                        }
 
                         connection.query(
                             "SELECT * FROM BBY_22_users WHERE id = ?",
                             [req.session.postOwnerID],
-                            function (error, results, fields) {
+                            function (error, results) {
                                 myResults = results;
                                 if (error) {} else if (results.length > 0) {
                                     results.forEach(user => {
@@ -735,7 +1098,7 @@ app.post('/getPostOwner', (req, res) => {
     connection.query(
         "SELECT * FROM BBY_22_users WHERE id = ?",
         [req.session.postOwnerID],
-        function (error, results, fields) {
+        function (error, results) {
 
             if (error) {} else if (results.length > 0) {
                 results.forEach(user => {
@@ -781,9 +1144,16 @@ app.post('/toeditpost', (req, res) => {
 //save edits to post
 app.post('/savepostinfo', (req, res) => {
 
+    // Sanitize text from tiny editor
+    let sanitizeDescription = sanitizeHtml(req.body.description, {
+        allowedTags: []
+    }, {
+        allowedAttributes: {}
+    });
+
     connection.query(
         "UPDATE BBY_22_item_posts SET title = ?, city = ?, description = ?, status = ? WHERE id = ? AND user_id = ?",
-        [req.body.title, req.body.city, req.body.description, req.body.status, req.body.postID, req.session.userID],
+        [req.body.title, req.body.city, sanitizeDescription, req.body.status, req.body.postID, req.session.userID],
         function (error, results) {
             if (error) {
                 res.send({
@@ -950,13 +1320,13 @@ app.post('/update-data', (req, res) => {
     checkEmailAlreadyExists(req.body.email, req.session.email,
         function (recordReturned) {
 
-            // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
+            // If validation returns null, user isn't currently in database, so their data can be updated
             if (recordReturned == null) {
                 //Checks if the new user's username is already in the database (username must be unique)
                 checkUsernameAlreadyExists(req.body.userName, req.session.userName,
                     function (recordReturned) {
 
-                        // If authenticate() returns null, user isn't currently in database, so their data can be inserted/added
+                        // If validation returns null, user isn't currently in database, so their data can be updated
                         if (recordReturned == null) {
 
                             // Insert the new user into the database
@@ -967,6 +1337,7 @@ app.post('/update-data', (req, res) => {
                                     if (error) {
                                         res.send({
                                             status: "Fail",
+                                            field: "none",
                                             msg: "Error updating data."
                                         });
                                     } else {
@@ -987,9 +1358,10 @@ app.post('/update-data', (req, res) => {
 
                         } else {
 
-                            // Send message saying email already exists
+                            // Send message saying username already exists
                             res.send({
                                 status: "Fail",
+                                field: "userName",
                                 msg: "Username already exists."
                             });
                         }
@@ -999,6 +1371,7 @@ app.post('/update-data', (req, res) => {
                 // Send message saying email already exists
                 res.send({
                     status: "Fail",
+                    field: "userEmail",
                     msg: "Email already exists."
                 });
             }
@@ -1138,7 +1511,7 @@ function checkUsernameBeforeAdding(userName, callback) {
 
 // Checks if a username exists in the database before reserving an item
 app.post('/check-username-exists', (req, res) => {
-    connection.query("SELECT * FROM BBY_22_users WHERE username = ? AND type = 'USER'",
+    connection.query("SELECT * FROM BBY_22_users WHERE userName = ? AND type = 'USER'",
         [req.body.userReserved],
         function (error, results) {
             if (error) {}
@@ -1194,13 +1567,13 @@ app.post('/reserve-user-for-item', (req, res) => {
 // Gets the current item post status and user reserved value
 app.post('/get-current-item-status', (req, res) => {
     connection.query("SELECT * FROM BBY_22_item_posts WHERE id = ? AND user_id = ?",
-    [req.session.editpostID, req.session.userID],
+        [req.session.editpostID, req.session.userID],
         function (error, results) {
             if (error) {}
             // Get the user_reserved value
             res.send({
                 status: 'Success',
-                postID: req.session.editpostID, 
+                postID: req.session.editpostID,
                 userID: req.session.userID,
                 itemStatus: results[0].status,
                 userReserved: results[0].user_reserved
@@ -1213,59 +1586,69 @@ app.post('/get-current-item-status', (req, res) => {
 
 // Loads all messages page
 app.get("/message", (req, res) => {
-    let message = fs.readFileSync("./app/message.html", "utf8");
-    let messageDOM = new JSDOM(message);
 
-    messageDOM.window.document.getElementById("thisUserName").textContent = req.session.userName;
+    if (req.session.loggedIn) {
+        let message = fs.readFileSync("./app/message.html", "utf8");
+        let messageDOM = new JSDOM(message);
 
+        messageDOM.window.document.getElementById("thisUserName").textContent = req.session.userName;
 
-    // Create the appropriate HTML script for socket.io
-    let socketScript = messageDOM.window.document.createElement("script");
-    if (is_heroku) {
-        socketScript.src = "https://on-the-house-bby-22.herokuapp.com/socket.io/socket.io.js";
+        // Create the appropriate HTML script for socket.io
+        let socketScript = messageDOM.window.document.createElement("script");
+        if (is_heroku) {
+            socketScript.src = "https://on-the-house-bby-22.herokuapp.com/socket.io/socket.io.js";
+
+        } else {
+            socketScript.src = "http://localhost:8000/socket.io/socket.io.js";
+        }
+        messageDOM.window.document.body.appendChild(socketScript);
+
+        let clientScript = messageDOM.window.document.createElement("script");
+        clientScript.src = "js/clientMessage.js";
+        messageDOM.window.document.body.appendChild(clientScript);
+
+        res.set("Server", "MACT Engine");
+        res.set("X-Powered-By", "MACT");
+        res.send(messageDOM.serialize());
 
     } else {
-        socketScript.src = "http://localhost:8000/socket.io/socket.io.js";
+        // User is not logged in, so direct to login page
+        res.redirect("/");
     }
-    messageDOM.window.document.body.appendChild(socketScript);
-
-    let clientScript = messageDOM.window.document.createElement("script");
-    clientScript.src = "js/clientMessage.js";
-    messageDOM.window.document.body.appendChild(clientScript);
-
-
-    res.set("Server", "MACT Engine");
-    res.set("X-Powered-By", "MACT");
-    res.send(messageDOM.serialize());
 });
 
 
 // Loads private message page after clicking a post
 app.get("/postMessage", (req, res) => {
-    let message = fs.readFileSync("./app/postMessage.html", "utf8");
-    let messageDOM = new JSDOM(message);
 
-    messageDOM.window.document.getElementById("thisUserName").textContent = req.session.userName;
+    if (req.session.loggedIn) {
+        let message = fs.readFileSync("./app/postMessage.html", "utf8");
+        let messageDOM = new JSDOM(message);
 
+        messageDOM.window.document.getElementById("thisUserName").textContent = req.session.userName;
 
-    // Create the appropriate HTML script for socket.io
-    let socketScript = messageDOM.window.document.createElement("script");
-    if (is_heroku) {
-        socketScript.src = "https://on-the-house-bby-22.herokuapp.com/socket.io/socket.io.js";
+        // Create the appropriate HTML script for socket.io
+        let socketScript = messageDOM.window.document.createElement("script");
+        if (is_heroku) {
+            socketScript.src = "https://on-the-house-bby-22.herokuapp.com/socket.io/socket.io.js";
+
+        } else {
+            socketScript.src = "http://localhost:8000/socket.io/socket.io.js";
+        }
+        messageDOM.window.document.body.appendChild(socketScript);
+
+        let clientScript = messageDOM.window.document.createElement("script");
+        clientScript.src = "js/clientPostMessage.js";
+        messageDOM.window.document.body.appendChild(clientScript);
+
+        res.set("Server", "MACT Engine");
+        res.set("X-Powered-By", "MACT");
+        res.send(messageDOM.serialize());
 
     } else {
-        socketScript.src = "http://localhost:8000/socket.io/socket.io.js";
+        // User is not logged in, so direct to login page
+        res.redirect("/");
     }
-    messageDOM.window.document.body.appendChild(socketScript);
-
-    let clientScript = messageDOM.window.document.createElement("script");
-    clientScript.src = "js/clientPostMessage.js";
-    messageDOM.window.document.body.appendChild(clientScript);
-
-
-    res.set("Server", "MACT Engine");
-    res.set("X-Powered-By", "MACT");
-    res.send(messageDOM.serialize());
 });
 
 
@@ -1277,14 +1660,15 @@ app.post("/all-messages-between-two-users", function (req, res) {
         function (error, messages) {
             res.send({
                 status: "Success",
-                dbResult: messages
+                dbResult: messages,
+                sessionUserID: req.session.userID
             })
         }
     );
 });
 
 
-// Gets a post owner's user ID from the post ID
+// Gets a post owner's user ID and the current user's ID, from the post ID
 app.post("/get-other-user-by-post", function (req, res) {
 
     connection.query("SELECT user_id FROM BBY_22_item_posts WHERE id = ?",
@@ -1304,8 +1688,8 @@ app.post("/get-other-user-by-post", function (req, res) {
 app.post("/get-owner-username-with-id", function (req, res) {
 
     // Gets the email of the user with this user ID
-    connection.query("SELECT username FROM BBY_22_users WHERE id = ?",
-        [req.body.postOwnerID],
+    connection.query("SELECT userName FROM BBY_22_users WHERE id = ?",
+        [req.body.otherUserID],
         function (error, username) {
             res.send({
                 status: "Success",
@@ -1320,12 +1704,29 @@ app.post("/get-owner-username-with-id", function (req, res) {
 app.post("/people-who-messaged-this-user", function (req, res) {
 
     // Gets all usernames who have sent this user a message or received one from them
-    let sqlStatement = "SELECT DISTINCT userSending, userReceiving FROM bby_22_messages WHERE userReceiving = '" + req.body.username + "'" + " OR userSending = '" + req.body.username + "'";
+    let sqlStatement = "SELECT DISTINCT userSending, userReceiving FROM bby_22_messages WHERE userReceiving = '" + req.session.userID + "'" + " OR userSending = '" + req.session.userID + "'";
     connection.query(sqlStatement,
         function (error, contacts) {
             res.send({
                 status: "Success",
-                thisUsersContacts: contacts
+                thisUsersContacts: contacts,
+                sessionUserID: req.session.userID
+            })
+        }
+    );
+});
+
+
+// Get user's user ID based on their username
+app.post("/get-user-id-from-username", function (req, res) {
+
+    connection.query("SELECT id FROM bby_22_users WHERE userName = ?",
+        [req.body.userName],
+        function (error, otherID) {
+            res.send({
+                status: "Success",
+                otherUserID: otherID[0],
+                sessionUserID: req.session.userID
             })
         }
     );
@@ -1389,7 +1790,7 @@ function authenticateUser(email, pwd, callback) {
 
     connection.query(
         "SELECT * FROM BBY_22_users WHERE email = ? AND password = ?", [email, pwd],
-        function (error, results, fields) {
+        function (error, results) {
 
             if (error) {
                 res.send({
@@ -1415,7 +1816,7 @@ function checkEmailAlreadyExists(email, sessionemail, callback) {
 
     connection.query(
         "SELECT * FROM BBY_22_users WHERE email = ?", [email],
-        function (error, results, fields) {
+        function (error, results) {
             if (error) {
                 res.send({
                     status: "Fail",
@@ -1438,7 +1839,7 @@ function checkUsernameAlreadyExists(username, sessionusername, callback) {
 
     connection.query(
         "SELECT * FROM BBY_22_users WHERE userName = ?", [username],
-        function (error, results, fields) {
+        function (error, results) {
             if (error) {
                 res.send({
                     status: "Fail",
@@ -1455,6 +1856,15 @@ function checkUsernameAlreadyExists(username, sessionusername, callback) {
         }
     );
 }
+
+
+// Redirects to 404 page for any other path that does not exist
+app.get('*', function(req, res){
+    let newError = fs.readFileSync("./app/error.html", "utf8");
+    let newErrorDOM = new JSDOM(newError);
+
+    res.status(404).send(newErrorDOM.serialize());
+});
 
 
 // Function connects to a database, checks if database exists, if not it creates it
@@ -1493,7 +1903,7 @@ async function initializeDatabase() {
             description VARCHAR(1000), 
             city VARCHAR(30), 
             status VARCHAR(30), 
-            user_reserved VARCHAR(20),
+            user_reserved int,
             timestamp VARCHAR(50),
             item_pic TEXT (999),
             PRIMARY KEY (id),
@@ -1501,11 +1911,28 @@ async function initializeDatabase() {
             
         CREATE TABLE IF NOT EXISTS BBY_22_messages(
             id int NOT NULL AUTO_INCREMENT, 
-            userSending VARCHAR(30) NOT NULL,                
-            userReceiving VARCHAR(30) NOT NULL, 
+            userSending int NOT NULL,                
+            userReceiving int NOT NULL, 
             message VARCHAR(300), 
             time VARCHAR(50), 
-            PRIMARY KEY (id));`;
+            PRIMARY KEY (id));
+            
+        CREATE TABLE IF NOT EXISTS BBY_22_bookmarks(
+            id int NOT NULL AUTO_INCREMENT, 
+            user_id int NOT NULL,
+            post_id int NOT NULL,
+            PRIMARY KEY (id),
+            FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+            FOREIGN KEY (post_id) REFERENCES BBY_22_item_posts(id) ON UPDATE CASCADE ON DELETE CASCADE);
+
+        CREATE TABLE IF NOT EXISTS BBY_22_ratings(
+            id int NOT NULL AUTO_INCREMENT, 
+            user int NOT NULL,                
+            reviewer int NOT NULL, 
+            rating int,
+            PRIMARY KEY (id),
+            FOREIGN KEY (user) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+            FOREIGN KEY (reviewer) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
     } else {
         connection = await mysql.createConnection({
             host: "localhost",
@@ -1534,7 +1961,7 @@ async function initializeDatabase() {
             description VARCHAR(1000), 
             city VARCHAR(30), 
             status VARCHAR(30), 
-            user_reserved VARCHAR(20), 
+            user_reserved int, 
             timestamp VARCHAR(50),
             item_pic TEXT (999),
             PRIMARY KEY (id),
@@ -1542,11 +1969,28 @@ async function initializeDatabase() {
             
         CREATE TABLE IF NOT EXISTS BBY_22_messages(
             id int NOT NULL AUTO_INCREMENT, 
-            userSending VARCHAR(30) NOT NULL,                
-            userReceiving VARCHAR(30) NOT NULL, 
+            userSending int NOT NULL,                
+            userReceiving int NOT NULL, 
             message VARCHAR(300), 
             time VARCHAR(50), 
-            PRIMARY KEY (id));`;
+            PRIMARY KEY (id));
+            
+        CREATE TABLE IF NOT EXISTS BBY_22_bookmarks(
+            id int NOT NULL AUTO_INCREMENT, 
+            user_id int NOT NULL,
+            post_id int NOT NULL,
+            PRIMARY KEY (id),
+            FOREIGN KEY (user_id) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+            FOREIGN KEY (post_id) REFERENCES BBY_22_item_posts(id) ON UPDATE CASCADE ON DELETE CASCADE);
+       
+        CREATE TABLE IF NOT EXISTS BBY_22_ratings(
+            id int NOT NULL AUTO_INCREMENT, 
+            user int NOT NULL,                
+            reviewer int NOT NULL, 
+            rating int,
+            PRIMARY KEY (id),
+            FOREIGN KEY (user) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE,
+            FOREIGN KEY (reviewer) REFERENCES BBY_22_users(id) ON UPDATE CASCADE ON DELETE CASCADE);`;
     }
 
     // Creates a table for user profiles and item posts
@@ -1555,11 +1999,12 @@ async function initializeDatabase() {
     // Await allows for us to wait for this line to execute synchronously
     const [rows, fields] = await connection.query("SELECT * FROM BBY_22_users");
 
-    // Adds a default user account in case there is no data in the table.
+    // Adds default admin and user accounts in case there is no data in the table.
     if (rows.length == 0) {
-        let recordReturneds = "INSERT INTO BBY_22_users (firstName, lastName, userName, city, email, password, type) VALUES ?";
+        let recordReturneds = "INSERT INTO BBY_22_users (firstName, lastName, userName, city, email, password, type, profile_pic) VALUES ?";
         let recordValues = [
-            ["Test", "Test", "Test", "Vancouver", "test@test.ca", "password", "ADMIN"]
+            ["Admin", "Test", "Admin", "Vancouver", "admin@test.ca", "password", "ADMIN", "user-pic-none.jpg"],
+            ["User", "Test", "User", "Vancouver", "user@test.ca", "password", "USER", "user-pic-none.jpg"]
         ];
         await connection.query(recordReturneds, [recordValues]);
     }

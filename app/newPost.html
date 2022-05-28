@@ -10,8 +10,11 @@
 
     <!-- Styles Page for New Post -->
     <link rel="stylesheet" href="/css/newPost.css">
-</head>
 
+    <!-- Tiny editor -->
+    <script src="https://cdn.tiny.cloud/1/64lg7fzavr5yxtvjfnrl8fw8700yfi2f4m70sfctwdil72xb/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+</head>
+ 
 <body>
     <!-- Nav bar -->
     <!-- Header -->
@@ -20,7 +23,7 @@
             <div class="container">
                 <ul class="navbar">
                     <li id="home"><a href="#">HOME</a></li>
-                    <li id="bookmark"><a href="#">SAVED</a></li>
+                    <li id="bookmark"><a href="#">BOOKMARKS</a></li>
                     <li id="messages"><a href="#">MESSAGES</a></li>
                     <li id="listings"><a href="#">MY LISTINGS</a></li>
                     <li id="profile"><a href="#">PROFILE</a></li>
@@ -38,7 +41,7 @@
                 </label>
                 <ul class="menuInside">
                     <li><a class="links" id="home2" href="#">Home</a></li>
-                    <li><a class="links bookmark" id="bookmark2" href="#">Saved</a></li>
+                    <li><a class="links bookmark" id="bookmark2" href="#">Bookmarks</a></li>
                     <li><a class="links messages" id="messages2" href="#">Messages</a></li>
                     <li><a class="links listings" id="listings2" href="#">My Listings</a></li>
                     <li><a class="links profile" id="profile2" href="#">Profile</a></li>
@@ -62,26 +65,30 @@
 
         <div class="newPostdiv">
             <form id="signUpForm">
-                <label>Title:</label>
+                <label>Title: <abbr title="Required" class="asterisk">*</abbr></label>
                 <br>
-                <input type="text" id="title" name="title" placeholder="Title" pattern="[A-Za-z]{1,50}"
+                <input type="text" id="title" name="title" placeholder="Title" pattern="[A-Za-z]{1,50}" maxlength="50"
                     required="required">
                 <br>
-                <label>City:</label>
+                <label>City: <abbr title="Required" class="asterisk">*</abbr></label>
                 <br>
-                <input type="text" id="city" name="city" placeholder="City" pattern="[A-Za-z]{1,30}"
+                <input type="text" id="city" name="city" placeholder="City" pattern="[A-Za-z]{1,30}" maxlength="30"
                     required="required">
                 <br>
-                <label>Description:</label>
+                <label>Description: <abbr title="Required" class="asterisk">*</abbr></label>
                 <br>
-                <textarea name="description" id="newPostDescription" maxlength="1000" minlength="20" ></textarea>
+                <textarea name="description" id="newPostDescription" maxlength="1000" minlength="20"></textarea>
                 <br><br>
                 <button id="newPostBtn">Next: Add Photo</button>
                 <br>
+                <p id="errorMessage"></p>
             </form>
             <form id="backtoMain" action="/main" method="get">
                 <input type="submit" id="backToLogin" value="Go Back" />
             </form>
+            <div id="resetDiv">
+                <button id="resetBtn" onclick="resetFields()">Reset</button>
+            </div>
         </div>
 
     </div>

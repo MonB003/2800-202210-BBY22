@@ -13,6 +13,14 @@ document.querySelector("#home2").addEventListener("click", function (e) {
     window.location.replace("/main");
 });
 
+//redirects to bookmarks page
+document.querySelector("#bookmark").addEventListener("click", function (e) {
+    window.location.replace("/myBookmarks");
+});
+document.querySelector("#bookmark2").addEventListener("click", function (e) {
+    window.location.replace("/myBookmarks");
+});
+
 //redirects to message page
 document.querySelector("#messages").addEventListener("click", function (e) {
     window.location.replace("/message");
@@ -53,14 +61,14 @@ function getMessagePage(postID) {
 async function checkPostOwnerAndSessionUser(postID) {
     const idDataSent = {
         postID
-    }
+    };
     const idPostDetails = {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(idDataSent)
-    }
+    };
 
     // Get post owner's ID
     const postResponseID = await fetch('/get-other-user-by-post', idPostDetails);
@@ -75,6 +83,51 @@ async function checkPostOwnerAndSessionUser(postID) {
         window.location.replace("/postMessage");
     }
 }
+
+// Gets the currently selected bookmark status in the dropdown
+function getBookmarkStatus(postID) {
+    // Get dropdown menu item selected
+    let savePostDropdown = document.getElementById(`savepost${postID}`);
+    var bookmarkStatus = savePostDropdown.value;
+
+
+    if (bookmarkStatus == "1") {
+        // Record post_id to send to database for bby_22_bookmarks table
+        const dataSent = {
+            postID
+        }
+
+        //Displays a pop-up to inform the user that the item has been added to their bookmarks
+        addBookmark(dataSent);
+        let confirmBookmarkDiv = document.getElementById('confirmBookmark');
+        confirmBookmarkDiv.style.display = "block";
+    }
+    // If bookmark status is 0, do nothing because bookmarks can only deleted from my bookmarks page
+
+}
+
+// When the user acknowledged the bookmark added confirmation by clicking on OK
+function confirmBookmarkMsg() {
+    let confirmBookmarkDiv = document.getElementById('confirmBookmark');
+    confirmBookmarkDiv.style.display = "none";
+}
+
+async function addBookmark(dataSent) {
+
+    // Looks for only an app.post function
+    // Sends the JSON data (postID) to the server
+    const bookmarkDetails = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(dataSent)
+    };
+
+    // Get response from server side post request
+    await fetch('/addBookmark', bookmarkDetails);
+}
+
 
 //toggle filter menu
 document.querySelector("#togglefilter").addEventListener("click", function (e) {
@@ -104,28 +157,25 @@ document.querySelector("#sortbutton").addEventListener("click", function (e) {
 document.querySelector("#filterstatus").addEventListener("click", function (e) {
     if (filterstatus == "all") {
         filterstatus = "available";
-        document.querySelector("#filterstatus").innerHTML = "Available"
+        document.querySelector("#filterstatus").innerHTML = "Available";
     } else if (filterstatus == "available") {
         filterstatus = "reserved";
-        document.querySelector("#filterstatus").innerHTML = "Reserved"
+        document.querySelector("#filterstatus").innerHTML = "Reserved";
     } else {
-        filterstatus = "all"
-        document.querySelector("#filterstatus").innerHTML = "All"
+        filterstatus = "all";
+        document.querySelector("#filterstatus").innerHTML = "All";
     }
     displayposts();
 });
 
 // retrieves posts from database
 async function loadposts() {
-    const dataSent = {}
-
     const getDetails = {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
-        },
-        body: JSON.stringify(dataSent)
-    }
+        }
+    };
 
     const getResponse = await fetch('/loadposts', getDetails);
     const jsonData = await getResponse.json();
@@ -140,20 +190,19 @@ async function displayposts() {
     let posttemplate = document.getElementById("posttemplate");
     let posts = document.getElementById("posts");
     if (search.toLowerCase() == "game") {
-        let testpost = posttemplate.content.cloneNode(true);
-        testpost.querySelector(".post").id = `game`;
-        testpost.querySelector(".posttitle").innerHTML = "On The House Surprise";
-        testpost.querySelector(".posttitle").style.color = "lightgreen";
-        testpost.querySelector(".poststatus").innerHTML = "Available";
-        testpost.querySelector(".postlocation").innerHTML = "Click Title to Find Out";
-        testpost.querySelector(".postdate").innerHTML = "";
-        testpost.querySelector(".savepost").innerHTML = "";
-        testpost.querySelector(".messagepost").innerHTML = "";
+        let postinfo = posttemplate.content.cloneNode(true);
+        postinfo.querySelector(".post").id = `game`;
+        postinfo.querySelector(".posttitle").innerHTML = "On The House Surprise";
+        postinfo.querySelector(".posttitle").style.color = "lightgreen";
+        postinfo.querySelector(".poststatus").innerHTML = "Available";
+        postinfo.querySelector(".postlocation").innerHTML = "Click Title to Find Out";
+        postinfo.querySelector(".postdate").innerHTML = "";
+        postinfo.querySelector(".savepost").innerHTML = "";
+        postinfo.querySelector(".postoptions").innerHTML = "";
         let postpic = `<img src="imgs/stickmangame.png" alt="game-pic" id="gamepic">`;
-        console.log(postpic);
-        testpost.querySelector(".postimage").innerHTML = postpic;
-        testpost.querySelector(".posttitle").setAttribute("onclick", `window.location.replace("/game")`);
-        posts.appendChild(testpost);
+        postinfo.querySelector(".postimage").innerHTML = postpic;
+        postinfo.querySelector(".posttitle").setAttribute("onclick", `window.location.replace("/game")`);
+        posts.appendChild(postinfo);
     }
 
     if (sort == "recent") {
@@ -161,69 +210,121 @@ async function displayposts() {
             if (document.querySelector("#filter").value == "title") {
                 if (postdata[i].title.toLowerCase().includes(search.toLowerCase())) {
                     if (postdata[i].status == filterstatus) {
-                        let testpost = posttemplate.content.cloneNode(true);
-                        testpost.querySelector(".post").id = `post${postdata[i].postid}`;
-                        testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
-                        testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
-                        testpost.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
-                        testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
-                        testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
-                        testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
-                        testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
-                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
-                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
-                        testpost.querySelector(".postimage").innerHTML = postpic;
-                        testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
-                        posts.appendChild(testpost);
+                        let postinfo = posttemplate.content.cloneNode(true);
+                        postinfo.querySelector(".post").id = `post${postdata[i].postid}`;
+                        postinfo.querySelector(".posttitle").innerHTML = postdata[i].title;
+                        postinfo.querySelector(".poststatus").innerHTML = postdata[i].status;
+                        postinfo.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
+                        postinfo.querySelector(".postlocation").innerHTML = postdata[i].city;
+                        postinfo.querySelector(".postdate").innerHTML = postdata[i].timestamp;
+                        postinfo.querySelector(".savepost").id = `save${postdata[i].postid}`;
+                        postinfo.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        postinfo.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+                        postinfo.querySelector(".messagepost").setAttribute("onmouseover", `setCursorHover(${postdata[i].postid}, "message${postdata[i].postid}")`);
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
+                        postinfo.querySelector(".postimage").innerHTML = postpic;
+                        postinfo.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
+                        postinfo.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
+                        postinfo.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
+                        if (postdata[i].is_owner == true) {
+                            postinfo.querySelector(".editpost").id = `edit${postdata[i].postid}`;
+                            postinfo.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`);
+                            postinfo.querySelector(".editpost").innerHTML= `Edit`;
+                            postinfo.querySelector(".editpost").style.cursor = "pointer";
+                            postinfo.querySelector(".messagepost").style.display = "none";
+                            postinfo.querySelector(".savepostcontainer").style.display = "none";
+                        } else {
+                            postinfo.querySelector(".editpost").style.display = "none";
+                        }
+                        posts.appendChild(postinfo);
                     } else if (filterstatus == "all") {
-                        let testpost = posttemplate.content.cloneNode(true);
-                        testpost.querySelector(".post").id = `post${postdata[i].postid}`;
-                        testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
-                        testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
-                        testpost.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
-                        testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
-                        testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
-                        testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
-                        testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
-                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
-                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
-                        testpost.querySelector(".postimage").innerHTML = postpic;
-                        testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
-                        posts.appendChild(testpost);
+                        let postinfo = posttemplate.content.cloneNode(true);
+                        postinfo.querySelector(".post").id = `post${postdata[i].postid}`;
+                        postinfo.querySelector(".posttitle").innerHTML = postdata[i].title;
+                        postinfo.querySelector(".poststatus").innerHTML = postdata[i].status;
+                        postinfo.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
+                        postinfo.querySelector(".postlocation").innerHTML = postdata[i].city;
+                        postinfo.querySelector(".postdate").innerHTML = postdata[i].timestamp;
+                        postinfo.querySelector(".savepost").id = `save${postdata[i].postid}`;
+                        postinfo.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        postinfo.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+                        postinfo.querySelector(".messagepost").setAttribute("onmouseover", `setCursorHover(${postdata[i].postid}, "message${postdata[i].postid}")`);
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
+                        postinfo.querySelector(".postimage").innerHTML = postpic;
+                        postinfo.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
+                        postinfo.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
+                        postinfo.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
+                        if (postdata[i].is_owner == true) {
+                            postinfo.querySelector(".editpost").id = `edit${postdata[i].postid}`;
+                            postinfo.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`);
+                            postinfo.querySelector(".editpost").innerHTML= `Edit`;
+                            postinfo.querySelector(".editpost").style.cursor = "pointer";
+                            postinfo.querySelector(".messagepost").style.display = "none";
+                            postinfo.querySelector(".savepostcontainer").style.display = "none";
+                        } else {
+                            postinfo.querySelector(".editpost").style.display = "none";
+                        }
+                        posts.appendChild(postinfo);
                     }
                 }
             } else if (document.querySelector("#filter").value == "city") {
                 if (postdata[i].city.toLowerCase().includes(search.toLowerCase())) {
                     if (postdata[i].status == filterstatus) {
-                        let testpost = posttemplate.content.cloneNode(true);
-                        testpost.querySelector(".post").id = `post${postdata[i].postid}`;
-                        testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
-                        testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
-                        testpost.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
-                        testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
-                        testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
-                        testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
-                        testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
-                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+                        let postinfo = posttemplate.content.cloneNode(true);
+                        postinfo.querySelector(".post").id = `post${postdata[i].postid}`;
+                        postinfo.querySelector(".posttitle").innerHTML = postdata[i].title;
+                        postinfo.querySelector(".poststatus").innerHTML = postdata[i].status;
+                        postinfo.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
+                        postinfo.querySelector(".postlocation").innerHTML = postdata[i].city;
+                        postinfo.querySelector(".postdate").innerHTML = postdata[i].timestamp;
+                        postinfo.querySelector(".savepost").id = `save${postdata[i].postid}`;
+                        postinfo.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        postinfo.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+                        postinfo.querySelector(".messagepost").setAttribute("onmouseover", `setCursorHover(${postdata[i].postid}, "message${postdata[i].postid}")`);
                         let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
-                        testpost.querySelector(".postimage").innerHTML = postpic;
-                        testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
-                        posts.appendChild(testpost);
+                        postinfo.querySelector(".postimage").innerHTML = postpic;
+                        postinfo.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
+                        postinfo.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
+                        postinfo.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
+                        if (postdata[i].is_owner == true) {
+                            postinfo.querySelector(".editpost").id = `edit${postdata[i].postid}`;
+                            postinfo.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`);
+                            postinfo.querySelector(".editpost").innerHTML= `Edit`;
+                            postinfo.querySelector(".editpost").style.cursor = "pointer";
+                            postinfo.querySelector(".messagepost").style.display = "none";
+                            postinfo.querySelector(".savepostcontainer").style.display = "none";
+                        } else {
+                            postinfo.querySelector(".editpost").style.display = "none";
+                        }
+                        posts.appendChild(postinfo);
                     } else if (filterstatus == "all") {
-                        let testpost = posttemplate.content.cloneNode(true);
-                        testpost.querySelector(".post").id = `post${postdata[i].postid}`;
-                        testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
-                        testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
-                        testpost.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
-                        testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
-                        testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
-                        testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
-                        testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
-                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
-                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
-                        testpost.querySelector(".postimage").innerHTML = postpic;
-                        testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
-                        posts.appendChild(testpost);
+                        let postinfo = posttemplate.content.cloneNode(true);
+                        postinfo.querySelector(".post").id = `post${postdata[i].postid}`;
+                        postinfo.querySelector(".posttitle").innerHTML = postdata[i].title;
+                        postinfo.querySelector(".poststatus").innerHTML = postdata[i].status;
+                        postinfo.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
+                        postinfo.querySelector(".postlocation").innerHTML = postdata[i].city;
+                        postinfo.querySelector(".postdate").innerHTML = postdata[i].timestamp;
+                        postinfo.querySelector(".savepost").id = `save${postdata[i].postid}`;
+                        postinfo.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        postinfo.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+                        postinfo.querySelector(".messagepost").setAttribute("onmouseover", `setCursorHover(${postdata[i].postid}, "message${postdata[i].postid}")`);
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
+                        postinfo.querySelector(".postimage").innerHTML = postpic;
+                        postinfo.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
+                        postinfo.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
+                        postinfo.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
+                        if (postdata[i].is_owner == true) {
+                            postinfo.querySelector(".editpost").id = `edit${postdata[i].postid}`;
+                            postinfo.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`);
+                            postinfo.querySelector(".editpost").innerHTML= `Edit`;
+                            postinfo.querySelector(".editpost").style.cursor = "pointer";
+                            postinfo.querySelector(".messagepost").style.display = "none";
+                            postinfo.querySelector(".savepostcontainer").style.display = "none";
+                        } else {
+                            postinfo.querySelector(".editpost").style.display = "none";
+                        }
+                        posts.appendChild(postinfo);
                     }
                 }
             }
@@ -233,69 +334,121 @@ async function displayposts() {
             if (document.querySelector("#filter").value == "title") {
                 if (postdata[i].title.toLowerCase().includes(search.toLowerCase())) {
                     if (postdata[i].status == filterstatus) {
-                        let testpost = posttemplate.content.cloneNode(true);
-                        testpost.querySelector(".post").id = `post${postdata[i].postid}`;
-                        testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
-                        testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
-                        testpost.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
-                        testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
-                        testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
-                        testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
-                        testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
-                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
-                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
-                        testpost.querySelector(".postimage").innerHTML = postpic;
-                        testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
-                        posts.appendChild(testpost);
+                        let postinfo = posttemplate.content.cloneNode(true);
+                        postinfo.querySelector(".post").id = `post${postdata[i].postid}`;
+                        postinfo.querySelector(".posttitle").innerHTML = postdata[i].title;
+                        postinfo.querySelector(".poststatus").innerHTML = postdata[i].status;
+                        postinfo.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
+                        postinfo.querySelector(".postlocation").innerHTML = postdata[i].city;
+                        postinfo.querySelector(".postdate").innerHTML = postdata[i].timestamp;
+                        postinfo.querySelector(".savepost").id = `save${postdata[i].postid}`;
+                        postinfo.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        postinfo.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+                        postinfo.querySelector(".messagepost").setAttribute("onmouseover", `setCursorHover(${postdata[i].postid}, "message${postdata[i].postid}")`);
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
+                        postinfo.querySelector(".postimage").innerHTML = postpic;
+                        postinfo.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
+                        postinfo.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
+                        postinfo.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
+                        if (postdata[i].is_owner == true) {
+                            postinfo.querySelector(".editpost").id = `edit${postdata[i].postid}`;
+                            postinfo.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`);
+                            postinfo.querySelector(".editpost").innerHTML= `Edit`;
+                            postinfo.querySelector(".editpost").style.cursor = "pointer";
+                            postinfo.querySelector(".messagepost").style.display = "none";
+                            postinfo.querySelector(".savepostcontainer").style.display = "none";
+                        } else {
+                            postinfo.querySelector(".editpost").style.display = "none";
+                        }
+                        posts.appendChild(postinfo);
                     } else if (filterstatus == "all") {
-                        let testpost = posttemplate.content.cloneNode(true);
-                        testpost.querySelector(".post").id = `post${postdata[i].postid}`;
-                        testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
-                        testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
-                        testpost.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
-                        testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
-                        testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
-                        testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
-                        testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
-                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
-                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
-                        testpost.querySelector(".postimage").innerHTML = postpic;
-                        testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
-                        posts.appendChild(testpost);
+                        let postinfo = posttemplate.content.cloneNode(true);
+                        postinfo.querySelector(".post").id = `post${postdata[i].postid}`;
+                        postinfo.querySelector(".posttitle").innerHTML = postdata[i].title;
+                        postinfo.querySelector(".poststatus").innerHTML = postdata[i].status;
+                        postinfo.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
+                        postinfo.querySelector(".postlocation").innerHTML = postdata[i].city;
+                        postinfo.querySelector(".postdate").innerHTML = postdata[i].timestamp;
+                        postinfo.querySelector(".savepost").id = `save${postdata[i].postid}`;
+                        postinfo.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        postinfo.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+                        postinfo.querySelector(".messagepost").setAttribute("onmouseover", `setCursorHover(${postdata[i].postid}, "message${postdata[i].postid}")`);
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
+                        postinfo.querySelector(".postimage").innerHTML = postpic;
+                        postinfo.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
+                        postinfo.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
+                        postinfo.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
+                        if (postdata[i].is_owner == true) {
+                            postinfo.querySelector(".editpost").id = `edit${postdata[i].postid}`;
+                            postinfo.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`);
+                            postinfo.querySelector(".editpost").innerHTML= `Edit`;
+                            postinfo.querySelector(".editpost").style.cursor = "pointer";
+                            postinfo.querySelector(".messagepost").style.display = "none";
+                            postinfo.querySelector(".savepostcontainer").style.display = "none";
+                        } else {
+                            postinfo.querySelector(".editpost").style.display = "none";
+                        }
+                        posts.appendChild(postinfo);
                     }
                 }
             } else if (document.querySelector("#filter").value == "city") {
                 if (postdata[i].city.toLowerCase().includes(search.toLowerCase())) {
                     if (postdata[i].status == filterstatus) {
-                        let testpost = posttemplate.content.cloneNode(true);
-                        testpost.querySelector(".post").id = `post${postdata[i].postid}`;
-                        testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
-                        testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
-                        testpost.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
-                        testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
-                        testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
-                        testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
-                        testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
-                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
-                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
-                        testpost.querySelector(".postimage").innerHTML = postpic;
-                        testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
-                        posts.appendChild(testpost);
+                        let postinfo = posttemplate.content.cloneNode(true);
+                        postinfo.querySelector(".post").id = `post${postdata[i].postid}`;
+                        postinfo.querySelector(".posttitle").innerHTML = postdata[i].title;
+                        postinfo.querySelector(".poststatus").innerHTML = postdata[i].status;
+                        postinfo.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
+                        postinfo.querySelector(".postlocation").innerHTML = postdata[i].city;
+                        postinfo.querySelector(".postdate").innerHTML = postdata[i].timestamp;
+                        postinfo.querySelector(".savepost").id = `save${postdata[i].postid}`;
+                        postinfo.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        postinfo.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+                        postinfo.querySelector(".messagepost").setAttribute("onmouseover", `setCursorHover(${postdata[i].postid}, "message${postdata[i].postid}")`);
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
+                        postinfo.querySelector(".postimage").innerHTML = postpic;
+                        postinfo.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
+                        postinfo.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
+                        postinfo.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
+                        if (postdata[i].is_owner == true) {
+                            postinfo.querySelector(".editpost").id = `edit${postdata[i].postid}`;
+                            postinfo.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`);
+                            postinfo.querySelector(".editpost").innerHTML= `Edit`;
+                            postinfo.querySelector(".editpost").style.cursor = "pointer";
+                            postinfo.querySelector(".messagepost").style.display = "none";
+                            postinfo.querySelector(".savepostcontainer").style.display = "none";
+                        } else {
+                            postinfo.querySelector(".editpost").style.display = "none";
+                        }
+                        posts.appendChild(postinfo);
                     } else if (filterstatus == "all") {
-                        let testpost = posttemplate.content.cloneNode(true);
-                        testpost.querySelector(".post").id = `post${postdata[i].postid}`;
-                        testpost.querySelector(".posttitle").innerHTML = postdata[i].title;
-                        testpost.querySelector(".poststatus").innerHTML = postdata[i].status;
-                        testpost.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
-                        testpost.querySelector(".postlocation").innerHTML = postdata[i].city;
-                        testpost.querySelector(".postdate").innerHTML = postdata[i].timestamp;
-                        testpost.querySelector(".savepost").id = `save${postdata[i].postid}`;
-                        testpost.querySelector(".messagepost").id = `message${postdata[i].postid}`;
-                        testpost.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
-                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">"
-                        testpost.querySelector(".postimage").innerHTML = postpic;
-                        testpost.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
-                        posts.appendChild(testpost);
+                        let postinfo = posttemplate.content.cloneNode(true);
+                        postinfo.querySelector(".post").id = `post${postdata[i].postid}`;
+                        postinfo.querySelector(".posttitle").innerHTML = postdata[i].title;
+                        postinfo.querySelector(".poststatus").innerHTML = postdata[i].status;
+                        postinfo.querySelector(".poststatus").setAttribute("id", `postStatus${postdata[i].postid}`);
+                        postinfo.querySelector(".postlocation").innerHTML = postdata[i].city;
+                        postinfo.querySelector(".postdate").innerHTML = postdata[i].timestamp;
+                        postinfo.querySelector(".savepost").id = `save${postdata[i].postid}`;
+                        postinfo.querySelector(".messagepost").id = `message${postdata[i].postid}`;
+                        postinfo.querySelector(".messagepost").setAttribute("onclick", `getMessagePage(${postdata[i].postid})`);
+                        postinfo.querySelector(".messagepost").setAttribute("onmouseover", `setCursorHover(${postdata[i].postid}, "message${postdata[i].postid}")`);
+                        let postpic = "<img src=\"imgs/uploads/userPic-" + postdata[i].item_pic + "\" alt=\"profile-pic\" id=\"picID\">";
+                        postinfo.querySelector(".postimage").innerHTML = postpic;
+                        postinfo.querySelector(".posttitle").setAttribute("onclick", `viewPost(${postdata[i].postid})`);
+                        postinfo.querySelector(".savepost").setAttribute("id", `savepost${postdata[i].postid}`);
+                        postinfo.querySelector(".savepost").setAttribute("onchange", `getBookmarkStatus(${postdata[i].postid})`);
+                        if (postdata[i].is_owner == true) {
+                            postinfo.querySelector(".editpost").id = `edit${postdata[i].postid}`;
+                            postinfo.querySelector(".editpost").setAttribute("onclick", `editpost(${postdata[i].postid})`);
+                            postinfo.querySelector(".editpost").innerHTML= `Edit`;
+                            postinfo.querySelector(".editpost").style.cursor = "pointer";
+                            postinfo.querySelector(".messagepost").style.display = "none";
+                            postinfo.querySelector(".savepostcontainer").style.display = "none";
+                        } else {
+                            postinfo.querySelector(".editpost").style.display = "none";
+                        }
+                        posts.appendChild(postinfo);
                     }
                 }
             }
@@ -312,7 +465,7 @@ async function viewPost(postID) {
     // Sends data in an array to the server and saves it to a session
     const dataSent = {
         postID
-    }
+    };
 
     // Looks for only an app.post function
     // Sends the JSON data (postID) to the server
@@ -322,12 +475,62 @@ async function viewPost(postID) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(dataSent)
-    }
+    };
 
 
     const postResponse = await fetch('/toviewpost', postDetails);
     const jsonData = await postResponse.json();
     if (jsonData.status == "Success") {
         window.location.replace("/viewPost");
+    }
+};
+
+
+// Changes the cursor when hovering over the message button, depending on if the user can message the post owner
+async function setCursorHover(postID, messagePostID) {
+    const idDataSent = {
+        postID
+    };
+    const idPostDetails = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(idDataSent)
+    };
+
+    // Get post owner's ID
+    const postResponseID = await fetch('/get-other-user-by-post', idPostDetails);
+    const jsonDataID = await postResponseID.json();
+    let returnedUserID = jsonDataID.otherUserID;
+    let postOwnerID = returnedUserID.user_id; // Post owner userID
+    let returnedSessionID = jsonDataID.sessionUserID; // Current session userID
+
+    // If post owner is current session user, they cannot message themself
+    if (postOwnerID == returnedSessionID) {
+        document.getElementById(messagePostID).style.cursor = "not-allowed";
+    } else {
+        document.getElementById(messagePostID).style.cursor = "pointer";
+    }
+}
+
+//saves post id to session for editing post on editpost page
+async function editpost(postID) {
+    const dataSent = {
+        postID
+    };
+
+    const postDetails = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(dataSent)
+    };
+
+    const postResponse = await fetch('/toeditpost', postDetails);
+    const jsonData = await postResponse.json();
+    if (jsonData.status == "Success") {
+        window.location.replace("/editpost");
     }
 };

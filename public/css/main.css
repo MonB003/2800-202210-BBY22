@@ -17,6 +17,8 @@
     line-height: 1;
     display: block;
     width: 100%;
+    position: fixed;
+    top: 0;
 }
 
 .navbar,
@@ -92,6 +94,8 @@
         padding: 0;
         height: 42px;
         width: 100%;
+        position: fixed;
+        top: 0px;
     }
 
     #menuClicked {
@@ -124,7 +128,7 @@
         position: absolute;
         width: 100%;
         height: 2px;
-        background-color: #848484;
+        background-color: white;
         transition-duration: .25s;
     }
 
@@ -174,6 +178,7 @@
 
 #customerName {
     font-family: 'Lato', sans-serif;
+    padding-top: 55px;
 }
 
 
@@ -200,8 +205,7 @@ body {
     background-color: #526e62;
     border: none;
     text-align: center;
-    text-decoration: none;
-    border-radius: 5px;
+    text-decoration: none;  
     font-size: 18px;
     height: 50px;
     margin-top: 10px;
@@ -212,11 +216,20 @@ body {
     -ms-transition: all 300ms ease;
     -o-transition: all 300ms ease;
     transition: all 300ms ease;
+    cursor: pointer;
 }
 
 .navbutton:hover {
     background-color: #435a50;
     box-shadow: 1px 1px 3px rgb(73, 71, 71);
+}
+
+#newPostPageBtn {
+    border-radius: 0px 5px 0px 5px;
+}
+
+#togglefilter {
+    border-radius: 5px 0px 5px 0px;
 }
 
 #filtersearch {
@@ -242,22 +255,24 @@ body {
     font-size: 16px;
     height: 24px;
     background-color: #526e62;
+    color:white;
     border: none;
     text-align: center;
     text-decoration: none;
-    border-radius: 10px;
+    border-radius: 5px;
     box-shadow: 0 0 5px rgb(40, 39, 39);
+    cursor: pointer;
 }
 
-#pagename {
+#customerName, #pagename {
     font-size: 36px;
-    font-weight: bold;
     text-align: center;
     margin: auto;
+    padding-top: 55px;
 }
 
 .post {
-    border-radius: 15px;
+    border-radius: 25px;
     background-color: white;
     overflow: hidden;
     display: grid;
@@ -270,7 +285,7 @@ body {
 .postimage {
     grid-column: 1 / span 3;
     overflow: hidden;
-    border-radius: 15px 15px 0px 0px;
+    border-radius: 25px 25px 0px 0px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -302,6 +317,7 @@ body {
     color: white;
     padding-bottom: 3px;
     margin-top: -1px;
+    margin-left: 60px;
 }
 
 .postlocation {
@@ -328,15 +344,99 @@ body {
     font-weight: bold;
     text-align: right;
     padding-right: 10px;
-    border-radius: 0px 0px 15px 15px;
+    border-radius: 0px 0px 25px 25px;
+    margin-right: 10px;
 }
 
 .messagepost {
+    color: green;
+    font-size: 20px;
+    font-weight: bold;
     cursor: pointer;
 }
 
+.messagepost:hover {
+    color: gray;
+    cursor: pointer;
+}
+
+.editpost {
+    color: green;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.editpost:hover {
+    color: gray;
+    cursor: pointer;
+}
+
+
+/* Popup confirmation div */
+.popup {
+    position: fixed;
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    background-color: #c5c5c5;
+    padding-top: 50px;
+    text-align: center;
+  }
+  
+  /* Popup confirmation details */
+  .confirmBookmarkContent {
+    background-color: #fefefe;
+    margin: 10% auto 15% auto; 
+    width: 50%;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #confirmationMsg {
+    font-size: 18pt;
+    padding: 5px;
+  }
+
+  #cancelMsgBtn,
+  #removeMsgBtn,
+  #confirmMsgBtn {
+    border: none;
+    outline: none;
+    background-color: #8AA39B;
+    padding: 5pt;
+    padding-left: 8pt;
+    padding-right: 8pt;
+    font-family: 'Lato', sans-serif;
+    letter-spacing: 1px;
+    font-size: 15px;
+    color: aliceblue;
+    border-radius: 1px;
+    margin-bottom: 10pt;
+    text-transform: uppercase;
+    box-shadow: 1px 1px 1px rgb(73, 71, 71);
+    width: 50%;
+    align-self: center;
+    cursor: pointer;
+  }
+
+  #cancelMsgBtn:hover,
+  #removeMsgBtn:hover,
+  #confirmMsgBtn:hover {
+    background-color: #587568;
+    box-shadow: 1px 1px 3px rgb(73, 71, 71);
+  }
+
 /* mobile view */
 @media only screen and (max-width : 425px) {
+    header {
+        position: fixed;
+        width: 100%;
+    }
 
     #topnav {
         margin-top: 15px;
@@ -373,6 +473,7 @@ body {
         font-size: 18px;
         height: 20px;
         width: 100px;
+        margin-left: 40px;
     }
 
     .postlocation {
@@ -381,6 +482,10 @@ body {
 
     .postdate {
         font-size: 16px;
+    }
+
+    #pagename {
+        padding-top: 50px;
     }
 
 }
@@ -427,6 +532,7 @@ body {
         font-size: 18px;
         height: 20px;
         width: 100px;
+        margin-left: 40px;
     }
 
     .postlocation {

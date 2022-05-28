@@ -7,7 +7,6 @@
 
 .container {
   width: 100%;
-  position: relative;
 }
 
 .navbar {
@@ -16,6 +15,8 @@
   line-height: 1;
   display: block;
   width: 100%;
+  position: fixed;
+  top: 0;
 }
 
 .navbar,
@@ -73,6 +74,12 @@
   display: none;
 }
 
+.asterisk {
+  color: red;
+  font-weight: bold;
+  text-decoration: none;
+}
+
 @media only screen and (max-width: 750px) {
   .container {
     display: none;
@@ -83,7 +90,6 @@
   }
 
   .menu {
-    z-index: 1;
     top: 0;
     display: block;
     background-color: #435a50;
@@ -91,6 +97,7 @@
     padding: 0;
     height: 42px;
     width: 100%;
+    position: fixed;
   }
 
   #menuClicked {
@@ -123,7 +130,7 @@
     position: absolute;
     width: 100%;
     height: 2px;
-    background-color: #848484;
+    background-color: white;
     transition-duration: .25s;
   }
 
@@ -165,6 +172,7 @@
     color: white;
     background-color: #435a50;
   }
+
 }
 
 .headerContainer {
@@ -217,10 +225,9 @@ body {
   background-color: rgba(0, 0, 0, 0.1);
   width: 500px;
   margin: 2% auto;
-  border-top-left-radius: 25px;
-  border-bottom-right-radius: 25px;
   box-shadow: 0 0 10px rgb(40, 39, 39);
   padding: 20px;
+  margin-top: 70px;
   font-family: 'Lato', sans-serif;
 }
 
@@ -253,6 +260,7 @@ body {
   background-color: #6B9080;
   border-radius: 5px;
   margin-bottom: 15px;
+  cursor: pointer;
 }
 
 #newPostBtn:hover {
@@ -260,11 +268,11 @@ body {
   box-shadow: 1px 1px 3px rgb(73, 71, 71);
 }
 
-#backtoMain {
+#backtoMain, #resetDiv {
   text-align: center;
 }
 
-#backToLogin {
+#backToLogin, #resetBtn {
   width: 400px;
   height: 40px;
   border: none;
@@ -275,6 +283,11 @@ body {
   background-color: rgb(121, 119, 119);
   margin-bottom: 20px;
   border-radius: 5px;
+  cursor: pointer;
+}
+
+#resetBtn {
+  background-color: #714955;
 }
 
 #newPostDescription, #description {
@@ -282,8 +295,18 @@ body {
   height: 150px;
 }
 
+.tox {
+  width: 400px;
+  margin: auto;
+}
+
 #backToLogin:hover {
   background-color: rgb(89, 88, 88);
+  box-shadow: 1px 1px 3px rgb(73, 71, 71);
+}
+
+#resetBtn:hover {
+  background-color: rgb(144, 65, 65);
   box-shadow: 1px 1px 3px rgb(73, 71, 71);
 }
 
@@ -319,7 +342,7 @@ footer {
 
   #content {
     width: 300px;
-    margin-top: 80px;
+    margin-top: 70px;
   }
 
   #signUpForm input {
@@ -336,7 +359,7 @@ footer {
     margin-top: 8px;
   }
 
-  #backToLogin {
+  #backToLogin, #resetBtn {
     width: 280px;
     height: 35px;
     margin-bottom: 10px;
@@ -350,4 +373,21 @@ footer {
   #uploadFile {
     padding-top: 5px;
   }
+
+  html, head, body {
+    z-index: -1;
+    position: relative;
+  }
+
+  #content {
+    z-index: -1;
+    position: relative;
+  }
+  
+  .tox {
+    width: 280px;
+    z-index: auto;
+    position: relative;
+  }
+
 }
