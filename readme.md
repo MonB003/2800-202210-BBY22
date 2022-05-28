@@ -220,12 +220,13 @@ Images:
 - [Logo - House roof icon](https://thenounproject.com/icon/house-roof-945733/)
 - [Logo - Handshake icon](https://www.vecteezy.com/vector-art/4999401-handshake-icon-like-good-deal-simple-flat-style-trend-modern-logotype-graphic-design-isolated-on-white-background) 
 
-YouTube Tutorials:
+Tutorials:
 - [Messaging feature](https://www.youtube.com/watch?v=Ozrm_xftcjQ) 
 - [Fetch API tutorial (basic syntax for post requests)](https://www.youtube.com/watch?v=Kw5tC5nQMRY)
 - [Popup confirmation messages](https://www.w3schools.com/howto/howto_css_delete_modal.asp)
 - [Easter Egg game](https://www.youtube.com/watch?v=Sz7ugHHlvX4&list=PL1ATIExhr18A9eWbGdwOady_sfE5VkHur&index=4)
 - [Hamburger Menu](https://www.youtube.com/watch?v=OFKBep95lb4&ab_channel=TylerPotts) 
+- [Search Bar](https://css-tricks.com/in-page-filtered-search-with-vanilla-javascript/)
 
 Comp 1800, 2537, 1537 Example Reference:
 - [Image Upload Method](https://learn.bcit.ca/d2l/le/content/818588/viewContent/7409204/View)
