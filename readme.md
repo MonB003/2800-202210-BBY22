@@ -227,6 +227,9 @@ YouTube Tutorials:
 - [Easter Egg game](https://www.youtube.com/watch?v=Sz7ugHHlvX4&list=PL1ATIExhr18A9eWbGdwOady_sfE5VkHur&index=4)
 - [Hamburger Menu](https://www.youtube.com/watch?v=OFKBep95lb4&ab_channel=TylerPotts) 
 
+Comp 1800, 2537, 1537 Example Reference:
+- [Image Upload Method](https://learn.bcit.ca/d2l/le/content/818588/viewContent/7409204/View)
+
 
 <br>
 
